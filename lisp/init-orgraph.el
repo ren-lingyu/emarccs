@@ -117,42 +117,51 @@
   (setq org-beamer-outline-frame-options "t"))
 
 (with-eval-after-load 'org-latex-preview
-    (when (display-graphic-p) 
-        (setq org-startup-with-latex-preview t))
-	(setq org-latex-preview-mode-ignored-environments nil)
-	(setq org-latex-preview-process-precompile nil)
-    (setq org-latex-preview-preamble
-		  (concat
-			"\\documentclass{article}\n"
-			"\\usepackage{xcolor}\n"
-			"[PACKAGES]\n"
-			"\\usepackage{org--math}\n"
-			"\\pagestyle{empty}\n"))
-    (setq org-latex-preview-compiler-command-map
+  (when (display-graphic-p) 
+    (setq org-startup-with-latex-preview t))
+  (setq org-latex-preview-mode-ignored-environments nil)
+  (setq org-latex-preview-process-precompile nil)
+  (setq org-latex-preview-preamble
+	(concat
+	 "\\documentclass{article}\n"
+	 "\\usepackage{xcolor}\n"
+	 "[PACKAGES]\n"
+	 "\\usepackage{org-preview}\n"
+	 "\\pagestyle{empty}\n"))
+  (setq org-latex-preview-compiler-command-map
         `(("pdflatex" . ,(format "%s latexmk -norc -latex=pdflatex" (shell-quote-argument texlive))) 
           ("xelatex" . ,(format "%s latexmk -norc -xelatex -no-pdf" (shell-quote-argument texlive)))
           ("lualatex" . ,(format "%s latexmk -norc -dvilua" (shell-quote-argument texlive)))))
-    (setq org-latex-preview-process-default 'docker)
-    (setq org-latex-preview-process-alist
-        `((docker 
-                :programs ("docker")
-                :description "dvi > svg"
-                :message "you need to install the programs: texlive and dvisvgm in docker image."
-                :image-input-type "dvi"
-                :image-output-type "svg"
-                :latex-compiler ("%l -interaction=nonstopmode -outdir=%o %f")
-                :image-converter 
-                (,(format "%s dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %%B-%%%%9p.svg %%f"
-			  			  (shell-quote-argument texlive)))))))
+  (setq org-latex-preview-process-default 'docker)
+  (setq org-latex-preview-process-alist
+        `((docker :programs ("docker")
+                  :description "dvi > svg"
+                  :message "you need to install the programs: texlive and dvisvgm in docker image."
+                  :image-input-type "dvi"
+                  :image-output-type "svg"
+                  :latex-compiler ("%l -interaction=nonstopmode -outdir=%o %f")
+                  :image-converter 
+                  (,(format "%s dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %%B-%%%%9p.svg %%f" (shell-quote-argument texlive)))))))
+
+;; (with-eval-after-load 'ob-latex
+;;   (setq org-babel-latex-process-alist
+;; 	`((svg :programs ("docker")
+;;                :description "dvi > svg"
+;;                :message "you need to install the programs: texlive and dvisvgm in docker image."
+;;                :image-input-type "dvi"
+;;                :image-output-type "svg"
+;; 	       :latex-compiler
+;; 	       (,(format "%s latexmk -norc -dvilua -interaction=nonstopmode -outdir=%%o %%f" (shell-quote-argument texlive)))
+;;                :image-converter 
+;;                (,(format "%s dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %%B-%%%%9p.svg %%f" (shell-quote-argument texlive)))))))
 
 (with-eval-after-load 'citar
-  (setq citar-notes-paths 
+  (setq citar-notes-paths
 	(list (expand-file-name "./literature/" org-roam-directory))
 	citar-library-paths nil)
-  (setq citar-bibliography 
-		(list 
-			(expand-file-name "./texmf/bibtex/bib/ref.bib" org-directory)
-			(expand-file-name "./texmf/bibtex/bib/zotero-my-library.bib" org-directory))))
+  (setq citar-bibliography
+	(list (expand-file-name "./texmf/bibtex/bib/ref.bib" org-directory)
+	      (expand-file-name "./texmf/bibtex/bib/zotero-my-library.bib" org-directory))))
 
 (mapc #'require '(org org-roam org-roam-organize org-gtd consult consult-org-roam auctex vertico orderless marginalia))
 

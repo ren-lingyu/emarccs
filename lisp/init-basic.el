@@ -43,6 +43,12 @@
 (setq native-comp-async-report-warnings-errors 'silent)
 
 ;; 基础编码和启动界面设置, 基本外观设置
+(set-face-attribute 'default
+		    nil
+		    :height 180
+		    :weight 'regular 
+		    :width 'normal
+		    :family "Maple Mono NF CN")
 (setq inhibit-startup-message t) ;; 关闭启动界面
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
@@ -55,8 +61,10 @@
   (set-face-background 'default "black")
   (set-face-foreground 'default "white"))     ; 终端背景/前景色
 
+(setq frame-resize-pixelwise t)
+
 (setq default-frame-alist
-      '((fullscreen . nil)))
+      '((fullscreen . maximized)))
 
 (setq initial-frame-alist default-frame-alist)
 

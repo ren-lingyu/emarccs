@@ -1,2 +1,33 @@
 #+TITLE: Emacs Initial Configuration
 #+AUTHOR: aRenCoco
+
+* 项目介绍
+这是本人自用的 Emacs 配置, 尚处于更新中.
+
+* 项目结构
+#+BEGIN_SRC
+.emacs.d/
+├── .gitignore                       # Git 忽略规则
+├── LICENSE                          # MIT 许可证
+├── README.org                       # 项目文档
+├── init.el                          # 主配置入口
+├── custom.el                        # 自定义配置 (由 Emacs 生成)
+└── lisp/                            # 功能模块目录
+    ├── init-ai.el                   # AI 辅助功能
+    ├── init-basic.el                # 基础设置 (路径、加载策略)
+    ├── init-blog-publish.el         # 博客发布工具
+    ├── init-complete.el             # 自动补全 (Company, AAS)
+    ├── init-debug.el                # 调试工具
+    ├── init-feed.el                 # RSS 源阅读
+    ├── init-help.el                 # 帮助系统优化
+    ├── init-org.el                  # Org 模式配置
+    ├── init-org-latex-preview.el    # LaTeX 预览
+    ├── init-org-roam.el             # Org-roam 知识库
+    ├── init-org-roam-citar.el       # Org-roam + Citar 集成
+    ├── init-orgraph.el              # Org 文档图表化
+    ├── init-tex.el                  # LaTeX 支持
+    └── init-theme.el                # 主题配置
+#+END_SRC
+  
+* 许可证
+本项目采用 MIT 许可证, 见 [[file:LICENSE][LICENSE]].

@@ -61,10 +61,10 @@
   (set-face-background 'default "black")
   (set-face-foreground 'default "white"))     ; 终端背景/前景色
 
-(setq frame-resize-pixelwise t)
+;; (setq frame-resize-pixelwise t)
 
 (setq default-frame-alist
-      '((fullscreen . maximized)))
+      '((fullscreen . nil)))
 
 (setq initial-frame-alist default-frame-alist)
 

@@ -33,7 +33,10 @@
     ";eq" (lambda () (interactive) (insert "\\\(  \\\)") (forward-char -3) )
     ";ee" (lambda () (interactive) (insert "\\begin{equation}\n\n\\end{equation}\n") (forward-line -2) )
     ";ea" (lambda () (interactive) (insert "\\begin{align}\n\n\\end{align}\n") (forward-line -2) )
-    ";es" (lambda () (interactive) (insert "\\begin{split}\n\n\\end{split}\n") (forward-line -2) ) 
+    ";es" (lambda () (interactive) (insert "\\begin{split}\n\n\\end{split}") (forward-line -1) )
+    ";eg" (lambda () (interactive) (insert "\\begin{gathered}\n\n\\end{gathered}") (forward-line -1) )
+    ";eyq" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquant}\n\n\\end{yquant}\n\\end{tikzpicture}") (forward-line -2))
+    ";eyg" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquantgroup}\n\n\\end{yquantgroup}\n\\end{tikzpicture}") (forward-line -2)) 
   )
 )
 
@@ -114,6 +117,7 @@
     ";tr" "\\tr"
     ";mrm" "\\mathrm"
     ";mca" "\\mathcal"
+    ";msc" "\\mathfrak"
     ";mbb" "\\mathbb"
     ";mtt" "\\mathtt"
     ";mfr" "\\mathfrak"
@@ -130,21 +134,18 @@
     ";ket" (lambda () (interactive) (yas-expand-snippet "\\ket| $1 >$0"))
     ";bra" (lambda () (interactive) (yas-expand-snippet "\\bra< $1 |$0"))
     ";bk" (lambda () (interactive) (yas-expand-snippet "\\braket< $1 | $2 >$0"))
+    ";kb" (lambda () (interactive) (yas-expand-snippet "\\ketbra| $1 >< $2 |$0"))
     ";bok" (lambda () (interactive) (yas-expand-snippet "\\braket< $1 | $3 | $2 >$0"))
     ";eval" (lambda () (interactive) (yas-expand-snippet "\\eval{ $1 }_{ $2 }^{ $3 }$0"))
     ";frac" (lambda () (interactive) (yas-expand-snippet "\\frac{ $1 }{ $2 }$0"))
     ";sqrt" (lambda () (interactive) (yas-expand-snippet "\\sqrt{ $1 }$0"))
+    ";text" (lambda () (interactive) (yas-expand-snippet "\\text{$1}$0"))
   )
   :hook
   (LaTeX-mode . laas-mode)
   (LaTeX-mode . yas-minor-mode)
   (org-mode . laas-mode)
   (org-mode . yas-minor-mode)
-)
-
-(defun load/init-complete ()
-  (interactive) 
-  (load-file (expand-file-name "./lisp/init-complete.el" user-emacs-directory))
 )
 
 (provide 'init-complete)

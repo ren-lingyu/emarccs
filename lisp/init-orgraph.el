@@ -18,7 +18,17 @@
       ("xelatex" . ,(format "%s xelatex -no-pdf" (shell-quote-argument texlive)))
       ("lualatex" . ,(format "%s dvilualatex" (shell-quote-argument texlive)))))
   (setq org-latex-classes
-	`(("note"
+	`(("article"
+           ,(mapconcat #'identity
+		       '("\\documentclass[10pt]{article}")
+		       "\n")
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+           ("\\subsubsubsection{%s}" . "\\subsubsubsection*{%s}")
+           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+	  ("note"
            ,(mapconcat #'identity
 		       '("\\documentclass[10pt,a4paper]{article}"
 			 "\\usepackage{org-note}")

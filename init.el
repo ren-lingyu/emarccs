@@ -37,6 +37,8 @@
 
 (require 'init-org-latex-preview) ; org-latex-preview
 
+(require 'init-feed)
+
 (require 'init-ai) ; AI辅助
 
 (require 'init-blog-publish) ; 博客发布设置

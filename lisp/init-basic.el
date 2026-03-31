@@ -4,10 +4,6 @@
 
 ;; 加载最新的.el文件
 (setq load-prefer-newer t)
-(setq package-enable-at-startup nil)
-
-;; time zone
-(setenv "TZ" "Asia/Shanghai")
 
 ;; temporary directory
 (setq temporary-file-directory (expand-file-name "~/tmp/emacs/"))
@@ -18,29 +14,20 @@
 
 ;; straight.el 引导
 (defvar bootstrap-version)
-(let 
-    ((bootstrap-file
-      (expand-file-name
-       "straight/repos/straight.el/bootstrap.el"
-       (or
-        (bound-and-true-p straight-base-dir)
-        user-emacs-directory)))
-     (bootstrap-version 7))
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-	(url-retrieve-synchronously
+        (url-retrieve-synchronously
          "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-
-(setq straight-use-package-by-default t)
-(setq package-enable-at-startup nil) ; 禁用package.el
-(setq straight-vc-git-default-clone-depth 1) ; 使用浅克隆
-(setq straight-vc-git-default-protocol 'https)
-;; (setq straight-host-usernames '((github . "git")))
-(setq native-comp-async-report-warnings-errors 'silent)
 
 ;; 基础编码和启动界面设置, 基本外观设置
 (set-face-attribute 'default
@@ -49,7 +36,6 @@
 		    :weight 'regular 
 		    :width 'normal
 		    :family "Maple Mono NF CN")
-(setq inhibit-startup-message t) ;; 关闭启动界面
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)

@@ -9,10 +9,7 @@
   (add-hook 'LaTeX-mode-hook
     (lambda ()
       (setq TeX-electric-escape nil
-            TeX-electric-sub-and-superscript nil
-      ) ; 自动补全
-    )
-  )
+            TeX-electric-sub-and-superscript nil)))
   :config
   (setq TeX-auto-local (locate-user-emacs-file "cache/auctex-auto/"))
   (unless 
@@ -24,34 +21,20 @@
   (setq TeX-parse-self t); 自动解析文档结构
   (setq TeX-master nil) ; 不指定主文件
   (setq preview-image-type nil) ; 禁用预览
-  (setq TeX-command-default "LuaLaTeX")
+  ;; (setq TeX-command-default "LuaLaTeX")
   (setq TeX-save-query nil)
   (setq TeX-show-compilation nil) ; 禁用编译
   (setq TeX-PDF-mode nil)
-)
-
-(use-package company-auctex
-  :after auctex
-  :hook (LaTeX-mode . company-auctex-init)
-)
-
-(use-package company-math
-  :disabled
-  :after company
-  :init
-  (add-to-list 'company-backends 'company-math-symbols-unicode)
-  (add-to-list 'company-backends 'company-math-symbols-latex)
-)
+  (setq TeX-view-program-selection '((output-pdf "Zathura"))) 
+  (setq TeX-view-program-list '(("Zathura" "zathura %o"))))
 
 (use-package flycheck
-  :hook (LaTeX-mode . flycheck-mode)
-)
+  :hook (LaTeX-mode . flycheck-mode))
 
 (use-package cdlatex
   :hook 
   (org-mode . turn-on-org-cdlatex)
-  (LaTeX-mode . company-auctex-init)
-)
+  (LaTeX-mode . company-auctex-init))
 
 ;; 启用 org-mode 的 LaTeX 区域高亮支持
 (setq org-highlight-latex-and-related '(native script))
@@ -61,8 +44,7 @@
   "Strict LaTeX syntax highlighting in org-mode."
   (font-lock-add-keywords
    nil
-   '(
-      ;; 数学区域 $...$ 和 \( ... \)
+   '(;; 数学区域 $...$ 和 \( ... \)
       ("\\$[^$ \n]+\\$" . font-lock-constant-face)
       ("\\\\(\\([^() \n]+\\)\\\\)" 1 font-lock-constant-face)
       ;; 环境名, 如 \begin{equation}
@@ -90,10 +72,7 @@
       ("\\\\ket|\\([^> \n]+\\)>" 1 font-lock-keyword-face)
       ;; \braket<...|...> 和 \braket<...|...|...>
       ("\\\\braket<\\([^| \n]+\\)|\\([^> \n]+\\)>" . font-lock-keyword-face)
-      ("\\\\braket<\\([^| \n]+\\)|\\([^| \n]+\\)|\\([^> \n]+\\)>" . font-lock-keyword-face)
-    )
-  )
-)
+      ("\\\\braket<\\([^| \n]+\\)|\\([^| \n]+\\)|\\([^> \n]+\\)>" . font-lock-keyword-face))))
 
 ;; (add-hook 'org-mode-hook #'my/org-latex-font-lock)
 (add-hook 'LaTeX-mode-hook #'my/org-latex-font-lock)
@@ -105,34 +84,28 @@
   (lambda ()
     (interactive)
     (insert "\\begin{equation}\n\n\\end{equation}")
-    (forward-line -2)
-  )
-) 
+    (forward-line -2)))
+
 (global-set-key 
   (kbd "C-c l e a") 
   (lambda ()
     (interactive)
     (insert "\\begin{align}\n\n\\end{align}")
-    (forward-line -2)
-  )
-)
+    (forward-line -2)))
+
 (global-set-key 
   (kbd "C-c l e s") 
   (lambda ()
     (interactive)
     (insert "\\begin{split}\n\n\\end{split}")
-    (forward-line -2)
-  )
-)
+    (forward-line -2)))
+
 (global-set-key
   (kbd "C-c l e l")
   (lambda ()
     (interactive)
     (insert "\\label{}\n")
-    (forward-line -1)
-  )
-)
-                              
+    (forward-line -1)))         
 
 ;; The End
 (provide 'init-tex)

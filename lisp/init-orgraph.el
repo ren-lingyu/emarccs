@@ -10,13 +10,11 @@
   (setq org-latex-compiler "lualatex")
   (setq org-latex-bib-compiler "biblatex")
   (setq org-latex-pdf-process
-        (list
-         (format "%s latexmk -f -pdf -%%latex -interaction=nonstopmode -output-directory=$(realpath %%o) $(realpath %%f)"
-                 (shell-quote-argument texlive))))
+        (list "latexmk -f -pdf -%latex -interaction=nonstopmode -output-directory=$(realpath %o) $(realpath %f)"))
   (setq org-latex-precompile-compiler-map
-    `(("pdflatex" . ,(format "%s latex" (shell-quote-argument texlive))) 
-      ("xelatex" . ,(format "%s xelatex -no-pdf" (shell-quote-argument texlive)))
-      ("lualatex" . ,(format "%s dvilualatex" (shell-quote-argument texlive)))))
+    `(("pdflatex" . "latex")
+      ("xelatex" . "xelatex -no-pdf")
+      ("lualatex" . "dvilualatex" )))
   (setq org-latex-classes
 	`(("article"
            ,(mapconcat #'identity

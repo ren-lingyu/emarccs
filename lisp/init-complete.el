@@ -5,13 +5,22 @@
 ;; 自动补全
 (use-package company
   :hook 
-  (after-init . global-company-mode)
-)
+  (after-init . global-company-mode))
+
+(use-package company-auctex
+  :after auctex
+  :hook (LaTeX-mode . company-auctex-init))
+
+(use-package company-math
+  :disabled
+  :after company
+  :init
+  (add-to-list 'company-backends 'company-math-symbols-unicode)
+  (add-to-list 'company-backends 'company-math-symbols-latex))
 
 ;; (use-package yasnippet
 ;;   :straight (:host github :repo "joaotavora/yasnippet")
-;;   :init (yas-global-mode 1)
-;; )
+;;   :init (yas-global-mode 1))
 
 (use-package aas
   :straight (:host github :repo "ymarco/auto-activating-snippets")
@@ -25,8 +34,7 @@
     ";i-" "ī"
     ";a-" "ā"
     ";u-" "ū"
-    ";e-" "ē"
-  )
+    ";e-" "ē")
   (aas-set-snippets 'org-mode
     ";abst" (lambda () (interactive) (insert "#+BEGIN_abstract\n\n#+END_abstract\n") (forward-line -2) )
     ";comm" (lambda () (interactive) (insert "#+BEGIN_COMMENT\n\n#+END_COMMENT\n") (forward-line -2) )
@@ -36,16 +44,13 @@
     ";es" (lambda () (interactive) (insert "\\begin{split}\n\n\\end{split}") (forward-line -1) )
     ";eg" (lambda () (interactive) (insert "\\begin{gathered}\n\n\\end{gathered}") (forward-line -1) )
     ";eyq" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquant}\n\n\\end{yquant}\n\\end{tikzpicture}") (forward-line -2))
-    ";eyg" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquantgroup}\n\n\\end{yquantgroup}\n\\end{tikzpicture}") (forward-line -2)) 
-  )
-)
+    ";eyg" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquantgroup}\n\n\\end{yquantgroup}\n\\end{tikzpicture}") (forward-line -2))))
 
 (use-package laas
   :straight (:host github :repo "tecosaur/LaTeX-auto-activating-snippets")
   :init
   (setq laas-basic-snippets
-    '(
-      ";;alp" "\\alpha"
+    '(";;alp" "\\alpha"
       ";;bet" "\\beta"
       ";;gam" "\\gamma"
       ";;del" "\\delta"
@@ -99,12 +104,10 @@
       ";;ale" "\\aleph"
       ";;bet" "\\beth"
       ";;dal" "\\daleth"
-      ";;gim" "\\gimel"
-    )
-  )
-  ;; (setq laas-subscript-snippets nil)
-  ;; (setq laas-frac-snippet nil)
-  ;; (setq laas-accent-snippets nil)
+      ";;gim" "\\gimel"))
+  (setq laas-subscript-snippets nil)
+  (setq laas-frac-snippet nil)
+  (setq laas-accent-snippets nil)
   :config
   (aas-set-snippets 'laas-mode
     ";label" (lambda () (interactive) (yas-expand-snippet "\\label{$1:$2}\n$0"))
@@ -139,14 +142,12 @@
     ";eval" (lambda () (interactive) (yas-expand-snippet "\\eval{ $1 }_{ $2 }^{ $3 }$0"))
     ";frac" (lambda () (interactive) (yas-expand-snippet "\\frac{ $1 }{ $2 }$0"))
     ";sqrt" (lambda () (interactive) (yas-expand-snippet "\\sqrt{ $1 }$0"))
-    ";text" (lambda () (interactive) (yas-expand-snippet "\\text{$1}$0"))
-  )
+    ";text" (lambda () (interactive) (yas-expand-snippet "\\text{$1}$0")))
   :hook
   (LaTeX-mode . laas-mode)
   (LaTeX-mode . yas-minor-mode)
   (org-mode . laas-mode)
-  (org-mode . yas-minor-mode)
-)
+  (org-mode . yas-minor-mode))
 
 (provide 'init-complete)
 ;;; init-complete.el ends here

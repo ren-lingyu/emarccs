@@ -88,12 +88,10 @@
   (org-link-set-parameters "eq"
 			   :follow 
 			   (lambda (path arg)
-			     (let 
-				 ((label (concat "\\label{eq:" path "}")))
-			       (org-mark-element)
+			     (let ((label (concat "\\label{eq:" path "}")))
+			       (org-mark-ring-push)
 			       (goto-char (point-min))
-			       (if 
-				   (re-search-forward label nil t)
+			       (if (re-search-forward label nil t)
 				   (progn
 				     (beginning-of-line)
 				     (recenter)
@@ -101,17 +99,14 @@
 				 (message "未找到公式引用: %s" label))))
 			   ;; 设置导出函数，导出为 \eqref{eq:...}
 			   :export 
-			   (lambda 
-			     (path description backend info)
+			   (lambda (path description backend info)
 			     (cond
-			      ;; 对于 LaTeX 导出
 			      ((or (eq backend 'latex) (eq backend 'beamer))
 			       (format "\\eqref{eq:%s}" path))
 			      ((eq backend 'html)
 			       (format "<span class=\"eqref\">eq:%s</span>" 
 				       (or description path)))
 			      (t (or description (format "eq:%s" path)))))
-			   ;; 自定义链接外观  
 			   :face 
 			   '(;; :inherit 'org-link
 			     :foreground "dark red" 

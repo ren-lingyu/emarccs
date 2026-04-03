@@ -67,6 +67,8 @@
 (global-prettify-symbols-mode t)
 ;; (setq display-line-numbers-type 'relative) ; 显示相对行号
 
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 
 ;; Emacs行为设置
 ;; (electric-pair-mode t)                        ; 自动补全括号

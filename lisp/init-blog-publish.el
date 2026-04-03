@@ -9,9 +9,9 @@
 
 (use-package citeproc)
 
-(defconst blog/beginning-year 2026)
-;; (defconst org-blog-org-blog-url "https://aren-coco.com/")
-;; (defconst org-blog-org-blog-url "http://localhost:8081/")
+(defconst org-blog-site-name "aRenCoco's Blog")
+(defconst org-blog-site-url "https://aren-coco.com")
+(defconst org-blog-beginning-year 2026)
 
 ;; license strings
 (defconst cc-license-generic-work-full-tool-name
@@ -24,10 +24,10 @@
 
 (defconst cc-license-no-geniric-work-full-tool-name
   (concat "&copy;" 
-	  (if (= (string-to-number (format-time-string "%Y")) blog/beginning-year) 
-	      (number-to-string blog/beginning-year) 
-	    (concat (number-to-string blog/beginning-year) "-" (format-time-string "%Y"))) "\u0020"
-	  "<a rel=\"cc:attributionURL\" href=\"https://aren-coco.com/\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
+	  (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year) 
+	      (number-to-string org-blog-beginning-year) 
+	    (concat (number-to-string org-blog-beginning-year) "-" (format-time-string "%Y"))) "\u0020"
+	  "<a rel=\"cc:attributionURL\" href=\"" org-blog-site-url "/" "\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
 	  "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a>"
 	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
 	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
@@ -36,10 +36,10 @@
 
 (defconst cc-license-no-genic-work-no-full-tool-name
   (concat "&copy;" 
-	  (if (= (string-to-number (format-time-string "%Y")) blog/beginning-year) 
-	      (number-to-string blog/beginning-year) 
-	    (concat (number-to-string blog/beginning-year) "-" (format-time-string "%Y"))) "\u0020"
-	  "<a rel=\"cc:attributionURL\" href=\"https://aren-coco.com/\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
+	  (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year) 
+	      (number-to-string org-blog-beginning-year) 
+	    (concat (number-to-string org-blog-beginning-year) "-" (format-time-string "%Y"))) "\u0020"
+	  "<a rel=\"cc:attributionURL\" href=\"" org-blog-site-url "/" "\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
 	  "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>"
 	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
 	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
@@ -48,17 +48,21 @@
 
 ;; Blog configuration
 (defconst org-blog-sitemap-title "Post")
+(defconst org-blog-sitemap-abstract "The map of blog posting, sorted by DATE and categorized by FILESTAGS.")
+(defconst org-blog-sitemap-description "The map of blog posting, sorted by DATE and categorized by FILESTAGS.")
+
 (defconst org-blog-theindex-title "Index")
-(defconst org-blog-sitemap-abstract "The map of blog posting, sorted by DATE and categorized by FILESTAGS. ")
-(defconst org-blog-theindex-abstract "The website index, sorted by the first letter of the title. ")
+(defconst org-blog-theindex-abstract "The website index, sorted by the first letter of the title.")
+(defconst org-blog-theindex-description "The website index, sorted by the first letter of the title.")
 
 (setq org-html-head
       (concat "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/MapleMono-NF-CN-Regular/result.css\"/>\n"
-	      "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/LXGWWenKai-Regular/result.css\"/>\n"
-	      "<link rel=\"stylesheet\" href=\"https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css\"/>\n"
-	      "<link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\"/>\n"
-	      "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-default.css?v=" (format-time-string "%Y%m%d%z") "\"/>\n"
-	      "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-local.css?v=" (format-time-string "%Y%m%d%z") "\"/>\n" ))
+	          "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/LXGWWenKai-Regular/result.css\"/>\n"
+	          "<link rel=\"stylesheet\" href=\"https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css\"/>\n"
+	          "<link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\"/>\n"
+	          "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-default.css?v=" (format-time-string "%Y%m%d%z") "\"/>\n"
+	          "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-local.css?v=" (format-time-string "%Y%m%d%z") "\"/>\n"
+              "<link rel=\"alternate\" type=\"application/atom+xml\" title=\"" org-blog-site-name " - Atom\" href=\"/feed.xml\"/>\n"))
 
 (setq org-html-home/up-format
       "<div class=\"flexbox\">\n")
@@ -75,6 +79,7 @@
 		  "<a accesskey=\"\" href=\"/about.html\">About</a>\n"
 		  "<a accesskey=\"\" href=\"/style.html\">Style</a>\n"
 		  "<a accesskey=\"\" href=\"/theindex.html\">Index</a>\n"
+		  "<a accesskey=\"\" href=\"" org-blog-site-url "/feed.xml\">Feed</a>\n"
 		  "</nav>\n"
 		  "</header>\n"
 		  ;; "</div>\n"
@@ -175,6 +180,7 @@
     (concat "#+TITLE: " title "\n"
 	    "#+INDEX: " title "\n"
 	    "#+FILETAGS: :blog:index:\n"
+        "#+DESCRIPTION: " org-blog-sitemap-description "\n"
 	    "#+BEGIN_abstract\n"
 	    org-blog-sitemap-abstract "\n"
 	    "#+END_abstract\n"
@@ -205,6 +211,7 @@
  					     "#+TITLE: " org-blog-theindex-title "\n"
  					     "#+INDEX: " org-blog-theindex-title "\n"
  					     "#+FILETAGS: :blog:index:\n"
+                         "#+DESCRIPTION: " org-blog-theindex-description "\n"
  					     "#+BEGIN_abstract\n" 
  					     org-blog-theindex-abstract "\n"
  					     "#+END_abstract\n"

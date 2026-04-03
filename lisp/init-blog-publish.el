@@ -337,7 +337,8 @@
 	 ;; :publishing-function ,(my-generator/org-html-publish-to-html 'my/blog-file-list)
 	 ;; :completion-function ,(lambda (project) (setq my/blog-file-list nil))
 	 :publishing-function org-html-publish-to-html
-	 :filter-final-output ,(list #'my/blog-insert-meta-description)
+     ;; #+DESCRIPTION 可以实现下面这个函数的作用
+	 ;; :filter-final-output ,(list #'my/blog-insert-meta-description)
 	 :html-link-home "/index.html"
 	 :author "aRenCoco"
 	 :email "aRen_Coco@outlook.com"
@@ -368,7 +369,8 @@
 	 :exclude ".*"
 	 :include ("index.org" "sitemap.org" "about.org" "theindex.org")
 	 :publishing-directory ,(expand-file-name "./public/" org-directory)
-	 :filter-final-output ,(list #'my/blog-insert-meta-description)
+     ;; #+DESCRIPTION 可以实现下面这个函数的作用
+	 ;; :filter-final-output ,(list #'my/blog-insert-meta-description)
 	 :recursive nil
 	 :publishing-function org-html-publish-to-html
 	 :completion-function ,(lambda (project) (org-publish-file (expand-file-name "theindex.org" (plist-get project :base-directory)) (cons "index" project)))

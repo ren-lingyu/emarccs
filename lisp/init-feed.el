@@ -5,7 +5,7 @@
 (use-package elfeed
   :straight (:host github :repo "skeeto/elfeed")
   :config
-  (setq elfeed-feeds '(("https://aren-coco.com/feed.atom" blog)
+  (setq elfeed-feeds '(("https://aren-coco.com/feed.xml" blog)
                        ("https://langxubai.com/rss.xml" blog))))
 
 (use-package elfeed-dashboard

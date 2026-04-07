@@ -7,8 +7,8 @@
   :straight (:host github :repo "karthink/gptel")
   :config
   (setq gptel-directives
-	(append gptel-directives
-		'((translation . "You are a LLM working in Emacs as a specialized bilingual translation assistant specialized in academic STEM(such as phyics and mathematics) content. 
+	    (append gptel-directives
+		        '((translation . "You are a LLM working in Emacs as a specialized bilingual translation assistant specialized in academic STEM(such as phyics and mathematics) content. 
 When the user provides a text input, your sole task is to perform a direct, precise, and context-free translation between Chinese and English.
 The following rules must be strictly obeyed: 
 1. If the input is in Chinese, translate it into English.
@@ -25,18 +25,30 @@ The following rules must be strictly obeyed:
   ;; 	      qwen3-coder-next:cloud))
   (gptel-make-gh-copilot "Copilot")
   (setq gptel-backend
-	(gptel-make-ollama "Ollama"             ;Any name of your choosing
-	  :host "localhost:11434"               ;Where it's running
-	  :stream t                             ;Stream responses
-	  :models '(gemma3n:e4b
-		    deepseek-v3.2:cloud
-		    qwen3.5:cloud
-		    qwen3-coder-next:cloud)))
-  (setq gptel-model 'deepseek-v3.2:cloud)
-  )
+	    (gptel-make-ollama "Ollama"             ;Any name of your choosing
+	      :host "localhost:11434"               ;Where it's running
+	      :stream t                             ;Stream responses
+	      :models '(gemma4:e4b
+                    phi4-mini-reasoning:3.8b
+		            deepseek-v3.2:cloud
+                    qwen2.5:7b
+		            qwen3.5:cloud
+		            qwen3-coder-next:cloud
+                    gemini-3-flash-preview:cloud)))
+  (setq gptel-model 'deepseek-v3.2:cloud))
+
+;; superchat
+(use-package superchat
+  :straight (:host github :repo "yibie/superchat")
+  :config
+  (setq superchat-data-directory (locate-user-emacs-file "superchat/"))
+  (setq superchat-lang "中文") ; or "English", "Francais", etc.
+  (setq superchat-response-timeout 60)
+  (setq superchat-completion-check-delay 2))
 
 ;; ellama
 (use-package ellama
+  :disabled
   :straight (:host github :repo "s-kostyaev/ellama")
   :bind ("C-c e" . ellama)
   ;; send last message in chat buffer with C-c C-c

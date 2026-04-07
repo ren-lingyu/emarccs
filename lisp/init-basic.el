@@ -67,17 +67,19 @@
 (global-prettify-symbols-mode t)
 ;; (setq display-line-numbers-type 'relative) ; 显示相对行号
 
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)           ; 默认禁用制表符
+(setq-default tab-width 4)                    ; 默认 tab 宽度为 4 个空格
 
 ;; Emacs行为设置
 ;; (electric-pair-mode t)                        ; 自动补全括号
 (global-auto-revert-mode t)                   ; 文件外部修改自动刷新
 (delete-selection-mode t)                     ; 选中文本后输入替换
 
-(setq make-backup-files nil                     ; 备份文件 <filename>~
-      auto-save-default nil                     ; 自动保存文件 #<filename>#
-      create-lockfiles nil)                     ; 锁文件 .#<filename>
+(setq make-backup-files t)                     ; 备份文件 <filename>~
+(setq auto-save-default t)                     ; 自动保存文件 #<filename>#
+(setq create-lockfiles t)                      ; 锁文件 .#<filename>
+
+(add-hook 'bookmark-exit-hook #'bookmark-save)
 
 ;; Backup and auto-save configuration
 (setq backup-directory-alist `((".*" . ,(locate-user-emacs-file "cache/backups/"))))

@@ -2,6 +2,18 @@
 ;;; commentary:
 ;;; code:
 
+(use-package koishi-theme
+  :ensure t
+  :straight (:host github :repo "gynamics/koishi-theme.el")
+  :init
+  ;; set `koishi-theme-mode' to t if you want to use light theme,
+  ;; this variable should be configured before you load theme.
+  (setq koishi-theme-mode nil)
+  ;; enable koishi theme
+  (load-theme 'koishi t)
+  (unless (or (daemonp) (display-graphic-p))
+    (setf (alist-get 'background-color default-frame-alist) nil)))
+
 ;; Modus Themes(官方主题, 终端兼容性最佳)
 (use-package modus-themes
   :init
@@ -11,7 +23,7 @@
   (setq modus-themes-org-blocks 'gray-background) ; Org块背景样式
   (setq modus-themes-region '(accented)) ; 选区高亮样式
   (setq modus-themes-fringes 'subtle) ; Fringe样式
-)
+  )
 
 ;; Doom Themes(可选, 风格时尚)
 (use-package doom-themes
@@ -25,14 +37,14 @@
   (setq doom-themes-enable-italic t) ; 启用斜体
   (doom-themes-visual-bell-config) ; 启用视觉提示
   (doom-themes-org-config) ; 启用Org增强
-)
+  )
 
 ;; Doom Modeline(可选)
 (use-package doom-modeline
   :init
   (doom-modeline-mode 1) ; 启用Doom状态栏
   (setq doom-modeline-icon nil) ; 禁用图标以兼容终端
-)
+  )
 
 
 (use-package catppuccin-theme
@@ -44,8 +56,7 @@
   (setq catppuccin-colorize-comments t) ; 彩色注释
   (setq catppuccin-colorize-org-headings t) ; 彩色org标题
   (setq catppuccin-colorize-modeline t) ; 彩色模式行
-  (load-theme 'catppuccin t)
-)
+  (load-theme 'catppuccin t))
 
 ;; =========================
 ;; 主题切换配置
@@ -53,7 +64,8 @@
 
 ;; 所有主题组及子主题(Catppuccin 风味特殊处理)
 (defconst my/theme-groups
-  '((modus modus-vivendi modus-operandi)
+  '((koishi koishi)
+    (modus modus-vivendi modus-operandi)
     (doom doom-one doom-dracula doom-gruvbox doom-nord doom-solarized-dark)
     (catppuccin mocha latte frappe macchiato))
   "主题组及其子主题(Catppuccin 风味特殊处理)")

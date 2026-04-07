@@ -6,7 +6,8 @@
   :straight (:host github :repo "skeeto/elfeed")
   :config
   (setq elfeed-feeds '(("https://aren-coco.com/feed.atom" blog)
-                       ("https://langxubai.com/rss.xml" blog))))
+                       ("https://langxubai.com/rss.xml" blog)
+                       ("https://rss.arxiv.org/atom/cond-mat.str-el" arXiv))))
 
 (use-package elfeed-dashboard
   :disabled

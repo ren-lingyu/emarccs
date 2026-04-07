@@ -83,7 +83,12 @@
 
 ;; Backup and auto-save configuration
 (setq backup-directory-alist `((".*" . ,(locate-user-emacs-file "cache/backups/"))))
-(setq auto-save-file-name-transforms `((".*" ,(locate-user-emacs-file "cache/auto-save/") t)) create-lockfiles nil)
+(dolist (entry backup-directory-alist)
+  (make-directory (cdr entry) t))
+
+(setq auto-save-file-name-transforms `((".*" ,(locate-user-emacs-file "cache/auto-save/") t)))
+(dolist (entry auto-save-file-name-transforms)
+  (make-directory (cadr entry) t))
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)    ; 编程模式折叠代码块
 ;; (savehist-mode 1)                           ; 保存历史记录

@@ -40,7 +40,7 @@
                                    70)
                                   ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
                                         (equal (frame-monitor-attribute 'geometry) '(0 0 1920 1080)))
-                                   80)
+                                   110)
                                   ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
                                         (equal (frame-monitor-attribute 'geometry) '(0 0 3072 1920)))
                                    180)

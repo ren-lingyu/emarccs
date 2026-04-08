@@ -31,11 +31,24 @@
 
 ;; 基础编码和启动界面设置, 基本外观设置
 (set-face-attribute 'default
-		    nil
-		    :height 180
-		    :weight 'regular 
-		    :width 'normal
-		    :family "Maple Mono NF CN")
+                    nil
+                    :height (cond ((and (string-equal (frame-monitor-attribute 'name) "eDP-1")
+                                        (equal (frame-monitor-attribute 'geometry) '(0 0 3072 1920)))
+                                   100)
+                                  ((and (string-equal (frame-monitor-attribute 'name) "HDMI-1")
+                                        (equal (frame-monitor-attribute 'geometry) '(3072 408 1920 1200)))
+                                   70)
+                                  ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
+                                        (equal (frame-monitor-attribute 'geometry) '(0 0 1920 1080)))
+                                   80)
+                                  ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
+                                        (equal (frame-monitor-attribute 'geometry) '(0 0 3072 1920)))
+                                   180)
+                                  (t 'unspecified))
+                    :weight 'regular
+                    :width 'normal
+                    :family "Maple Mono NF CN")
+
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)

@@ -26,7 +26,8 @@
 (setq default-frame-alist
       '((background-color . "gray10")
         (foreground-color . "gray90")
-        (fullscreen . nil)))
+        (width . (text-pixels . 1200))
+        (height . (text-pixels . 1000))))
 
 (provide 'early-init)
 ;;; early-init.el ends here

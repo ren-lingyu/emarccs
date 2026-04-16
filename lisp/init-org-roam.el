@@ -148,7 +148,6 @@
 (global-set-key (kbd "C-c h d") (lambda () (interactive) (insert (concat "\n* " (format-time-string "%Y-%m-%d %A %z") "\n"))))
 
 (use-package consult-org-roam
-  :disabled
   :after (org-roam consult)
   :init
   (require 'org-roam)
@@ -161,7 +160,7 @@
   (consult-org-roam-buffer-narrow-key ?r)
   ;; Display org-roam buffers right after non-org-roam buffers
   ;; in consult-buffer (and not down at the bottom)
-  (consult-org-roam-buffer-after-buffers t)
+  (consult-org-roam-buffer-after-buffers nil)
   :config
   ;; Activate the minor mode
   (consult-org-roam-mode t)

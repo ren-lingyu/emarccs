@@ -118,12 +118,12 @@
     ";ker" "\\ker"
     ";im" "\\im"
     ";tr" "\\tr"
-    ";mrm" "\\mathrm"
-    ";mca" "\\mathcal"
-    ";msc" "\\mathfrak"
-    ";mbb" "\\mathbb"
-    ";mtt" "\\mathtt"
-    ";mfr" "\\mathfrak"
+    ";mrm" (lambda () (interactive) (yas-expand-snippet "\\mathrm{$1} $0"))
+    ";mcal" (lambda () (interactive) (yas-expand-snippet "\\mathcal{$1} $0"))
+    ";mscr" (lambda () (interactive) (yas-expand-snippet "\\mathscr{$1} $0"))
+    ";mbb" (lambda () (interactive) (yas-expand-snippet "\\mathbb{$1} $0"))
+    ";mtt" (lambda () (interactive) (yas-expand-snippet "\\mathtt{$1} $0"))
+    ";mfrak" (lambda () (interactive) (yas-expand-snippet "\\mathfrak{$1} $0"))
     ";times" "\\times"
     ";sum" (lambda () (interactive) (yas-expand-snippet "\\sum_{ $1 }^{ $2 } $0"))
     ";int" (lambda () (interactive) (yas-expand-snippet "\\int_{ $1 }^{ $2 } $0"))

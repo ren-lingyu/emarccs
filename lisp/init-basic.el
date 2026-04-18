@@ -33,16 +33,16 @@
 (set-face-attribute 'default
                     nil
                     :height (cond ((and (string-equal (frame-monitor-attribute 'name) "eDP-1")
-                                        (equal (frame-monitor-attribute 'geometry) '(0 0 3072 1920)))
+                                        (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(3072 1920)))
                                    100)
                                   ((and (string-equal (frame-monitor-attribute 'name) "HDMI-1")
-                                        (equal (frame-monitor-attribute 'geometry) '(3072 408 1920 1200)))
+                                        (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(1920 1200)))
                                    70)
                                   ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
-                                        (equal (frame-monitor-attribute 'geometry) '(0 0 1920 1080)))
+                                        (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(1920 1080)))
                                    110)
                                   ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
-                                        (equal (frame-monitor-attribute 'geometry) '(0 0 3072 1920)))
+                                        (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(3072 1920)))
                                    180)
                                   (t 'unspecified))
                     :weight 'regular
@@ -63,11 +63,9 @@
 ;; (setq frame-resize-pixelwise t)
 
 (setq default-frame-alist
-      (cond ((and (string-equal (frame-monitor-attribute 'name) "eDP-1")
-            (equal (frame-monitor-attribute 'geometry) '(0 0 3072 1920)))
+      (cond ((string-equal (frame-monitor-attribute 'name) "eDP-1")
              '((fullscreen . maximized)))
-            ((and (string-equal (frame-monitor-attribute 'name) "HDMI-1")
-                  (equal (frame-monitor-attribute 'geometry) '(3072 408 1920 1200)))
+            ((string-equal (frame-monitor-attribute 'name) "HDMI-1")
              '((fullscreen . maximized)))
             (t
              '((fullscreen . nil)))))

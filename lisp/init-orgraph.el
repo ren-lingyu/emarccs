@@ -166,7 +166,7 @@
         (list (expand-file-name "./texmf/bibtex/bib/ref.bib" org-directory)
               (expand-file-name "./texmf/bibtex/bib/zotero-my-library.bib" org-directory))))
 
-;; (mapc #'require '(org org-roam org-roam-organize org-gtd consult consult-org-roam auctex vertico orderless marginalia))
+(mapc #'require '(org org-roam org-roam-organize org-gtd consult consult-org-roam auctex vertico orderless marginalia))
 
 ;; (setq compile-command "emacs --batch --load ~/.emacs.d/init.el --eval \"(org-publish-all t)\"")
 

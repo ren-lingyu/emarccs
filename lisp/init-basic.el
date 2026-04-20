@@ -278,6 +278,14 @@
 ;; 各种语言和文件格式的简单支持
 (setopt elisp-fontify-semantically t)
 
+(use-package treesit-auto
+  :straight (:host github :repo "renzmann/treesit-auto")
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
 (use-package lisp-semantic-hl
   :ensure t
   :hook ((emacs-lisp-mode lisp-mode) . lisp-semantic-hl-mode))
@@ -285,6 +293,9 @@
 (use-package markdown-mode)
 
 (use-package yaml-mode)
+
+(use-package kdl-mode
+  :straight (:host github :repo "taquangtrung/emacs-kdl-mode"))
 
 (use-package nix-mode
   :straight (:host github :repo "NixOS/nix-mode")

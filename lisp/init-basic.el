@@ -32,13 +32,7 @@
 ;; 基础编码和启动界面设置, 基本外观设置
 (set-face-attribute 'default
                     nil
-                    :height (cond ((and (string-equal (frame-monitor-attribute 'name) "eDP-1")
-                                        (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(3072 1920)))
-                                   100)
-                                  ((and (string-equal (frame-monitor-attribute 'name) "HDMI-1")
-                                        (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(1920 1200)))
-                                   70)
-                                  ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
+                    :height (cond ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
                                         (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(1920 1080)))
                                    110)
                                   ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
@@ -48,6 +42,16 @@
                     :weight 'regular
                     :width 'normal
                     :family "Maple Mono NF CN")
+
+(let* ((geometry (cdr (cdr (frame-monitor-attribute 'geometry))))
+       (width (car geometry))
+       (height (car (cdr geometry))))
+  (setq default-frame-alist
+        '((width . (text-pixels . width))
+          (height . (text-pixels . height))
+          (fullscreen . maximized))))
+
+(setq initial-frame-alist default-frame-alist)
 
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
@@ -59,18 +63,6 @@
   (setq frame-background-mode 'dark)
   (set-face-background 'default "black")
   (set-face-foreground 'default "white"))
-
-;; (setq frame-resize-pixelwise t)
-
-(setq default-frame-alist
-      (cond ((string-equal (frame-monitor-attribute 'name) "eDP-1")
-             '((fullscreen . maximized)))
-            ((string-equal (frame-monitor-attribute 'name) "HDMI-1")
-             '((fullscreen . maximized)))
-            (t
-             '((fullscreen . nil)))))
-
-(setq initial-frame-alist default-frame-alist)
 
 (menu-bar-mode -1)                            ; 关闭菜单栏
 (tool-bar-mode -1)
@@ -293,6 +285,9 @@
 (use-package markdown-mode)
 
 (use-package yaml-mode)
+
+(use-package qml-mode
+  :straight (:host github :repo "coldnew/qml-mode"))
 
 (use-package kdl-mode
   :straight (:host github :repo "taquangtrung/emacs-kdl-mode"))

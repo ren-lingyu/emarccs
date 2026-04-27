@@ -70,18 +70,18 @@
   (setq citar-org-roam-capture-template-key "r")
 )
 
-(defun my/citar-insert-then-create-note ()
-  "Insert citation and then create a note for the selected entry."
-  (interactive)
-  (let ((refs (citar-select-refs)))
-    (when refs
-      ;; 插入引用
-      (citar-insert-citation refs)
-      ;; 创建笔记(使用第一个条目)
-      (citar-create-note (car refs))))
-)
+;; (defun my/citar-insert-then-create-note ()
+;;   "Insert citation and then create a note for the selected entry."
+;;   (interactive)
+;;   (let ((refs (citar-select-refs)))
+;;     (when refs
+;;       ;; 插入引用
+;;       (citar-insert-citation refs)
+;;       ;; 创建笔记(使用第一个条目)
+;;       (citar-create-note (car refs))))
+;; )
 
-(global-set-key (kbd "C-c c i") #'my/citar-insert-then-create-note)
+;; (global-set-key (kbd "C-c c i") #'my/citar-insert-then-create-note)
 
 (provide 'init-org-roam-citar)
 

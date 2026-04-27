@@ -23,11 +23,14 @@
 (setq native-comp-async-report-warnings-errors 'silent)
 
 ;; 初始外观
+(setq frame-resize-pixelwise t)
+
 (setq default-frame-alist
       '((background-color . "gray10")
         (foreground-color . "gray90")
-        (width . (text-pixels . 1200))
-        (height . (text-pixels . 1000))))
+        (fullscreen . maximized)))
+
+(setq initial-frame-alist default-frame-alist)
 
 (provide 'early-init)
 ;;; early-init.el ends here

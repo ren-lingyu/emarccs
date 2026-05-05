@@ -278,6 +278,9 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
+(setq treesit-language-source-alist
+      '((lean . ("https://github.com/Julian/tree-sitter-lean.git"))))
+
 (use-package lisp-semantic-hl
   :ensure t
   :hook ((emacs-lisp-mode lisp-mode) . lisp-semantic-hl-mode))

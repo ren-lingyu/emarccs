@@ -1,6 +1,6 @@
 {
   
-  description = "aRenCoco's Emacs configuration";
+  description = "aRenCoco's Emacs Configuration";
   
   outputs = { self }: {
     

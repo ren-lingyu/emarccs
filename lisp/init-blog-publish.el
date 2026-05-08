@@ -320,8 +320,11 @@
 								 :group-by (vector (intern "n:id"))
 								 :having (list '= '(funcall count (distinct t:tag)) tag_num)
 								 ))))
-			     (result_list (when sitemap_bool (append result_list (list (expand-file-name sitemap_filename base_dir)))))
-			     (result_list (when makeindex_bool (append result_list (list (expand-file-name theindex_filename base_dir))))))
+			     (result_list (when sitemap_bool
+                                (append result_list (list (expand-file-name sitemap_filename base_dir)))))
+			     (result_list (when makeindex_bool
+                                (with-temp-file (expand-file-name theindex_filename base_dir) nil)
+                                (append result_list (list (expand-file-name theindex_filename base_dir))))))
 			result_list)
 		    (error "[ERROR] DB Query Failed: %S" err))
 		(funcall origin_function project))))

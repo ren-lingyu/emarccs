@@ -8,6 +8,7 @@
 !LICENSE
 !init.el
 !early-init.el
+!flake.nix
 
 # 子目录文件白名单
 !lisp/

@@ -30,28 +30,29 @@
   (load bootstrap-file nil 'nomessage))
 
 ;; 基础编码和启动界面设置, 基本外观设置
-(set-face-attribute 'default
-                    nil
-                    :height (cond ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
-                                        (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(1920 1080)))
-                                   110)
-                                  ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
-                                        (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(3072 1920)))
-                                   180)
-                                  (t 'unspecified))
-                    :weight 'regular
-                    :width 'normal
-                    :family "Maple Mono NF CN")
+(when (display-graphic-p)
+  (set-face-attribute 'default
+                      nil
+                      :height (cond ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
+                                          (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(1920 1080)))
+                                     110)
+                                    ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
+                                          (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(3072 1920)))
+                                     180)
+                                    (t 'unspecified))
+                      :weight 'regular
+                      :width 'normal
+                      :family "Maple Mono NF CN")
 
-(let* ((geometry (cdr (cdr (frame-monitor-attribute 'geometry))))
-       (width (car geometry))
-       (height (car (cdr geometry))))
-  (setq default-frame-alist
-        '((width . (text-pixels . width))
-          (height . (text-pixels . height))
-          (fullscreen . maximized))))
+  (let* ((geometry (cdr (cdr (frame-monitor-attribute 'geometry))))
+         (width (car geometry))
+         (height (car (cdr geometry))))
+    (setq default-frame-alist
+          '((width . (text-pixels . width))
+            (height . (text-pixels . height))
+            (fullscreen . maximized))))
 
-(setq initial-frame-alist default-frame-alist)
+  (setq initial-frame-alist default-frame-alist))
 
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
@@ -117,9 +118,9 @@
 ;; 有关 buffe 显示
 (setq display-buffer-alist
       '(("*compilation*"
-	 (display-buffer-in-direction)
-	 (direction . below)
-	 (window-height . 6))))
+         (display-buffer-in-direction)
+         (direction . below)
+         (window-height . 6))))
 
 (setq compilation-scroll-output t)
 
@@ -309,7 +310,6 @@
   :mode ("\\.env\\..*\\'" . dotenv-mode))
 
 ;; 键位设置和快捷键
-
 (setq x-super-keysym 'hyper)  ;通过把 Super 映射为 Hyper 在逻辑上禁用 Super 键
 
 ;; (global-set-key (kbd "RET") 'newline-and-indent) ; Enter 键设置为"新其一行并做缩进"

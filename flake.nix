@@ -25,7 +25,7 @@
         
       };
 
-      default = emacsConfig { emacsConfigDir = ".emacs.d" };
+      default = emacsConfig { emacsConfigDir = ".emacs.d"; };
       
     };
     

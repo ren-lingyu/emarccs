@@ -46,12 +46,13 @@
 
   (let* ((geometry (cdr (cdr (frame-monitor-attribute 'geometry))))
          (width (car geometry))
-         (height (car (cdr geometry))))
-    (setq default-frame-alist
-          '((width . (text-pixels . width))
-            (height . (text-pixels . height))
-            (fullscreen . maximized))))
-
+         (height (car (cdr geometry)))
+         (default-frame-alist (assq-delete-all width default-frame-alist))
+         (default-frame-alist (assq-delete-all height default-frame-alist)))
+    (push '((width . (text-pixels . width))
+            (height . (text-pixels . height)))
+          default-frame-alist))
+  
   (setq initial-frame-alist default-frame-alist))
 
 (prefer-coding-system 'utf-8)

@@ -25,16 +25,15 @@
 ;; 初始外观
 (setq frame-resize-pixelwise t)
 
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
 (setq blink-cursor-mode nil)
 
 (setq default-frame-alist
       '((background-color . "gray10")
         (foreground-color . "gray90")
-        (fullscreen . maximized)))
+        (fullscreen . maximized)
+        (vertical-scroll-bars . nil)
+        (menu-bar-lines . 0)
+        (tool-bar-lines . 0)))
 
 (setq initial-frame-alist default-frame-alist)
 

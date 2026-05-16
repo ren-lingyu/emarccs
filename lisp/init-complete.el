@@ -118,12 +118,12 @@
     ";ker" "\\ker"
     ";im" "\\im"
     ";tr" "\\tr"
-    ";mrm" (lambda () (interactive) (yas-expand-snippet "\\mathrm{$1} $0"))
-    ";mcal" (lambda () (interactive) (yas-expand-snippet "\\mathcal{$1} $0"))
-    ";mscr" (lambda () (interactive) (yas-expand-snippet "\\mathscr{$1} $0"))
-    ";mbb" (lambda () (interactive) (yas-expand-snippet "\\mathbb{$1} $0"))
-    ";mtt" (lambda () (interactive) (yas-expand-snippet "\\mathtt{$1} $0"))
-    ";mfrak" (lambda () (interactive) (yas-expand-snippet "\\mathfrak{$1} $0"))
+    ";mrm" (lambda () (interactive) (yas-expand-snippet "\\mathrm{$1}"))
+    ";mcal" (lambda () (interactive) (yas-expand-snippet "\\mathcal{$1}"))
+    ";mscr" (lambda () (interactive) (yas-expand-snippet "\\mathscr{$1}"))
+    ";mbb" (lambda () (interactive) (yas-expand-snippet "\\mathbb{$1}"))
+    ";mtt" (lambda () (interactive) (yas-expand-snippet "\\mathtt{$1}"))
+    ";mfrak" (lambda () (interactive) (yas-expand-snippet "\\mathfrak{$1}"))
     ";times" "\\times"
     ";sum" (lambda () (interactive) (yas-expand-snippet "\\sum_{ $1 }^{ $2 } $0"))
     ";int" (lambda () (interactive) (yas-expand-snippet "\\int_{ $1 }^{ $2 } $0"))
@@ -142,7 +142,10 @@
     ";eval" (lambda () (interactive) (yas-expand-snippet "\\eval{ $1 }_{ $2 }^{ $3 }$0"))
     ";frac" (lambda () (interactive) (yas-expand-snippet "\\frac{ $1 }{ $2 }$0"))
     ";sqrt" (lambda () (interactive) (yas-expand-snippet "\\sqrt{ $1 }$0"))
-    ";text" (lambda () (interactive) (yas-expand-snippet "\\text{$1}$0")))
+    ";text" (lambda () (interactive) (yas-expand-snippet "\\text{$1}$0"))
+    ";tensor" (lambda () (interactive) (yas-expand-snippet "\\tensor{ $1 }{ $2 }$0"))
+    ";sp" (lambda () (interactive) (yas-expand-snippet "\\sp{ $1 }$0"))
+    ";sb" (lambda () (interactive) (yas-expand-snippet "\\sb{ $1 }$0")))
   :hook
   (LaTeX-mode . laas-mode)
   (LaTeX-mode . yas-minor-mode)

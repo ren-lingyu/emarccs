@@ -212,6 +212,13 @@
    ("C-c g" . consult-grep)
    ("C-c G" . consult-ripgrep)))
 
+;; 大文件
+(use-package vlf
+  :config
+  (require 'vlf-setup)
+  (setq vlf-application 'dont-ask)
+  (setq vlf-tune-enabled t))
+
 ;; Embark：上下文操作
 (use-package embark
   :bind

@@ -120,6 +120,41 @@
 
 (setq compilation-scroll-output t)
 
+;; dired
+(use-package dired
+  :straight (:type built-in)
+  :config
+  (setq dired-listing-switches "-l -a --human-readable --group-directories-first")
+  (setq dired-hide-details-mode nil)
+  (put 'dired-find-alternate-file 'disabled nil))
+
+(use-package dired-x
+  :straight (:type built-in)
+  :config
+  (setq dired-omit-files nil))
+
+(use-package diredfl
+  :hook
+  ((dired-mode . diredfl-mode)
+   (dirvish-directory-view-mode . diredfl-mode))
+  :config
+  (set-face-attribute 'diredfl-dir-name nil :bold t))
+
+(use-package dirvish
+  :ensure t
+  :straight (:host github :repo "alexluigit/dirvish")
+  :init
+  (dirvish-override-dired-mode)
+  :config
+  (setq dirvish-hide-details nil)
+  (setq dirvish-mode-line-format '(:left (sort symlink) :right (omit yank index)))
+  (setq dirvish-attributes '(vc-state subtree-state nerd-icons collapse git-msg file-time file-size))
+  (setq dirvish-side-attributes '(vc-state nerd-icons collapse file-size))
+  (setq dirvish-large-directory-threshold 20000))
+
+;; 图标
+(use-package nerd-icons)
+
 ;; 状态栏美化(终端兼容)
 (use-package powerline
   :config 

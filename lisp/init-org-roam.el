@@ -143,7 +143,8 @@
   :bind 
   (("C-c o o" . org-roam-organize-mode)
    ("C-c o c" . org-roam-organize-check-variables))
-  :hook (after-init-hook . org-roam-organize-mode))
+  :hook
+  ((after-init . org-roam-organize-mode)))
 
 (global-set-key (kbd "C-c h d") (lambda () (interactive) (insert (concat "\n* " (format-time-string "%Y-%m-%d %A %z") "\n"))))
 

@@ -14,7 +14,7 @@
   (unless (or (daemonp) (display-graphic-p))
     (setf (alist-get 'background-color default-frame-alist) nil))
   :hook
-  (server-after-make-frame-hook . (lambda () (load-theme 'koishi t))))
+  ((server-after-make-frame . (lambda () (load-theme 'koishi t)))))
 
 ;; Modus Themes(官方主题, 终端兼容性最佳)
 (use-package modus-themes

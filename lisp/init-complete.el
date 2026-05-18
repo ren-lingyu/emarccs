@@ -28,6 +28,7 @@
   (LaTeX-mode . aas-activate-for-major-mode)
   (org-mode . aas-activate-for-major-mode)
   :config
+  (remhash 'text-mode aas-keymaps)
   (aas-set-snippets 'text-mode
     ;; expand unconditionally
     ";o-" "ō"
@@ -35,14 +36,16 @@
     ";a-" "ā"
     ";u-" "ū"
     ";e-" "ē")
+  (remhash 'org-mode aas-keymaps)
   (aas-set-snippets 'org-mode
     ";abst" (lambda () (interactive) (insert "#+BEGIN_abstract\n\n#+END_abstract\n") (forward-line -2) )
     ";comm" (lambda () (interactive) (insert "#+BEGIN_COMMENT\n\n#+END_COMMENT\n") (forward-line -2) )
     ";eq" (lambda () (interactive) (insert "\\\(  \\\)") (forward-char -3) )
     ";ee" (lambda () (interactive) (insert "\\begin{equation}\n\n\\end{equation}\n") (forward-line -2) )
-    ";ea" (lambda () (interactive) (insert "\\begin{align}\n\n\\end{align}\n") (forward-line -2) )
+    ";ean" (lambda () (interactive) (insert "\\begin{align}\n\n\\end{align}\n") (forward-line -2) )
+    ";ead" (lambda () (interactive) (insert "\\begin{aligned}[t]\n\n\\end{aligned}") (forward-line -1) )
     ";es" (lambda () (interactive) (insert "\\begin{split}\n\n\\end{split}") (forward-line -1) )
-    ";eg" (lambda () (interactive) (insert "\\begin{gathered}\n\n\\end{gathered}") (forward-line -1) )
+    ";egd" (lambda () (interactive) (insert "\\begin{gathered}\n\n\\end{gathered}") (forward-line -1) )
     ";eyq" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquant}\n\n\\end{yquant}\n\\end{tikzpicture}") (forward-line -2))
     ";eyg" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquantgroup}\n\n\\end{yquantgroup}\n\\end{tikzpicture}") (forward-line -2))))
 

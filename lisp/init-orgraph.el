@@ -26,6 +26,17 @@
            ("\\subsubsubsection{%s}" . "\\subsubsubsection*{%s}")
            ("\\paragraph{%s}" . "\\paragraph*{%s}")
            ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+          ("book"
+           ,(mapconcat #'identity
+                       '("\\documentclass[10pt]{book}")
+                       "\n")
+           ("\\chapter{%s}" . "\\chapter*{%s}")
+           ("\\section{%s}" . "\\section*{%s}")
+           ("\\subsection{%s}" . "\\subsection*{%s}")
+           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+           ("\\subsubsubsection{%s}" . "\\subsubsubsection*{%s}")
+           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+           ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
           ("note"
            ,(mapconcat #'identity
                        '("\\documentclass[10pt,a4paper]{article}"

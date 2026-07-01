@@ -31,32 +31,45 @@
 
 ;; 基础编码和启动界面设置, 基本外观设置
 (when (display-graphic-p)
-  (set-face-attribute 'default
-                      nil
-                      :height (cond ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
-                                          (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(1920 1080)))
-                                     110)
-                                    ((and (string-equal (frame-monitor-attribute 'name) "XWAYLAND0")
-                                          (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(3072 1920)))
-                                     180)
-                                    ((and (string-equal (frame-monitor-attribute 'name) "rdp-0")
-                                          (equal (cdr (cdr (frame-monitor-attribute 'geometry))) '(3072 1920)))
-                                     180)
-                                    (t 'unspecified))
-                      :weight 'regular
-                      :width 'normal
-                      :family "Maple Mono NF CN")
-
-  (let* ((geometry (cdr (cdr (frame-monitor-attribute 'geometry))))
-         (width (car geometry))
-         (height (car (cdr geometry)))
-         (default-frame-alist (assq-delete-all width default-frame-alist))
-         (default-frame-alist (assq-delete-all height default-frame-alist)))
-    (push '((width . (text-pixels . width))
-            (height . (text-pixels . height)))
-          default-frame-alist))
-  
-  (setq initial-frame-alist default-frame-alist))
+  (let* ((geometry (frame-monitor-attribute 'geometry))
+         (monitor-width (nth 2 geometry))
+         (monitor-height (nth 3 geometry))
+         
+         ;; Baseline: 1920x1080 -> font height 110
+         (base-width 1920.0)
+         (base-height 1080.0)
+         (base-font-height 110)
+         
+         ;; Use the smaller scaling factor to avoid overly large fonts
+         ;; on monitors with unusual aspect ratios.
+         (scale (min (/ monitor-width base-width)
+                     (/ monitor-height base-height)))
+         
+         ;; For example:
+         ;; 3072x1920 -> scale = 1.6 -> font height = 176
+         (font-height (round (* base-font-height scale))))
+    
+    (set-face-attribute 'default
+                        nil
+                        :height font-height
+                        :weight 'regular
+                        :width 'normal
+                        :family "Maple Mono NF CN")
+    
+    ;; (setq default-frame-alist
+    ;;       (assq-delete-all 'width default-frame-alist))
+    ;; (setq default-frame-alist
+    ;;       (assq-delete-all 'height default-frame-alist))
+    
+    ;; (push `(width . (text-pixels . ,monitor-width))
+    ;;       default-frame-alist)
+    ;; (push `(height . (text-pixels . ,monitor-height))
+    ;;       default-frame-alist)
+    
+    ;; (set-frame-size nil monitor-width monitor-height t)
+    
+    ;; (setq initial-frame-alist default-frame-alist)
+    ))
 
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)

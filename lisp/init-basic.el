@@ -31,45 +31,50 @@
 
 ;; 基础编码和启动界面设置, 基本外观设置
 (when (display-graphic-p)
-  (let* ((geometry (frame-monitor-attribute 'geometry))
+  (let* ((font-height-mm 4)
+         (mm-size (frame-monitor-attribute 'mm-size))
+         (mm-width (and (consp mm-size) (car mm-size)))
+         (mm-height (and (consp mm-size)
+                         (if (consp (cdr mm-size))
+                             (cadr mm-size)
+                           (cdr mm-size))))
+         (geometry (frame-monitor-attribute 'geometry))
          (monitor-width (nth 2 geometry))
          (monitor-height (nth 3 geometry))
-         
-         ;; Baseline: 1920x1080 -> font height 110
          (base-width 1920.0)
          (base-height 1080.0)
          (base-font-height 110)
-         
-         ;; Use the smaller scaling factor to avoid overly large fonts
-         ;; on monitors with unusual aspect ratios.
-         (scale (min (/ monitor-width base-width)
-                     (/ monitor-height base-height)))
-         
-         ;; For example:
-         ;; 3072x1920 -> scale = 1.6 -> font height = 176
-         (font-height (round (* base-font-height scale))))
-    
+         (scale (when (and (numberp monitor-width)
+                           (numberp monitor-height)
+                           (> monitor-width 0)
+                           (> monitor-height 0))
+                  (min (/ monitor-width base-width)
+                       (/ monitor-height base-height))))
+         (font-height (or (when (and (numberp mm-width)
+                                     (numberp mm-height)
+                                     (> mm-width 0)
+                                     (> mm-height 0))
+                            (round (* font-height-mm 10 (/ 72.27 25.4))))
+                          (when scale
+                            (round (* base-font-height scale)))
+                          'unspecified))
+         (frame-size (cdr (cdr geometry)))
+         (width (car frame-size))
+         (height (car (cdr frame-size)))
+         (default-frame-alist (assq-delete-all width default-frame-alist))
+         (default-frame-alist (assq-delete-all height default-frame-alist)))
     (set-face-attribute 'default
                         nil
                         :height font-height
                         :weight 'regular
                         :width 'normal
                         :family "Maple Mono NF CN")
-    
-    ;; (setq default-frame-alist
-    ;;       (assq-delete-all 'width default-frame-alist))
-    ;; (setq default-frame-alist
-    ;;       (assq-delete-all 'height default-frame-alist))
-    
-    ;; (push `(width . (text-pixels . ,monitor-width))
-    ;;       default-frame-alist)
-    ;; (push `(height . (text-pixels . ,monitor-height))
-    ;;       default-frame-alist)
-    
-    ;; (set-frame-size nil monitor-width monitor-height t)
-    
-    ;; (setq initial-frame-alist default-frame-alist)
-    ))
+
+    (push '((width . (text-pixels . width))
+            (height . (text-pixels . height)))
+          default-frame-alist)
+  
+    (setq initial-frame-alist default-frame-alist)))
 
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)

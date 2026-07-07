@@ -69,11 +69,8 @@
                         :weight 'regular
                         :width 'normal
                         :family "Maple Mono NF CN")
-
-    (push '((width . (text-pixels . width))
-            (height . (text-pixels . height)))
-          default-frame-alist)
-  
+    (push `(width . (text-pixels . ,width)) default-frame-alist)
+    (push `(height . (text-pixels . ,height)) default-frame-alist)
     (setq initial-frame-alist default-frame-alist)))
 
 (prefer-coding-system 'utf-8)

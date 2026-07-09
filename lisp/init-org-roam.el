@@ -104,25 +104,25 @@
   ;; :straight (:local-repo "~/data/org-roam-organize/") ;; 用于调试
   :after org-roam
   :custom
-  (org-roam-organize/directory org-roam-directory)
-  (org-roam-organize/moc-directory (expand-file-name "./moc/" org-roam-directory))
-  (org-roam-organize/moc-tag "map")
-  (org-roam-organize/top-moc-file (expand-file-name "./moc/maps.org" org-roam-directory))
-  (org-roam-organize/move-source-tag "idea")
-  (org-roam-organize/move-target-tag "zettel")
-  (org-roam-organize/fleeting-directory (expand-file-name "./fleeting/" org-roam-directory))
-  (org-roam-organize/permanent-directory (expand-file-name "./permanent/" org-roam-directory))
-  (org-roam-organize/move-target-directory (expand-file-name "./permanent/" org-roam-directory))
-  (org-roam-organize/directory-p t)
-  (org-roam-organize/tag-title-alist '(("map" . "Maps")
+  (org-roam-organize-directory org-roam-directory)
+  (org-roam-organize-moc-directory (expand-file-name "./moc/" org-roam-directory))
+  (org-roam-organize-moc-tag "map")
+  (org-roam-organize-top-moc-file (expand-file-name "./moc/maps.org" org-roam-directory))
+  (org-roam-organize-move-source-tag "idea")
+  (org-roam-organize-move-target-tag "zettel")
+  (org-roam-organize-fleeting-directory (expand-file-name "./fleeting/" org-roam-directory))
+  (org-roam-organize-permanent-directory (expand-file-name "./permanent/" org-roam-directory))
+  (org-roam-organize-move-target-directory (expand-file-name "./permanent/" org-roam-directory))
+  (org-roam-organize-directory-p t)
+  (org-roam-organize-tag-title-alist '(("map" . "Maps")
 				       ("zettel" . "Permanent")
 				       ("ref" . "Literature")
 				       ("idea" . "Fleeting")
 				       ("note" . "Note")
 				       ("blog" . "Blog")))
-  (org-roam-organize/moc-managed-tag-property "MOC_MANAGED_TAG")
-  (org-roam-organize/moc-managed-node-count-property "MOC_MANAGED_NODE_COUNT")
-  (org-roam-organize/capture-template `("m" "map of contents" plain "%?"
+  (org-roam-organize-moc-managed-tag-property "MOC_MANAGED_TAG")
+  (org-roam-organize-moc-managed-node-count-property "MOC_MANAGED_NODE_COUNT")
+  (org-roam-organize-capture-template `("m" "map of contents" plain "%?"
                                           :if-new (file+head
 						   "moc/${slug}.org"
 						   ,(concat
@@ -136,8 +136,8 @@
 						     "#+FILETAGS: :map:\n"
 						     "#+DESCRIPTION:\n"))
                                           :unnarrowed t))
-  (org-roam-organize/move-target-directory-id-or-not t)
-  (org-roam-organize/move-target-filename-id-or-not nil)
+  (org-roam-organize-move-target-directory-id-or-not t)
+  (org-roam-organize-move-target-filename-id-or-not nil)
   :config
   (org-roam-organize-create-directory)
   :bind 

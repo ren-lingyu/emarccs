@@ -16,9 +16,9 @@
   (org-roam-db-update-method 'immediate) 
   :bind 
   (("C-c n f" . org-roam-node-find)
-    ("C-c n i" . org-roam-node-insert)
-    ("C-c n l" . org-roam-buffer-toggle)
-    ("C-c n c" . org-roam-capture))
+   ("C-c n i" . org-roam-node-insert)
+   ("C-c n l" . org-roam-buffer-toggle)
+   ("C-c n c" . org-roam-capture))
   :config
   (org-roam-db-autosync-mode)
   ;; (advice-add 'org-roam-mode-hook :after
@@ -28,76 +28,76 @@
   ;;   )
   ;; )
   (setq org-roam-node-display-template
-    (concat 
-      "${title:*} "
-      (propertize "${tags:30}" 'face 'org-tag)))
+        (concat 
+         "${title:*} "
+         (propertize "${tags:30}" 'face 'org-tag)))
   (setq org-roam-capture-templates
-    (append org-roam-capture-templates
-      `(
-        ("f" "fleeting" plain "%?"
-          :if-new 
-          (file+head  
-            "fleeting/${slug}.org"
-            ,(concat
-              "#+TITLE: ${title}\n"
-              "#+AUTHOR: Lingyu Ren\n"
-              "#+DATE: " (format-time-string "%Y-%m-%d %A %H:%M:%S %z") "\n"
-              "#+FILETAGS: :idea:\n"
-              "#+DESCRIPTION:\n"
-            ))
-          :unnarrowed t)
-        ("p" "permanent" plain "%?"
-          :if-new 
-          (file+head  
-            "permanent/${id}/${slug}.org"
-            ,(concat
-              "#+TITLE: ${title}\n"
-              "#+AUTHOR: Lingyu Ren\n"
-              "#+DATE: " (format-time-string "%Y-%m-%d %A %H:%M:%S %z") "\n"
-              "#+FILETAGS: :zettel:\n"
-              "#+DESCRIPTION:\n"
-            ))
-          :unnarrowed t)
-        ("I" "post index" plain "%?"
-          :if-new 
-          (file+head  
-          "permanent/${slug}.org"
-            ,(concat
-              "#+TITLE: ${title}\n"
-              "#+INDEX: ${title}\n"
-              "#+DESCRIPTION:\n"
-              "#+AUTHOR: aRenCoco\n"
-              "#+EMAIL: aRen_Coco@outlook.com\n"
-              "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
-              "#+FILETAGS: :zettel:blog:\n"
-            ))
-          :unnarrowed t)
-        ("P" "post article" plain "%?"
-          :if-new 
-          (file+head  
-            "permanent/${id}/${slug}.org"
-            ,(concat
-              "#+TITLE: ${title}\n"
-              "#+INDEX: ${title}\n"
-              "#+AUTHOR: aRenCoco\n"
-              "#+EMAIL: aRen_Coco@outlook.com\n"
-              "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
-              "#+FILETAGS: :zettel:blog:post:\n"
-            ))
-          :unnarrowed t)
-        ("D" "draft article" plain "%?"
-          :if-new 
-          (file+head  
-          "permanent/${id}/${slug}.org"
-            ,(concat
-              "#+TITLE: ${title}\n"
-              "#+INDEX: ${title}\n"
-              "#+AUTHOR: aRenCoco\n"
-              "#+EMAIL: aRen_Coco@outlook.com\n"
-              "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
-              "#+FILETAGS: :zettel:blog:\n"
-            ))
-          :unnarrowed t)))))
+        (append org-roam-capture-templates
+                `(
+                  ("f" "fleeting" plain "%?"
+                   :if-new 
+                   (file+head  
+                    "fleeting/${slug}.org"
+                    ,(concat
+                      "#+TITLE: ${title}\n"
+                      "#+AUTHOR: Lingyu Ren\n"
+                      "#+DATE: " (format-time-string "%Y-%m-%d %A %H:%M:%S %z") "\n"
+                      "#+FILETAGS: :idea:\n"
+                      "#+DESCRIPTION:\n"
+                      ))
+                   :unnarrowed t)
+                  ("p" "permanent" plain "%?"
+                   :if-new 
+                   (file+head  
+                    "permanent/${id}/${slug}.org"
+                    ,(concat
+                      "#+TITLE: ${title}\n"
+                      "#+AUTHOR: Lingyu Ren\n"
+                      "#+DATE: " (format-time-string "%Y-%m-%d %A %H:%M:%S %z") "\n"
+                      "#+FILETAGS: :zettel:\n"
+                      "#+DESCRIPTION:\n"
+                      ))
+                   :unnarrowed t)
+                  ("I" "post index" plain "%?"
+                   :if-new 
+                   (file+head  
+                    "permanent/${slug}.org"
+                    ,(concat
+                      "#+TITLE: ${title}\n"
+                      "#+INDEX: ${title}\n"
+                      "#+DESCRIPTION:\n"
+                      "#+AUTHOR: aRenCoco\n"
+                      "#+EMAIL: aRen_Coco@outlook.com\n"
+                      "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
+                      "#+FILETAGS: :zettel:blog:\n"
+                      ))
+                   :unnarrowed t)
+                  ("P" "post article" plain "%?"
+                   :if-new 
+                   (file+head  
+                    "permanent/${id}/${slug}.org"
+                    ,(concat
+                      "#+TITLE: ${title}\n"
+                      "#+INDEX: ${title}\n"
+                      "#+AUTHOR: aRenCoco\n"
+                      "#+EMAIL: aRen_Coco@outlook.com\n"
+                      "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
+                      "#+FILETAGS: :zettel:blog:post:\n"
+                      ))
+                   :unnarrowed t)
+                  ("D" "draft article" plain "%?"
+                   :if-new 
+                   (file+head  
+                    "permanent/${id}/${slug}.org"
+                    ,(concat
+                      "#+TITLE: ${title}\n"
+                      "#+INDEX: ${title}\n"
+                      "#+AUTHOR: aRenCoco\n"
+                      "#+EMAIL: aRen_Coco@outlook.com\n"
+                      "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
+                      "#+FILETAGS: :zettel:blog:\n"
+                      ))
+                   :unnarrowed t)))))
 
 (use-package org-roam-organize
   :straight (:host github :repo "ren-lingyu/org-roam-organize")
@@ -115,27 +115,27 @@
   (org-roam-organize-move-target-directory (expand-file-name "./permanent/" org-roam-directory))
   (org-roam-organize-directory-p t)
   (org-roam-organize-tag-title-alist '(("map" . "Maps")
-				       ("zettel" . "Permanent")
-				       ("ref" . "Literature")
-				       ("idea" . "Fleeting")
-				       ("note" . "Note")
-				       ("blog" . "Blog")))
+                                       ("zettel" . "Permanent")
+                                       ("ref" . "Literature")
+                                       ("idea" . "Fleeting")
+                                       ("note" . "Note")
+                                       ("blog" . "Blog")))
   (org-roam-organize-moc-managed-tag-property "MOC_MANAGED_TAG")
   (org-roam-organize-moc-managed-node-count-property "MOC_MANAGED_NODE_COUNT")
   (org-roam-organize-capture-template `("m" "map of contents" plain "%?"
-                                          :if-new (file+head
-						   "moc/${slug}.org"
-						   ,(concat
-						     ":PROPERTIES:\n"
-						     ":MOC_MANAGED_TAG: ${moc_managed_tag}\n"
-						     ":MOC_MANAGED_NODE_COUNT:\n"
-						     ":END:\n"
-						     "#+TITLE: ${title}\n"
-						     "#+AUTHOR: Lingyu Ren\n"
-						     "#+DATE: " (format-time-string "<%Y-%m-%d %A %H:%M:%S %z>") "\n"
-						     "#+FILETAGS: :map:\n"
-						     "#+DESCRIPTION:\n"))
-                                          :unnarrowed t))
+                                        :if-new (file+head
+                                                 "moc/${slug}.org"
+                                                 ,(concat
+                                                   ":PROPERTIES:\n"
+                                                   ":MOC_MANAGED_TAG: ${moc_managed_tag}\n"
+                                                   ":MOC_MANAGED_NODE_COUNT:\n"
+                                                   ":END:\n"
+                                                   "#+TITLE: ${title}\n"
+                                                   "#+AUTHOR: Lingyu Ren\n"
+                                                   "#+DATE: " (format-time-string "<%Y-%m-%d %A %H:%M:%S %z>") "\n"
+                                                   "#+FILETAGS: :map:\n"
+                                                   "#+DESCRIPTION:\n"))
+                                        :unnarrowed t))
   (org-roam-organize-move-target-directory-id-or-not t)
   (org-roam-organize-move-target-filename-id-or-not nil)
   :config
@@ -167,11 +167,11 @@
   (consult-org-roam-mode t)
   ;; Eventually suppress previewing for certain functions
   (consult-customize
-    consult-org-roam-forward-links
-    ;; :preview-key "TAB"
-    :preview-key "M-."
-    ;; :preview-key 'any
-  )
+   consult-org-roam-forward-links
+   ;; :preview-key "TAB"
+   :preview-key "M-."
+   ;; :preview-key 'any
+   )
   ;; (advice-add 'consult-org-roam-mode-hook :after
   ;;   (lambda (&rest _)
   ;;     (display-line-numbers-mode 1)
@@ -229,40 +229,40 @@
   (let ((element (org-element-context)))
     ;; Check if the cursor is on a link element
     (if (eq (org-element-type element) 'link)
-      (let* (;; Link type, e.g., "id"
-          (link-type (org-element-property :type element))
-          ;; Link target (ID for Org-roam)
-          (link-path (org-element-property :path element))
-          ;; Start of description text
-          (desc-begin (org-element-property :contents-begin element))
-          ;; End of description text
-          (desc-end (org-element-property :contents-end element)))
-        ;; Ensure the link is an Org-roam ID link
-        (if (and (string= link-type "id") link-path)
-          (let* ((node-id link-path)
-              ;; Query Org-roam database for the node title using EmacSQL
-              (title (caar (org-roam-db-query
-                    [:select title :from nodes :where (= id $s1)]
-                    node-id))))
-            (cond
-              ;; Case 1: Node not found
-              ((null title)
-                (message "No node found with id=%s." node-id))
-              ;; Case 2: Description already matches the node title
-              ((and 
-                desc-begin 
-                desc-end
-                  (string= title (buffer-substring-no-properties desc-begin desc-end)))
-                (message "The link description is already up-to-date."))
-              ;; Case 3: Update description to match node title
-              (t
-                (save-excursion
-                  (goto-char desc-begin)
-                  (delete-region desc-begin desc-end)
-                  (insert title))
-                (message "Description updated to: %s" title))))
-          ;; Not an ID link
-          (message "The current link is not an Org-roam ID link.")))
+        (let* (;; Link type, e.g., "id"
+               (link-type (org-element-property :type element))
+               ;; Link target (ID for Org-roam)
+               (link-path (org-element-property :path element))
+               ;; Start of description text
+               (desc-begin (org-element-property :contents-begin element))
+               ;; End of description text
+               (desc-end (org-element-property :contents-end element)))
+          ;; Ensure the link is an Org-roam ID link
+          (if (and (string= link-type "id") link-path)
+              (let* ((node-id link-path)
+                     ;; Query Org-roam database for the node title using EmacSQL
+                     (title (caar (org-roam-db-query
+                                   [:select title :from nodes :where (= id $s1)]
+                                   node-id))))
+                (cond
+                 ;; Case 1: Node not found
+                 ((null title)
+                  (message "No node found with id=%s." node-id))
+                 ;; Case 2: Description already matches the node title
+                 ((and 
+                   desc-begin 
+                   desc-end
+                   (string= title (buffer-substring-no-properties desc-begin desc-end)))
+                  (message "The link description is already up-to-date."))
+                 ;; Case 3: Update description to match node title
+                 (t
+                  (save-excursion
+                    (goto-char desc-begin)
+                    (delete-region desc-begin desc-end)
+                    (insert title))
+                  (message "Description updated to: %s" title))))
+            ;; Not an ID link
+            (message "The current link is not an Org-roam ID link.")))
       ;; Cursor is not on a link
       (message "The cursor is not on a link."))))
 

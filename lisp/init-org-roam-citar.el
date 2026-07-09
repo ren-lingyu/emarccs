@@ -12,13 +12,13 @@
   (org-cite-activate-processor 'citar)
   (citar-bibliography org-cite-global-bibliography)
   (citar-templates
-    '(
-        (main . "| ${=type=:12} | ${title} | ${year issued date} | ${author editor:%etal:} |")
-        (suffix . "${abstract}")
-        (preview . "${author editor:%etal} (${year issued date}) ${title}, ${journal}.\n")
-        (note . "Notes on ${author editor:%etal}, ${title}")
-    )
-  )
+   '(
+     (main . "| ${=type=:12} | ${title} | ${year issued date} | ${author editor:%etal:} |")
+     (suffix . "${abstract}")
+     (preview . "${author editor:%etal} (${year issued date}) ${title}, ${journal}.\n")
+     (note . "Notes on ${author editor:%etal}, ${title}")
+     )
+   )
   (citar-format-reference
    '((author . (:style " %s" :fallback ""))
      (title . (:style " “%s”" :fallback ""))
@@ -26,14 +26,14 @@
      (key . (:style " [%s]" :fallback ""))
      (type . (:style " [%s]" :fallback ""))
      (abstract . (:style "\n%s" :fallback ""))))
-)
+  )
 
 ;; Citar 与 Embark 的集成增强
 (use-package citar-embark
   :after (citar embark)
   :config
   (citar-embark-mode)  ;; 启用集成模式
-)
+  )
 
 (use-package citar-org-roam
   :after (org org-roam citar)
@@ -64,11 +64,11 @@
                     "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${id}.org"
                     "#+TITLE: ${note-title}\n#+AUTHOR: ${citar-author}\n#+YEAR: ${citar-year}\n#+MONTH: ${citar-month}\n#+DOI: ${citar-doi}\n#+ISBN: ${citar-isbn}\n#+URL: ${citar-url}\n#+FILETAGS: :ref:\n#+DESCRIPTION:\n\n* Citing Nodes")
                    :unnarrowed t)
+                  )
                 )
         )
-  )
   (setq citar-org-roam-capture-template-key "r")
-)
+  )
 
 ;; (defun my/citar-insert-then-create-note ()
 ;;   "Insert citation and then create a note for the selected entry."

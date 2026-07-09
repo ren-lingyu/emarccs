@@ -13,7 +13,7 @@
   ;; (add-hook 'org-mode-hook 'org-latex-preview-mode)
   (setq org-latex-preview-mode-ignored-commands
         '(next-line previous-line mwheel-scroll
-          scroll-up-command scroll-down-command))
+                    scroll-up-command scroll-down-command))
   (setq org-latex-preview-numbered t)
   (setq org-latex-preview-mode-display-live nil)
   (setq org-latex-preview-mode-update-delay 1)

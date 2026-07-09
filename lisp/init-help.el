@@ -17,10 +17,10 @@
   ;; don't pop new window
   (setq helpful-switch-buffer-function
         (lambda (buf) (if-let ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
-                          ;; ensure the helpful window is selected for `helpful-update'.
-                          (select-window window)
-                        ;; line above returns nil if no available window is found
-                        (pop-to-buffer buf))))
+                     ;; ensure the helpful window is selected for `helpful-update'.
+                     (select-window window)
+                   ;; line above returns nil if no available window is found
+                   (pop-to-buffer buf))))
   (defvar help-helpful/history () "History of helpful, a list of buffers.")
   (defun help-helpful--switch-to-buffer  (buffer &optional offset)
     "Jump to last SYMBOL in helpful history, offset by OFFSET."
@@ -38,8 +38,8 @@
                         nil
                       idx))))
       (let ((idx (+ (or offset 0) (find-index buffer help-helpful/history))))
-	(if (or (>= idx (length help-helpful/history))
-		(< idx 0))
+        (if (or (>= idx (length help-helpful/history))
+                (< idx 0))
             (message "No further history.")
           (switch-to-buffer (nth idx help-helpful/history))))))
   (defun help-helpful--update (oldfunc)

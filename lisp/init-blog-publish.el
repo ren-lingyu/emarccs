@@ -16,35 +16,35 @@
 ;; license strings
 (defconst cc-license-generic-work-full-tool-name
   (concat "This work is licensed under" "\u0020"
-	  "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a>"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
+          "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a>"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
 (defconst cc-license-no-geniric-work-full-tool-name
   (concat "&copy;" 
-	  (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year) 
-	      (number-to-string org-blog-beginning-year) 
-	    (concat (number-to-string org-blog-beginning-year) "-" (format-time-string "%Y"))) "\u0020"
-	  "<a rel=\"cc:attributionURL\" href=\"" org-blog-site-url "/" "\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
-	  "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a>"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
+          (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year) 
+              (number-to-string org-blog-beginning-year) 
+            (concat (number-to-string org-blog-beginning-year) "-" (format-time-string "%Y"))) "\u0020"
+          "<a rel=\"cc:attributionURL\" href=\"" org-blog-site-url "/" "\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
+          "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a>"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
 (defconst cc-license-no-genic-work-no-full-tool-name
   (concat "&copy;" 
-	  (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year) 
-	      (number-to-string org-blog-beginning-year) 
-	    (concat (number-to-string org-blog-beginning-year) "-" (format-time-string "%Y"))) "\u0020"
-	  "<a rel=\"cc:attributionURL\" href=\"" org-blog-site-url "/" "\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
-	  "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
-	  "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
+          (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year) 
+              (number-to-string org-blog-beginning-year) 
+            (concat (number-to-string org-blog-beginning-year) "-" (format-time-string "%Y"))) "\u0020"
+          "<a rel=\"cc:attributionURL\" href=\"" org-blog-site-url "/" "\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
+          "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/by.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
+          "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
 ;; Blog configuration
 (defconst org-blog-sitemap-title "Post")
@@ -57,11 +57,11 @@
 
 (setq org-html-head
       (concat "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/MapleMono-NF-CN-Regular/result.css\"/>\n"
-	          "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/LXGWWenKai-Regular/result.css\"/>\n"
-	          "<link rel=\"stylesheet\" href=\"https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css\"/>\n"
-	          "<link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\"/>\n"
-	          "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-default.css?v=" (format-time-string "%Y%m%d%z") "\"/>\n"
-	          "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-local.css?v=" (format-time-string "%Y%m%d%z") "\"/>\n"
+              "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/LXGWWenKai-Regular/result.css\"/>\n"
+              "<link rel=\"stylesheet\" href=\"https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css\"/>\n"
+              "<link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\"/>\n"
+              "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-default.css?v=" (format-time-string "%Y%m%d%z") "\"/>\n"
+              "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-local.css?v=" (format-time-string "%Y%m%d%z") "\"/>\n"
               "<link rel=\"alternate\" type=\"application/atom+xml\" title=\"" org-blog-site-name " - Atom\" href=\"/feed.atom\"/>\n"))
 
 (setq org-html-home/up-format
@@ -69,69 +69,69 @@
 
 (setq org-html-preamble-format
       `(("en"
-	 ,(concat "\n"
-		  ;; "<div class=\"flexbox\">\n"
-		  ;; "<div id=\"org-div-home-and-up\">\n"
-		  "<header>\n"
-		  "<nav>\n"
-		  "<a accesskey=\"\" href=\"/index.html\">aRenCoco's Blog</a>\n"
-		  "<a accesskey=\"\" href=\"/sitemap.html\">Post</a>\n"
-		  "<a accesskey=\"\" href=\"/about.html\">About</a>\n"
-		  "<a accesskey=\"\" href=\"/style.html\">Style</a>\n"
-		  "<a accesskey=\"\" href=\"/theindex.html\">Index</a>\n"
-		  "<a accesskey=\"\" href=\"" org-blog-site-url "/feed.atom\">Feed</a>\n"
-		  "</nav>\n"
-		  "</header>\n"
-		  ;; "</div>\n"
-		  "<hr class=\"topline\">\n"
-		  "\n"))))
+         ,(concat "\n"
+                  ;; "<div class=\"flexbox\">\n"
+                  ;; "<div id=\"org-div-home-and-up\">\n"
+                  "<header>\n"
+                  "<nav>\n"
+                  "<a accesskey=\"\" href=\"/index.html\">aRenCoco's Blog</a>\n"
+                  "<a accesskey=\"\" href=\"/sitemap.html\">Post</a>\n"
+                  "<a accesskey=\"\" href=\"/about.html\">About</a>\n"
+                  "<a accesskey=\"\" href=\"/style.html\">Style</a>\n"
+                  "<a accesskey=\"\" href=\"/theindex.html\">Index</a>\n"
+                  "<a accesskey=\"\" href=\"" org-blog-site-url "/feed.atom\">Feed</a>\n"
+                  "</nav>\n"
+                  "</header>\n"
+                  ;; "</div>\n"
+                  "<hr class=\"topline\">\n"
+                  "\n"))))
 
 (setq org-html-postamble-format
       `(("en"
-	 ,(concat "\n"
-		  ;; "<hr class=\"bottomline\">\n"
-		  "<footer>\n"
-		  "<p>\n"
-		  cc-license-no-genic-work-no-full-tool-name
-		  "</p>\n"
-		  "<p>\n"
-		  "Generated at <span class=\"update-time\">%T</span> by %c on <a href=\"https://nixos.org\">NixOS</a>." 
-		  "</p>\n"
-		  "</footer>\n"
-		  "</div>\n"
-		  "\n"))))
+         ,(concat "\n"
+                  ;; "<hr class=\"bottomline\">\n"
+                  "<footer>\n"
+                  "<p>\n"
+                  cc-license-no-genic-work-no-full-tool-name
+                  "</p>\n"
+                  "<p>\n"
+                  "Generated at <span class=\"update-time\">%T</span> by %c on <a href=\"https://nixos.org\">NixOS</a>." 
+                  "</p>\n"
+                  "</footer>\n"
+                  "</div>\n"
+                  "\n"))))
 
 (add-to-list 'org-export-global-macros
-	     '("timestamp" . "@@html:<span class=\"timestamp\">[$1]</span>@@"))
+             '("timestamp" . "@@html:<span class=\"timestamp\">[$1]</span>@@"))
 
 (add-to-list 'org-export-global-macros
-	     '("filetags" . "@@html:<span class=\"filetags\" data-filetags=\"$1\"></span>@@"))
+             '("filetags" . "@@html:<span class=\"filetags\" data-filetags=\"$1\"></span>@@"))
 
 (defun org-blog-sitemap-entry-format (entry _style project)
   "Sitemap PROJECT ENTRY STYLE format that includes date."
   (let* ((file (org-publish--expand-file-name entry project))
-	 ;; 获取标题
-	 (parsed_title (org-publish-find-property file :title project))
-	 (title (if parsed_title
-		    (org-no-properties (org-element-interpret-data parsed_title))
-		  (file-name-nondirectory (file-name-sans-extension file))))
-	 ;; 获取日期
-	 (date_prop (car (org-publish-find-property file :date project)))
-	 ;; (tags (mapconcat (lambda (tag) (concat "#" tag)) (org-publish-find-property file :filetags project) " "))
-	 (tags_list (org-publish-find-property file :filetags project))
-	 (tags (mapconcat (lambda (tag) (concat "#" tag))
-			  (cl-remove-if (lambda (tag) (member tag (list "zettel" "blog" "post")))
-					tags_list)             
-			  " "))
-	 (date-str (if date_prop
-		       (format-time-string "%Y-%m-%d %a %z" (org-timestamp-to-time date_prop))
-		     "")))
+         ;; 获取标题
+         (parsed_title (org-publish-find-property file :title project))
+         (title (if parsed_title
+                    (org-no-properties (org-element-interpret-data parsed_title))
+                  (file-name-nondirectory (file-name-sans-extension file))))
+         ;; 获取日期
+         (date_prop (car (org-publish-find-property file :date project)))
+         ;; (tags (mapconcat (lambda (tag) (concat "#" tag)) (org-publish-find-property file :filetags project) " "))
+         (tags_list (org-publish-find-property file :filetags project))
+         (tags (mapconcat (lambda (tag) (concat "#" tag))
+                          (cl-remove-if (lambda (tag) (member tag (list "zettel" "blog" "post")))
+                                        tags_list)             
+                          " "))
+         (date-str (if date_prop
+                       (format-time-string "%Y-%m-%d %a %z" (org-timestamp-to-time date_prop))
+                     "")))
     (org-publish-cache-set-file-property file :title title)
     ;; 输出 sitemap 项
     (if (and (member "post" tags_list)
              (not (= (length title) 0)) 
              (not (or (null (file-name-directory entry)) (string= (file-name-directory entry) "./") (string= (file-name-directory entry) "/"))))
-	(format "{{{timestamp(%s)}}} [[file:%s][%s]] {{{filetags(%s)}}} " date-str entry title tags)
+        (format "{{{timestamp(%s)}}} [[file:%s][%s]] {{{filetags(%s)}}} " date-str entry title tags)
       (format "" entry)
       ;; (progn
       ;;   (if
@@ -147,7 +147,7 @@
   (let* ((tags_hash (make-hash-table :test 'equal)))
     (dolist (entry list)
       (when (and (listp entry) 
-		 (stringp (car entry)))
+                 (stringp (car entry)))
         (let* ((str (car entry)))
           (when (string-match "{{{filetags(\\([^)]*\\))}}}" str)
             (let* ((tags_str (match-string 1 str)))
@@ -159,64 +159,64 @@
   "Generate a sitemap using a custom filter function. TITLE is the sitemap title. LIST is an internal representation of files as returned by `org-list-to-lisp'."
   (let* ((filtered_list
           (cl-remove-if (lambda (entry)
-			  (cond
-			   ((null entry) t)
-			   ((listp entry) (string= (car entry) ""))
-			   ((stringp entry) (string= entry "")) 
-			   (t nil)))
-			list))
-	 (blog_tags (org-blog--checkout-tags filtered_list)))
+                          (cond
+                           ((null entry) t)
+                           ((listp entry) (string= (car entry) ""))
+                           ((stringp entry) (string= entry "")) 
+                           (t nil)))
+                        list))
+         (blog_tags (org-blog--checkout-tags filtered_list)))
     (setq org-html-head-extra
-	  (format "<style>\n%s%s</style>\n"
-		  (concat "li:has(.filetags){display: none;}\n"
-			  ".content:has([value=\"all\"]:checked)\n"
-			  "li{display: list-item;}\n")
-		  (mapconcat (lambda (tag)
-			       (format (concat ".content:has([value=\"%s\"]:checked)\n"
-					       "li:has([data-filetags~=\"%s\"]){display: list-item;}\n")
-				       tag 
-				       tag))
-			     blog_tags)))
+          (format "<style>\n%s%s</style>\n"
+                  (concat "li:has(.filetags){display: none;}\n"
+                          ".content:has([value=\"all\"]:checked)\n"
+                          "li{display: list-item;}\n")
+                  (mapconcat (lambda (tag)
+                               (format (concat ".content:has([value=\"%s\"]:checked)\n"
+                                               "li:has([data-filetags~=\"%s\"]){display: list-item;}\n")
+                                       tag 
+                                       tag))
+                             blog_tags)))
     (concat "#+TITLE: " title "\n"
-	    "#+INDEX: " title "\n"
-	    "#+FILETAGS: :blog:index:\n"
-        "#+DESCRIPTION: " org-blog-sitemap-description "\n"
-	    "#+BEGIN_abstract\n"
-	    org-blog-sitemap-abstract "\n"
-	    "#+END_abstract\n"
-	    (format (concat "#+BEGIN_EXPORT html\n" 
-			    "<section class=\"filter\">\n%s\n%s</section>\n" 
-			    "#+END_EXPORT\n")
-		    (concat "<label class=\"category\">\n" 
-			    "<input type=\"radio\" name=\"tag\" value=\"all\" checked/>\n" 
-			    "<span>all</span>\n" 
-			    "</label>\n")
-		    (mapconcat (lambda (tag)
-				 (format 
-				  (concat "<label class=\"category\">\n" 
-					  "<input type=\"radio\" name=\"tag\" value=\"%s\"/>\n" 
-					  "<span>%s</span>\n" 
-					  "</label>\n")
-				  tag 
-				  tag))
-			       blog_tags "\n"))
-	    "\n"
-	    (org-list-to-org filtered_list))))
+            "#+INDEX: " title "\n"
+            "#+FILETAGS: :blog:index:\n"
+            "#+DESCRIPTION: " org-blog-sitemap-description "\n"
+            "#+BEGIN_abstract\n"
+            org-blog-sitemap-abstract "\n"
+            "#+END_abstract\n"
+            (format (concat "#+BEGIN_EXPORT html\n" 
+                            "<section class=\"filter\">\n%s\n%s</section>\n" 
+                            "#+END_EXPORT\n")
+                    (concat "<label class=\"category\">\n" 
+                            "<input type=\"radio\" name=\"tag\" value=\"all\" checked/>\n" 
+                            "<span>all</span>\n" 
+                            "</label>\n")
+                    (mapconcat (lambda (tag)
+                                 (format 
+                                  (concat "<label class=\"category\">\n" 
+                                          "<input type=\"radio\" name=\"tag\" value=\"%s\"/>\n" 
+                                          "<span>%s</span>\n" 
+                                          "</label>\n")
+                                  tag 
+                                  tag))
+                               blog_tags "\n"))
+            "\n"
+            (org-list-to-org filtered_list))))
 
 (advice-add 'org-publish-index-generate-theindex :after
- 	    (lambda (project directory)
- 	      (let ((index.org (expand-file-name "theindex.org" directory)))
- 		(when (file-exists-p index.org)
- 		  (with-temp-buffer (insert (concat
- 					     "#+TITLE: " org-blog-theindex-title "\n"
- 					     "#+INDEX: " org-blog-theindex-title "\n"
- 					     "#+FILETAGS: :blog:index:\n"
-                         "#+DESCRIPTION: " org-blog-theindex-description "\n"
- 					     "#+BEGIN_abstract\n" 
- 					     org-blog-theindex-abstract "\n"
- 					     "#+END_abstract\n"
- 					     "#+INCLUDE: \"theindex.inc\"\n"))
- 				    (write-region (point-min) (point-max) index.org))))))
+            (lambda (project directory)
+              (let ((index.org (expand-file-name "theindex.org" directory)))
+                (when (file-exists-p index.org)
+                  (with-temp-buffer (insert (concat
+                                             "#+TITLE: " org-blog-theindex-title "\n"
+                                             "#+INDEX: " org-blog-theindex-title "\n"
+                                             "#+FILETAGS: :blog:index:\n"
+                                             "#+DESCRIPTION: " org-blog-theindex-description "\n"
+                                             "#+BEGIN_abstract\n" 
+                                             org-blog-theindex-abstract "\n"
+                                             "#+END_abstract\n"
+                                             "#+INCLUDE: \"theindex.inc\"\n"))
+                                    (write-region (point-min) (point-max) index.org))))))
 
 (setq org-html-head-include-default-style nil)
 ;; (setq org-export-with-toc t)
@@ -227,7 +227,7 @@
   "Return HTML snippet for article timestamps."
   (let* ((input_file (file-name-nondirectory (plist-get info :input-file))))
     (if (not (member input_file (list "index.org" "sitemap.org" "theindex.org" "about.org" "style.org")))
-	(let* ((spec (org-html-format-spec info))
+        (let* ((spec (org-html-format-spec info))
                (date_str (format-time-string "%Y-%m-%d %z" (org-time-string-to-time (format-spec "%d" spec))))
                (lastmod_str (format-time-string "%Y-%m-%d %z" (org-time-string-to-time (format-spec "%C" spec))))
                ;; (date_str (format-spec "%d" spec))
@@ -250,84 +250,84 @@
 (defun my/blog-files ()
   "Return a list of note files containing 'blog' tag." ;
   (seq-uniq (seq-map #'car (org-roam-db-query [:select [nodes:file]
-						       :from tags
-						       :left-join nodes
-						       :on (= tags:node-id nodes:id)
-						       :where (like tag (quote "%\"blog\"%"))]))))
+                                                       :from tags
+                                                       :left-join nodes
+                                                       :on (= tags:node-id nodes:id)
+                                                       :where (like tag (quote "%\"blog\"%"))]))))
 
 (defun my/blog-insert-meta-description (output _backend _info)
   (let* ((re (rx (seq "<div" (* (not (any ">"))) "class=\"abstract\"" (* (not (any ">"))) ">"
-		      (group (*? anything))
-		      "</div>")))
-	 (abstract
-	  (when (string-match re output)
-	    (let* ((content (match-string 1 output)))
-	      (setq content (replace-regexp-in-string "<sup>.*?</sup>" "" content))
-	      (setq content (replace-regexp-in-string "<sub>.*?</sub>" "" content))
-	      (setq content (replace-regexp-in-string "<[^>]+>" "" content))
-	      (setq content (replace-regexp-in-string "\n" " " content))
-	      (string-trim content)))))
+                      (group (*? anything))
+                      "</div>")))
+         (abstract
+          (when (string-match re output)
+            (let* ((content (match-string 1 output)))
+              (setq content (replace-regexp-in-string "<sup>.*?</sup>" "" content))
+              (setq content (replace-regexp-in-string "<sub>.*?</sub>" "" content))
+              (setq content (replace-regexp-in-string "<[^>]+>" "" content))
+              (setq content (replace-regexp-in-string "\n" " " content))
+              (string-trim content)))))
     (when abstract
       (setq output (replace-regexp-in-string
-		    "</head>"
-		    (format "<meta name=\"description\" content=\"%s\">\n</head>" abstract)
-		    output)))
+                    "</head>"
+                    (format "<meta name=\"description\" content=\"%s\">\n</head>" abstract)
+                    output)))
     output))
 
 (defun my-generator/org-html-publish-to-html (blog_file_list)
   "Generate function with args PLIST, FILENAME and PUB-DIR to publish files who member a list, which is appending to BLOG_FILE_LIST, to HTML."
   (lambda (plist filename pub-dir)
     (let* ((file_name (expand-file-name filename))
-	   (base_directory (expand-file-name "./roam/permanent/" org-directory))
-	   (no_node_index_file_list (list (expand-file-name "sitemap.org" base_directory)
-					  (expand-file-name "theindex.org" base_directory)))
-	   (post_file_list (append (symbol-value blog_file_list) no_node_index_file_list)))
+           (base_directory (expand-file-name "./roam/permanent/" org-directory))
+           (no_node_index_file_list (list (expand-file-name "sitemap.org" base_directory)
+                                          (expand-file-name "theindex.org" base_directory)))
+           (post_file_list (append (symbol-value blog_file_list) no_node_index_file_list)))
       (when (member file_name post_file_list)
-	(org-html-publish-to-html plist filename pub-dir)))))
+        (org-html-publish-to-html plist filename pub-dir)))))
 
 (advice-add 'org-publish-get-base-files
-	    :around
-	    (lambda (origin_function project)
-	      (if (plist-get (cdr project) :org-roam-db-support)
-		  (condition-case err
-		      (let* ((project (cdr project))
-			     (base_dir (file-name-as-directory (expand-file-name (plist-get project :base-directory))))
-			     (base_extension (plist-get project :base-extension))
-			     (select_tag_list (plist-get project :org-roam-select-tags))
-			     (tag_vec (vconcat select_tag_list))
-			     (tag_num (length select_tag_list))
-			     ;; (exclude_tag_list (plist-get project :org-roam-exclude-tags))
-			     (recursive_bool (plist-get project :recursive))
-			     (sitemap_bool (plist-get project :auto-sitemap))
-			     (makeindex_bool (plist-get project :makeindex))
-			     (sitemap_filename (plist-get project :sitemap-filename))
-			     (theindex_filename "theindex.org")
-			     (result_list (mapcar #'car (org-roam-db-query
-							 (vector :select (vector (intern "n:file"))
-								 :from '(as nodes n)
-								 :join '(as tags t)
-								 :on '(= n:id t:node_id)
-								 :where (list 'and
-									      '(= n:level 0)
-									      (list 'like (intern "n:file") "%.org")
-									      (if recursive_bool
-										  (list 'like (intern "n:file") (concat base_dir "%"))
-										(list 'and
-										      (list 'like (intern "n:file") (concat base_dir "%"))
-										      (list 'not
-											    (list 'like (intern "n:file") (concat base_dir "%/%")))))
- 									      (list 'in (intern "t:tag") tag_vec))
-								 :group-by (vector (intern "n:id"))
-								 :having (list '= '(funcall count (distinct t:tag)) tag_num)
-								 ))))
-			     (result_list (when sitemap_bool
-                                (append result_list (list (expand-file-name sitemap_filename base_dir)))))
-			     (result_list (when makeindex_bool
-                                (with-temp-file (expand-file-name theindex_filename base_dir) nil)
-                                (append result_list (list (expand-file-name theindex_filename base_dir))))))
-			result_list)
-		    (error "[ERROR] DB Query Failed: %S" err))
-		(funcall origin_function project))))
+            :around
+            (lambda (origin_function project)
+              (if (plist-get (cdr project) :org-roam-db-support)
+                  (condition-case err
+                      (let* ((project (cdr project))
+                             (base_dir (file-name-as-directory (expand-file-name (plist-get project :base-directory))))
+                             (base_extension (plist-get project :base-extension))
+                             (select_tag_list (plist-get project :org-roam-select-tags))
+                             (tag_vec (vconcat select_tag_list))
+                             (tag_num (length select_tag_list))
+                             ;; (exclude_tag_list (plist-get project :org-roam-exclude-tags))
+                             (recursive_bool (plist-get project :recursive))
+                             (sitemap_bool (plist-get project :auto-sitemap))
+                             (makeindex_bool (plist-get project :makeindex))
+                             (sitemap_filename (plist-get project :sitemap-filename))
+                             (theindex_filename "theindex.org")
+                             (result_list (mapcar #'car (org-roam-db-query
+                                                         (vector :select (vector (intern "n:file"))
+                                                                 :from '(as nodes n)
+                                                                 :join '(as tags t)
+                                                                 :on '(= n:id t:node_id)
+                                                                 :where (list 'and
+                                                                              '(= n:level 0)
+                                                                              (list 'like (intern "n:file") "%.org")
+                                                                              (if recursive_bool
+                                                                                  (list 'like (intern "n:file") (concat base_dir "%"))
+                                                                                (list 'and
+                                                                                      (list 'like (intern "n:file") (concat base_dir "%"))
+                                                                                      (list 'not
+                                                                                            (list 'like (intern "n:file") (concat base_dir "%/%")))))
+                                                                              (list 'in (intern "t:tag") tag_vec))
+                                                                 :group-by (vector (intern "n:id"))
+                                                                 :having (list '= '(funcall count (distinct t:tag)) tag_num)
+                                                                 ))))
+                             (result_list (when sitemap_bool
+                                            (append result_list (list (expand-file-name sitemap_filename base_dir)))))
+                             (result_list (when makeindex_bool
+                                            (with-temp-file (expand-file-name theindex_filename base_dir) nil)
+                                            (append result_list (list (expand-file-name theindex_filename base_dir))))))
+                        result_list)
+                    (error "[ERROR] DB Query Failed: %S" err))
+                (funcall origin_function project))))
 
 ;; (setq org-export-with-planning t)
 
@@ -335,79 +335,79 @@
 
 (setq org-publish-project-alist
       `(("post"
-	 :org-roam-db-support t
-	 :org-roam-select-tags ,(list "blog") ; 必须含至少一个tag
-	 ;; :org-roam-exclude-tags ,(list ) ; 暂时没有想到排除方法, 同时也没有这个需求.
-	 :base-directory ,(expand-file-name "./roam/permanent/" org-directory)
-	 :base-extension "org"
-	 :publishing-directory ,(expand-file-name "./public/" org-directory)
-	 :recursive t
-	 ;; 以下三行注释保留, 作为 advice-add 失效时的 fallback. 
-	 ;; :preparation-function ,(lambda (project) (setq my/blog-file-list (my/blog-files)))
-	 ;; :publishing-function ,(my-generator/org-html-publish-to-html 'my/blog-file-list)
-	 ;; :completion-function ,(lambda (project) (setq my/blog-file-list nil))
-	 :publishing-function org-html-publish-to-html
-     ;; #+DESCRIPTION 可以实现下面这个函数的作用
-	 ;; :filter-final-output ,(list #'my/blog-insert-meta-description)
-	 :html-link-home "/index.html"
-	 :author "aRenCoco"
-	 :email "aRen_Coco@outlook.com"
-	 :with-author t
-	 :with-email t 
-	 :headline-levels 5
-	 :with-toc t
-	 :with-creator t
-	 :with-timestamp t
-	 :with-planning t
-	 :html-postamble t ; 页脚
-	 :auto-preamble t
-	 :section-numbers t
-	 :auto-sitemap t
-	 :sitemap-filename "sitemap.org" 
-	 :sitemap-title ,(format "%s" org-blog-sitemap-title)
-	 :sitemap-sort-files anti-chronologically
-	 :sitemap-file-entry-format "%d %t"
-	 :sitemap-style list
-	 :sitemap-format-entry org-blog-sitemap-entry-format
-	 :sitemap-function org-blog-publish-sitemap-filtered
-	 :makeindex t
-	 :sitemap-sort-folders 'ignore)
-	("index"
-	 :org-roam-db-support nil
-	 :base-directory ,(expand-file-name "./roam/permanent/" org-directory)
-	 :base-extension "org"
-	 :exclude ".*"
-	 :include ("index.org" "sitemap.org" "about.org" "theindex.org")
-	 :publishing-directory ,(expand-file-name "./public/" org-directory)
-     ;; #+DESCRIPTION 可以实现下面这个函数的作用
-	 ;; :filter-final-output ,(list #'my/blog-insert-meta-description)
-	 :recursive nil
-	 :publishing-function org-html-publish-to-html
-	 :completion-function ,(lambda (project) (org-publish-file (expand-file-name "theindex.org" (plist-get project :base-directory)) (cons "index" project)))
-	 :html-link-home "/index.html"
-	 :author "aRenCoco"
-	 :email "aRen_Coco@outlook.com" 
-	 :with-author t
-	 :with-email t 
-	 :headline-levels 5
-	 :with-toc nil
-	 :with-creator t
-	 :with-timestamp t
-	 :with-planning t
-	 :html-postamble t ; 页脚
-	 :auto-preamble t
-	 :section-numbers nil
-	 :auto-sitemap nil
-	 :makeindex nil)
-	("static"
-	 :org-roam-db-support nil
-	 :base-directory ,(expand-file-name "./static/" org-directory)
-	 :base-extension "css\\|js\\|png\\|svg\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|woff2\\|proto\\|bin"
-	 :publishing-directory ,(expand-file-name "./public/" org-directory)
-	 :recursive t
-	 :publishing-function org-publish-attachment)
-	("all"
-	 :components ("post" "index" "static"))))
+         :org-roam-db-support t
+         :org-roam-select-tags ,(list "blog") ; 必须含至少一个tag
+         ;; :org-roam-exclude-tags ,(list ) ; 暂时没有想到排除方法, 同时也没有这个需求.
+         :base-directory ,(expand-file-name "./roam/permanent/" org-directory)
+         :base-extension "org"
+         :publishing-directory ,(expand-file-name "./public/" org-directory)
+         :recursive t
+         ;; 以下三行注释保留, 作为 advice-add 失效时的 fallback. 
+         ;; :preparation-function ,(lambda (project) (setq my/blog-file-list (my/blog-files)))
+         ;; :publishing-function ,(my-generator/org-html-publish-to-html 'my/blog-file-list)
+         ;; :completion-function ,(lambda (project) (setq my/blog-file-list nil))
+         :publishing-function org-html-publish-to-html
+         ;; #+DESCRIPTION 可以实现下面这个函数的作用
+         ;; :filter-final-output ,(list #'my/blog-insert-meta-description)
+         :html-link-home "/index.html"
+         :author "aRenCoco"
+         :email "aRen_Coco@outlook.com"
+         :with-author t
+         :with-email t 
+         :headline-levels 5
+         :with-toc t
+         :with-creator t
+         :with-timestamp t
+         :with-planning t
+         :html-postamble t ; 页脚
+         :auto-preamble t
+         :section-numbers t
+         :auto-sitemap t
+         :sitemap-filename "sitemap.org" 
+         :sitemap-title ,(format "%s" org-blog-sitemap-title)
+         :sitemap-sort-files anti-chronologically
+         :sitemap-file-entry-format "%d %t"
+         :sitemap-style list
+         :sitemap-format-entry org-blog-sitemap-entry-format
+         :sitemap-function org-blog-publish-sitemap-filtered
+         :makeindex t
+         :sitemap-sort-folders 'ignore)
+        ("index"
+         :org-roam-db-support nil
+         :base-directory ,(expand-file-name "./roam/permanent/" org-directory)
+         :base-extension "org"
+         :exclude ".*"
+         :include ("index.org" "sitemap.org" "about.org" "theindex.org")
+         :publishing-directory ,(expand-file-name "./public/" org-directory)
+         ;; #+DESCRIPTION 可以实现下面这个函数的作用
+         ;; :filter-final-output ,(list #'my/blog-insert-meta-description)
+         :recursive nil
+         :publishing-function org-html-publish-to-html
+         :completion-function ,(lambda (project) (org-publish-file (expand-file-name "theindex.org" (plist-get project :base-directory)) (cons "index" project)))
+         :html-link-home "/index.html"
+         :author "aRenCoco"
+         :email "aRen_Coco@outlook.com" 
+         :with-author t
+         :with-email t 
+         :headline-levels 5
+         :with-toc nil
+         :with-creator t
+         :with-timestamp t
+         :with-planning t
+         :html-postamble t ; 页脚
+         :auto-preamble t
+         :section-numbers nil
+         :auto-sitemap nil
+         :makeindex nil)
+        ("static"
+         :org-roam-db-support nil
+         :base-directory ,(expand-file-name "./static/" org-directory)
+         :base-extension "css\\|js\\|png\\|svg\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|woff2\\|proto\\|bin"
+         :publishing-directory ,(expand-file-name "./public/" org-directory)
+         :recursive t
+         :publishing-function org-publish-attachment)
+        ("all"
+         :components ("post" "index" "static"))))
 
 (provide 'init-blog-publish)
 ;;; init-blog-publish.el ends here. 

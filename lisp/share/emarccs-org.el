@@ -1,4 +1,4 @@
-;;; init-org.el --- Org mode configuration -*- lexical-binding: t; -*-
+;;; emarccs-org.el --- Org mode configuration -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -193,5 +193,5 @@
       "<%Y-%m-%d %a %z>" 
       nil))))
 
-(provide 'init-org)
-;;; init-org.el ends here.
+(provide 'emarccs-org)
+;;; emarccs-org.el ends here.

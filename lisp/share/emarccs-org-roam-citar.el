@@ -1,4 +1,4 @@
-;;; init-org-roam-citar.el -*- lexical-binding: t; -*-
+;;; emarccs-org-roam-citar.el -*- lexical-binding: t; -*-
 ;;; commentary:
 
 ;;; code:
@@ -83,6 +83,6 @@
 
 ;; (global-set-key (kbd "C-c c i") #'my/citar-insert-then-create-note)
 
-(provide 'init-org-roam-citar)
+(provide 'emarccs-org-roam-citar)
 
-;;; init-org-roam-citar.el ends here
+;;; emarccs-org-roam-citar.el ends here

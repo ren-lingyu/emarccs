@@ -1,4 +1,4 @@
-;;; init-theme.el -*- lexical-binding: t; -*-
+;;; emarccs-theme.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -128,5 +128,5 @@
 (my/load-current-theme)
 
 
-(provide 'init-theme)
-;;; init-theme.el ends here.
+(provide 'emarccs-theme)
+;;; emarccs-theme.el ends here.

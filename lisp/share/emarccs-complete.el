@@ -1,4 +1,4 @@
-;;; init-complete.el -*- lexical-binding: t; -*-
+;;; emarccs-complete.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -155,5 +155,5 @@
   (org-mode . laas-mode)
   (org-mode . yas-minor-mode))
 
-(provide 'init-complete)
-;;; init-complete.el ends here
+(provide 'emarccs-complete)
+;;; emarccs-complete.el ends here

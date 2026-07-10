@@ -1,4 +1,4 @@
-;;; init-blog-publish.el -*- lexical-binding: t; -*-
+;;; emarccs-blog-publish.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -409,5 +409,5 @@
         ("all"
          :components ("post" "index" "static"))))
 
-(provide 'init-blog-publish)
-;;; init-blog-publish.el ends here. 
+(provide 'emarccs-blog-publish)
+;;; emarccs-blog-publish.el ends here. 

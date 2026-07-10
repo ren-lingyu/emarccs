@@ -1,4 +1,4 @@
-;;; init-tex.el
+;;; emarccs-tex.el
 ;;; commentary:
 ;;; code: 
 
@@ -108,6 +108,6 @@
    (forward-line -1)))         
 
 ;; The End
-(provide 'init-tex)
+(provide 'emarccs-tex)
 
-;;; init-tex.el ends here
+;;; emarccs-tex.el ends here

@@ -12,42 +12,42 @@
 ;; (defconst *is-a-mac* (eq system-type 'darwin)) ; 判断是否处于MacOS
 
 ;; 设定源码加载路径
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "lisp/share" user-emacs-directory))
 
 ;; customize
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
-  (load-file custom-file))
+ (load-file custom-file))
 
 ;; main settings
-(require 'init-basic) ; 基本设置
+(require 'emarccs-basic) ; 基本设置
 
-(require 'init-help) ; 帮助信息优化
+(require 'emarccs-help) ; 帮助信息优化
 
-(require 'init-theme) ; 主题
+(require 'emarccs-theme) ; 主题
 
-(require 'init-org) ; Org设置
+(require 'emarccs-org) ; Org设置
 
-(require 'init-tex) ; Tex设置
+(require 'emarccs-tex) ; Tex设置
 
-(require 'init-complete) ; 自动补全
+(require 'emarccs-complete) ; 自动补全
 
-(require 'init-org-roam) ; org-roam及相关设置
+(require 'emarccs-org-roam) ; org-roam及相关设置
 
-(require 'init-org-roam-citar) ; org-roam中citar及相关设置
+(require 'emarccs-org-roam-citar) ; org-roam中citar及相关设置
 
-(require 'init-org-latex-preview) ; 预览
+(require 'emarccs-org-latex-preview) ; 预览
 
-(require 'init-feed)
+(require 'emarccs-feed)
 
-(require 'init-ai) ; AI辅助
+(require 'emarccs-ai) ; AI辅助
 
-(require 'init-blog-publish) ; 博客发布设置
+(require 'emarccs-blog-publish) ; 博客发布设置
 
-(require 'init-orgraph) ; orgraph
+(require 'emarccs-orgraph) ; orgraph
 
 ;; debug
-(require 'init-debug)
+(require 'emarccs-debug)
 
 ;; End
 (provide 'init)

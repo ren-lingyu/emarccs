@@ -1,4 +1,4 @@
-;;; init-ai.el -*- lexical-binding: t; -*-
+;;; emarccs-ai.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -96,5 +96,5 @@ The following rules must be strictly obeyed:
 ;;     (apply original-function args)))
 ;; (advice-add 'copilot--get-source :around #'my-copilot-get-source-suppress-warning)
 
-(provide 'init-ai)
-;;; init-ai.el ends here
+(provide 'emarccs-ai)
+;;; emarccs-ai.el ends here

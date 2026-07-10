@@ -2,14 +2,14 @@
 ;;; commentary:
 ;;; code:
 
-;; 版本和操作系统检查
-(let ((minver "28.1"))
+;; 版本检查
+(let* ((minver "30.2"))
   (when (version< emacs-version minver)
-    (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
-(when (version< emacs-version "30.1")
-  (message "Your Emacs is old, and some functionality in this config will be disabled. Please upgrade if possible."))
-
-;; (defconst *is-a-mac* (eq system-type 'darwin)) ; 判断是否处于MacOS
+    (display-warning
+     'emarccs
+     (format "This configuration is only tested with Emacs %s or newer; current Emacs is %s."
+             minver emacs-version)
+     :warning)))
 
 ;; 设定源码加载路径
 (add-to-list 'load-path (expand-file-name "lisp/share" user-emacs-directory))

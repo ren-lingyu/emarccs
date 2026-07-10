@@ -14,11 +14,6 @@
 ;; 设定源码加载路径
 (add-to-list 'load-path (expand-file-name "lisp/share" user-emacs-directory))
 
-;; customize
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
- (load-file custom-file))
-
 ;; main settings
 (require 'emarccs-basic) ; 基本设置
 
@@ -48,6 +43,11 @@
 
 ;; debug
 (require 'emarccs-debug)
+
+;; customize
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+ (load-file custom-file))
 
 ;; End
 (provide 'init)

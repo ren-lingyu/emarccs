@@ -3,7 +3,7 @@
 ;;; code:
 
 ;; version check
-(let ((minver "30.2"))
+(let ((minver "31.0"))
   (when (version< emacs-version minver)
     (display-warning
      'emarccs
@@ -12,7 +12,10 @@
      :warning)))
 
 ;; load-path
-(add-to-list 'load-path (expand-file-name "lisp/share" user-emacs-directory))
+(add-to-list 'load-path
+             (expand-file-name "lisp/share"
+                               (file-name-directory (or load-file-name
+                                                        buffer-file-name))))
 
 ;; main settings
 (require 'emarccs-basic) ; 基本设置

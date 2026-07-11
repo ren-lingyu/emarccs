@@ -1,4 +1,4 @@
-;;; emarccs-tex.el
+;;; emarccs-tex.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code: 
 

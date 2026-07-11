@@ -1,4 +1,4 @@
-;;; emarccs-orgraph.el -*- lexical-binding: t; -*-
+;;; emarccs-shared-orgraph.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -222,5 +222,5 @@
                 (org-publish-all)
                 (message "[INFO] Publish finished. ")))))
 
-(provide 'emarccs-orgraph)
-;;; emarccs-orgraph.el ends here
+(provide 'emarccs-shared-orgraph)
+;;; emarccs-shared-orgraph.el ends here

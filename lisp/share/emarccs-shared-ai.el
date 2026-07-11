@@ -1,4 +1,4 @@
-;;; emarccs-ai.el -*- lexical-binding: t; -*-
+;;; emarccs-shared-ai.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -96,5 +96,5 @@ The following rules must be strictly obeyed:
 ;;     (apply original-function args)))
 ;; (advice-add 'copilot--get-source :around #'my-copilot-get-source-suppress-warning)
 
-(provide 'emarccs-ai)
-;;; emarccs-ai.el ends here
+(provide 'emarccs-shared-ai)
+;;; emarccs-shared-ai.el ends here

@@ -1,4 +1,4 @@
-;;; emarccs-blog-publish.el -*- lexical-binding: t; -*-
+;;; emarccs-shared-blog-publish.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -409,5 +409,5 @@
         ("all"
          :components ("post" "index" "static"))))
 
-(provide 'emarccs-blog-publish)
-;;; emarccs-blog-publish.el ends here. 
+(provide 'emarccs-shared-blog-publish)
+;;; emarccs-shared-blog-publish.el ends here. 

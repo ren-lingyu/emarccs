@@ -1,4 +1,4 @@
-;;; emarccs-org-latex-preview.el --- Org preview configuration -*- lexical-binding: t; -*-
+;;; emarccs-shared-org-latex-preview.el --- Org preview configuration -*- lexical-binding: t; -*-
 ;;; commentary:
 
 ;;; from https://abode.karthinks.com/org-latex-preview/
@@ -23,5 +23,5 @@
   (setq org-latex-preview-process-precompile nil) ; lualatex does not support precompile
   (setq org-latex-preview-mode nil))
 
-(provide 'emarccs-org-latex-preview)
-;;; emarccs-org-latex-preview.el ends here. 
+(provide 'emarccs-shared-org-latex-preview)
+;;; emarccs-shared-org-latex-preview.el ends here. 

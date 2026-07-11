@@ -1,4 +1,4 @@
-;;; emarccs-theme.el -*- lexical-binding: t; -*-
+;;; emarccs-shared-theme.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -128,5 +128,5 @@
 (my/load-current-theme)
 
 
-(provide 'emarccs-theme)
-;;; emarccs-theme.el ends here.
+(provide 'emarccs-shared-theme)
+;;; emarccs-shared-theme.el ends here.

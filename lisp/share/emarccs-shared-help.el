@@ -1,4 +1,4 @@
-;;; emarccs-help.el -*- lexical-binding: t; -*-
+;;; emarccs-shared-help.el -*- lexical-binding: t; -*-
 ;;; commentary:
 
 ;; 参考了https://emacs-china.org/t/helpful-el/8153
@@ -63,5 +63,5 @@
                                             (push buf help-helpful/history)
                                             buf))))
 
-(provide 'emarccs-help)
-;;; emarccs-basic.el ends here.
+(provide 'emarccs-shared-help)
+;;; emarccs-shared-basic.el ends here.

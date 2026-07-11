@@ -1,4 +1,4 @@
-;;; emarccs-basic.el -*- lexical-binding: t; -*-
+;;; emarccs-shared-basic.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -429,5 +429,5 @@
    (insert "#+BEGIN_abstract\n\n#+END_abstract\n")
    (forward-line -2)))
 
-(provide 'emarccs-basic)
-;;; emarccs-basic.el ends here.
+(provide 'emarccs-shared-basic)
+;;; emarccs-shared-basic.el ends here.

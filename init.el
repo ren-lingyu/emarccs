@@ -18,34 +18,34 @@
                                                         buffer-file-name))))
 
 ;; main settings
-(require 'emarccs-basic) ; 基本设置
+(require 'emarccs-shared-basic) ; 基本设置
 
-(require 'emarccs-help) ; 帮助信息优化
+(require 'emarccs-shared-help) ; 帮助信息优化
 
-(require 'emarccs-theme) ; 主题
+(require 'emarccs-shared-theme) ; 主题
 
-(require 'emarccs-org) ; Org 设置
+(require 'emarccs-shared-org) ; Org 设置
 
-(require 'emarccs-tex) ; Tex 设置
+(require 'emarccs-shared-tex) ; Tex 设置
 
-(require 'emarccs-complete) ; 自动补全
+(require 'emarccs-shared-complete) ; 自动补全
 
-(require 'emarccs-org-roam) ; org-roam 及相关设置
+(require 'emarccs-shared-org-roam) ; org-roam 及相关设置
 
-(require 'emarccs-org-roam-citar) ; org-roam 中 citar 及相关设置
+(require 'emarccs-shared-org-roam-citar) ; org-roam 中 citar 及相关设置
 
-(require 'emarccs-org-latex-preview) ; 预览
+(require 'emarccs-shared-org-latex-preview) ; 预览
 
-(require 'emarccs-feed)
+(require 'emarccs-shared-feed)
 
-(require 'emarccs-ai) ; AI 辅助
+(require 'emarccs-shared-ai) ; AI 辅助
 
-(require 'emarccs-blog-publish) ; 博客发布设置
+(require 'emarccs-shared-blog-publish) ; 博客发布设置
 
-(require 'emarccs-orgraph) ; orgraph
+(require 'emarccs-shared-orgraph) ; orgraph
 
 ;; debug
-(require 'emarccs-debug)
+(require 'emarccs-shared-debug)
 
 ;; customize
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

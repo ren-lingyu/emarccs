@@ -1,4 +1,4 @@
-;;; emarccs-debug.el -*- lexical-binding: t; coding: utf-8 -*-
+;;; emarccs-shared-debug.el -*- lexical-binding: t; coding: utf-8 -*-
 ;;; commentary:
 
 ;; 该文件的内容是用一些奇怪的代码来禁止某些奇怪的报错或者提示. 
@@ -8,5 +8,5 @@
 
 (setq image-scaling-factor 1.0)
 
-(provide 'emarccs-debug)
-;;; emarccs-debug.el ends here
+(provide 'emarccs-shared-debug)
+;;; emarccs-shared-debug.el ends here

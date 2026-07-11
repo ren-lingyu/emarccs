@@ -1,4 +1,4 @@
-;;; emarccs-org.el --- Org mode configuration -*- lexical-binding: t; -*-
+;;; emarccs-shared-org.el --- Org mode configuration -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -193,5 +193,5 @@
       "<%Y-%m-%d %a %z>" 
       nil))))
 
-(provide 'emarccs-org)
-;;; emarccs-org.el ends here.
+(provide 'emarccs-shared-org)
+;;; emarccs-shared-org.el ends here.

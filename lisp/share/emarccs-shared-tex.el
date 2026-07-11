@@ -1,4 +1,4 @@
-;;; emarccs-tex.el -*- lexical-binding: t; -*-
+;;; emarccs-shared-tex.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code: 
 
@@ -108,6 +108,6 @@
    (forward-line -1)))         
 
 ;; The End
-(provide 'emarccs-tex)
+(provide 'emarccs-shared-tex)
 
-;;; emarccs-tex.el ends here
+;;; emarccs-shared-tex.el ends here

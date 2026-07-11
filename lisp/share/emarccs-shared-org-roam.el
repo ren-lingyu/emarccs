@@ -1,4 +1,4 @@
-;;; emarccs-org-roam.el -*- lexical-binding: t; -*-
+;;; emarccs-shared-org-roam.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -266,5 +266,5 @@
       ;; Cursor is not on a link
       (message "The cursor is not on a link."))))
 
-(provide 'emarccs-org-roam)
-;;; emarccs-org-roam.el ends here
+(provide 'emarccs-shared-org-roam)
+;;; emarccs-shared-org-roam.el ends here

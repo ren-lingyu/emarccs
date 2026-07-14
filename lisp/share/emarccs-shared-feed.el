@@ -3,22 +3,18 @@
 ;;; code:
 
 (use-package elfeed
-  :straight (:host github :repo "skeeto/elfeed")
   :config
   (setq elfeed-feeds '(("https://aren-coco.com/feed.atom" blog)
                        ("https://langxubai.com/rss.xml" blog)
                        ("https://rss.arxiv.org/atom/cond-mat.str-el" arXiv))))
 
 (use-package elfeed-dashboard
-  :disabled
-  :straight (:host github :repo "manojm321/elfeed-dashboard"))
+  :disabled)
 
 (use-package elfeed-org
-  :disabled
-  :straight (:host github :repo "remyhonig/elfeed-org"))
+  :disabled)
 
 (use-package arxiv-mode
-  :straight (:host github :repo "fizban007/arxiv-mode")
   :config
   (setq arxiv-use-variable-pitch t)
   (setq arxiv-pop-up-new-frame t)

@@ -100,7 +100,6 @@
                    :unnarrowed t)))))
 
 (use-package org-roam-organize
-  :straight (:host github :repo "ren-lingyu/org-roam-organize")
   ;; :straight (:local-repo "~/data/org-roam-organize/") ;; 用于调试
   :after org-roam
   :custom
@@ -187,8 +186,6 @@
   ("C-c c s" . consult-org-roam-search))
 
 (use-package org-roam-ui
-  :straight
-  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
   :after org-roam
   ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
   ;;         a hookable mode anymore, you're advised to pick something yourself
@@ -203,14 +200,12 @@
 ;; 卡片工作台
 (use-package org-workbench
   :disabled
-  :straight (:host github :repo "yibie/org-workbench")
   :after org-roam ; 或 org-supertag、org-brain 等
   :config
   (org-workbench-setup))
 
 ;; DATE
 (use-package org-roam-timestamps
-  :straight (:host github :repo "tefkah/org-roam-timestamps")
   :after org-roam
   :config
   (org-roam-timestamps-mode 1)

@@ -18,12 +18,7 @@
   (add-to-list 'company-backends 'company-math-symbols-unicode)
   (add-to-list 'company-backends 'company-math-symbols-latex))
 
-;; (use-package yasnippet
-;;   :straight (:host github :repo "joaotavora/yasnippet")
-;;   :init (yas-global-mode 1))
-
 (use-package aas
-  :straight (:host github :repo "ymarco/auto-activating-snippets")
   :hook 
   (LaTeX-mode . aas-activate-for-major-mode)
   (org-mode . aas-activate-for-major-mode)
@@ -50,7 +45,6 @@
     ";eyg" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquantgroup}\n\n\\end{yquantgroup}\n\\end{tikzpicture}") (forward-line -2))))
 
 (use-package laas
-  :straight (:host github :repo "tecosaur/LaTeX-auto-activating-snippets")
   :init
   (setq laas-basic-snippets
         '(";;alp" "\\alpha"

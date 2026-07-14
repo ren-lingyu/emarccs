@@ -4,7 +4,6 @@
 
 ;; gptel
 (use-package gptel
-  :straight (:host github :repo "karthink/gptel")
   :config
   (setq gptel-directives
         (append gptel-directives
@@ -39,7 +38,6 @@ The following rules must be strictly obeyed:
 
 ;; superchat
 (use-package superchat
-  :straight (:host github :repo "yibie/superchat")
   :config
   (setq superchat-data-directory (locate-user-emacs-file "superchat/"))
   (setq superchat-lang "中文") ; or "English", "Francais", etc.
@@ -49,7 +47,6 @@ The following rules must be strictly obeyed:
 ;; ellama
 (use-package ellama
   :disabled
-  :straight (:host github :repo "s-kostyaev/ellama")
   :bind ("C-c e" . ellama)
   ;; send last message in chat buffer with C-c C-c
   :hook (org-ctrl-c-ctrl-c-hook . ellama-chat-send-last-message)
@@ -60,41 +57,6 @@ The following rules must be strictly obeyed:
   ;; show ellama session id in header line in all buffers
   (ellama-session-header-line-global-mode +1)
   (setq ellama-language "中文"))
-
-;; ;; copilot
-;; (use-package copilot
-;;   :straight (:host github :repo "copilot-emacs/copilot.el" :branch "main")
-;;   :config
-;;   (setq copilot-idle-delay nil)
-;;   :hook
-;;   (prog-mode . copilot-mode)
-;;   (LaTeX-mode . copilot-mode)
-;;   (python-mode . copilot-mode)
-;;   (TeX-mode . copilot-mode)
-;;   :bind
-;;   (:map copilot-mode-map
-;;     ("C-TAB" . 'copilot-accept-completion)
-;;     ("C-<right>" . 'copilot-accept-completion-by-word)
-;;   )
-;; )
-
-;; (use-package copilot-chat
-;;   :straight (:host github :repo "chep/copilot-chat.el" :files ("*.el"))
-;;   :after (request org markdown-mode)
-;; )
-
-;; ;; debug code
-;; ;; 由于 `lisp-indent-offset' 的默认值是 nil，在编辑 elisp 时每敲一个字
-;; ;; 符都会跳出一个 warning，将其默认值设置为 t 以永不显示这个 warning
-;; (setq-default copilot--indent-warning-printed-p t
-;;               copilot-indent-offset-warning-disable t)
-
-;;   ;; 文件超出 `copilot-max-char' 的时候不要弹出一个 warning 的 window
-;; (defun my-copilot-get-source-suppress-warning (original-function &rest args)
-;;   "Advice to suppress display-warning in copilot--get-source."
-;;   (cl-letf (((symbol-function 'display-warning) (lambda (&rest args) nil)))
-;;     (apply original-function args)))
-;; (advice-add 'copilot--get-source :around #'my-copilot-get-source-suppress-warning)
 
 (provide 'emarccs-shared-ai)
 ;;; emarccs-shared-ai.el ends here

@@ -5,31 +5,6 @@
 (use-package org
   ;; :defer
   :demand t
-  ;; :straight (org :type git :host nil :repo "https://https.git.savannah.nongnu.org/git/org-mode.git")
-  :straight `(org
-              :fork (:host nil
-                           :repo "https://git.tecosaur.net/tec/org-mode.git"
-                           :branch "dev"
-                           :remote "tecosaur")
-              :files (:defaults "etc")
-              :build t
-              :pre-build
-              (with-temp-file "org-version.el"
-                (require 'lisp-mnt)
-                (let ((version
-                       (with-temp-buffer
-                         (insert-file-contents "lisp/org.el")
-                         (lm-header "version")))
-                      (git-version
-                       (string-trim
-                        (with-temp-buffer
-                          (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
-                          (buffer-string)))))
-                  (insert
-                   (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
-                   (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
-                   "(provide 'org-version)\n")))
-              :pin nil)
   :init
   (setq org-directory (expand-file-name "~/org/"))
   :config
@@ -69,13 +44,11 @@
 ;; 嵌入
 (use-package org-transclusion
   :after org
-  :straight (:host github :repo "nobiot/org-transclusion" :branch "main")
   :hook (org-mode . org-transclusion-mode))
 
 (use-package org-include-inline
   :disabled
   :after org
-  :straight (:host github :repo "yibie/org-include-inline" :branch "main")
   :hook (org-mode . org-include-inline-mode))
 
 ;; GTD and agenda
@@ -86,7 +59,6 @@
   (setq org-edna-use-inheritance t))
 
 (use-package org-gtd
-  :straight (:host github :repo "Trevoke/org-gtd.el" :branch "master")
   :after (org org-edna)
   :init
   (setq org-gtd-update-ack "4.0.0")

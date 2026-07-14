@@ -2,8 +2,10 @@
 ;;; commentary:
 ;;; code:
 
+(setenv "TZ" "Asia/Shanghai")
+
 ;; 加载最新的.el文件
-(setq load-prefer-newer t)
+;; (setq load-prefer-newer t)
 
 ;; temporary directory
 (setq temporary-file-directory (expand-file-name "~/tmp/emacs/"))
@@ -12,24 +14,10 @@
 (setq small-temporary-file-directory (expand-file-name temporary-file-directory))
 (setq org-babel-remote-temporary-directory (expand-file-name temporary-file-directory))
 
-;; straight.el 引导
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name
-        "straight/repos/straight.el/bootstrap.el"
-        (or (bound-and-true-p straight-base-dir)
-            user-emacs-directory)))
-      (bootstrap-version 7))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
 ;; 基础编码和启动界面设置, 基本外观设置
+(setq inhibit-startup-screen t)
+(setq initial-buffer-choice t)
+
 (when (display-graphic-p)
   (let* ((font-height-mm 4)
          (mm-size (frame-monitor-attribute 'mm-size))
@@ -125,10 +113,6 @@
 ;; 忽略格式风格警告
 (setq byte-compile-warnings '(not docstrings))
 
-;; 有关use-package
-(straight-use-package 'use-package)
-(eval-when-compile (require 'use-package))
-
 ;; 有关 buffe 显示
 (setq display-buffer-alist
       '(("*compilation*"
@@ -140,20 +124,16 @@
 
 ;; dired
 (use-package dired
-  :straight (:type built-in)
   :config
   (setq dired-listing-switches "-l -a --human-readable --group-directories-first")
   (setq dired-hide-details-mode nil)
   (put 'dired-find-alternate-file 'disabled nil))
 
 (use-package dired-x
-  :straight (:type built-in)
   :config
   (setq dired-omit-files nil))
 
 (use-package dirvish
-  :ensure t
-  :straight (:host github :repo "alexluigit/dirvish")
   :init
   (dirvish-override-dired-mode)
   :config
@@ -321,13 +301,11 @@
 
 ;; undo
 (use-package undo-tree
-  :straight (:host gitlab :repo "tsc25/undo-tree")
   :init (global-undo-tree-mode)
   :custom
   (undo-tree-auto-save-history nil))
 
-(use-package vundo
-  :straight (:host github :repo "casouri/vundo"))
+(use-package vundo)
 
 ;; avy
 (use-package avy
@@ -341,7 +319,6 @@
 
 ;; 输入法
 (use-package pyim
-  :straight (:host github :repo "tumashu/pyim")
   :commands (pyim-mode toggle-input-method)
   :config
   (setq default-input-method "pyim")
@@ -352,12 +329,10 @@
   (setq-default pyim-punctuation-translate-p '(no)))
 
 (use-package pyim-basedict
-  :straight (:host github :repo "tumashu/pyim-basedict")
   :config
   (pyim-basedict-enable))
 
 (use-package pyim-cangjiedict
-  :straight (:host github :repo "cor5corpii/pyim-cangjiedict")
   :config
   (pyim-cangjie6dict-enable))
 
@@ -365,7 +340,6 @@
 (setopt elisp-fontify-semantically t)
 
 (use-package treesit-auto
-  :straight (:host github :repo "renzmann/treesit-auto")
   :custom
   (treesit-auto-install 'prompt)
   :config
@@ -376,30 +350,24 @@
       '((lean . ("https://github.com/Julian/tree-sitter-lean.git"))))
 
 (use-package lisp-semantic-hl
-  :ensure t
   :hook ((emacs-lisp-mode lisp-mode) . lisp-semantic-hl-mode))
 
 (use-package markdown-mode)
 
 (use-package yaml-mode)
 
-(use-package qml-mode
-  :straight (:host github :repo "coldnew/qml-mode"))
+(use-package qml-mode)
 
-(use-package kdl-mode
-  :straight (:host github :repo "taquangtrung/emacs-kdl-mode"))
+(use-package kdl-mode)
 
 (use-package nix-mode
-  :straight (:host github :repo "NixOS/nix-mode")
   :mode "\\.nix\\'")
 
 (use-package dockerfile-mode
-  :straight (:host github :repo "spotify/dockerfile-mode")
   :mode ("Dockerfile\\'" . dockerfile-mode)
   :config (put 'dockerfile-image-name 'safe-local-variable #'stringp))
 
 (use-package dotenv-mode
-  :straight (:host github :repo "preetpalS/emacs-dotenv-mode")
   :mode ("\\.env\\..*\\'" . dotenv-mode))
 
 ;; 键位设置和快捷键

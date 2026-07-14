@@ -6,7 +6,6 @@
 ;;; code:
 
 (use-package helpful
-  :straight (:host github :repo "Wilfred/helpful")
   :bind
   (("C-h f" . helpful-callable)
    ("C-h v" . helpful-variable)

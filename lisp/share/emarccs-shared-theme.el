@@ -3,8 +3,6 @@
 ;;; code:
 
 (use-package koishi-theme
-  :ensure t
-  :straight (:host github :repo "gynamics/koishi-theme.el")
   :init
   ;; set `koishi-theme-mode' to t if you want to use light theme,
   ;; this variable should be configured before you load theme.

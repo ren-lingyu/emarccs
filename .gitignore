@@ -9,12 +9,29 @@
 !init.el
 !early-init.el
 !flake.nix
+!flake.lock
 
 # 子目录文件白名单
 !lisp/
 !lisp/**/
 !lisp/**/*.el
 
+!pkgs/
+!pkgs/**/
+!pkgs/**/*.nix
+!pkgs/**/*.el
+
+!locks/
+!locks/**/
+!locks/**/*.nix
+!locks/**/*.lock
+
+!tests/
+!tests/**/
+!tests/**/*.nix
+!tests/**/lisp/*.el
+
 # 全局黑名单
+**/tmp/
 *~
 *#*

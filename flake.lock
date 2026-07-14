@@ -1,0 +1,201 @@
+{
+  "nodes": {
+    "elisp-helpers": {
+      "inputs": {
+        "fromElisp": "fromElisp"
+      },
+      "locked": {
+        "lastModified": 1782098990,
+        "narHash": "sha256-cdzwG8NRXtwlG25Tjfvscx9nKllZbNbEHvK/q7Sdmak=",
+        "ref": "refs/heads/master",
+        "rev": "6ed8c5617af3d62a456ad1407c2e22feefd48b1b",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/emacs-twist/elisp-helpers"
+      },
+      "original": {
+        "ref": "refs/heads/master",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/emacs-twist/elisp-helpers"
+      }
+    },
+    "elpa-gnu": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782568193,
+        "narHash": "sha256-xmX4v8LmAU6v0cbNx/oA8bci17JCtEreUCMWuJAFxK8=",
+        "ref": "refs/heads/main",
+        "rev": "fcf738c3547216d700e1f67a2e1830ed2acba981",
+        "shallow": true,
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/elpa/gnu.git"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/elpa/gnu.git"
+      }
+    },
+    "elpa-nongnu": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782554643,
+        "narHash": "sha256-4cTfnlfiz8O0ii0GWdHVqw1bJUreeCZY/eVhhq3PQGY=",
+        "ref": "refs/heads/main",
+        "rev": "2e12d173f9e329f1a37c07a4a84fdbaaff12d245",
+        "shallow": true,
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/elpa/nongnu.git"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/elpa/nongnu.git"
+      }
+    },
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": "nixpkgs-lib"
+      },
+      "locked": {
+        "lastModified": 1782949081,
+        "narHash": "sha256-vp6Y/Grm98ESt6ceOkWiHWyZRDV3J1RID4w+6NWK9yA=",
+        "ref": "refs/heads/main",
+        "rev": "17c9d6cdfc60c64f4ee8d306f9bc0b4ccb51481e",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/hercules-ci/flake-parts.git"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/hercules-ci/flake-parts.git"
+      }
+    },
+    "fromElisp": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1723987997,
+        "narHash": "sha256-OhaVgTG6zjLByzl+uPTvtCld3p2uqgbCXmOl/s3LVRo=",
+        "owner": "talyz",
+        "repo": "fromElisp",
+        "rev": "f071a0e262c02c0895b575c4e322b7fd90713543",
+        "type": "github"
+      },
+      "original": {
+        "owner": "talyz",
+        "repo": "fromElisp",
+        "type": "github"
+      }
+    },
+    "melpa": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783884873,
+        "narHash": "sha256-fNqaFvMSiqU76VD8fVain4vg93duLVpNmHIuDNxS/ZU=",
+        "ref": "refs/heads/master",
+        "rev": "0a71915fff01c8de0b0accc9a787d64cc1b588f1",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/melpa/melpa.git"
+      },
+      "original": {
+        "ref": "refs/heads/master",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/melpa/melpa.git"
+      }
+    },
+    "nix-to-lisp": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783887250,
+        "narHash": "sha256-BOCB1TZfgQzaQTpbfSH9muaj6Co4PVFqpAENhJvNkgA=",
+        "ref": "refs/heads/main",
+        "rev": "537b93c0256f55f42e68347d59a3aef8805eb673",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/ren-lingyu/nix-to-lisp.git"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/ren-lingyu/nix-to-lisp.git"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1783776592,
+        "narHash": "sha256-UgCQzxeWI75XM8G+hPrPh+MKzEPjG3SpAj7dtqSbksA=",
+        "ref": "refs/heads/nixos-unstable",
+        "rev": "e7a3ca8092b61ff85b6a45bf863ea2b2d6a661b3",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs.git"
+      },
+      "original": {
+        "ref": "refs/heads/nixos-unstable",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs.git"
+      }
+    },
+    "nixpkgs-lib": {
+      "locked": {
+        "lastModified": 1782614948,
+        "narHash": "sha256-ePjCwr1sNm9NYUqywL7QfK3JnlS015msC+eBu2zKlp8=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "db3f255737b94216eb71cce308e2912cf6bc2d7c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "elpa-gnu": "elpa-gnu",
+        "elpa-nongnu": "elpa-nongnu",
+        "flake-parts": "flake-parts",
+        "melpa": "melpa",
+        "nix-to-lisp": "nix-to-lisp",
+        "nixpkgs": "nixpkgs",
+        "twist": "twist"
+      }
+    },
+    "twist": {
+      "inputs": {
+        "elisp-helpers": "elisp-helpers"
+      },
+      "locked": {
+        "lastModified": 1782962225,
+        "narHash": "sha256-0ehUDDBy44dos6Heq1LatRdD/SM7YMDR3ApbWPGNnYk=",
+        "ref": "refs/heads/master",
+        "rev": "267604e48a8a8d528d05682073307c8369eb8a29",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/emacs-twist/twist.nix.git"
+      },
+      "original": {
+        "ref": "refs/heads/master",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/emacs-twist/twist.nix.git"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

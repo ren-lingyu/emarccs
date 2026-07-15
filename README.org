@@ -1,35 +1,163 @@
-#+TITLE: Emacs Initial Configuration
+#+TITLE: Emarccs
 #+AUTHOR: aRenCoco
 
 * 项目介绍
-这是本人自用的 Emacs 配置, 尚处于更新和迭代当中, *README 更新可能不及时*.
+
+这是本人自用的 Emacs 配置. 当前结构同时支持两个入口:
+
+- 纯 Emacs 入口: =early-init.el= 和 =init.el=, 由 =straight.el= 管理第三方包.
+- Nix 入口: =flake.nix= 通过 =twist.nix= 构建包含 package set 和共享配置的 Emacs wrapper.
+
+配置主体位于 =lisp/share/=, 由纯 Emacs 和 Nix wrapper 共用. 纯 Emacs 相关的包管理器引导位于 =lisp/pure-emacs/=. Nix wrapper 专用的启动适配位于 =lisp/twist-emacs/=.
+
+当前目标 Emacs 版本为 *31+*. 纯 Emacs 在低版本启动时只给出 warning; Nix wrapper 当前使用 =pkgs.emacs31-pgtk= 和 =pkgs.emacs31-gtk3=.
 
 * 项目结构
-#+BEGIN_SRC
-  .emacs.d/
-  ├── .gitignore                       # Git 忽略规则
-  ├── LICENSE                          # MIT 许可证
-  ├── flake.nix                        # flake.nix
-  ├── README.org                       # 项目文档
-  ├── early-init.el                    # 早期初始化配置
-  ├── init.el                          # 主配置入口
-  ├── custom.el                        # 自定义配置 (由 Emacs 生成)
-  └── lisp/                            # 功能模块目录
-      ├── init-ai.el                   # AI 辅助功能
-      ├── init-basic.el                # 基础设置 (路径、加载策略)
-      ├── init-blog-publish.el         # 博客发布工具
-      ├── init-complete.el             # 自动补全 (Company, AAS)
-      ├── init-debug.el                # 调试工具
-      ├── init-feed.el                 # RSS 源阅读
-      ├── init-help.el                 # 帮助系统优化
-      ├── init-org.el                  # Org 模式配置
-      ├── init-org-latex-preview.el    # LaTeX 预览
-      ├── init-org-roam.el             # Org-roam 知识库
-      ├── init-org-roam-citar.el       # Org-roam + Citar 集成
-      ├── init-orgraph.el              # Org 文档图表化
-      ├── init-tex.el                  # LaTeX 支持
-      └── init-theme.el                # 主题配置
-#+END_SRC
-  
+
+#+begin_src text
+.
+├── early-init.el
+├── init.el
+├── flake.nix
+├── flake.lock
+├── lisp/
+│   ├── pure-emacs/
+│   │   ├── emarccs-pemacs.el
+│   │   └── emarccs-pemacs-straight.el
+│   ├── share/
+│   │   ├── emarccs-shared.el
+│   │   └── emarccs-shared-*.el
+│   └── twist-emacs/
+│       ├── emarccs-twist.el
+│       └── emarccs-twist-advice-add.el
+├── pkgs/
+│   ├── default.nix
+│   └── <package>/
+│       ├── melpa-recipe.el
+│       ├── straight-register.el
+│       ├── override.nix
+│       └── ...
+├── locks/
+│   └── emacs/
+│       ├── archive.lock
+│       ├── flake.lock
+│       └── flake.nix
+└── tests/
+    ├── default.nix
+    ├── startup-smoke/
+    └── package-availability-smoke/
+#+end_src
+
+关键约定:
+
+- =init.el= 先加载 =emarccs-pemacs=, 再加载 =emarccs-shared=.
+- =lisp/share/emarccs-shared.el= 是共享配置入口, 模块加载顺序应保持稳定.
+- =pkgs/<package>/straight-register.el= 服务纯 Emacs / straight.
+- =pkgs/<package>/melpa-recipe.el= 和 =override.nix= 服务 twist.nix.
+- =locks/emacs/= 由 twist.nix 维护, 当前 pgtk/gtk 共享同一 Emacs 大版本 lock.
+- =tests/= 中的 Nix checks 用于验证 wrapper 启动注入和包可见性.
+
+* 纯 Emacs 入口
+
+纯 Emacs 使用:
+
+#+begin_src text
+early-init.el
+init.el
+lisp/pure-emacs/
+lisp/share/
+pkgs/*/straight-register.el
+#+end_src
+
+=lisp/pure-emacs/emarccs-pemacs-straight.el= 会:
+
+1. 设置 straight.el 基本选项.
+2. 如缺少 =straight/repos/straight.el/bootstrap.el=, 从 straight.el 上游下载 install script 进行 bootstrap.
+3. 安装/加载 =use-package=.
+4. 自动读取 =pkgs/*/straight-register.el= 并注册自定义 recipe.
+
+注意: 空 =user-emacs-directory= 首次启动时, straight bootstrap 依赖网络访问 =raw.githubusercontent.com=. 若网络或 DNS 不稳定, GUI 可能表现为已打开但初始化无响应. 手动预置完整 =straight/repos/straight.el/= 可以跳过 straight 自身 bootstrap 下载, 但后续 package clone/build 仍可能联网.
+
+* Nix / twist 入口
+
+=flake.nix= 使用 =flake-parts= 和 =twist.nix= 构建 configured Emacs wrapper. 当前主要输出:
+
+#+begin_src text
+packages.<system>.emacs-pgtk-twist
+packages.<system>.emacs-gtk-twist
+
+apps.<system>.emacs-pgtk-twist-lock
+apps.<system>.emacs-pgtk-twist-update
+apps.<system>.emacs-gtk-twist-lock
+apps.<system>.emacs-gtk-twist-update
+#+end_src
+
+常用命令:
+
+#+begin_src sh
+nix flake check -L --show-trace
+nix build .#emacs-pgtk-twist -L --show-trace
+nix run .#emacs-pgtk-twist-lock --impure
+nix run .#emacs-pgtk-twist-update --impure
+#+end_src
+
+Nix wrapper 的策略:
+
+- 不让 twist 读取真实 =init.el=.
+- =initParser= 返回空 package set, 因此不依赖 =:ensure t= 推断包列表.
+- =extraPackages= 来自 =pkgs/default.nix= 的显式包列表.
+- =extraSiteStartElisp= 在 wrapper 的 =site-start.el= 中加入 =lisp/twist-emacs= 和 =lisp/share=, 并安装 =startup--load-user-init-file= advice.
+- wrapper shared 配置在真实用户 init 前加载; =--no-init-file= 仍保留 Emacs 原生命令行语义.
+
+当前 =checks= 会真实构建 wrapper 并运行 smoke test, 所以第一次 =nix flake check= 可能较重.
+
+* Package 定义
+
+=pkgs/default.nix= 自动发现:
+
+- =pkgs/<package>/melpa-recipe.el=
+- =pkgs/<package>/override.nix=
+
+并显式维护 twist 使用的 package list. 本地 MELPA recipe 在仓库中保留 =melpa-recipe.el= 后缀, 再由 =pkgs/default.nix= 生成 twist 可读取的无后缀 recipe 目录.
+
+这里故意使用 =runCommand + cp= 生成 regular files, 而不使用 =linkFarm= 或 =symlinkJoin=. twist 的 =type = "melpa"= registry 当前只接受 =builtins.readDir= 类型为 ="regular"= 的 recipe entry; symlinked recipe entry 会被过滤并表现为 =Package <name> is not found=.
+
+当前 override 分两类:
+
+- =input=: 作用于 twist package data, 适合补 metadata, =packageRequires=, =preBuild= 等.
+- =scope=: 作用于最终 =elispPackages= derivation scope, 适合修改 =nativeBuildInputs=, =buildInfo=, =installInfo= 等构建过程.
+
+重要 override:
+
+- =org=: 使用 tecosaur fork, 构建前生成 =org-version.el=.
+- =auctex=: 使用 final derivation override, 注入 TeX/Perl/Git 构建依赖, 显式构建并安装 =auctex.info= 和 =preview-latex.info=.
+- =citar=: 修正 generated autoload 缺少 =cl-lib= 的问题.
+- =company-auctex=, =superchat=: 构建期设置可写 =HOME=.
+- =laas=: 补充缺失依赖 =math-symbol-lists=.
+
+* 测试状态
+
+当前仓库提供两类 flake checks:
+
+- =startup-smoke=: 检查 wrapper =site-start.el= 中的 load-path 和 startup advice 注入.
+- =package-availability-smoke=: 检查显式声明包可被 Emacs 找到.
+
+最近验证结果:
+
+- =nix flake check -L --show-trace= 通过.
+- =nix build .#emacs-pgtk-twist -L --show-trace= 通过.
+- 构建产物 batch smoke test 可找到 =org=, =org-roam=, =citar=.
+
+当前后续维护项:
+
+- AUCTeX override 当前使用 =texliveMinimal.withPackages= 组合构建期 TeX 环境. 若后续 Nixpkgs 调整 TeX Live schema, 需要重新检查该 override.
+
+* 维护注意事项
+
+- =.gitignore= 使用倒置白名单模式. 新增可追踪文件时, 需要同时确认对应 =!pattern= 已放行.
+- 修改 =lisp/share/emarccs-shared.el= 的模块顺序时要谨慎, 当前顺序是配置初始化语义的一部分.
+- 纯 Emacs 与 Nix wrapper 共用 =lisp/share/=, 因此共享配置中应避免过多 Nix/twist 专用分支.
+
 * 许可证
+
 本项目采用 MIT 许可证, 见 [[file:LICENSE][LICENSE]].

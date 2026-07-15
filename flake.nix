@@ -34,6 +34,10 @@
   
   outputs = { self, ... }@inputs : inputs.flake-parts.lib.mkFlake { inherit inputs; } {
     
+    imports = [
+      inputs.flake-parts.flakeModules.easyOverlay
+    ];
+    
     systems = inputs.nixpkgs.lib.systems.flakeExposed;
     
     flake = {
@@ -144,6 +148,8 @@
           lockDir = cfg_.lockDir;
         };
       }) twistContext_.emacsTwists;
+      
+      overlayAttrs = pkgs.lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;
       
       apps = self.lib.concatMapEmacsTwists pkgs (name_ : emacsName_ : variantName_ : cfg_ : let
         apps_ = config.packages.${name_}.makeApps {

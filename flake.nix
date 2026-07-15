@@ -142,6 +142,25 @@
         };
       }) emacsTwists;
       
+      checks = self.lib.concatMapEmacsTwists pkgs (name_ : emacsName_ : variantName_ : cfg_ : (pkgs.lib.mapAttrs' (
+        checkName_ : check_ : {
+          name = "${name_}-${checkName_}";
+          value = check_;
+        }
+      ) (import ./tests {
+        inherit pkgs;
+        emacsPackage = config.packages.${name_};
+        elispPackages = elispkgs.packages;
+        siteStartCheckList = [
+          "eval-and-compile"
+          "${./lisp/twist-emacs}"
+          "${./lisp/share}"
+          "${pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el)}"
+          "startup--load-user-init-file"
+          "${./early-init.el}"
+        ];
+      }))) emacsTwists;
+      
     };
     
   };

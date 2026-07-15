@@ -2,6 +2,10 @@
 ;;; commentary:
 ;;; code:
 
+;; transient
+(use-package transient
+  :demand t)
+
 ;; gptel
 (use-package gptel
   :config
@@ -38,6 +42,7 @@ The following rules must be strictly obeyed:
 
 ;; superchat
 (use-package superchat
+  :after transient
   :config
   (setq superchat-data-directory (locate-user-emacs-file "superchat/"))
   (setq superchat-lang "中文") ; or "English", "Francais", etc.

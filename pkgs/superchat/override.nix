@@ -1,10 +1,11 @@
 { pkgs } : {
 
-  input = final_ : super_ : {
+  scope = { old, ... } : {
     preBuild = builtins.concatStringsSep "\n" [
-      (super_.preBuild or "")
       "export HOME=\"$TMPDIR/home\""
       "mkdir -p \"$HOME\""
+      "sed -i \"/^(require 'subr-x)$/a (require 'transient)\" superchat.el"
+      (old.preBuild or "")
     ];
   };
 

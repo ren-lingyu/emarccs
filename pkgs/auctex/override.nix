@@ -4,8 +4,8 @@
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
       pkgs.git
       pkgs.perl
-      (pkgs.texlive.combined.scheme-minimal.withPackages (ps : [
-        ps.latex
+      (pkgs.texliveMinimal.withPackages (ps : with ps; [
+        latex
       ]))
     ];
     preBuild = builtins.concatStringsSep "\n" [

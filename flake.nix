@@ -142,6 +142,19 @@
         };
       }) emacsTwists;
       
+      apps = self.lib.concatMapEmacsTwists pkgs (name_ : emacsName_ : variantName_ : cfg_ : let
+        apps_ = config.packages.${name_}.makeApps {
+          lockDirName = pkgs.lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
+        };
+      in {
+        "${name_}-lock" = apps_.lock // {
+          meta.description = "Generate lock files for ${name_}.";
+        };
+        "${name_}-update" = apps_.update // {
+          meta.description = "Update lock files for ${name_}.";
+        };
+      }) emacsTwists;
+      
       checks = self.lib.concatMapEmacsTwists pkgs (name_ : emacsName_ : variantName_ : cfg_ : (pkgs.lib.mapAttrs' (
         checkName_ : check_ : {
           name = "${name_}-${checkName_}";

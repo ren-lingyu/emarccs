@@ -16,6 +16,7 @@
     nix-to-lisp = {
       url = "git+https://github.com/ren-lingyu/nix-to-lisp.git?ref=refs/heads/main&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
     };
     melpa = {
       url = "git+https://github.com/melpa/melpa.git?ref=refs/heads/master&shallow=1";

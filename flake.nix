@@ -41,6 +41,24 @@
         
         elisp = inputs.nix-to-lisp.lib.elisp;
         
+        mkTwistContext = pkgs : {
+          elispkgs = (import ./pkgs { inherit pkgs; });        
+          emacsTwists = {
+            emacs = let
+              lock_ = ./locks/emacs;
+            in {
+              pgtk = {
+                package = pkgs.emacs31-pgtk;
+                lockDir = lock_;
+              };
+              gtk = {
+                package = pkgs.emacs31-gtk3;
+                lockDir = lock_;
+              };
+            };
+          };
+        };
+        
         concatMapEmacsTwists = pkgs_ : f_ : emacsTwists_ : (pkgs_.lib.concatMapAttrs (emacsName_ : variants_ : (
           pkgs_.lib.concatMapAttrs (variantName_ : cfg_ : let
             name_ = "${emacsName_}-${variantName_}-twist";
@@ -113,34 +131,18 @@
     };
     
     perSystem = { config, pkgs, ... } : let
-      
-      elispkgs = (import ./pkgs { inherit pkgs; });
-      
-      emacsTwists = {
-        emacs = let
-          lock_ = ./locks/emacs;
-        in {
-          pgtk = {
-            package = pkgs.emacs31-pgtk;
-            lockDir = lock_;
-          };
-          gtk = {
-            package = pkgs.emacs31-gtk3;
-            lockDir = lock_;
-          };
-        };
-      };
-      
+      twistContext_ = (self.lib.mkTwistContext pkgs);
     in {
       
       packages = self.lib.concatMapEmacsTwists pkgs (name_ : emacsName_ : variantName_ : cfg_ : {
         "${name_}" = self.lib.mkEmacsTwist {
-          inherit pkgs elispkgs;
+          inherit pkgs;
+          elispkgs = twistContext_.elispkgs;
           elisp = self.lib.elisp;
           package = cfg_.package;
           lockDir = cfg_.lockDir;
         };
-      }) emacsTwists;
+      }) twistContext_.emacsTwists;
       
       apps = self.lib.concatMapEmacsTwists pkgs (name_ : emacsName_ : variantName_ : cfg_ : let
         apps_ = config.packages.${name_}.makeApps {
@@ -153,7 +155,7 @@
         "${name_}-update" = apps_.update // {
           meta.description = "Update lock files for ${name_}.";
         };
-      }) emacsTwists;
+      }) twistContext_.emacsTwists;
       
       checks = self.lib.concatMapEmacsTwists pkgs (name_ : emacsName_ : variantName_ : cfg_ : (pkgs.lib.mapAttrs' (
         checkName_ : check_ : {
@@ -163,7 +165,7 @@
       ) (import ./tests {
         inherit pkgs;
         emacsPackage = config.packages.${name_};
-        elispPackages = elispkgs.packages;
+        elispPackages = twistContext_.elispkgs.packages;
         siteStartCheckList = [
           "eval-and-compile"
           "${./lisp/twist-emacs}"
@@ -172,7 +174,7 @@
           "startup--load-user-init-file"
           "${./early-init.el}"
         ];
-      }))) emacsTwists;
+      }))) twistContext_.emacsTwists;
       
     };
     

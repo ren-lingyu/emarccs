@@ -338,16 +338,14 @@
 
 ;; 各种语言和文件格式的简单支持
 (setopt elisp-fontify-semantically t)
+(setopt treesit-font-lock-level 4)
 
 (use-package treesit-auto
   :custom
-  (treesit-auto-install 'prompt)
+  (treesit-auto-install 'nil)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
-
-(setq treesit-language-source-alist
-      '((lean . ("https://github.com/Julian/tree-sitter-lean.git"))))
 
 (use-package lisp-semantic-hl
   :hook ((emacs-lisp-mode lisp-mode) . lisp-semantic-hl-mode))
@@ -362,6 +360,9 @@
 
 (use-package nix-mode
   :mode "\\.nix\\'")
+
+(use-package nix-ts-mode
+  :commands nix-ts-mode)
 
 (use-package dockerfile-mode
   :mode ("Dockerfile\\'" . dockerfile-mode)

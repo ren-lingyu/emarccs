@@ -73,6 +73,7 @@ in {
     "neotree"
     "nerd-icons"
     "nix-mode"
+    "nix-ts-mode"
     "orderless"
     "org"
     "org-edna" # Transitive dependency

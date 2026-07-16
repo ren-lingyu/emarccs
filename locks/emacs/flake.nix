@@ -376,6 +376,12 @@
       repo = "nix-mode";
       type = "github";
     };
+    nix-ts-mode = {
+      flake = false;
+      owner = "nix-community";
+      repo = "nix-ts-mode";
+      type = "github";
+    };
     orderless = {
       flake = false;
       owner = "oantolin";
@@ -633,5 +639,5 @@
       type = "github";
     };
   };
-  outputs = { ... }: { };
+  outputs = _: { };
 }

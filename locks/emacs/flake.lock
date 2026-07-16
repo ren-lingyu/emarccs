@@ -1009,6 +1009,22 @@
         "type": "github"
       }
     },
+    "nix-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783267219,
+        "narHash": "sha256-7oKVJYDqyu1zKB5dtrikiMd5TldssQoBez1k5K94Jy8=",
+        "owner": "nix-community",
+        "repo": "nix-ts-mode",
+        "rev": "3b69aeb8d2403ea52b60a46fa452965b7b37a50e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nix-ts-mode",
+        "type": "github"
+      }
+    },
     "orderless": {
       "flake": false,
       "locked": {
@@ -1465,6 +1481,7 @@
         "neotree": "neotree",
         "nerd-icons": "nerd-icons",
         "nix-mode": "nix-mode",
+        "nix-ts-mode": "nix-ts-mode",
         "orderless": "orderless",
         "org": "org",
         "org-edna": "org-edna",

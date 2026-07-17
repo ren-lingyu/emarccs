@@ -42,11 +42,11 @@
     
     flake = {
       
-      lib = {
+      lib = { pkgs } : {
         
         elisp = inputs.nix-to-lisp.lib.elisp;
         
-        mkTwistContext = pkgs : {
+        mkTwistContext = {
           elispkgs = (import ./pkgs { inherit pkgs; });        
           emacsTwists = {
             emacs = let
@@ -64,13 +64,13 @@
           };
         };
         
-        concatMapEmacsTwists = pkgs_ : f_ : emacsTwists_ : (pkgs_.lib.concatMapAttrs (emacsName_ : variants_ : (
-          pkgs_.lib.concatMapAttrs (variantName_ : cfg_ : let
+        concatMapEmacsTwists = f_ : emacsTwists_ : (pkgs.lib.concatMapAttrs (emacsName_ : variants_ : (
+          pkgs.lib.concatMapAttrs (variantName_ : cfg_ : let
             name_ = "${emacsName_}-${variantName_}-twist";
           in (f_ name_ cfg_)) variants_)
         ) emacsTwists_);
         
-        mkEmacsTwist = { pkgs, elispkgs, elisp, package, lockDir } : (inputs.twist.lib.makeEnv {
+        mkEmacsTwist = { elispkgs, elisp, package, lockDir } : (inputs.twist.lib.makeEnv {
           pkgs = pkgs;
           emacsPackage = package;
           registries = [
@@ -136,14 +136,14 @@
     };
     
     perSystem = { config, pkgs, ... } : let
-      twistContext_ = (self.lib.mkTwistContext pkgs);
+      lib = self.lib { inherit pkgs; };
+      twistContext_ = lib.mkTwistContext;
     in {
       
-      packages = self.lib.concatMapEmacsTwists pkgs (name_ : cfg_ : {
-        "${name_}" = self.lib.mkEmacsTwist {
-          inherit pkgs;
+      packages = lib.concatMapEmacsTwists (name_ : cfg_ : {
+        "${name_}" = lib.mkEmacsTwist {
           elispkgs = twistContext_.elispkgs;
-          elisp = self.lib.elisp;
+          elisp = lib.elisp;
           package = cfg_.package;
           lockDir = cfg_.lockDir;
         };
@@ -151,7 +151,7 @@
       
       overlayAttrs = pkgs.lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;
       
-      apps = self.lib.concatMapEmacsTwists pkgs (name_ : cfg_ : let
+      apps = lib.concatMapEmacsTwists (name_ : cfg_ : let
         apps_ = config.packages.${name_}.makeApps {
           lockDirName = pkgs.lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
         };
@@ -164,7 +164,7 @@
         };
       }) twistContext_.emacsTwists;
       
-      checks = self.lib.concatMapEmacsTwists pkgs (name_ : cfg_ : (pkgs.lib.mapAttrs' (
+      checks = lib.concatMapEmacsTwists (name_ : cfg_ : (pkgs.lib.mapAttrs' (
         checkName_ : check_ : {
           name = "${name_}-${checkName_}";
           value = check_;

@@ -8,4 +8,8 @@
     inherit pkgs emacsPackage elispPackages;
   };
 
+  treesit-grammars-smoke = import ./treesit-grammars-smoke {
+    inherit pkgs emacsPackage;
+  };
+
 }

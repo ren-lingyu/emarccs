@@ -1,10 +1,10 @@
 { pkgs, lib } : {
 
-  input = final_ : super_ : {
+  scope = { old, ... } : {
     preBuild = builtins.concatStringsSep "\n" [
-      (super_.preBuild or "")
       "export HOME=\"$TMPDIR/home\""
       "mkdir -p \"$HOME\""
+      (old.preBuild or "")
     ];
   };
 

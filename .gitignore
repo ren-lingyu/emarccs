@@ -12,6 +12,10 @@
 !flake.lock
 
 # 子目录文件白名单
+!lib/
+!lib/**/
+!lib/**/*.nix
+
 !lisp/
 !lisp/**/
 !lisp/**/*.el

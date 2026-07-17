@@ -1,4 +1,4 @@
-{ pkgs } : {
+{ pkgs, lib } : {
 
   scope = { old, ... } : let
     treesitGrammars = pkgs.emacs.pkgs.treesit-grammars.with-grammars (grammars : with grammars; [
@@ -20,20 +20,7 @@
       tree-sitter-typescript
       tree-sitter-yaml
     ]);
-    sourceLines = pkgs.lib.splitString "\n" (builtins.readFile "${old.src}/treesit-auto.el");
-    matchingLineNumbers = let
-      go = lineNumber : lines : (
-        if lines == [] then []
-        else (
-          (if builtins.head lines == "(provide 'treesit-auto)" then [ lineNumber ] else [])
-          ++ (go (lineNumber + 1) (builtins.tail lines))
-        )
-      );
-    in (go 1 sourceLines);
-    provideLineNumber = (
-      if builtins.length matchingLineNumbers == 1 then builtins.head matchingLineNumbers
-      else throw "Expected exactly one (provide 'treesit-auto) line in treesit-auto.el"
-    );
+    provideLineNumber = lib.findUniqueLineNumber "${old.src}/treesit-auto.el" "(provide 'treesit-auto)";
   in {
     patches = (old.patches or []) ++ [
       (pkgs.writeText "emarccs-treesit-auto-grammars.patch" (builtins.concatStringsSep "\n" [

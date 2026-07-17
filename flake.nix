@@ -42,35 +42,45 @@
     
     flake = {
       
-      lib = { pkgs } : {
-        
-        elisp = inputs.nix-to-lisp.lib.elisp;
-        
-        mkTwistContext = {
-          elispkgs = (import ./pkgs { inherit pkgs; });        
-          emacsTwists = {
-            emacs = let
-              lock_ = ./locks/emacs;
-            in {
-              pgtk = {
-                package = pkgs.emacs31-pgtk;
-                lockDir = lock_;
-              };
-              gtk = {
-                package = pkgs.emacs31-gtk3;
-                lockDir = lock_;
-              };
+      context = { pkgs, lib } : {
+        elispkgs = import ./pkgs { inherit pkgs lib; };
+        emacsTwists = {
+          emacs = let
+            lock_ = ./locks/emacs;
+          in {
+            pgtk = {
+              package = pkgs.emacs31-pgtk;
+              lockDir = lock_;
+            };
+            gtk = {
+              package = pkgs.emacs31-gtk3;
+              lockDir = lock_;
             };
           };
         };
+      };
+      
+      lib = { pkgs } : pkgs.lib.mergeAttrsList [
         
-        concatMapEmacsTwists = f_ : emacsTwists_ : (pkgs.lib.concatMapAttrs (emacsName_ : variants_ : (
-          pkgs.lib.concatMapAttrs (variantName_ : cfg_ : let
-            name_ = "${emacsName_}-${variantName_}-twist";
-          in (f_ name_ cfg_)) variants_)
-        ) emacsTwists_);
+        {
+          
+          elisp = inputs.nix-to-lisp.lib.elisp;
+          
+        }
         
-        mkEmacsTwist = { elispkgs, elisp, package, lockDir } : (inputs.twist.lib.makeEnv {
+        (import ./lib { inherit pkgs; })
+        
+      ];
+      
+    };
+    
+    perSystem = { config, pkgs, ... } : let
+      lib = self.lib { inherit pkgs; };
+      twistContext_ = self.context { inherit pkgs lib; };
+    in {
+      
+      packages = lib.concatMapEmacsTwists (name_ : cfg_ : {
+        "${name_}" = (({ elispkgs, elisp, package, lockDir } : (inputs.twist.lib.makeEnv {
           pkgs = pkgs;
           emacsPackage = package;
           registries = [
@@ -129,24 +139,12 @@
               ])
             ])
           ];
-        }).overrideScope elispkgs.overrides.scope;
-        
-      };
-      
-    };
-    
-    perSystem = { config, pkgs, ... } : let
-      lib = self.lib { inherit pkgs; };
-      twistContext_ = lib.mkTwistContext;
-    in {
-      
-      packages = lib.concatMapEmacsTwists (name_ : cfg_ : {
-        "${name_}" = lib.mkEmacsTwist {
+        }).overrideScope elispkgs.overrides.scope) {
           elispkgs = twistContext_.elispkgs;
           elisp = lib.elisp;
           package = cfg_.package;
           lockDir = cfg_.lockDir;
-        };
+        });
       }) twistContext_.emacsTwists;
       
       overlayAttrs = pkgs.lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;

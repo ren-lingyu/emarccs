@@ -1,4 +1,4 @@
-{ pkgs } : {
+{ pkgs, lib } : {
 
   scope = { old, ... } : {
     preBuild = builtins.concatStringsSep "\n" [

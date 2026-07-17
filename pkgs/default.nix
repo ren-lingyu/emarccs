@@ -1,4 +1,4 @@
-{ pkgs } : let
+{ pkgs, lib } : let
   
   mkMelpaRecipes = x_ : (
     pkgs.runCommand "emarccs-melpa-recipes" {} (
@@ -109,7 +109,7 @@ in {
   };
   
   overrides = let
-    allOverrides_ = mkAttrSetFromDirectory (x_ : "override.nix") (x_ : (import x_ { inherit pkgs; }));
+    allOverrides_ = mkAttrSetFromDirectory (x_ : "override.nix") (x_ : (import x_ { inherit pkgs lib; }));
   in {
     
     input = pkgs.lib.mapAttrs (_ : x_ : x_.input) (

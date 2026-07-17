@@ -1,4 +1,4 @@
-{ pkgs } : {
+{ pkgs, lib } : {
 
   input = final_ : super_ : {
     packageRequires = (super_.packageRequires or {}) // {

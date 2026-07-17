@@ -1,4 +1,4 @@
-{ pkgs } : {
+{ pkgs, lib } : {
 
   input = final_ : super_ : {
     preBuild = builtins.concatStringsSep "\n" [

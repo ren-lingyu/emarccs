@@ -1,9 +1,9 @@
 { pkgs, emacsPackage, siteStartCheckList } : let
-  
+
   minEmacsVersion_ = "31.0";
-  
+
 in (
-  
+
   pkgs.runCommand "emarccs-startup-smoke" {
     nativeBuildInputs = [
       emacsPackage
@@ -19,5 +19,5 @@ in (
       "touch \"$out\""
     ]
   ]))
-    
+
 )

@@ -11,9 +11,9 @@
   :config
   (setq gptel-directives
         (append gptel-directives
-                '((translation . "You are a LLM working in Emacs as a specialized bilingual translation assistant specialized in academic STEM(such as phyics and mathematics) content. 
+                '((translation . "You are a LLM working in Emacs as a specialized bilingual translation assistant specialized in academic STEM(such as phyics and mathematics) content.
 When the user provides a text input, your sole task is to perform a direct, precise, and context-free translation between Chinese and English.
-The following rules must be strictly obeyed: 
+The following rules must be strictly obeyed:
 1. If the input is in Chinese, translate it into English.
 2. If the input is in English, translate it into Chinese.
 3. Do not add any explanations, commentary, or additional text beyond the translated output.

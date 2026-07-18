@@ -13,8 +13,8 @@
   (org-roam-dailies-directory "journal/")
   (org-roam-completion-everywhere t)
   (org-roam-node-display-template "${title} ${tags}")
-  (org-roam-db-update-method 'immediate) 
-  :bind 
+  (org-roam-db-update-method 'immediate)
+  :bind
   (("C-c n f" . org-roam-node-find)
    ("C-c n i" . org-roam-node-insert)
    ("C-c n l" . org-roam-buffer-toggle)
@@ -28,15 +28,15 @@
   ;;   )
   ;; )
   (setq org-roam-node-display-template
-        (concat 
+        (concat
          "${title:*} "
          (propertize "${tags:30}" 'face 'org-tag)))
   (setq org-roam-capture-templates
         (append org-roam-capture-templates
                 `(
                   ("f" "fleeting" plain "%?"
-                   :if-new 
-                   (file+head  
+                   :if-new
+                   (file+head
                     "fleeting/${slug}.org"
                     ,(concat
                       "#+TITLE: ${title}\n"
@@ -47,8 +47,8 @@
                       ))
                    :unnarrowed t)
                   ("p" "permanent" plain "%?"
-                   :if-new 
-                   (file+head  
+                   :if-new
+                   (file+head
                     "permanent/${id}/${slug}.org"
                     ,(concat
                       "#+TITLE: ${title}\n"
@@ -59,8 +59,8 @@
                       ))
                    :unnarrowed t)
                   ("I" "post index" plain "%?"
-                   :if-new 
-                   (file+head  
+                   :if-new
+                   (file+head
                     "permanent/${slug}.org"
                     ,(concat
                       "#+TITLE: ${title}\n"
@@ -73,8 +73,8 @@
                       ))
                    :unnarrowed t)
                   ("P" "post article" plain "%?"
-                   :if-new 
-                   (file+head  
+                   :if-new
+                   (file+head
                     "permanent/${id}/${slug}.org"
                     ,(concat
                       "#+TITLE: ${title}\n"
@@ -86,8 +86,8 @@
                       ))
                    :unnarrowed t)
                   ("D" "draft article" plain "%?"
-                   :if-new 
-                   (file+head  
+                   :if-new
+                   (file+head
                     "permanent/${id}/${slug}.org"
                     ,(concat
                       "#+TITLE: ${title}\n"
@@ -139,7 +139,7 @@
   (org-roam-organize-move-target-filename-id-or-not nil)
   :config
   (org-roam-organize-create-directory)
-  :bind 
+  :bind
   (("C-c o o" . org-roam-organize-mode)
    ("C-c o c" . org-roam-organize-check-variables))
   :hook
@@ -217,7 +217,7 @@
 ;; =============================
 
 (defun my/update-link-description ()
-  "Update the description of the link at point to match the title of the corresponding Org-roam node in the database. 
+  "Update the description of the link at point to match the title of the corresponding Org-roam node in the database.
   If the link is not an Org-roam ID link or the node cannot be found, display an appropriate message without making changes."
   (interactive)
   (require 'org-roam)
@@ -244,8 +244,8 @@
                  ((null title)
                   (message "No node found with id=%s." node-id))
                  ;; Case 2: Description already matches the node title
-                 ((and 
-                   desc-begin 
+                 ((and
+                   desc-begin
                    desc-end
                    (string= title (buffer-substring-no-properties desc-begin desc-end)))
                   (message "The link description is already up-to-date."))

@@ -27,7 +27,7 @@
 (require 'org-element)
 
 (with-eval-after-load 'org
-  (set-face-attribute 'org-footnote nil 
+  (set-face-attribute 'org-footnote nil
                       :underline nil        ; 移除下划线
                       :foreground "#79a8ff" ; 保留颜色但不设置其他属性
                       :background 'unspecified
@@ -54,7 +54,7 @@
 ;; GTD and agenda
 (use-package org-edna
   :after org
-  :config 
+  :config
   (org-edna-mode 1)
   (setq org-edna-use-inheritance t))
 
@@ -68,7 +68,7 @@
     (make-directory org-gtd-directory t))
   :custom
   (org-todo-keywords '((sequence "TODO" "NEXT" "WAIT" "|" "DONE" "CNCL")))
-  (org-gtd-keyword-mapping 
+  (org-gtd-keyword-mapping
    '((todo . "TODO")
      (next . "NEXT")
      (wait . "WAIT")
@@ -155,14 +155,14 @@
 ;;           (insert " " setupfile-path))))))
 
 ;; 快捷键
-(global-set-key 
- (kbd "C-c u d") 
- (lambda () 
-   (interactive) 
+(global-set-key
+ (kbd "C-c u d")
+ (lambda ()
+   (interactive)
    (when (buffer-file-name)
-     (my/update-and-insert-or-not-date-in-org-file 
+     (my/update-and-insert-or-not-date-in-org-file
       (file-name-directory (buffer-file-name))
-      "<%Y-%m-%d %a %z>" 
+      "<%Y-%m-%d %a %z>"
       nil))))
 
 (provide 'emarccs-shared-org)

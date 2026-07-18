@@ -1,7 +1,7 @@
 {
-  
+
   description = "aRenCoco's Emacs configuration and packages built by twist";
-  
+
   inputs = {
     nixpkgs = {
       url = "git+https://github.com/NixOS/nixpkgs.git?ref=refs/heads/nixos-unstable&shallow=1";
@@ -31,17 +31,17 @@
       flake = false;
     };
   };
-  
+
   outputs = { self, ... }@inputs : inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-    
+
     imports = [
       inputs.flake-parts.flakeModules.easyOverlay
     ];
-    
+
     systems = inputs.nixpkgs.lib.systems.flakeExposed;
-    
+
     flake = {
-      
+
       context = { pkgs, lib } : {
         elispkgs = import ./pkgs { inherit pkgs lib; };
         emacsTwists = {
@@ -59,26 +59,26 @@
           };
         };
       };
-      
+
       lib = { pkgs } : pkgs.lib.mergeAttrsList [
-        
+
         {
-          
+
           elisp = inputs.nix-to-lisp.lib.elisp;
-          
+
         }
-        
+
         (import ./lib { inherit pkgs; })
-        
+
       ];
-      
+
     };
-    
+
     perSystem = { config, pkgs, ... } : let
       lib = self.lib { inherit pkgs; };
       twistContext_ = self.context { inherit pkgs lib; };
     in {
-      
+
       packages = lib.concatMapEmacsTwists (name_ : cfg_ : {
         "${name_}" = (({ elispkgs, elisp, package, lockDir } : (inputs.twist.lib.makeEnv {
           pkgs = pkgs;
@@ -146,9 +146,9 @@
           lockDir = cfg_.lockDir;
         });
       }) twistContext_.emacsTwists;
-      
+
       overlayAttrs = pkgs.lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;
-      
+
       apps = lib.concatMapEmacsTwists (name_ : cfg_ : let
         apps_ = config.packages.${name_}.makeApps {
           lockDirName = pkgs.lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
@@ -161,7 +161,7 @@
           meta.description = "Update lock files for ${name_}.";
         };
       }) twistContext_.emacsTwists;
-      
+
       checks = lib.concatMapEmacsTwists (name_ : cfg_ : (pkgs.lib.mapAttrs' (
         checkName_ : check_ : {
           name = "${name_}-${checkName_}";
@@ -180,9 +180,9 @@
           "${./early-init.el}"
         ];
       }))) twistContext_.emacsTwists;
-      
+
     };
-    
+
   };
-  
+
 }

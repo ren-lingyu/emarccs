@@ -1,5 +1,5 @@
 { pkgs, lib } : let
-  
+
   mkMelpaRecipes = x_ : (
     pkgs.runCommand "emarccs-melpa-recipes" {} (
       builtins.concatStringsSep "\n" (builtins.concatLists [
@@ -25,7 +25,7 @@
   ) dirAttrNames_)));
 
 in {
-  
+
   packages = [
     "aas"
     "ace-window"
@@ -107,15 +107,15 @@ in {
   recipes = {
     melpa = mkMelpaRecipes (mkAttrSetFromDirectory (x_ : "melpa-recipe.el") (x_ : x_));
   };
-  
+
   overrides = let
     allOverrides_ = mkAttrSetFromDirectory (x_ : "override.nix") (x_ : (import x_ { inherit pkgs lib; }));
   in {
-    
+
     input = pkgs.lib.mapAttrs (_ : x_ : x_.input) (
       pkgs.lib.filterAttrs (_ : x_ : x_ ? input) allOverrides_
     );
-    
+
     scope = final_ : prev_ : {
       elispPackages = prev_.elispPackages.overrideScope (
         efinal_ : esuper_ : pkgs.lib.mapAttrs (
@@ -133,7 +133,7 @@ in {
         )
       );
     };
-    
+
   };
-  
+
 }

@@ -24,4 +24,4 @@
   (setq org-latex-preview-mode nil))
 
 (provide 'emarccs-shared-org-latex-preview)
-;;; emarccs-shared-org-latex-preview.el ends here. 
+;;; emarccs-shared-org-latex-preview.el ends here.

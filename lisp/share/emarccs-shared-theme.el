@@ -70,7 +70,7 @@
     (catppuccin mocha latte frappe macchiato))
   "主题组及其子主题(Catppuccin 风味特殊处理)")
 
-;; 当前组索引和主题索引(初始化完全由这两个变量控制), 切换主题依赖于对这两个变量的重新赋值. 
+;; 当前组索引和主题索引(初始化完全由这两个变量控制), 切换主题依赖于对这两个变量的重新赋值.
 (defvar my/group-index 0 "当前主题组索引")
 (defvar my/theme-index 0 "当前主题索引")
 

@@ -1,6 +1,6 @@
 ;;; emarccs-shared-tex.el -*- lexical-binding: t; -*-
 ;;; commentary:
-;;; code: 
+;;; code:
 
 (use-package auctex
   :defer t
@@ -12,7 +12,7 @@
                     TeX-electric-sub-and-superscript nil)))
   :config
   (setq TeX-auto-local (locate-user-emacs-file "cache/auctex-auto/"))
-  (unless 
+  (unless
       (file-exists-p TeX-auto-local)
     (make-directory TeX-auto-local t)
     )
@@ -25,14 +25,14 @@
   (setq TeX-save-query nil)
   (setq TeX-show-compilation nil) ; 禁用编译
   (setq TeX-PDF-mode nil)
-  (setq TeX-view-program-selection '((output-pdf "Zathura"))) 
+  (setq TeX-view-program-selection '((output-pdf "Zathura")))
   (setq TeX-view-program-list '(("Zathura" "zathura %o"))))
 
 (use-package flycheck
   :hook (LaTeX-mode . flycheck-mode))
 
 (use-package cdlatex
-  :hook 
+  :hook
   (org-mode . turn-on-org-cdlatex)
   (LaTeX-mode . company-auctex-init))
 
@@ -79,22 +79,22 @@
 
 ;; 与latex环境有关的快捷键
 
-(global-set-key 
- (kbd "C-c l e e") 
+(global-set-key
+ (kbd "C-c l e e")
  (lambda ()
    (interactive)
    (insert "\\begin{equation}\n\n\\end{equation}")
    (forward-line -2)))
 
-(global-set-key 
- (kbd "C-c l e a") 
+(global-set-key
+ (kbd "C-c l e a")
  (lambda ()
    (interactive)
    (insert "\\begin{align}\n\n\\end{align}")
    (forward-line -2)))
 
-(global-set-key 
- (kbd "C-c l e s") 
+(global-set-key
+ (kbd "C-c l e s")
  (lambda ()
    (interactive)
    (insert "\\begin{split}\n\n\\end{split}")
@@ -105,7 +105,7 @@
  (lambda ()
    (interactive)
    (insert "\\label{}\n")
-   (forward-line -1)))         
+   (forward-line -1)))
 
 ;; The End
 (provide 'emarccs-shared-tex)

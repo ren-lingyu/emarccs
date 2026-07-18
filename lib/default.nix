@@ -1,5 +1,5 @@
 { pkgs } : {
-  
+
   concatMapEmacsTwists = f_ : emacsTwists_ : (pkgs.lib.concatMapAttrs (emacsName_ : variants_ : (
     pkgs.lib.concatMapAttrs (variantName_ : cfg_ : let
       name_ = "${emacsName_}-${variantName_}-twist";
@@ -21,5 +21,5 @@
     if builtins.length matchingLineNumbers_ == 1 then builtins.head matchingLineNumbers_
     else throw "Expected exactly one `${line_}` line in ${builtins.toString file_}"
   );
-  
+
 }

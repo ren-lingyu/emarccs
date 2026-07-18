@@ -23,9 +23,9 @@
           "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
 (defconst cc-license-no-geniric-work-full-tool-name
-  (concat "&copy;" 
-          (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year) 
-              (number-to-string org-blog-beginning-year) 
+  (concat "&copy;"
+          (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year)
+              (number-to-string org-blog-beginning-year)
             (concat (number-to-string org-blog-beginning-year) "-" (format-time-string "%Y"))) "\u0020"
           "<a rel=\"cc:attributionURL\" href=\"" org-blog-site-url "/" "\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
           "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a>"
@@ -35,9 +35,9 @@
           "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
 (defconst cc-license-no-genic-work-no-full-tool-name
-  (concat "&copy;" 
-          (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year) 
-              (number-to-string org-blog-beginning-year) 
+  (concat "&copy;"
+          (if (= (string-to-number (format-time-string "%Y")) org-blog-beginning-year)
+              (number-to-string org-blog-beginning-year)
             (concat (number-to-string org-blog-beginning-year) "-" (format-time-string "%Y"))) "\u0020"
           "<a rel=\"cc:attributionURL\" href=\"" org-blog-site-url "/" "\">aRenCoco</a>" "\u0020" "\u00B7" "\u0020"
           "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>"
@@ -95,7 +95,7 @@
                   cc-license-no-genic-work-no-full-tool-name
                   "</p>\n"
                   "<p>\n"
-                  "Generated at <span class=\"update-time\">%T</span> by %c on <a href=\"https://nixos.org\">NixOS</a>." 
+                  "Generated at <span class=\"update-time\">%T</span> by %c on <a href=\"https://nixos.org\">NixOS</a>."
                   "</p>\n"
                   "</footer>\n"
                   "</div>\n"
@@ -121,7 +121,7 @@
          (tags_list (org-publish-find-property file :filetags project))
          (tags (mapconcat (lambda (tag) (concat "#" tag))
                           (cl-remove-if (lambda (tag) (member tag (list "zettel" "blog" "post")))
-                                        tags_list)             
+                                        tags_list)
                           " "))
          (date-str (if date_prop
                        (format-time-string "%Y-%m-%d %a %z" (org-timestamp-to-time date_prop))
@@ -129,7 +129,7 @@
     (org-publish-cache-set-file-property file :title title)
     ;; 输出 sitemap 项
     (if (and (member "post" tags_list)
-             (not (= (length title) 0)) 
+             (not (= (length title) 0))
              (not (or (null (file-name-directory entry)) (string= (file-name-directory entry) "./") (string= (file-name-directory entry) "/"))))
         (format "{{{timestamp(%s)}}} [[file:%s][%s]] {{{filetags(%s)}}} " date-str entry title tags)
       (format "" entry)
@@ -146,7 +146,7 @@
 (defun org-blog--checkout-tags (list)
   (let* ((tags_hash (make-hash-table :test 'equal)))
     (dolist (entry list)
-      (when (and (listp entry) 
+      (when (and (listp entry)
                  (stringp (car entry)))
         (let* ((str (car entry)))
           (when (string-match "{{{filetags(\\([^)]*\\))}}}" str)
@@ -162,7 +162,7 @@
                           (cond
                            ((null entry) t)
                            ((listp entry) (string= (car entry) ""))
-                           ((stringp entry) (string= entry "")) 
+                           ((stringp entry) (string= entry ""))
                            (t nil)))
                         list))
          (blog_tags (org-blog--checkout-tags filtered_list)))
@@ -174,7 +174,7 @@
                   (mapconcat (lambda (tag)
                                (format (concat ".content:has([value=\"%s\"]:checked)\n"
                                                "li:has([data-filetags~=\"%s\"]){display: list-item;}\n")
-                                       tag 
+                                       tag
                                        tag))
                              blog_tags)))
     (concat "#+TITLE: " title "\n"
@@ -184,20 +184,20 @@
             "#+BEGIN_abstract\n"
             org-blog-sitemap-abstract "\n"
             "#+END_abstract\n"
-            (format (concat "#+BEGIN_EXPORT html\n" 
-                            "<section class=\"filter\">\n%s\n%s</section>\n" 
+            (format (concat "#+BEGIN_EXPORT html\n"
+                            "<section class=\"filter\">\n%s\n%s</section>\n"
                             "#+END_EXPORT\n")
-                    (concat "<label class=\"category\">\n" 
-                            "<input type=\"radio\" name=\"tag\" value=\"all\" checked/>\n" 
-                            "<span>all</span>\n" 
+                    (concat "<label class=\"category\">\n"
+                            "<input type=\"radio\" name=\"tag\" value=\"all\" checked/>\n"
+                            "<span>all</span>\n"
                             "</label>\n")
                     (mapconcat (lambda (tag)
-                                 (format 
-                                  (concat "<label class=\"category\">\n" 
-                                          "<input type=\"radio\" name=\"tag\" value=\"%s\"/>\n" 
-                                          "<span>%s</span>\n" 
+                                 (format
+                                  (concat "<label class=\"category\">\n"
+                                          "<input type=\"radio\" name=\"tag\" value=\"%s\"/>\n"
+                                          "<span>%s</span>\n"
                                           "</label>\n")
-                                  tag 
+                                  tag
                                   tag))
                                blog_tags "\n"))
             "\n"
@@ -212,7 +212,7 @@
                                              "#+INDEX: " org-blog-theindex-title "\n"
                                              "#+FILETAGS: :blog:index:\n"
                                              "#+DESCRIPTION: " org-blog-theindex-description "\n"
-                                             "#+BEGIN_abstract\n" 
+                                             "#+BEGIN_abstract\n"
                                              org-blog-theindex-abstract "\n"
                                              "#+END_abstract\n"
                                              "#+INCLUDE: \"theindex.inc\"\n"))
@@ -342,7 +342,7 @@
          :base-extension "org"
          :publishing-directory ,(expand-file-name "./public/" org-directory)
          :recursive t
-         ;; 以下三行注释保留, 作为 advice-add 失效时的 fallback. 
+         ;; 以下三行注释保留, 作为 advice-add 失效时的 fallback.
          ;; :preparation-function ,(lambda (project) (setq my/blog-file-list (my/blog-files)))
          ;; :publishing-function ,(my-generator/org-html-publish-to-html 'my/blog-file-list)
          ;; :completion-function ,(lambda (project) (setq my/blog-file-list nil))
@@ -353,7 +353,7 @@
          :author "aRenCoco"
          :email "aRen_Coco@outlook.com"
          :with-author t
-         :with-email t 
+         :with-email t
          :headline-levels 5
          :with-toc t
          :with-creator t
@@ -363,7 +363,7 @@
          :auto-preamble t
          :section-numbers t
          :auto-sitemap t
-         :sitemap-filename "sitemap.org" 
+         :sitemap-filename "sitemap.org"
          :sitemap-title ,(format "%s" org-blog-sitemap-title)
          :sitemap-sort-files anti-chronologically
          :sitemap-file-entry-format "%d %t"
@@ -386,9 +386,9 @@
          :completion-function ,(lambda (project) (org-publish-file (expand-file-name "theindex.org" (plist-get project :base-directory)) (cons "index" project)))
          :html-link-home "/index.html"
          :author "aRenCoco"
-         :email "aRen_Coco@outlook.com" 
+         :email "aRen_Coco@outlook.com"
          :with-author t
-         :with-email t 
+         :with-email t
          :headline-levels 5
          :with-toc nil
          :with-creator t
@@ -410,4 +410,4 @@
          :components ("post" "index" "static"))))
 
 (provide 'emarccs-shared-blog-publish)
-;;; emarccs-shared-blog-publish.el ends here. 
+;;; emarccs-shared-blog-publish.el ends here.

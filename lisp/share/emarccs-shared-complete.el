@@ -4,7 +4,7 @@
 
 ;; 自动补全
 (use-package company
-  :hook 
+  :hook
   (after-init . global-company-mode))
 
 (use-package company-auctex
@@ -19,7 +19,7 @@
   (add-to-list 'company-backends 'company-math-symbols-latex))
 
 (use-package aas
-  :hook 
+  :hook
   (LaTeX-mode . aas-activate-for-major-mode)
   (org-mode . aas-activate-for-major-mode)
   :config

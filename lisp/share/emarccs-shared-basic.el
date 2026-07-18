@@ -181,7 +181,7 @@
 
 ;; 状态栏美化(终端兼容)
 (use-package powerline
-  :config 
+  :config
   (powerline-default-theme))
 
 ;; 快捷键提示
@@ -296,7 +296,7 @@
   (require 'embark-consult))
 
 (use-package ace-window
-  :bind 
+  :bind
   (("C-x o" . 'ace-window)))
 
 ;; undo
@@ -314,7 +314,7 @@
 
 ;; 文件树 (类似 VSCode 的 sidebar)
 (use-package neotree
-  :bind 
+  :bind
   ("<f8>" . neotree-toggle))
 
 ;; 输入法
@@ -385,14 +385,14 @@
 (global-set-key (kbd "C-c m g") 'org-mark-ring-goto)
 
 (global-set-key
- (kbd "C-c c c") 
+ (kbd "C-c c c")
  (lambda ()
    (interactive)
    (insert "#+BEGIN_COMMENT\n\n#+END_COMMENT\n")
    (forward-line -2)))
 
-(global-set-key 
- (kbd "C-c c a") 
+(global-set-key
+ (kbd "C-c c a")
  (lambda ()
    (interactive)
    (insert "#+BEGIN_abstract\n\n#+END_abstract\n")

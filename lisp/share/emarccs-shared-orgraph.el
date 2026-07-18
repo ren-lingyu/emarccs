@@ -96,15 +96,15 @@
   (defun my/remove-angle-brackets-in-timestamp (output backend info)
     (when (org-export-derived-backend-p backend 'latex)
       (setq output
-            (replace-regexp-in-string 
+            (replace-regexp-in-string
              "\\(\\\\date{.*?\\)<\\([^>]+\\)>\\(.*?}\\)"
              "\\1\\2\\3"
              output)))
     output)
-  (add-hook 'org-export-filter-final-output-functions #'my/remove-angle-brackets-in-timestamp)  
+  (add-hook 'org-export-filter-final-output-functions #'my/remove-angle-brackets-in-timestamp)
   ;; 定义\label{eq:...}和\eqref{eq:...}对应的链接类型
   (org-link-set-parameters "eq"
-                           :follow 
+                           :follow
                            (lambda (path arg)
                              (let ((label (concat "\\label{eq:" path "}")))
                                (org-mark-ring-push)
@@ -116,21 +116,21 @@
                                      (message "找到公式引用: %s" label))
                                  (message "未找到公式引用: %s" label))))
                            ;; 设置导出函数，导出为 \eqref{eq:...}
-                           :export 
+                           :export
                            (lambda (path description backend info)
                              (cond
                               ((or (eq backend 'latex) (eq backend 'beamer))
                                (format "\\eqref{eq:%s}" path))
                               ((eq backend 'html)
-                               (format "<span class=\"eqref\">eq:%s</span>" 
+                               (format "<span class=\"eqref\">eq:%s</span>"
                                        (or description path)))
                               (t (or description (format "eq:%s" path)))))
-                           :face 
+                           :face
                            '(;; :inherit 'org-link
-                             :foreground "dark red" 
+                             :foreground "dark red"
                              :background "yellow"
                              :underline t)
-                           :help-echo 
+                           :help-echo
                            "公式引用链接. \n格式: [[eq:<label>]]. \n跳转时采用正则表达式查找当前光标所在buffer内\\label{eq:<label>}所在行. "))
 
 (with-eval-after-load 'ox-beamer
@@ -166,7 +166,7 @@
                   :image-input-type "dvi"
                   :image-output-type "svg"
                   :latex-compiler (,(format "%s %%l -interaction=nonstopmode -outdir=%%o %%f" (shell-quote-argument texlive)))
-                  :image-converter 
+                  :image-converter
                   (,(format "%s dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %%B-%%%%9p.svg %%f" (shell-quote-argument texlive)))))))
 
 (with-eval-after-load 'citar
@@ -189,24 +189,24 @@
                                                        :on (= tags:node-id nodes:id)
                                                        :where (like tag (quote "%\"post\"%"))]))))
 
-(add-hook 'before-save-hook 
+(add-hook 'before-save-hook
           (lambda ()
             (let* ((post_file_list (my/post-files)))
-              (cond ((and 
+              (cond ((and
                       buffer-file-name
                       (file-in-directory-p buffer-file-name org-roam-directory)
                       (not (file-in-directory-p buffer-file-name (expand-file-name "./literature/" org-roam-directory)))
                       (not (member buffer-file-name post_file_list)))
-                     (my/update-and-insert-or-not-date-in-org-file 
+                     (my/update-and-insert-or-not-date-in-org-file
                       orgraph-directory
-                      "<%Y-%m-%d %a %z>" 
+                      "<%Y-%m-%d %a %z>"
                       t)
                      (message "Updated DATE in %s" (buffer-file-name)))
                     ((and
                       buffer-file-name
                       (file-in-directory-p buffer-file-name (expand-file-name "./permanent/" org-roam-directory))
                       (not (member buffer-file-name post_file_list)))
-                     (my/update-and-insert-or-not-date-in-org-file 
+                     (my/update-and-insert-or-not-date-in-org-file
                       orgraph-directory
                       "<%Y-%m-%d %a %z>"
                       nil))

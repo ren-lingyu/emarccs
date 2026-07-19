@@ -110,6 +110,10 @@
 
 (defconst *spell-check-support-enabled* t)    ; 是否启用拼写检查
 
+(add-hook 'prog-mode-hook #'delete-trailing-whitespace-mode)
+
+(add-hook 'conf-mode-hook #'delete-trailing-whitespace-mode)
+
 ;; 忽略格式风格警告
 (setq byte-compile-warnings '(not docstrings))
 

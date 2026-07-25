@@ -36,9 +36,7 @@
   ;; (advice-add 'citar-org-roam-mode-hook :after
   ;;   (lambda (&rest _)
   ;;     (display-line-numbers-mode 1)
-  ;;     (font-lock-mode 1)
-  ;;   )
-  ;; )
+  ;;     (font-lock-mode 1)))
   (setq citar-org-roam-subdir "literature")
   (setq citar-org-roam-template-fields
         '((:citar-title . ("title"))

@@ -148,15 +148,35 @@
   (consult-customize
    consult-org-roam-forward-links
    ;; :preview-key "TAB"
-   :preview-key "M-."
    ;; :preview-key 'any
-   )
-  ;; (advice-add 'consult-org-roam-mode-hook :after
-  ;;   (lambda (&rest _)
-  ;;     (display-line-numbers-mode 1)
-  ;;     (font-lock-mode 1)
-  ;;   )
-  ;; )
+   :preview-key "M-.")
+  (defun emarccs-shared-consult-org-roam-forward-links (&optional other-window)
+    "Select an Org-roam forward link contained in the current buffer.
+If OTHER-WINDOW is non-nil, visit the node in another window."
+    (interactive)
+    (let (id-links)
+      (org-roam-db-map-links
+       (list
+        (lambda (link)
+          (when (string= (org-element-property :type link) "id")
+            (push (org-element-property :path link)
+                  id-links)))))
+      (setq id-links (delete-dups id-links))
+      (unless id-links
+        (user-error "No forward links found"))
+      (let ((chosen-node
+             (consult-org-roam-node-read
+              ""
+              (lambda (node)
+                (and (org-roam-node-p node)
+                     (member (org-roam-node-id node)
+                             id-links))))))
+        (consult-org-roam--open-or-capture
+         other-window
+         chosen-node))))
+  (advice-add #'consult-org-roam-forward-links
+              :override
+              #'emarccs-shared-consult-org-roam-forward-links)
   :bind
   ;; Define some convenient keybindings as an addition
   ("C-c c f" . consult-org-roam-file-find)

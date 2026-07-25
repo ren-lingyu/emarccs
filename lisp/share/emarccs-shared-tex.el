@@ -12,10 +12,8 @@
                     TeX-electric-sub-and-superscript nil)))
   :config
   (setq TeX-auto-local (locate-user-emacs-file "cache/auctex-auto/"))
-  (unless
-      (file-exists-p TeX-auto-local)
-    (make-directory TeX-auto-local t)
-    )
+  (unless (file-exists-p TeX-auto-local)
+    (make-directory TeX-auto-local t))
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
   (setq TeX-parse-self t); 自动解析文档结构

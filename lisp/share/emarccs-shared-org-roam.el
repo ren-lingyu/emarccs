@@ -196,7 +196,7 @@
 ;; 自定义函数
 ;; =============================
 
-(defun my/update-link-description ()
+(defun emarccs-shared-update-link-description ()
   "Update the description of the link at point to match the title of the corresponding Org-roam node in the database.
   If the link is not an Org-roam ID link or the node cannot be found, display an appropriate message without making changes."
   (interactive)

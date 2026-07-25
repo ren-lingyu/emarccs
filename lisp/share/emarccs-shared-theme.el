@@ -14,16 +14,15 @@
   :hook
   ((server-after-make-frame . (lambda () (load-theme 'koishi t)))))
 
-;; Modus Themes(官方主题, 终端兼容性最佳)
+;; Modus Themes (官方主题, 终端兼容性最佳)
 (use-package modus-themes
   :init
-  (load-theme 'modus-vivendi t) ; 默认加载深色主题
-  (setq modus-themes-bold-constructs t) ; 启用粗体
-  (setq modus-themes-italic-constructs t) ; 启用斜体
-  (setq modus-themes-org-blocks 'gray-background) ; Org块背景样式
-  (setq modus-themes-region '(accented)) ; 选区高亮样式
-  (setq modus-themes-fringes 'subtle) ; Fringe样式
-  )
+  (load-theme 'modus-vivendi t)
+  (setq modus-themes-bold-constructs t)
+  (setq modus-themes-italic-constructs t)
+  (setq modus-themes-org-blocks 'gray-background)
+  (setq modus-themes-region '(accented))
+  (setq modus-themes-fringes 'subtle))
 
 ;; Doom Themes(可选, 风格时尚)
 (use-package doom-themes
@@ -33,36 +32,35 @@
   ;; (load-theme 'doom-solarized-dark t)
   ;; (load-theme 'doom-nord t)
   ;; (load-theme 'doom-dracula t)
-  (setq doom-themes-enable-bold t) ; 启用粗体
-  (setq doom-themes-enable-italic t) ; 启用斜体
-  (doom-themes-visual-bell-config) ; 启用视觉提示
-  (doom-themes-org-config) ; 启用Org增强
-  )
+  (setq doom-themes-enable-bold t)
+  (setq doom-themes-enable-italic t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
 
-;; Doom Modeline(可选)
+;; Doom Modeline (可选)
 (use-package doom-modeline
   :init
-  (doom-modeline-mode 1) ; 启用Doom状态栏
-  (setq doom-modeline-icon nil) ; 禁用图标以兼容终端
-  )
+  (doom-modeline-mode 1)
+  (setq doom-modeline-icon nil))
 
 
 (use-package catppuccin-theme
   :init
-  (setq catppuccin-flavor 'mocha) ; 可选项：设置风味(Mocha 深色, Latte 浅色, Frappe 中间色, Macchiato 偏暗)
-  (setq catppuccin-enable-bold t) ; 粗体
-  (setq catppuccin-enable-italic t) ; 斜体
-  (setq catppuccin-highlight-matches t) ; 自定义高亮
-  (setq catppuccin-colorize-comments t) ; 彩色注释
-  (setq catppuccin-colorize-org-headings t) ; 彩色org标题
-  (setq catppuccin-colorize-modeline t) ; 彩色模式行
+  ;; 可选项: 设置风味 (Mocha 深色, Latte 浅色, Frappe 中间色, Macchiato 偏暗)
+  (setq catppuccin-flavor 'mocha)
+  (setq catppuccin-enable-bold t)
+  (setq catppuccin-enable-italic t)
+  (setq catppuccin-highlight-matches t)
+  (setq catppuccin-colorize-comments t)
+  (setq catppuccin-colorize-org-headings t)
+  (setq catppuccin-colorize-modeline t)
   (load-theme 'catppuccin t))
 
 ;; =========================
 ;; 主题切换配置
 ;; =========================
 
-;; 所有主题组及子主题(Catppuccin 风味特殊处理)
+;; 所有主题组及子主题 (Catppuccin 风味特殊处理)
 (defconst my/theme-groups
   '((koishi koishi)
     (modus modus-vivendi modus-operandi)
@@ -70,16 +68,18 @@
     (catppuccin mocha latte frappe macchiato))
   "主题组及其子主题(Catppuccin 风味特殊处理)")
 
-;; 当前组索引和主题索引(初始化完全由这两个变量控制), 切换主题依赖于对这两个变量的重新赋值.
+;; 当前组索引和主题索引 (初始化完全由这两个变量控制), 切换主题依赖于对这两个变量的重新赋值.
 (defvar my/group-index 0 "当前主题组索引")
 (defvar my/theme-index 0 "当前主题索引")
 
 (defun my/load-current-theme ()
   "根据组索引和主题索引加载主题"
-  (mapc #'disable-theme custom-enabled-themes) ;; 禁用旧主题
+  ;; 禁用旧主题
+  (mapc #'disable-theme custom-enabled-themes)
   (let* ((group (nth my/group-index my/theme-groups))
          (group-name (car group))
-         (theme (nth (1+ my/theme-index) group))) ;; 跳过组名
+         ;; 跳过组名
+         (theme (nth (1+ my/theme-index) group)))
     (cond
      ;; Catppuccin 特殊处理
      ((eq group-name 'catppuccin)

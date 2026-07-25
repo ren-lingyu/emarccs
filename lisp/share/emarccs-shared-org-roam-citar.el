@@ -83,6 +83,39 @@
 
 ;; (global-set-key (kbd "C-c c i") #'my/citar-insert-then-create-note)
 
+(defun emarccs-shared-consult-org-roam-forward-links (&optional other-window)
+  "Select an Org-roam forward link contained in the current buffer.
+If OTHER-WINDOW is non-nil, visit the node in another window."
+  (interactive)
+  (let (id-links)
+    (org-roam-db-map-links
+     (list
+      (lambda (link)
+        (when (string= (org-element-property :type link) "id")
+          (push (org-element-property :path link)
+                id-links)))))
+
+    (setq id-links (delete-dups id-links))
+
+    (unless id-links
+      (user-error "No forward links found"))
+
+    (let ((chosen-node
+           (consult-org-roam-node-read
+            ""
+            (lambda (node)
+              (and (org-roam-node-p node)
+                   (member (org-roam-node-id node)
+                           id-links))))))
+      (consult-org-roam--open-or-capture
+       other-window
+       chosen-node))))
+
+(with-eval-after-load 'consult-org-roam
+  (advice-add #'consult-org-roam-forward-links
+              :override
+              #'emarccs-shared-consult-org-roam-forward-links))
+
 (provide 'emarccs-shared-org-roam-citar)
 
 ;;; emarccs-shared-org-roam-citar.el ends here

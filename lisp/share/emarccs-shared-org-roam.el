@@ -32,118 +32,98 @@
          "${title:*} "
          (propertize "${tags:30}" 'face 'org-tag)))
   (setq org-roam-capture-templates
-        (append org-roam-capture-templates
-                `(
-                  ("f" "fleeting" plain "%?"
-                   :if-new
-                   (file+head
-                    "fleeting/${slug}.org"
-                    ,(concat
-                      "#+TITLE: ${title}\n"
-                      "#+AUTHOR: Lingyu Ren\n"
-                      "#+DATE: " (format-time-string "%Y-%m-%d %A %H:%M:%S %z") "\n"
-                      "#+FILETAGS: :idea:\n"
-                      "#+DESCRIPTION:\n"
-                      ))
-                   :unnarrowed t)
-                  ("p" "permanent" plain "%?"
-                   :if-new
-                   (file+head
-                    "permanent/${id}/${slug}.org"
-                    ,(concat
-                      "#+TITLE: ${title}\n"
-                      "#+AUTHOR: Lingyu Ren\n"
-                      "#+DATE: " (format-time-string "%Y-%m-%d %A %H:%M:%S %z") "\n"
-                      "#+FILETAGS: :zettel:\n"
-                      "#+DESCRIPTION:\n"
-                      ))
-                   :unnarrowed t)
-                  ("I" "post index" plain "%?"
-                   :if-new
-                   (file+head
-                    "permanent/${slug}.org"
-                    ,(concat
-                      "#+TITLE: ${title}\n"
-                      "#+INDEX: ${title}\n"
-                      "#+DESCRIPTION:\n"
-                      "#+AUTHOR: aRenCoco\n"
-                      "#+EMAIL: aRen_Coco@outlook.com\n"
-                      "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
-                      "#+FILETAGS: :zettel:blog:\n"
-                      ))
-                   :unnarrowed t)
-                  ("P" "post article" plain "%?"
-                   :if-new
-                   (file+head
-                    "permanent/${id}/${slug}.org"
-                    ,(concat
-                      "#+TITLE: ${title}\n"
-                      "#+INDEX: ${title}\n"
-                      "#+AUTHOR: aRenCoco\n"
-                      "#+EMAIL: aRen_Coco@outlook.com\n"
-                      "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
-                      "#+FILETAGS: :zettel:blog:post:\n"
-                      ))
-                   :unnarrowed t)
-                  ("D" "draft article" plain "%?"
-                   :if-new
-                   (file+head
-                    "permanent/${id}/${slug}.org"
-                    ,(concat
-                      "#+TITLE: ${title}\n"
-                      "#+INDEX: ${title}\n"
-                      "#+AUTHOR: aRenCoco\n"
-                      "#+EMAIL: aRen_Coco@outlook.com\n"
-                      "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
-                      "#+FILETAGS: :zettel:blog:\n"
-                      ))
-                   :unnarrowed t)))))
+        (append org-roam-capture-templates `(("I" "post index" plain "%?"
+                                              :if-new
+                                              (file+head
+                                               "permanent/${slug}.org"
+                                               ,(concat
+                                                 "#+TITLE: ${title}\n"
+                                                 "#+INDEX: ${title}\n"
+                                                 "#+DESCRIPTION:\n"
+                                                 "#+AUTHOR: aRenCoco\n"
+                                                 "#+EMAIL: aRen_Coco@outlook.com\n"
+                                                 "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
+                                                 "#+FILETAGS: :zettel:blog:\n"
+                                                 ))
+                                              :unnarrowed t)))))
 
 (use-package org-roam-organize
-  ;; :straight (:local-repo "~/data/org-roam-organize/") ;; 用于调试
   :after org-roam
   :custom
   (org-roam-organize-directory org-roam-directory)
-  (org-roam-organize-moc-directory (expand-file-name "./moc/" org-roam-directory))
-  (org-roam-organize-moc-tag "map")
-  (org-roam-organize-top-moc-file (expand-file-name "./moc/maps.org" org-roam-directory))
-  (org-roam-organize-move-source-tag "idea")
-  (org-roam-organize-move-target-tag "zettel")
-  (org-roam-organize-fleeting-directory (expand-file-name "./fleeting/" org-roam-directory))
-  (org-roam-organize-permanent-directory (expand-file-name "./permanent/" org-roam-directory))
-  (org-roam-organize-move-target-directory (expand-file-name "./permanent/" org-roam-directory))
-  (org-roam-organize-directory-p t)
-  (org-roam-organize-tag-title-alist '(("map" . "Maps")
-                                       ("zettel" . "Permanent")
-                                       ("ref" . "Literature")
-                                       ("idea" . "Fleeting")
-                                       ("note" . "Note")
-                                       ("blog" . "Blog")))
+  (org-roam-organize-registry (list (list :name "navigation"
+                                          :tag "map"
+                                          :moc t
+                                          :basic t
+                                          :directory "navigation"
+                                          :inbox "Not be Classified"
+                                          :template '((author . "Lingyu Ren")
+                                                      (date . "<%Y-%m-%d %A %H:%M:%S %z>")
+                                                      (description . nil)
+                                                      (filetags . ("map"))))
+                                    (list :name "fleeting"
+                                          :tag "idea"
+                                          :basic t
+                                          :directory "fleeting"
+                                          :inbox "Not be Classified"
+                                          :template '((author . "Lingyu Ren")
+                                                      (date . "<%Y-%m-%d %A %H:%M:%S %z>")
+                                                      (description . nil)
+                                                      (filetags . ("idea"))))
+                                    (list :name "literature"
+                                          :tag "ref"
+                                          :basic t
+                                          :directory "literature"
+                                          :inbox "Not be Classified"
+                                          :template '((author . "Lingyu Ren")
+                                                      (date . "<%Y-%m-%d %A %H:%M:%S %z>")
+                                                      (description . nil)
+                                                      (filetags . ("ref"))))
+                                    (list :name "permanent"
+                                          :tag "zettel"
+                                          :basic t
+                                          :directory "permanent"
+                                          :inbox "Not be Classified"
+                                          :template '((author . "Lingyu Ren")
+                                                      (date . "<%Y-%m-%d %A %H:%M:%S %z>")
+                                                      (description . nil)
+                                                      (filetags . ("zettel"))))
+                                    (list :name "note"
+                                          :tag "note"
+                                          :basic nil
+                                          :directory "permanent"
+                                          :inbox "Not be Classified"
+                                          :template '((author . "Lingyu Ren")
+                                                      (date . "<%Y-%m-%d %A %H:%M:%S %z>")
+                                                      (description . nil)
+                                                      (filetags . ("zettel" "note"))))
+                                    (list :name "blog"
+                                          :tag "blog"
+                                          :basic nil
+                                          :directory "permanent"
+                                          :inbox "Not be Classified"
+                                          :template '((author . "aRenCoco")
+                                                      (date . "<%Y-%m-%d %a %z>")
+                                                      (email . "aRen_Coco@outlook.com")
+                                                      (description . nil)
+                                                      (filetags . ("zettel" "blog"))))))
   (org-roam-organize-moc-managed-tag-property "MOC_MANAGED_TAG")
   (org-roam-organize-moc-managed-node-count-property "MOC_MANAGED_NODE_COUNT")
-  (org-roam-organize-capture-template `("m" "map of contents" plain "%?"
-                                        :if-new (file+head
-                                                 "moc/${slug}.org"
-                                                 ,(concat
-                                                   ":PROPERTIES:\n"
-                                                   ":MOC_MANAGED_TAG: ${moc_managed_tag}\n"
-                                                   ":MOC_MANAGED_NODE_COUNT:\n"
-                                                   ":END:\n"
-                                                   "#+TITLE: ${title}\n"
-                                                   "#+AUTHOR: Lingyu Ren\n"
-                                                   "#+DATE: " (format-time-string "<%Y-%m-%d %A %H:%M:%S %z>") "\n"
-                                                   "#+FILETAGS: :map:\n"
-                                                   "#+DESCRIPTION:\n"))
-                                        :unnarrowed t))
-  (org-roam-organize-move-target-directory-id-or-not t)
-  (org-roam-organize-move-target-filename-id-or-not nil)
-  :config
-  (org-roam-organize-create-directory)
   :bind
   (("C-c o o" . org-roam-organize-mode)
-   ("C-c o c" . org-roam-organize-check-variables))
+   ("C-c o c" . org-roam-organize-check-setup)
+   ("C-c o n c" . org-roam-organize-node-create)
+   ("C-c o m m" . org-roam-organize-moc-open-index)
+   ("C-c o m c" . org-roam-organize-moc-create)
+   ("C-c o m s" . org-roam-organize-moc-sync)
+   ("C-c o r c" . org-roam-organize-ref-complete-backlinks))
   :hook
   ((after-init . org-roam-organize-mode)))
+
+(use-package org-roam-include
+  :after org-roam
+  :hook
+  ((after-init . org-roam-include-mode)))
 
 (global-set-key (kbd "C-c h d") (lambda () (interactive) (insert (concat "\n* " (format-time-string "%Y-%m-%d %A %z") "\n"))))
 

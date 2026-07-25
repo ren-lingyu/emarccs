@@ -1124,14 +1124,31 @@
         "type": "github"
       }
     },
+    "org-roam-include": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784716002,
+        "narHash": "sha256-D2upcMoQI6gryHhDBET3TObimImfLWy2Fgkg4+vE7/0=",
+        "owner": "ren-lingyu",
+        "repo": "org-roam-include",
+        "rev": "0d7abe7e3b96115fc3b259954ce8e86e9815d09d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ren-lingyu",
+        "ref": "main",
+        "repo": "org-roam-include",
+        "type": "github"
+      }
+    },
     "org-roam-organize": {
       "flake": false,
       "locked": {
-        "lastModified": 1783602494,
-        "narHash": "sha256-qOGvBJzOQG6r0sPPctCfWa99Iuy8KxIBsxGNjEB9ndI=",
+        "lastModified": 1784921090,
+        "narHash": "sha256-qtFxnSDjVHoo/F6gLBfynsTvvk+VzGWcIx7/Rs4keII=",
         "owner": "ren-lingyu",
         "repo": "org-roam-organize",
-        "rev": "e1d4ccda077e3b8b30a7c5edfb0026e6e69379ca",
+        "rev": "f08ea12c89559f4797b5393dd461c88b65d88176",
         "type": "github"
       },
       "original": {
@@ -1488,6 +1505,7 @@
         "org-gtd": "org-gtd",
         "org-include-inline": "org-include-inline",
         "org-roam": "org-roam",
+        "org-roam-include": "org-roam-include",
         "org-roam-organize": "org-roam-organize",
         "org-roam-timestamps": "org-roam-timestamps",
         "org-roam-ui": "org-roam-ui",

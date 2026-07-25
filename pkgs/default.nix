@@ -80,6 +80,7 @@ in {
     "org-gtd"
     "org-include-inline"
     "org-roam"
+    "org-roam-include"
     "org-roam-organize"
     "org-roam-timestamps"
     "org-roam-ui"

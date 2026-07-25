@@ -420,6 +420,13 @@
       repo = "org-roam";
       type = "github";
     };
+    org-roam-include = {
+      flake = false;
+      owner = "ren-lingyu";
+      ref = "main";
+      repo = "org-roam-include";
+      type = "github";
+    };
     org-roam-organize = {
       flake = false;
       owner = "ren-lingyu";

@@ -46,16 +46,7 @@
           (:citar-doi . ("doi"))
           (:citar-isbn . ("isbn"))
           (:citar-url . ("url"))))
-  (setq citar-org-roam-note-title-template "${title}")
-  (setq org-roam-capture-templates
-        (append org-roam-capture-templates
-                '(("r" "reference" plain "%?"
-                   :target
-                   (file+head
-                    "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${id}.org"
-                    "#+TITLE: ${note-title}\n#+AUTHOR: ${citar-author}\n#+YEAR: ${citar-year}\n#+MONTH: ${citar-month}\n#+DOI: ${citar-doi}\n#+ISBN: ${citar-isbn}\n#+URL: ${citar-url}\n#+FILETAGS: :ref:\n#+DESCRIPTION:\n\n* Citing Nodes")
-                   :unnarrowed t))))
-  (setq citar-org-roam-capture-template-key "r"))
+  (setq citar-org-roam-note-title-template "${title}"))
 
 ;; (defun my/citar-insert-then-create-note ()
 ;;   "Insert citation and then create a note for the selected entry."

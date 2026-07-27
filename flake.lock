@@ -23,10 +23,10 @@
     "elpa-gnu": {
       "flake": false,
       "locked": {
-        "lastModified": 1784378155,
-        "narHash": "sha256-wAYisTSWlLcobVM070j4SZYILi2wICkMsSKLags2LWs=",
+        "lastModified": 1784996049,
+        "narHash": "sha256-9JCu8W6aLhRts2YLGBDAE/AsjuIKyi4VwSdO7j6ivlA=",
         "ref": "refs/heads/main",
-        "rev": "f4a727bb98979c449729532a4f8375d348276eb3",
+        "rev": "dc7c05145b37f47bef061f8d583e41f4b72b422f",
         "shallow": true,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/elpa/gnu.git"
@@ -95,10 +95,10 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1784297447,
-        "narHash": "sha256-I093K3svv7b3bF47AmhHL1AlaHFcmS1FDgaG0P9Qm7Y=",
+        "lastModified": 1785090121,
+        "narHash": "sha256-oVEy/KJuGxe02cfJO7/OvIER8p4XzRikEhlr4HTIrF8=",
         "ref": "refs/heads/master",
-        "rev": "1285db21b49c7d81ee9f4751aee3efc80457d3c1",
+        "rev": "9e756440d19c99fd8daccbd1e4436217f78c6c7c",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/melpa/melpa.git"
@@ -137,10 +137,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1784356753,
-        "narHash": "sha256-12KrbMiWLcf8m7pCvAtZh1ZrgF85ZXDXvfR/fWTKy84=",
+        "lastModified": 1785090369,
+        "narHash": "sha256-m0pDuRJG7EDo9ri+4Ksu83VsI+PlxNC9lNBfydejce4=",
         "ref": "refs/heads/nixos-unstable",
-        "rev": "61b7c44c4073f0b827768aff0049561b5110ea5a",
+        "rev": "624af665418d3c65d544145b4d34ad696439570e",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/NixOS/nixpkgs.git"
@@ -183,10 +183,10 @@
         "elisp-helpers": "elisp-helpers"
       },
       "locked": {
-        "lastModified": 1784324931,
-        "narHash": "sha256-OTH4s0Y+GOq2cFU5qGI1ifuLLP36evsUcg6VxxLWC1k=",
+        "lastModified": 1784591000,
+        "narHash": "sha256-WN1fwSB0X2+PRGlvp1QABWo4NbgeR6MempXH7y0nP8o=",
         "ref": "refs/heads/master",
-        "rev": "04eac977210d5c9d38568bb9b016565c4e3f34a0",
+        "rev": "cf6d43cac9811c2b3f3de95a79ca351e1bca4e57",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/emacs-twist/twist.nix.git"

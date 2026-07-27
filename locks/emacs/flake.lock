@@ -67,11 +67,11 @@
     "auctex": {
       "flake": false,
       "locked": {
-        "lastModified": 1784297278,
-        "narHash": "sha256-T2dsfJzvEeJP2gqtKthReINVB+WELZz12q2SDcZv+f8=",
+        "lastModified": 1785148080,
+        "narHash": "sha256-FRZJC7BVzkSTqrZ4APZlGa+9FoYWK72hHJyDSUwKqE4=",
         "ref": "main",
-        "rev": "752f54f849bf068f41d1b40156512f795214b2f8",
-        "revCount": 8954,
+        "rev": "fb04fcef9e86c95c5b1df01234e9d9189466beaf",
+        "revCount": 8955,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/auctex.git"
       },
@@ -420,11 +420,11 @@
     "dirvish": {
       "flake": false,
       "locked": {
-        "lastModified": 1784186992,
-        "narHash": "sha256-vmw1Jk6ocAZLKWGI2+sWidTA5pH8U57Xw9uV1fsm1Gw=",
+        "lastModified": 1784992843,
+        "narHash": "sha256-1oVMZKNhPNCWfL3ksSPCF6N7KAIThxww38eGPru2W+E=",
         "owner": "alexluigit",
         "repo": "dirvish",
-        "rev": "5152c80a32de3965a3e131a9314514af4aa8aa1e",
+        "rev": "bf164ee21e128837ede59be03836a9900c4a41be",
         "type": "github"
       },
       "original": {
@@ -644,11 +644,11 @@
     "flycheck": {
       "flake": false,
       "locked": {
-        "lastModified": 1784636719,
-        "narHash": "sha256-k+NiE+gksx+AJZVCUYTqeI4+GPrgzu5xbaL4KdnV6NE=",
+        "lastModified": 1785159230,
+        "narHash": "sha256-GO0LSTl8Yayh0fFuEX4Cty6+jo+Dardf1eoG4d3tWRg=",
         "owner": "flycheck",
         "repo": "flycheck",
-        "rev": "356bdd3570fe38dcff0f2228ced003d54383928d",
+        "rev": "2e18ec8df4ec1628d7abcb1cc13a3d142317ffa3",
         "type": "github"
       },
       "original": {
@@ -660,11 +660,11 @@
     "gptel": {
       "flake": false,
       "locked": {
-        "lastModified": 1784930874,
-        "narHash": "sha256-An0w/w7ededQU4CJFccVFl8vC+TIB+GManTju0lx4CA=",
+        "lastModified": 1785092581,
+        "narHash": "sha256-8GKKCCKk4uXeKQU0ECqeeLKfbKXqbDNm2/l52POX5JY=",
         "owner": "karthink",
         "repo": "gptel",
-        "rev": "f01c55cdc0c4b49c6c56e9d462831ada9d68f0f2",
+        "rev": "c91454c7b955f3ca8285375e937aa9b50c91c206",
         "type": "github"
       },
       "original": {
@@ -724,11 +724,11 @@
     "hl-indent-scope": {
       "flake": false,
       "locked": {
-        "lastModified": 1777713966,
-        "narHash": "sha256-95sZnjSj+6C3XA+YNW+VR7voez+io4+jjboU88dlYJs=",
+        "lastModified": 1785044171,
+        "narHash": "sha256-5eAGgYYoEjRM7prqxTmXuH3aR+gSnTEmZHaNpuioV+c=",
         "ref": "refs/heads/main",
-        "rev": "538ddc0295727b11e20a9615a18d0f280bc0212a",
-        "revCount": 56,
+        "rev": "5e0e0d293231169b27c96d13cf2ccdf3b4d01353",
+        "revCount": 73,
         "type": "git",
         "url": "https://codeberg.org/ideasman42/emacs-hl-indent-scope.git"
       },
@@ -1143,11 +1143,11 @@
     "org-roam-include": {
       "flake": false,
       "locked": {
-        "lastModified": 1784716002,
-        "narHash": "sha256-D2upcMoQI6gryHhDBET3TObimImfLWy2Fgkg4+vE7/0=",
+        "lastModified": 1785161186,
+        "narHash": "sha256-v1VxNeLsvz4VgdaPPao77x2eagOqJYB39eA+lIkdXsk=",
         "owner": "ren-lingyu",
         "repo": "org-roam-include",
-        "rev": "0d7abe7e3b96115fc3b259954ce8e86e9815d09d",
+        "rev": "6120d2a02726418f4358bf916bdb1456399c03bf",
         "type": "github"
       },
       "original": {
@@ -1160,11 +1160,11 @@
     "org-roam-organize": {
       "flake": false,
       "locked": {
-        "lastModified": 1785168288,
-        "narHash": "sha256-l0wi4ZclS3RP7W35QiAz+zMy0XAugp4wUTFbFyOizR0=",
+        "lastModified": 1785176445,
+        "narHash": "sha256-fmSzLkhFN1EjucV+u8B5lmFO6cGLCAxiAwZ6bLZns/E=",
         "owner": "ren-lingyu",
         "repo": "org-roam-organize",
-        "rev": "5b8adcd4445abe4c7408a6087f71444fa1fbed9b",
+        "rev": "fdfaf33a157419ef5a7a3d460fd0da7483cb74af",
         "type": "github"
       },
       "original": {
@@ -1660,11 +1660,11 @@
     "transient": {
       "flake": false,
       "locked": {
-        "lastModified": 1784919104,
-        "narHash": "sha256-XvTXzCDIOZ12qy0hg+sf5TNHS7shGeOBEut8NT8Ot34=",
+        "lastModified": 1784977527,
+        "narHash": "sha256-xf6bDD4Cehyb94Q7e3VT/XpNlPk8njkw/csjatU29Sg=",
         "owner": "magit",
         "repo": "transient",
-        "rev": "7600a4309440a7448fcd37d040eb6d0b41e4cdb6",
+        "rev": "91c25496972566d6b1b4411c1bb7a7e669355a4c",
         "type": "github"
       },
       "original": {

@@ -233,22 +233,26 @@
 (use-package diff-hl
   :custom
   (diff-hl-side 'left)
-  (diff-hl-highlight-function
-   #'diff-hl-highlight-on-fringe-flat)
-  (diff-hl-fringe-flat-bmp 'diff-hl-bmp-empty)
+  (diff-hl-margin-symbols-alist '((insert . "+")
+                                  (delete . "-")
+                                  (change . "~")
+                                  (unknown . "?")
+                                  (ignored . " ")
+                                  (reference . " ")))
   :custom-face
-  (diff-hl-insert
-   ((t (:inherit success
-        :inverse-video t))))
-  (diff-hl-delete
-   ((t (:inherit error
-        :inverse-video t))))
-  (diff-hl-change
-   ((t (:inherit warning
-        :inverse-video t))))
+  (diff-hl-insert ((t ( :inherit success
+                        :weight bold
+                        :inverse-video t))))
+  (diff-hl-delete ((t ( :inherit error
+                        :weight bold
+                        :inverse-video t))))
+  (diff-hl-change ((t ( :inherit warning
+                        :weight bold
+                        :inverse-video t))))
   :config
   (global-diff-hl-mode 1)
   (diff-hl-flydiff-mode 1)
+  (diff-hl-margin-mode 1)
   (with-eval-after-load 'magit
     (add-hook 'magit-post-refresh-hook
               #'diff-hl-magit-post-refresh)))

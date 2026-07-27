@@ -44,6 +44,7 @@ in {
     "consult"
     "consult-org-roam"
     "counsel"
+    "diff-hl"
     "dired-rainbow"
     "diredfl"
     "dirvish"

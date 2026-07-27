@@ -230,6 +230,29 @@
 (use-package hl-indent-scope
   :hook (prog-mode . hl-indent-scope-mode))
 
+(use-package diff-hl
+  :custom
+  (diff-hl-side 'left)
+  (diff-hl-highlight-function
+   #'diff-hl-highlight-on-fringe-flat)
+  (diff-hl-fringe-flat-bmp 'diff-hl-bmp-empty)
+  :custom-face
+  (diff-hl-insert
+   ((t (:inherit success
+        :inverse-video t))))
+  (diff-hl-delete
+   ((t (:inherit error
+        :inverse-video t))))
+  (diff-hl-change
+   ((t (:inherit warning
+        :inverse-video t))))
+  :config
+  (global-diff-hl-mode 1)
+  (diff-hl-flydiff-mode 1)
+  (with-eval-after-load 'magit
+    (add-hook 'magit-post-refresh-hook
+              #'diff-hl-magit-post-refresh)))
+
 ;; 搜索功能增强
 (use-package vertico
   :init

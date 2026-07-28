@@ -644,11 +644,11 @@
     "flycheck": {
       "flake": false,
       "locked": {
-        "lastModified": 1785159230,
-        "narHash": "sha256-GO0LSTl8Yayh0fFuEX4Cty6+jo+Dardf1eoG4d3tWRg=",
+        "lastModified": 1785245954,
+        "narHash": "sha256-l0NYXwzAHk0J3mmDr+5KCJGde5zzNljRT2d3ABJw29M=",
         "owner": "flycheck",
         "repo": "flycheck",
-        "rev": "2e18ec8df4ec1628d7abcb1cc13a3d142317ffa3",
+        "rev": "d983b24eaf9603b02fae0c46356657a3c0bb5034",
         "type": "github"
       },
       "original": {
@@ -660,11 +660,11 @@
     "gptel": {
       "flake": false,
       "locked": {
-        "lastModified": 1785092581,
-        "narHash": "sha256-8GKKCCKk4uXeKQU0ECqeeLKfbKXqbDNm2/l52POX5JY=",
+        "lastModified": 1785204677,
+        "narHash": "sha256-zfmfdno1Immb3T2Jf9aeGi1MuM9r9VcUGH/XUNrLodw=",
         "owner": "karthink",
         "repo": "gptel",
-        "rev": "c91454c7b955f3ca8285375e937aa9b50c91c206",
+        "rev": "513a6b74310d7bcc2a6138ccc1860b4577e73800",
         "type": "github"
       },
       "original": {
@@ -900,11 +900,11 @@
     "magit-section": {
       "flake": false,
       "locked": {
-        "lastModified": 1784936337,
-        "narHash": "sha256-6NZ7WQXkVSrPXskDUeHk2FRPYemN23e3umb5gGgnwhY=",
+        "lastModified": 1785230543,
+        "narHash": "sha256-k4/cXkhh09jg2aUyDoeql/KuHBvgkT7NnekBr6e5tRs=",
         "owner": "magit",
         "repo": "magit",
-        "rev": "4453f3d6dccc5be7fb00bf98e18272a4ff532ded",
+        "rev": "b6c8bbcc7deec1f8bb266c1b6765857056d82304",
         "type": "github"
       },
       "original": {
@@ -1143,11 +1143,11 @@
     "org-roam-include": {
       "flake": false,
       "locked": {
-        "lastModified": 1785161186,
-        "narHash": "sha256-v1VxNeLsvz4VgdaPPao77x2eagOqJYB39eA+lIkdXsk=",
+        "lastModified": 1785261363,
+        "narHash": "sha256-04B2riCYTGV4tqeqM3C3ICeeLVal1p7c6OjLAhUky3E=",
         "owner": "ren-lingyu",
         "repo": "org-roam-include",
-        "rev": "6120d2a02726418f4358bf916bdb1456399c03bf",
+        "rev": "82d775b64ceebf8151699985dd79a7cd210d86bb",
         "type": "github"
       },
       "original": {
@@ -1160,11 +1160,11 @@
     "org-roam-organize": {
       "flake": false,
       "locked": {
-        "lastModified": 1785255725,
-        "narHash": "sha256-JOg46WCH7cFK+yTFaIgLRyzrbLijsUGbxZIwjU80s5c=",
+        "lastModified": 1785261182,
+        "narHash": "sha256-yGU4s25GMBxM+A7Ox3U9uIaOA0HcXVnCEAvnsEtZ4sw=",
         "owner": "ren-lingyu",
         "repo": "org-roam-organize",
-        "rev": "ca3d78d4ab236f80c0c32348d3d7087f7a4f22e0",
+        "rev": "6e666d2ed6e76175b50d0465f6306fc4624d5974",
         "type": "github"
       },
       "original": {

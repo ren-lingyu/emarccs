@@ -76,7 +76,7 @@
                :cite t
                :basic t
                :directory "literature"
-               :inbox "Not be Classified"
+               :inbox "Citing Nodes"
                :provider #'emarccs-shared-org-roam-organize-citar-provider
                :template '((properties . ((roam_refs . "@${citar-key}")))
                            (keywords . ((author . "${citar-author}")

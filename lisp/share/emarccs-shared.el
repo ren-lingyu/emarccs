@@ -27,7 +27,7 @@
 
 (require 'emarccs-shared-blog-publish) ; 博客发布设置
 
-(require 'emarccs-shared-orgraph) ; orgraph
+(mapc #'require '(org org-roam org-roam-organize org-gtd consult consult-org-roam auctex vertico orderless marginalia))
 
 ;; debug
 (require 'emarccs-shared-debug)

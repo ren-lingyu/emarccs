@@ -409,5 +409,15 @@
         ("all"
          :components ("post" "index" "static"))))
 
+(add-hook 'after-save-hook
+          (lambda ()
+            (let* ((post_file_list (my/blog-files))
+                   (filename (buffer-file-name)))
+              (when (and filename
+                         (file-in-directory-p filename (expand-file-name "./permanent/" org-roam-directory))
+                         (member filename post_file_list))
+                (org-publish-all)
+                (message "[INFO] Publish finished. ")))))
+
 (provide 'emarccs-shared-blog-publish)
 ;;; emarccs-shared-blog-publish.el ends here.

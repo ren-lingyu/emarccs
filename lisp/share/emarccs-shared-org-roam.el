@@ -188,5 +188,40 @@ If OTHER-WINDOW is non-nil, visit the node in another window."
       ;; Cursor is not on a link
       (message "The cursor is not on a link."))))
 
+(defun my/post-files ()
+  "Return a list of note files containing 'post' tag."
+  (seq-uniq (seq-map #'car (org-roam-db-query (vector :select (vector 'nodes:file)
+                                                      :from 'tags
+                                                      :left-join 'nodes
+                                                      :on '(= tags:node-id nodes:id)
+                                                      :where '(like tag (quote "%\"post\"%")))))))
+
+;; =============================
+;; hook
+;; =============================
+
+(add-hook 'before-save-hook
+          (lambda ()
+            (let* ((post_file_list (my/post-files)))
+              (cond ((and
+                      buffer-file-name
+                      (file-in-directory-p buffer-file-name org-roam-directory)
+                      (not (file-in-directory-p buffer-file-name (expand-file-name "./literature/" org-roam-directory)))
+                      (not (member buffer-file-name post_file_list)))
+                     (my/update-and-insert-or-not-date-in-org-file
+                      org-directory
+                      "<%Y-%m-%d %a %z>"
+                      t)
+                     (message "Updated DATE in %s" (buffer-file-name)))
+                    ((and
+                      buffer-file-name
+                      (file-in-directory-p buffer-file-name (expand-file-name "./permanent/" org-roam-directory))
+                      (not (member buffer-file-name post_file_list)))
+                     (my/update-and-insert-or-not-date-in-org-file
+                      org-directory
+                      "<%Y-%m-%d %a %z>"
+                      nil))
+                    (t nil)))))
+
 (provide 'emarccs-shared-org-roam)
 ;;; emarccs-shared-org-roam.el ends here

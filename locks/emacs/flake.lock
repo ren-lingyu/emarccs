@@ -1160,11 +1160,11 @@
     "org-roam-organize": {
       "flake": false,
       "locked": {
-        "lastModified": 1785176445,
-        "narHash": "sha256-fmSzLkhFN1EjucV+u8B5lmFO6cGLCAxiAwZ6bLZns/E=",
+        "lastModified": 1785255725,
+        "narHash": "sha256-JOg46WCH7cFK+yTFaIgLRyzrbLijsUGbxZIwjU80s5c=",
         "owner": "ren-lingyu",
         "repo": "org-roam-organize",
-        "rev": "fdfaf33a157419ef5a7a3d460fd0da7483cb74af",
+        "rev": "ca3d78d4ab236f80c0c32348d3d7087f7a4f22e0",
         "type": "github"
       },
       "original": {

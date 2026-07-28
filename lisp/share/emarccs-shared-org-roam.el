@@ -67,7 +67,8 @@
                :basic t
                :directory "fleeting"
                :inbox "Not be Classified"
-               :template '((keywords . ((author . "Lingyu Ren")
+               :template '((path . "${slug}.org")
+                           (keywords . ((author . "Lingyu Ren")
                                         (date . "<%<%Y-%m-%d %A %H:%M:%S %z>>")
                                         (description . nil)
                                         (filetags . ("idea"))))))
@@ -78,7 +79,8 @@
                :directory "literature"
                :inbox "Citing Nodes"
                :provider #'emarccs-shared-org-roam-organize-citar-provider
-               :template '((properties . ((roam_refs . "@${citar-key}")))
+               :template '((path . "${citar-key}.org")
+                           (properties . ((roam_refs . "@${citar-key}")))
                            (keywords . ((author . "${citar-author}")
                                         (year . "${citar-year}")
                                         (month . "${citar-month}")
@@ -92,7 +94,8 @@
                :basic t
                :directory "permanent"
                :inbox "Not be Classified"
-               :template '((keywords . ((author . "Lingyu Ren")
+               :template '((path . "${slug}.org")
+                           (keywords . ((author . "Lingyu Ren")
                                         (date . "<%<%Y-%m-%d %A %H:%M:%S %z>>")
                                         (description . nil)
                                         (filetags . ("zettel"))))))
@@ -101,7 +104,8 @@
                :basic nil
                :directory "permanent"
                :inbox "Not be Classified"
-               :template '((keywords . ((author . "Lingyu Ren")
+               :template '((path . "${slug}.org")
+                           (keywords . ((author . "Lingyu Ren")
                                         (date . "<%<%Y-%m-%d %A %H:%M:%S %z>>")
                                         (description . nil)
                                         (filetags . ("zettel" "note"))))))
@@ -110,7 +114,8 @@
                :basic nil
                :directory "permanent"
                :inbox "Not be Classified"
-               :template '((keywords . ((author . "aRenCoco")
+               :template '((path . "${slug}.org")
+                           (keywords . ((author . "aRenCoco")
                                         (date . "<%<%Y-%m-%d %a %z>>")
                                         (email . "aRen_Coco@outlook.com")
                                         (description . nil)
@@ -119,7 +124,7 @@
   (org-roam-organize-moc-managed-node-count-property "MOC_MANAGED_NODE_COUNT")
   :config
   (with-eval-after-load 'citar-org-roam
-    (defun emarccs-shared--org-roam-citing-node-by-key (key)
+    (defun emarccs-shared--org-roam-literature-node-from-citekey (key)
       "Return the first Org-roam node that has cite ref KEY, or nil."
       (when-let* ((row (car (org-roam-db-query (vector :select (vector 'n:id)
                                                        :from '(as refs r)
@@ -134,7 +139,7 @@
     (defun emarccs-shared-org-roam-organize-citar-provider (_record)
       "Return an Org-roam Organize node creation request from a Citar entry."
       (let* ((key (citar-select-ref))
-             (existing_node (emarccs-shared--org-roam-citing-node-by-key key)))
+             (existing_node (emarccs-shared--org-roam-literature-node-from-citekey key)))
         (when key
           (if existing_node
               (progn
@@ -154,12 +159,12 @@
                                 :citar-url (citar-format--entry "${url}" entry)))))))))
   :bind
   (("C-c o o" . org-roam-organize-mode)
-   ("C-c o c" . org-roam-organize-check-setup)
    ("C-c o n c" . org-roam-organize-node-create)
    ("C-c o m m" . org-roam-organize-moc-open-index)
    ("C-c o m c" . org-roam-organize-moc-create)
    ("C-c o m s" . org-roam-organize-moc-sync)
-   ("C-c o r c" . org-roam-organize-cite-sync))
+   ("C-c o c c" . org-roam-organize-cite-check)
+   ("C-c o c s" . org-roam-organize-cite-sync))
   :hook
   ((after-init . org-roam-organize-mode)))
 

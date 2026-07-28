@@ -17,7 +17,7 @@
 
 (require 'emarccs-shared-org-roam) ; org-roam 及相关设置
 
-(require 'emarccs-shared-org-roam-citar) ; org-roam 中 citar 及相关设置
+(require 'emarccs-shared-org-roam-organize) ; org-roam organize、citar 及相关设置
 
 (require 'emarccs-shared-org-latex-preview) ; 预览
 

@@ -169,13 +169,6 @@
                   :image-converter
                   (,(format "%s dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %%B-%%%%9p.svg %%f" (shell-quote-argument texlive)))))))
 
-(with-eval-after-load 'citar
-  (setq citar-notes-paths
-        (list (expand-file-name "./literature/" org-roam-directory))
-        citar-library-paths nil)
-  (setq citar-bibliography
-        (list (expand-file-name "./texmf/bibtex/bib/org-citar.bib" org-directory))))
-
 (mapc #'require '(org org-roam org-roam-organize org-gtd consult consult-org-roam auctex vertico orderless marginalia))
 
 ;; (setq compile-command "emacs --batch --load ~/.emacs.d/init.el --eval \"(org-publish-all t)\"")

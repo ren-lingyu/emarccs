@@ -77,7 +77,7 @@
    ;; :preview-key "TAB"
    ;; :preview-key 'any
    :preview-key "M-.")
-  (defun emarccs-shared-consult-org-roam-forward-links (&optional other-window)
+  (defun emarccs-shared-org-roam--consult-forward-links (&optional other-window)
     "Select an Org-roam forward link contained in the current buffer.
 If OTHER-WINDOW is non-nil, visit the node in another window."
     (interactive)
@@ -104,7 +104,7 @@ If OTHER-WINDOW is non-nil, visit the node in another window."
          chosen-node))))
   (advice-add #'consult-org-roam-forward-links
               :override
-              #'emarccs-shared-consult-org-roam-forward-links)
+              #'emarccs-shared-org-roam--consult-forward-links)
   :bind
   ;; Define some convenient keybindings as an addition
   ("C-c c f" . consult-org-roam-file-find)
@@ -144,7 +144,7 @@ If OTHER-WINDOW is non-nil, visit the node in another window."
 ;; 自定义函数
 ;; =============================
 
-(defun emarccs-shared-update-link-description ()
+(defun emarccs-shared-org-roam-update-link-description ()
   "Update the description of the link at point to match the title of the corresponding Org-roam node in the database.
   If the link is not an Org-roam ID link or the node cannot be found, display an appropriate message without making changes."
   (interactive)
@@ -190,7 +190,7 @@ If OTHER-WINDOW is non-nil, visit the node in another window."
       ;; Cursor is not on a link
       (message "The cursor is not on a link."))))
 
-(defun my/post-files ()
+(defun emarccs-shared-org-roam--post-files ()
   "Return a list of note files containing 'post' tag."
   (seq-uniq (seq-map #'car (org-roam-db-query (vector :select (vector 'nodes:file)
                                                       :from 'tags
@@ -204,13 +204,13 @@ If OTHER-WINDOW is non-nil, visit the node in another window."
 
 (add-hook 'before-save-hook
           (lambda ()
-            (let* ((post_file_list (my/post-files)))
+            (let* ((post_file_list (emarccs-shared-org-roam--post-files)))
               (cond ((and
                       buffer-file-name
                       (file-in-directory-p buffer-file-name org-roam-directory)
                       (not (file-in-directory-p buffer-file-name (expand-file-name "./literature/" org-roam-directory)))
                       (not (member buffer-file-name post_file_list)))
-                     (my/update-and-insert-or-not-date-in-org-file
+                     (emarccs-shared-org-update-date
                       org-directory
                       "<%Y-%m-%d %a %z>"
                       t)
@@ -219,7 +219,7 @@ If OTHER-WINDOW is non-nil, visit the node in another window."
                       buffer-file-name
                       (file-in-directory-p buffer-file-name (expand-file-name "./permanent/" org-roam-directory))
                       (not (member buffer-file-name post_file_list)))
-                     (my/update-and-insert-or-not-date-in-org-file
+                     (emarccs-shared-org-update-date
                       org-directory
                       "<%Y-%m-%d %a %z>"
                       nil))

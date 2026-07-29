@@ -108,7 +108,7 @@
 
 ;; (setq confirm-kill-emacs #'y-or-n-p) ; 关闭 Emacs 前确认
 
-(defconst *spell-check-support-enabled* t)    ; 是否启用拼写检查
+(defconst emarccs-shared-basic--spell-check-support-enabled-p t)    ; 是否启用拼写检查
 
 (add-hook 'prog-mode-hook #'delete-trailing-whitespace-mode)
 

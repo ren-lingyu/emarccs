@@ -33,7 +33,7 @@
                :basic t
                :directory "literature"
                :inbox "Citing Nodes"
-               :provider #'emarccs-shared-org-roam-organize-citar-provider
+               :provider #'emarccs-shared-org-roam-organize--citar-provider
                :template '((path . "${citar-key}.org")
                            (properties . ((roam_refs . "@${citar-key}")))
                            (keywords . ((author . "${citar-author}")
@@ -79,7 +79,7 @@
   (org-roam-organize-moc-managed-node-count-property "MOC_MANAGED_NODE_COUNT")
   :config
   (with-eval-after-load 'citar-org-roam
-    (defun emarccs-shared--org-roam-literature-node-from-citekey (key)
+    (defun emarccs-shared-org-roam-organize--literature-node-from-citekey (key)
       "Return the first Org-roam node that has cite ref KEY, or nil."
       (when-let* ((row (car (org-roam-db-query (vector :select (vector 'n:id)
                                                        :from '(as refs r)
@@ -91,10 +91,11 @@
                                                key)))
                   (id (car row)))
         (org-roam-node-from-id id)))
-    (defun emarccs-shared-org-roam-organize-citar-provider (_record)
+    (defun emarccs-shared-org-roam-organize--citar-provider (_record)
       "Return an Org-roam Organize node creation request from a Citar entry."
       (let* ((key (citar-select-ref))
-             (existing_node (emarccs-shared--org-roam-literature-node-from-citekey key)))
+             (existing_node
+              (emarccs-shared-org-roam-organize--literature-node-from-citekey key)))
         (when key
           (if existing_node
               (progn

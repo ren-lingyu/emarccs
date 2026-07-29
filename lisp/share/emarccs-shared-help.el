@@ -20,13 +20,15 @@
                      (select-window window)
                    ;; line above returns nil if no available window is found
                    (pop-to-buffer buf))))
-  (defvar help-helpful/history () "History of helpful, a list of buffers.")
-  (defun help-helpful--switch-to-buffer  (buffer &optional offset)
+  (defvar emarccs-shared-help--history () "History of helpful, a list of buffers.")
+  (defun emarccs-shared-help--switch-to-buffer  (buffer &optional offset)
     "Jump to last SYMBOL in helpful history, offset by OFFSET."
     (interactive)
     (require 'seq)
     (require 'cl-lib)
-    (setq help-helpful/history (seq-remove (lambda (buf) (not (buffer-live-p buf))) help-helpful/history))
+    (setq emarccs-shared-help--history
+          (seq-remove (lambda (buf) (not (buffer-live-p buf)))
+                      emarccs-shared-help--history))
     (cl-labels ((find-index (elt lst)
                   (let ((idx 0)
                         (len (length lst)))
@@ -36,12 +38,12 @@
                     (if (eq idx len)
                         nil
                       idx))))
-      (let ((idx (+ (or offset 0) (find-index buffer help-helpful/history))))
-        (if (or (>= idx (length help-helpful/history))
+      (let ((idx (+ (or offset 0) (find-index buffer emarccs-shared-help--history))))
+        (if (or (>= idx (length emarccs-shared-help--history))
                 (< idx 0))
             (message "No further history.")
-          (switch-to-buffer (nth idx help-helpful/history))))))
-  (defun help-helpful--update (oldfunc)
+          (switch-to-buffer (nth idx emarccs-shared-help--history))))))
+  (defun emarccs-shared-help--update (oldfunc)
     "Insert back/forward buttons."
     (funcall oldfunc)
     (let ((inhibit-read-only t))
@@ -49,17 +51,17 @@
       (insert-text-button "Back"
                           'action (lambda (&rest _)
                                     (interactive)
-                                    (help-helpful--switch-to-buffer  (current-buffer) 1)))
+                                    (emarccs-shared-help--switch-to-buffer  (current-buffer) 1)))
       (insert " | ")
       (insert-text-button "Forward"
                           'action (lambda (&rest _)
                                     (interactive)
-                                    (help-helpful--switch-to-buffer  (current-buffer)  -1)))
+                                    (emarccs-shared-help--switch-to-buffer  (current-buffer)  -1)))
       (insert "\n\n")))
-  (advice-add #'helpful-update :around #'help-helpful--update)
+  (advice-add #'helpful-update :around #'emarccs-shared-help--update)
   (advice-add #'helpful--buffer :around (lambda (oldfunc &rest _)
                                           (let ((buf (apply oldfunc _)))
-                                            (push buf help-helpful/history)
+                                            (push buf emarccs-shared-help--history)
                                             buf))))
 
 (provide 'emarccs-shared-help)

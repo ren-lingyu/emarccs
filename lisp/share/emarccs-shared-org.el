@@ -80,7 +80,7 @@
    ("C-c d p" . org-gtd-process-inbox)
    ("C-c d n" . org-gtd-show-all-next)
    ("C-c d s" . org-gtd-reflect-stuck-projects)
-   ;; ("C-c d s" . my/org-gtd-auto-save-files)
+   ;; ("C-c d s" . emarccs-shared-org-gtd-auto-save-files)
    :map org-gtd-clarify-mode-map
    ("C-c c" . org-gtd-organize)
    :map org-agenda-mode-map
@@ -105,7 +105,7 @@
 ;;   (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
 
 ;; 更新文件头
-(defun my/update-and-insert-or-not-date-in-org-file (path time_string insert_bool)
+(defun emarccs-shared-org-update-date (path time_string insert_bool)
   "Update #+DATE only for specific Org files."
   (when (and (eq major-mode 'org-mode)
              (buffer-file-name) ; 确保有文件名
@@ -137,7 +137,7 @@
                                             (forward-line)
                                             (insert "#+DATE: " now "\n")))))))))))
 
-;; (defun my/update-setupfile-in-org-file (path)
+;; (defun emarccs-shared-org-update-setupfile (path)
 ;;   "Update #+SETUPFILE only for specific Org files."
 ;;   (when (and  (eq major-mode 'org-mode)
 ;;               (buffer-file-name)
@@ -156,7 +156,7 @@
  (lambda ()
    (interactive)
    (when (buffer-file-name)
-     (my/update-and-insert-or-not-date-in-org-file
+     (emarccs-shared-org-update-date
       (file-name-directory (buffer-file-name))
       "<%Y-%m-%d %a %z>"
       nil))))

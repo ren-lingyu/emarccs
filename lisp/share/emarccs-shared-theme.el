@@ -61,7 +61,7 @@
 ;; =========================
 
 ;; 所有主题组及子主题 (Catppuccin 风味特殊处理)
-(defconst my/theme-groups
+(defconst emarccs-shared-theme--groups
   '((koishi koishi)
     (modus modus-vivendi modus-operandi)
     (doom doom-one doom-dracula doom-gruvbox doom-nord doom-solarized-dark)
@@ -69,17 +69,17 @@
   "主题组及其子主题(Catppuccin 风味特殊处理)")
 
 ;; 当前组索引和主题索引 (初始化完全由这两个变量控制), 切换主题依赖于对这两个变量的重新赋值.
-(defvar my/group-index 0 "当前主题组索引")
-(defvar my/theme-index 0 "当前主题索引")
+(defvar emarccs-shared-theme--group-index 0 "当前主题组索引")
+(defvar emarccs-shared-theme--theme-index 0 "当前主题索引")
 
-(defun my/load-current-theme ()
+(defun emarccs-shared-theme--load-current ()
   "根据组索引和主题索引加载主题"
   ;; 禁用旧主题
   (mapc #'disable-theme custom-enabled-themes)
-  (let* ((group (nth my/group-index my/theme-groups))
+  (let* ((group (nth emarccs-shared-theme--group-index emarccs-shared-theme--groups))
          (group-name (car group))
          ;; 跳过组名
-         (theme (nth (1+ my/theme-index) group)))
+         (theme (nth (1+ emarccs-shared-theme--theme-index) group)))
     (cond
      ;; Catppuccin 特殊处理
      ((eq group-name 'catppuccin)
@@ -91,26 +91,30 @@
       (load-theme theme t)
       (message "加载主题: %s" theme)))))
 
-(defun my/toggle-theme-group ()
+(defun emarccs-shared-theme-toggle-group ()
   "切换到下一个主题组"
   (interactive)
-  (setq my/group-index (mod (1+ my/group-index) (length my/theme-groups))
-        my/theme-index 0)
-  (my/load-current-theme))
+  (setq emarccs-shared-theme--group-index
+        (mod (1+ emarccs-shared-theme--group-index)
+             (length emarccs-shared-theme--groups))
+        emarccs-shared-theme--theme-index 0)
+  (emarccs-shared-theme--load-current))
 
-(defun my/toggle-subtheme ()
+(defun emarccs-shared-theme-toggle-subtheme ()
   "切换当前组的下一个主题"
   (interactive)
-  (let ((group (nth my/group-index my/theme-groups)))
-    (setq my/theme-index (mod (1+ my/theme-index) (1- (length group))))
-    (my/load-current-theme)))
+  (let ((group (nth emarccs-shared-theme--group-index emarccs-shared-theme--groups)))
+    (setq emarccs-shared-theme--theme-index
+          (mod (1+ emarccs-shared-theme--theme-index)
+               (1- (length group))))
+    (emarccs-shared-theme--load-current)))
 
-(defun my/show-current-theme ()
+(defun emarccs-shared-theme-show-current ()
   "显示当前主题组和主题名称"
   (interactive)
-  (let* ((group (nth my/group-index my/theme-groups))
+  (let* ((group (nth emarccs-shared-theme--group-index emarccs-shared-theme--groups))
          (group-name (car group))
-         (theme (nth (1+ my/theme-index) group)))
+         (theme (nth (1+ emarccs-shared-theme--theme-index) group)))
     (message "当前主题组: %s | 当前主题: %s"
              group-name
              (if (eq group-name 'catppuccin)
@@ -118,12 +122,12 @@
                theme))))
 
 ;; 快捷键绑定
-(global-set-key (kbd "<f4>") #'my/toggle-theme-group)
-(global-set-key (kbd "<f5>") #'my/toggle-subtheme)
-(global-set-key (kbd "<f6>") #'my/show-current-theme)
+(global-set-key (kbd "<f4>") #'emarccs-shared-theme-toggle-group)
+(global-set-key (kbd "<f5>") #'emarccs-shared-theme-toggle-subtheme)
+(global-set-key (kbd "<f6>") #'emarccs-shared-theme-show-current)
 
 ;; 初始化加载主题
-(my/load-current-theme)
+(emarccs-shared-theme--load-current)
 
 
 (provide 'emarccs-shared-theme)

@@ -38,7 +38,7 @@
 (setq org-highlight-latex-and-related '(native script))
 
 ;; 自定义 LaTeX 高亮规则
-(defun my/org-latex-font-lock ()
+(defun emarccs-shared-tex--org-latex-font-lock ()
   "Strict LaTeX syntax highlighting in org-mode."
   (font-lock-add-keywords
    nil
@@ -72,8 +72,8 @@
      ("\\\\braket<\\([^| \n]+\\)|\\([^> \n]+\\)>" . font-lock-keyword-face)
      ("\\\\braket<\\([^| \n]+\\)|\\([^| \n]+\\)|\\([^> \n]+\\)>" . font-lock-keyword-face))))
 
-;; (add-hook 'org-mode-hook #'my/org-latex-font-lock)
-(add-hook 'LaTeX-mode-hook #'my/org-latex-font-lock)
+;; (add-hook 'org-mode-hook #'emarccs-shared-tex--org-latex-font-lock)
+(add-hook 'LaTeX-mode-hook #'emarccs-shared-tex--org-latex-font-lock)
 
 ;; 与latex环境有关的快捷键
 
@@ -163,7 +163,7 @@
   (setq org-latex-default-class "note")
   ;; (setq org-latex-title-command "")
   (setq org-export-with-toc t)
-  (defun my/insert-toc-after-abstract-or-title (output backend info)
+  (defun emarccs-shared-tex--insert-toc-after-abstract-or-title (output backend info)
     (when (and (org-export-derived-backend-p backend 'latex)
                (string-match-p "\\\\documentclass[[:space:]]*\\(?:\\[.*?\\][[:space:]]*\\)?{[[:space:]]*article[[:space:]]*}" output))
       (if (string-match "\\\\end{abstract}" output)
@@ -192,8 +192,9 @@
              "\\\\end{abstract}\n\n\\\\begin{abstract}"
              output)))
     output)
-  (add-hook 'org-export-filter-final-output-functions #'my/insert-toc-after-abstract-or-title)
-  (defun my/remove-angle-brackets-in-timestamp (output backend info)
+  (add-hook 'org-export-filter-final-output-functions
+            #'emarccs-shared-tex--insert-toc-after-abstract-or-title)
+  (defun emarccs-shared-tex--remove-angle-brackets-in-timestamp (output backend info)
     (when (org-export-derived-backend-p backend 'latex)
       (setq output
             (replace-regexp-in-string
@@ -201,7 +202,8 @@
              "\\1\\2\\3"
              output)))
     output)
-  (add-hook 'org-export-filter-final-output-functions #'my/remove-angle-brackets-in-timestamp)
+  (add-hook 'org-export-filter-final-output-functions
+            #'emarccs-shared-tex--remove-angle-brackets-in-timestamp)
   ;; 定义\label{eq:...}和\eqref{eq:...}对应的链接类型
   (org-link-set-parameters "eq"
                            :follow

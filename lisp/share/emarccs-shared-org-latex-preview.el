@@ -5,9 +5,6 @@
 
 ;;; code:
 
-(defconst texlive (expand-file-name "./config/texlive.sh" org-directory))
-
-;; 预览
 (with-eval-after-load 'org-latex-preview
   (plist-put org-latex-preview-appearance-options
              :page-width 0.8)
@@ -43,15 +40,7 @@
                    :image-input-type "dvi"
                    :image-output-type "svg"
                    :latex-compiler ("%l -interaction=nonstopmode -outdir=%o %f")
-                   :image-converter ("dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %B-%%9p.svg %f"))
-          (docker :programs ("docker")
-                  :description "dvi > svg"
-                  :message "you need to install the programs: texlive and dvisvgm in docker image."
-                  :image-input-type "dvi"
-                  :image-output-type "svg"
-                  :latex-compiler (,(format "%s %%l -interaction=nonstopmode -outdir=%%o %%f" (shell-quote-argument texlive)))
-                  :image-converter
-                  (,(format "%s dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %%B-%%%%9p.svg %%f" (shell-quote-argument texlive)))))))
+                   :image-converter ("dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %B-%%9p.svg %f")))))
 
 (provide 'emarccs-shared-org-latex-preview)
 ;;; emarccs-shared-org-latex-preview.el ends here.

@@ -125,7 +125,7 @@
 
 ;; citar
 (use-package citar
-  :after org
+  :after (org org-roam)
   :custom
   (org-cite-insert-processor 'citar)
   (org-cite-follow-processor 'citar)
@@ -140,14 +140,10 @@
                             (year . (:style " (%s)" :fallback ""))
                             (key . (:style " [%s]" :fallback ""))
                             (type . (:style " [%s]" :fallback ""))
-                            (abstract . (:style "\n%s" :fallback "")))))
-
-(with-eval-after-load 'citar
-  (setq citar-notes-paths
-        (list (expand-file-name "./literature/" org-roam-directory))
-        citar-library-paths nil)
-  (setq citar-bibliography
-        (list (expand-file-name "./texmf/bibtex/bib/org-citar.bib" org-directory))))
+                            (abstract . (:style "\n%s" :fallback ""))))
+  (citar-bibliography (list (expand-file-name "./texmf/bibtex/bib/org-citar.bib" org-directory)))
+  (citar-library-paths nil)
+  (citar-notes-paths (list (expand-file-name "./literature/" org-roam-directory))))
 
 (use-package citar-embark
   :after (citar embark)

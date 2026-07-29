@@ -4,7 +4,7 @@
 
 ;; org-roam
 (use-package org-roam
-  :defer
+  ;; :defer
   ;; :demand t
   :after (org)
   :custom

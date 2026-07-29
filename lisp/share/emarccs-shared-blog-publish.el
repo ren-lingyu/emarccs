@@ -109,6 +109,7 @@
 
 (defun org-blog-sitemap-entry-format (entry _style project)
   "Sitemap PROJECT ENTRY STYLE format that includes date."
+  (require 'org-element)
   (let* ((file (org-publish--expand-file-name entry project))
          ;; 获取标题
          (parsed_title (org-publish-find-property file :title project))

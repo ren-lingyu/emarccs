@@ -81,6 +81,7 @@
     "Select an Org-roam forward link contained in the current buffer.
 If OTHER-WINDOW is non-nil, visit the node in another window."
     (interactive)
+    (require 'org-element)
     (let (id-links)
       (org-roam-db-map-links
        (list
@@ -147,6 +148,7 @@ If OTHER-WINDOW is non-nil, visit the node in another window."
   "Update the description of the link at point to match the title of the corresponding Org-roam node in the database.
   If the link is not an Org-roam ID link or the node cannot be found, display an appropriate message without making changes."
   (interactive)
+  (require 'org-element)
   (require 'org-roam)
   (let ((element (org-element-context)))
     ;; Check if the cursor is on a link element

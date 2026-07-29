@@ -22,11 +22,7 @@
   (setq org-log-into-drawer t)
   (setq bookmark-file (expand-file-name "./cache/bookmarks" org-directory))
   (setq org-publish-timestamp-directory (expand-file-name "./cache/.org-timestamps/" org-directory))
-  (setq org-id-locations-file (expand-file-name "./cache/.org-id-locations" org-directory)))
-
-(require 'org-element)
-
-(with-eval-after-load 'org
+  (setq org-id-locations-file (expand-file-name "./cache/.org-id-locations" org-directory))
   (set-face-attribute 'org-footnote nil
                       :underline nil        ; 移除下划线
                       :foreground "#79a8ff" ; 保留颜色但不设置其他属性

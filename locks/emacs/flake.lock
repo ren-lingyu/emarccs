@@ -1140,6 +1140,23 @@
         "type": "github"
       }
     },
+    "org-roam-blog": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785489081,
+        "narHash": "sha256-0T7USZqojm53zbkxlKZkOmD986UBpie3G2YGgIv6K3E=",
+        "owner": "ren-lingyu",
+        "repo": "org-roam-blog",
+        "rev": "2c7140eab0d22a7a7706e3b26f3fe1628fab093f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ren-lingyu",
+        "ref": "main",
+        "repo": "org-roam-blog",
+        "type": "github"
+      }
+    },
     "org-roam-include": {
       "flake": false,
       "locked": {
@@ -1522,6 +1539,7 @@
         "org-gtd": "org-gtd",
         "org-include-inline": "org-include-inline",
         "org-roam": "org-roam",
+        "org-roam-blog": "org-roam-blog",
         "org-roam-include": "org-roam-include",
         "org-roam-organize": "org-roam-organize",
         "org-roam-timestamps": "org-roam-timestamps",

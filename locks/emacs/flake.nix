@@ -426,6 +426,13 @@
       repo = "org-roam";
       type = "github";
     };
+    org-roam-blog = {
+      flake = false;
+      owner = "ren-lingyu";
+      ref = "main";
+      repo = "org-roam-blog";
+      type = "github";
+    };
     org-roam-include = {
       flake = false;
       owner = "ren-lingyu";

@@ -81,6 +81,7 @@ in {
     "org-gtd"
     "org-include-inline"
     "org-roam"
+    "org-roam-blog"
     "org-roam-include"
     "org-roam-organize"
     "org-roam-timestamps"

@@ -25,7 +25,7 @@
 
 (require 'emarccs-shared-ai) ; AI 辅助
 
-(require 'emarccs-shared-blog-publish) ; 博客发布设置
+(require 'emarccs-shared-org-roam-blog) ; 博客发布设置
 
 ;; debug
 (require 'emarccs-shared-debug)

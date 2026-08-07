@@ -1,4 +1,8 @@
-{ pkgs, emacsPackage, elispPackages, siteStartCheckList } : {
+{ pkgs, emacsPackage, elispSource, elispPackages, siteStartCheckList } : {
+
+  elisp-byte-compile = import ./elisp-byte-compile {
+    inherit pkgs emacsPackage elispSource;
+  };
 
   startup-smoke = import ./startup-smoke {
     inherit pkgs emacsPackage siteStartCheckList;

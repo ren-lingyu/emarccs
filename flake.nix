@@ -170,6 +170,14 @@
       ) (import ./tests {
         inherit pkgs;
         emacsPackage = config.packages.${name_};
+        elispSource = pkgs.lib.fileset.toSource {
+          root = ./.;
+          fileset = pkgs.lib.fileset.unions [
+            ./early-init.el
+            ./init.el
+            ./lisp
+          ];
+        };
         elispPackages = twistContext_.elispkgs.packages;
         siteStartCheckList = [
           "eval-and-compile"

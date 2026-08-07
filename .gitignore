@@ -34,6 +34,7 @@
 !tests/**/
 !tests/**/*.nix
 !tests/**/lisp/*.el
+!tests/**/lisp/*.scm
 
 # 全局黑名单
 **/tmp/

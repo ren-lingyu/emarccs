@@ -546,6 +546,12 @@
       repo = "rainbow-delimiters";
       type = "github";
     };
+    reformatter = {
+      flake = false;
+      owner = "purcell";
+      repo = "emacs-reformatter";
+      type = "github";
+    };
     ripgrep = {
       flake = false;
       owner = "nlamirault";

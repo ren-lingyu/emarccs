@@ -261,9 +261,10 @@
 (use-package vertico
   :init
   (vertico-mode)
-  (with-eval-after-load 'vertico
-    (define-key vertico-map "\DEL" #'vertico-directory-delete-char)
-    (define-key vertico-map "\C-d" #'vertico-directory-delete-word)))
+  :bind
+  (:map vertico-map
+        ("DEL" . vertico-directory-delete-char)
+        ("C-d" . vertico-directory-delete-word)))
 
 (use-package orderless
   :custom

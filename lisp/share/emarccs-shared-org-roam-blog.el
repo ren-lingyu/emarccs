@@ -142,12 +142,13 @@
             "<span>all</span>\n"
             "</label>\n"
             (mapconcat (lambda (tag)
-                         (format (concat "<label class=\"category\">\n"
-                                         "<input type=\"radio\" name=\"tag\" value=\"%s\"/>\n"
-                                         "<span>%s</span>\n"
-                                         "</label>\n")
-                                 tag
-                                 tag))
+                         (let* ((sharp_tag (concat "#" tag)))
+                           (format (concat "<label class=\"category\">\n"
+                                           "<input type=\"radio\" name=\"tag\" value=\"%s\"/>\n"
+                                           "<span>%s</span>\n"
+                                           "</label>\n")
+                                   sharp_tag
+                                   sharp_tag)))
                        tags
                        "\n")
             "</section>\n"
@@ -171,7 +172,7 @@
                                    published
                                    url
                                    title
-                                   (mapconcat #'identity
+                                   (mapconcat (lambda (x) (concat "#" x))
                                               tags
                                               "\u0020"))))
                        entries))))

@@ -14,7 +14,7 @@
   (setq org-hide-leading-stars nil)
   (setq org-latex-default-packages-alist nil) ; 确保默认包列表为空
   (setq org-latex-packages-alist nil) ; 确保包列表为空
-  (setq org-cite-export-processors '((latex bibtex) (html csl) (t basic)))
+  (setq org-cite-export-processors '((latex biblatex) (html csl) (t basic)))
   (setq org-src-fontify-natively t)             ; Org代码块语法高亮
   (setq org-src-tab-acts-natively t)            ; Org代码块TAB缩进
   (setq org-timestamp-formats  '("%Y-%m-%d %a %z" . "%Y-%m-%d %H:%M:%S %z"))

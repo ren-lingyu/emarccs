@@ -67,11 +67,11 @@
     "auctex": {
       "flake": false,
       "locked": {
-        "lastModified": 1788346574,
-        "narHash": "sha256-y1wpg/s0dot05WKNCTk2DUiJia6VQSFt/hmq+yp0SQM=",
+        "lastModified": 1788431212,
+        "narHash": "sha256-pko+5GUd7tKJPOJxhO2KBu2ub/gmHwO98juwLlyVLNw=",
         "ref": "main",
-        "rev": "82189092e425f48f8da60b68ffb0b276d9eeb833",
-        "revCount": 8978,
+        "rev": "9ac12c37e2b6a95c00d7dbc2553b46b5ac20e54c",
+        "revCount": 8980,
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/auctex.git"
       },
@@ -276,11 +276,11 @@
     "consult": {
       "flake": false,
       "locked": {
-        "lastModified": 1788019124,
-        "narHash": "sha256-kKTWFFz2A3dGTTX7hLKMpep6v8nd0MZBkvpzHdnfJh0=",
+        "lastModified": 1788437996,
+        "narHash": "sha256-z5bBWs8SfYeiLCG2FLqQSiWJADMN6y8eJemhAjjPqDE=",
         "owner": "minad",
         "repo": "consult",
-        "rev": "3a2441ddb08d9897eb266cda4935fa91a767e1d5",
+        "rev": "788735b54e5ad9d33137613aebae055443e3e05e",
         "type": "github"
       },
       "original": {
@@ -916,11 +916,11 @@
     "modus-themes": {
       "flake": false,
       "locked": {
-        "lastModified": 1788255845,
-        "narHash": "sha256-z+W3bJsLPyrF+CTAVyWca0WXY8/hmTxLw9gSiBaPvmQ=",
+        "lastModified": 1788529743,
+        "narHash": "sha256-8fr1rmz3tjtJQovyHfLHLHZK0GNp4+G5L9kSlX1wqMU=",
         "owner": "protesilaos",
         "repo": "modus-themes",
-        "rev": "a3e7ba280524dfd4bdaf3169ef5901ac91dadb01",
+        "rev": "bcf065b803439524ebe8b96f4584643562fee343",
         "type": "github"
       },
       "original": {
@@ -1524,11 +1524,11 @@
     "simple-httpd": {
       "flake": false,
       "locked": {
-        "lastModified": 1787600095,
-        "narHash": "sha256-R091fMTvc5eoAkV7vtMZ2CpaYSs7vOVM5kOT0xEWPBM=",
+        "lastModified": 1788549943,
+        "narHash": "sha256-jEC42wJkk6YMnNuSc1R14fiXiutxeSGwit7iB+7tAOg=",
         "owner": "skeeto",
         "repo": "emacs-web-server",
-        "rev": "e6ffb91b7e5fa35169e7bc2c477eb292cb990973",
+        "rev": "0c17124cefddf2d50defcec5f2bd25fa6d1db756",
         "type": "github"
       },
       "original": {
@@ -1605,11 +1605,11 @@
     "vertico": {
       "flake": false,
       "locked": {
-        "lastModified": 1788053015,
-        "narHash": "sha256-RGNIFwbFciYlPEdHlxcOP6tql1SQtdgsl7s4QGhSumA=",
+        "lastModified": 1788476768,
+        "narHash": "sha256-SwR2bwdzfRdKy6fZTOwUlkVS/Xw+Jc9R9U0oo0i04BA=",
         "owner": "minad",
         "repo": "vertico",
-        "rev": "cd2eb6daff6a5a68a11740aa363729ec6f8702d3",
+        "rev": "ccf98566f1940f96f5b8ba21f4ea9db370a177a4",
         "type": "github"
       },
       "original": {
@@ -1638,11 +1638,11 @@
     "vundo": {
       "flake": false,
       "locked": {
-        "lastModified": 1766120651,
-        "narHash": "sha256-d6xUM1PtzT+hJNG7JTQ9Bm7jLChOONnt8lTu9WnirWk=",
+        "lastModified": 1788595583,
+        "narHash": "sha256-JTadqeCqHHM5iFHXd8UdSCanfkAD8ai2R6a07osPMO0=",
         "owner": "casouri",
         "repo": "vundo",
-        "rev": "e0af8c5845abf884a644215a9cac37f39c13cd5a",
+        "rev": "04caf7ec54e4a7861d3591a1e090adc1fb76b5d1",
         "type": "github"
       },
       "original": {

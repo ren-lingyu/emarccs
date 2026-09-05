@@ -23,8 +23,6 @@
 
 (require 'emarccs-shared-feed)
 
-(require 'emarccs-shared-ai) ; AI 辅助
-
 (require 'emarccs-shared-org-roam-blog) ; 博客发布设置
 
 ;; debug

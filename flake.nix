@@ -80,7 +80,7 @@
     in {
 
       packages = lib.concatMapEmacsTwists (name_ : cfg_ : {
-        "${name_}" = (({ elispkgs, elisp, package, lockDir } : (inputs.twist.lib.makeEnv {
+        "${name_}" = (({ elispkgs, elisp, package, lockDir } : ((inputs.twist.lib.makeEnv {
           pkgs = pkgs;
           emacsPackage = package;
           registries = [
@@ -139,7 +139,16 @@
               ])
             ])
           ];
-        }).overrideScope elispkgs.overrides.scope) {
+        }).overrideScope elispkgs.overrides.scope).overrideScope (_final: prev: {
+          executablePackages = builtins.concatLists [
+            prev.executablePackages
+            (with pkgs; [
+              coreutils
+              ripgrep
+              gnugrep
+            ])
+          ];
+        })) {
           elispkgs = twistContext_.elispkgs;
           elisp = lib.elisp;
           package = cfg_.package;

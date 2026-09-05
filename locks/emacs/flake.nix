@@ -210,12 +210,6 @@
       repo = "elisp-refs";
       type = "github";
     };
-    ellama = {
-      flake = false;
-      owner = "s-kostyaev";
-      repo = "ellama";
-      type = "github";
-    };
     emacsql = {
       flake = false;
       owner = "magit";
@@ -244,12 +238,6 @@
       flake = false;
       owner = "flycheck";
       repo = "flycheck";
-      type = "github";
-    };
-    gptel = {
-      flake = false;
-      owner = "karthink";
-      repo = "gptel";
       type = "github";
     };
     helpful = {
@@ -320,12 +308,6 @@
       flake = false;
       owner = "tarsius";
       repo = "llama";
-      type = "github";
-    };
-    llm = {
-      flake = false;
-      owner = "ahyatt";
-      repo = "llm";
       type = "github";
     };
     lv = {
@@ -478,25 +460,6 @@
       repo = "parsebib";
       type = "github";
     };
-    plz = {
-      flake = false;
-      owner = "alphapapa";
-      ref = "stable";
-      repo = "plz.el";
-      type = "github";
-    };
-    plz-event-source = {
-      flake = false;
-      owner = "r0man";
-      repo = "plz-event-source";
-      type = "github";
-    };
-    plz-media-type = {
-      flake = false;
-      owner = "r0man";
-      repo = "plz-media-type";
-      type = "github";
-    };
     posframe = {
       flake = false;
       owner = "tumashu";
@@ -582,23 +545,10 @@
       repo = "string-inflection";
       type = "github";
     };
-    superchat = {
-      flake = false;
-      owner = "yibie";
-      ref = "main";
-      repo = "superchat";
-      type = "github";
-    };
     swiper = {
       flake = false;
       owner = "abo-abo";
       repo = "swiper";
-      type = "github";
-    };
-    transient = {
-      flake = false;
-      owner = "magit";
-      repo = "transient";
       type = "github";
     };
     treesit-auto = {
@@ -644,12 +594,6 @@
       flake = false;
       owner = "mattiase";
       repo = "xr";
-      type = "github";
-    };
-    yaml = {
-      flake = false;
-      owner = "zkry";
-      repo = "yaml.el";
       type = "github";
     };
     yaml-mode = {

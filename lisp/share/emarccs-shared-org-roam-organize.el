@@ -31,6 +31,7 @@
                :tag "ref"
                :cite t
                :basic t
+               :bibliography t
                :directory "literature"
                :inbox "Citing Nodes"
                :backend (list 'citar

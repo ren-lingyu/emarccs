@@ -1175,6 +1175,23 @@
         "type": "github"
       }
     },
+    "org-texmacs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1789138228,
+        "narHash": "sha256-QsUeX+cQVUJRSqhegaYkit10TAXe3YZXdG0lRAEqHb0=",
+        "owner": "ren-lingyu",
+        "repo": "org-texmacs",
+        "rev": "6fd48944c238e0b627e3bc2d47e224ebf8e2892b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ren-lingyu",
+        "ref": "main",
+        "repo": "org-texmacs",
+        "type": "github"
+      }
+    },
     "org-transclusion": {
       "flake": false,
       "locked": {
@@ -1460,6 +1477,7 @@
         "org-roam-organize": "org-roam-organize",
         "org-roam-timestamps": "org-roam-timestamps",
         "org-roam-ui": "org-roam-ui",
+        "org-texmacs": "org-texmacs",
         "org-transclusion": "org-transclusion",
         "org-workbench": "org-workbench",
         "parsebib": "parsebib",

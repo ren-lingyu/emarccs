@@ -84,6 +84,7 @@ in {
     "org-roam-organize"
     "org-roam-timestamps"
     "org-roam-ui"
+    "org-texmacs"
     "org-transclusion"
     "org-workbench"
     "powerline"

@@ -441,6 +441,13 @@
       repo = "org-roam-ui";
       type = "github";
     };
+    org-texmacs = {
+      flake = false;
+      owner = "ren-lingyu";
+      ref = "main";
+      repo = "org-texmacs";
+      type = "github";
+    };
     org-transclusion = {
       flake = false;
       owner = "nobiot";

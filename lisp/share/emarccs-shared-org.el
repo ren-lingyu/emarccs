@@ -37,6 +37,11 @@
                       :weight 'ultra-bold
                       :inverse-video t))
 
+(use-package emarccs-shared--org-babellike-block
+  :after org
+  :config (setq emarccs-shared--org-babellike-block-registry
+                '(("reply" . (:from :subject :date)))))
+
 ;; 嵌入
 (use-package org-transclusion
   :after org

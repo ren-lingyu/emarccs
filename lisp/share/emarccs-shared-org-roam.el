@@ -46,7 +46,78 @@
                                                  "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
                                                  "#+FILETAGS: :zettel:blog:\n"
                                                  ))
-                                              :unnarrowed t)))))
+                                              :unnarrowed t))))
+  (defun emarccs-shared-org-roam-forward-links (&optional other-window)
+    "Select an Org-roam node linked from the current buffer.
+
+All `id' links recognized by `org-roam-db-map-links', including
+links in elements configured by `org-roam-db-extra-links-elements',
+are considered.
+
+With prefix argument OTHER-WINDOW, visit the selected node in
+another window."
+    (interactive "P")
+    (let (ids)
+      (org-roam-db-map-links
+       (list
+        (lambda (link)
+          (when (string= (org-element-property :type link) "id")
+            (push (org-element-property :path link) ids)))))
+      (setq ids (delete-dups ids))
+      (unless ids
+        (user-error "No Org-roam forward links found"))
+      (org-roam-node-visit
+       (org-roam-node-read
+        nil
+        (lambda (node)
+          (member (org-roam-node-id node) ids))
+        nil
+        t
+        "Forward link: ")
+       other-window)))
+  (defun emarccs-shared-org-roam-update-link-description ()
+    "Update the description of the link at point to match the title of the corresponding Org-roam node in the database.
+If the link is not an Org-roam ID link or the node cannot be found, display an appropriate message without making changes."
+    (interactive)
+    (let ((element (org-element-context)))
+      ;; Check if the cursor is on a link element
+      (if (eq (org-element-type element) 'link)
+          (let* (;; Link type, e.g., "id"
+                 (link-type (org-element-property :type element))
+                 ;; Link target (ID for Org-roam)
+                 (link-path (org-element-property :path element))
+                 ;; Start of description text
+                 (desc-begin (org-element-property :contents-begin element))
+                 ;; End of description text
+                 (desc-end (org-element-property :contents-end element)))
+            ;; Ensure the link is an Org-roam ID link
+            (if (and (string= link-type "id") link-path)
+                (let* ((node-id link-path)
+                       ;; Query Org-roam database for the node title using EmacSQL
+                       (title (caar (org-roam-db-query
+                                     [:select title :from nodes :where (= id $s1)]
+                                     node-id))))
+                  (cond
+                   ;; Case 1: Node not found
+                   ((null title)
+                    (message "No node found with id=%s." node-id))
+                   ;; Case 2: Description already matches the node title
+                   ((and
+                     desc-begin
+                     desc-end
+                     (string= title (buffer-substring-no-properties desc-begin desc-end)))
+                    (message "The link description is already up-to-date."))
+                   ;; Case 3: Update description to match node title
+                   (t
+                    (save-excursion
+                      (goto-char desc-begin)
+                      (delete-region desc-begin desc-end)
+                      (insert title))
+                    (message "Description updated to: %s" title))))
+              ;; Not an ID link
+              (message "The current link is not an Org-roam ID link.")))
+        ;; Cursor is not on a link
+        (message "The cursor is not on a link.")))))
 
 (use-package org-roam-include
   :after org-roam
@@ -81,124 +152,6 @@
   (org-roam-timestamps-mode 1)
   (setq org-roam-timestamps-parent-file t)
   (setq org-roam-timestamps-remember-timestamps t))
-
-;; =============================
-;; 自定义函数
-;; =============================
-
-(defun emarccs-shared-org-roam-forward-links (&optional other-window)
-  "Select an Org-roam node linked from the current buffer.
-
-All `id' links recognized by `org-roam-db-map-links', including
-links in elements configured by `org-roam-db-extra-links-elements',
-are considered.
-
-With prefix argument OTHER-WINDOW, visit the selected node in
-another window."
-  (interactive "P")
-  (require 'org-roam)
-  (let (ids)
-    (org-roam-db-map-links
-     (list
-      (lambda (link)
-        (when (string= (org-element-property :type link) "id")
-          (push (org-element-property :path link) ids)))))
-
-    (setq ids (delete-dups ids))
-
-    (unless ids
-      (user-error "No Org-roam forward links found"))
-
-    (org-roam-node-visit
-     (org-roam-node-read
-      nil
-      (lambda (node)
-        (member (org-roam-node-id node) ids))
-      nil
-      t
-      "Forward link: ")
-     other-window)))
-
-(defun emarccs-shared-org-roam-update-link-description ()
-  "Update the description of the link at point to match the title of the corresponding Org-roam node in the database.
-If the link is not an Org-roam ID link or the node cannot be found, display an appropriate message without making changes."
-  (interactive)
-  (require 'org-element)
-  (require 'org-roam)
-  (let ((element (org-element-context)))
-    ;; Check if the cursor is on a link element
-    (if (eq (org-element-type element) 'link)
-        (let* (;; Link type, e.g., "id"
-               (link-type (org-element-property :type element))
-               ;; Link target (ID for Org-roam)
-               (link-path (org-element-property :path element))
-               ;; Start of description text
-               (desc-begin (org-element-property :contents-begin element))
-               ;; End of description text
-               (desc-end (org-element-property :contents-end element)))
-          ;; Ensure the link is an Org-roam ID link
-          (if (and (string= link-type "id") link-path)
-              (let* ((node-id link-path)
-                     ;; Query Org-roam database for the node title using EmacSQL
-                     (title (caar (org-roam-db-query
-                                   [:select title :from nodes :where (= id $s1)]
-                                   node-id))))
-                (cond
-                 ;; Case 1: Node not found
-                 ((null title)
-                  (message "No node found with id=%s." node-id))
-                 ;; Case 2: Description already matches the node title
-                 ((and
-                   desc-begin
-                   desc-end
-                   (string= title (buffer-substring-no-properties desc-begin desc-end)))
-                  (message "The link description is already up-to-date."))
-                 ;; Case 3: Update description to match node title
-                 (t
-                  (save-excursion
-                    (goto-char desc-begin)
-                    (delete-region desc-begin desc-end)
-                    (insert title))
-                  (message "Description updated to: %s" title))))
-            ;; Not an ID link
-            (message "The current link is not an Org-roam ID link.")))
-      ;; Cursor is not on a link
-      (message "The cursor is not on a link."))))
-
-(defun emarccs-shared-org-roam--post-files ()
-  "Return a list of note files containing 'post' tag."
-  (seq-uniq (seq-map #'car (org-roam-db-query (vector :select (vector 'nodes:file)
-                                                      :from 'tags
-                                                      :left-join 'nodes
-                                                      :on '(= tags:node-id nodes:id)
-                                                      :where '(like tag (quote "%\"post\"%")))))))
-
-;; =============================
-;; hook
-;; =============================
-
-(add-hook 'before-save-hook
-          (lambda ()
-            (let* ((post_file_list (emarccs-shared-org-roam--post-files)))
-              (cond ((and
-                      buffer-file-name
-                      (file-in-directory-p buffer-file-name org-roam-directory)
-                      (not (file-in-directory-p buffer-file-name (expand-file-name "./literature/" org-roam-directory)))
-                      (not (member buffer-file-name post_file_list)))
-                     (emarccs-shared-org-update-date
-                      org-directory
-                      "<%Y-%m-%d %a %z>"
-                      t)
-                     (message "Updated DATE in %s" (buffer-file-name)))
-                    ((and
-                      buffer-file-name
-                      (file-in-directory-p buffer-file-name (expand-file-name "./permanent/" org-roam-directory))
-                      (not (member buffer-file-name post_file_list)))
-                     (emarccs-shared-org-update-date
-                      org-directory
-                      "<%Y-%m-%d %a %z>"
-                      nil))
-                    (t nil)))))
 
 (provide 'emarccs-shared-org-roam)
 ;;; emarccs-shared-org-roam.el ends here

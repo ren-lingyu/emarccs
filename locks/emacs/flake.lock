@@ -289,22 +289,6 @@
         "type": "github"
       }
     },
-    "consult-org-roam": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1770660315,
-        "narHash": "sha256-T9ZoqFCByPK8nrSy9M+uMGoSWxb/oYccngSu9c32/KE=",
-        "owner": "jgru",
-        "repo": "consult-org-roam",
-        "rev": "781d9c1cfee8631bc125fa45bab92de320d3941e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jgru",
-        "repo": "consult-org-roam",
-        "type": "github"
-      }
-    },
     "counsel": {
       "flake": false,
       "locked": {
@@ -1422,7 +1406,6 @@
         "compat": "compat",
         "cond-let": "cond-let",
         "consult": "consult",
-        "consult-org-roam": "consult-org-roam",
         "counsel": "counsel",
         "dag-draw": "dag-draw",
         "dash": "dash",

@@ -42,7 +42,6 @@ in {
     "company-auctex"
     "company-math"
     "consult"
-    "consult-org-roam"
     "counsel"
     "diff-hl"
     "dired-rainbow"

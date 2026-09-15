@@ -18,7 +18,8 @@
   (("C-c n f" . org-roam-node-find)
    ("C-c n i" . org-roam-node-insert)
    ("C-c n l" . org-roam-buffer-toggle)
-   ("C-c n c" . org-roam-capture))
+   ("C-c n c" . org-roam-capture)
+   ("C-c c l" . emarccs-shared-org-roam-forward-links))
   :config
   (org-roam-db-autosync-mode)
   ;; (advice-add 'org-roam-mode-hook :after
@@ -54,65 +55,6 @@
 
 (global-set-key (kbd "C-c h d") (lambda () (interactive) (insert (concat "\n* " (format-time-string "%Y-%m-%d %A %z") "\n"))))
 
-(use-package consult-org-roam
-  :after (org-roam consult)
-  :init
-  (require 'org-roam)
-  (require 'consult)
-  (require 'consult-org-roam)
-  :custom
-  ;; Use `ripgrep' for searching with `consult-org-roam-search'
-  (consult-org-roam-grep-func #'consult-ripgrep)
-  ;; Configure a custom narrow key for `consult-buffer'
-  (consult-org-roam-buffer-narrow-key ?r)
-  ;; Display org-roam buffers right after non-org-roam buffers
-  ;; in consult-buffer (and not down at the bottom)
-  (consult-org-roam-buffer-after-buffers nil)
-  :config
-  ;; Activate the minor mode
-  (consult-org-roam-mode t)
-  ;; Eventually suppress previewing for certain functions
-  (consult-customize
-   consult-org-roam-forward-links
-   ;; :preview-key "TAB"
-   ;; :preview-key 'any
-   :preview-key "M-.")
-  (defun emarccs-shared-org-roam--consult-forward-links (&optional other-window)
-    "Select an Org-roam forward link contained in the current buffer.
-If OTHER-WINDOW is non-nil, visit the node in another window."
-    (interactive)
-    (require 'org-element)
-    (let (id-links)
-      (org-roam-db-map-links
-       (list
-        (lambda (link)
-          (when (string= (org-element-property :type link) "id")
-            (push (org-element-property :path link)
-                  id-links)))))
-      (setq id-links (delete-dups id-links))
-      (unless id-links
-        (user-error "No forward links found"))
-      (let ((chosen-node
-             (consult-org-roam-node-read
-              ""
-              (lambda (node)
-                (and (org-roam-node-p node)
-                     (member (org-roam-node-id node)
-                             id-links))))))
-        (consult-org-roam--open-or-capture
-         other-window
-         chosen-node))))
-  (advice-add #'consult-org-roam-forward-links
-              :override
-              #'emarccs-shared-org-roam--consult-forward-links)
-  :bind
-  ;; Define some convenient keybindings as an addition
-  ("C-c c f" . consult-org-roam-file-find)
-  ("C-c c b" . consult-org-roam-backlinks)
-  ("C-c c B" . consult-org-roam-backlinks-recursive)
-  ("C-c c l" . consult-org-roam-forward-links)
-  ("C-c c s" . consult-org-roam-search))
-
 (use-package org-roam-ui
   :after org-roam
   ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
@@ -143,6 +85,39 @@ If OTHER-WINDOW is non-nil, visit the node in another window."
 ;; =============================
 ;; 自定义函数
 ;; =============================
+
+(defun emarccs-shared-org-roam-forward-links (&optional other-window)
+  "Select an Org-roam node linked from the current buffer.
+
+All `id' links recognized by `org-roam-db-map-links', including
+links in elements configured by `org-roam-db-extra-links-elements',
+are considered.
+
+With prefix argument OTHER-WINDOW, visit the selected node in
+another window."
+  (interactive "P")
+  (require 'org-roam)
+  (let (ids)
+    (org-roam-db-map-links
+     (list
+      (lambda (link)
+        (when (string= (org-element-property :type link) "id")
+          (push (org-element-property :path link) ids)))))
+
+    (setq ids (delete-dups ids))
+
+    (unless ids
+      (user-error "No Org-roam forward links found"))
+
+    (org-roam-node-visit
+     (org-roam-node-read
+      nil
+      (lambda (node)
+        (member (org-roam-node-id node) ids))
+      nil
+      t
+      "Forward link: ")
+     other-window)))
 
 (defun emarccs-shared-org-roam-update-link-description ()
   "Update the description of the link at point to match the title of the corresponding Org-roam node in the database.

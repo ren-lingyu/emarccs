@@ -109,12 +109,6 @@
       repo = "consult";
       type = "github";
     };
-    consult-org-roam = {
-      flake = false;
-      owner = "jgru";
-      repo = "consult-org-roam";
-      type = "github";
-    };
     counsel = {
       flake = false;
       owner = "abo-abo";

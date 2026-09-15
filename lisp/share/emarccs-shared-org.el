@@ -69,10 +69,20 @@
                                               (forward-line)
                                               (insert "#+DATE: " now "\n"))))))))))))
 
-(use-package emarccs-shared--org-babellike-block
+(use-package emarccs-shared--org-extension-block
   :after org
-  :config (setq emarccs-shared--org-babellike-block-registry
-                '(("reply" . (:from :subject :date)))))
+  :config
+  (setq emarccs-shared--org-extension-block-registry
+        '(("reply" . (:from :subject :date))
+          ("theorem" . (:title))
+          ("lemma" . (:title))
+          ("proposition" . (:title))
+          ("corollary" . (:title))
+          ("definition" . (:title))
+          ("example" . (:title))
+          ("remark" . (:title))
+          ("claim" . (:title))
+          ("hint" . (:title)))))
 
 ;; 嵌入
 (use-package org-transclusion

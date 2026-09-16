@@ -72,6 +72,7 @@
 (use-package emarccs-shared--org-extension-block
   :after org
   :config
+  (setq emarccs-shared--org-extension-block-preserve-namespace t)
   (setq emarccs-shared--org-extension-block-registry
         '(("reply" . (:from :subject :date))
           ("theorem" . (:title))

@@ -18,9 +18,13 @@
                   "ox-latex"
                   (data info))
 
-(defconst emarccs-shared--org-extension-block--namespace
+(defconst emarccs-shared--org-extension-block--source-namespace
   "ext"
-  "Org special-block namespace used for extension blocks.")
+  "Org source-level namespace used for extension blocks.")
+
+(defconst emarccs-shared--org-extension-block--export-namespace
+  "org-extension-block"
+  "Namespace used when extension blocks are preserved in backend output.")
 
 (defvar emarccs-shared--org-extension-block-registry nil
   "Registry of Org extension-block kinds.
@@ -56,7 +60,7 @@ The latter contains validated parameter values in their original
 Org secondary-string representation.")
 
 (defcustom emarccs-shared--org-extension-block-preserve-namespace nil
-  "Whether to preserve the `ext' namespace in backend output.
+  "Whether to preserve an extension-block namespace in backend output.
 
 When nil, an extension block is lowered directly to its KIND in
 the target backend.  For example,
@@ -65,9 +69,10 @@ the target backend.  For example,
 
 is lowered to an `example' environment by the LaTeX backend.
 
-When non-nil, the common `ext' namespace is preserved and KIND is
-passed separately to the target backend.  The backend is then
-responsible for interpreting the namespace.
+When non-nil, the source-level `ext' namespace is represented by
+the backend-facing `orgextension' namespace and KIND is passed
+separately to the target backend.  The backend is then responsible
+for interpreting that namespace.
 
 This option affects only backend lowering.  It does not affect
 the normalized Org AST."
@@ -93,7 +98,7 @@ the normalized Org AST."
 
 ;;; Extension-block parsing and normalization
 
-(defun emarccs-shared--org-extension-block--namespace-block-p
+(defun emarccs-shared--org-extension-block--source-namespace-block-p
     (block)
   "Return non-nil when BLOCK belongs to the extension namespace."
   (and
@@ -105,7 +110,7 @@ the normalized Org AST."
      (or
       (org-element-property :type block)
       ""))
-    emarccs-shared--org-extension-block--namespace)))
+    emarccs-shared--org-extension-block--source-namespace)))
 
 (defun emarccs-shared--org-extension-block--parse-head
     (block)
@@ -126,7 +131,7 @@ the remaining Babel-style header-argument string."
         (string-empty-p raw)
       (user-error
        "%s block requires a kind"
-       emarccs-shared--org-extension-block--namespace))
+       emarccs-shared--org-extension-block--source-namespace))
 
     (unless
         (string-match
@@ -134,7 +139,7 @@ the remaining Babel-style header-argument string."
          raw)
       (user-error
        "Invalid %s block header: %s"
-       emarccs-shared--org-extension-block--namespace
+       emarccs-shared--org-extension-block--source-namespace
        raw))
 
     (let ((kind
@@ -150,7 +155,7 @@ the remaining Babel-style header-argument string."
            (string-prefix-p ":" parameter-string))
         (user-error
          "Unexpected text after %s block kind %s: %s"
-         emarccs-shared--org-extension-block--namespace
+         emarccs-shared--org-extension-block--source-namespace
          kind
          parameter-string))
 
@@ -188,7 +193,7 @@ values are Org secondary strings in source representation."
             (memq key allowed)
           (user-error
            "Unknown parameter for %s kind %s: %s"
-           emarccs-shared--org-extension-block--namespace
+           emarccs-shared--org-extension-block--source-namespace
            kind
            key))
 
@@ -196,14 +201,14 @@ values are Org secondary strings in source representation."
           (user-error
            "Parameter %s for %s kind %s requires a value"
            key
-           emarccs-shared--org-extension-block--namespace
+           emarccs-shared--org-extension-block--source-namespace
            kind))
 
         (when
             (memq key seen)
           (user-error
            "Duplicate parameter for %s kind %s: %s"
-           emarccs-shared--org-extension-block--namespace
+           emarccs-shared--org-extension-block--source-namespace
            kind
            key))
 
@@ -238,7 +243,7 @@ special block receives the properties `:extension-kind' and
 
 The original `:type' and `:parameters' properties are preserved."
   (when
-      (emarccs-shared--org-extension-block--namespace-block-p
+      (emarccs-shared--org-extension-block--source-namespace-block-p
        block)
     (pcase-let*
         ((`(,source-kind . ,parameter-string)
@@ -251,7 +256,7 @@ The original `:type' and `:parameters' properties are preserved."
       (unless spec
         (user-error
          "Unknown %s block kind: %s"
-         emarccs-shared--org-extension-block--namespace
+         emarccs-shared--org-extension-block--source-namespace
          source-kind))
 
       ;; The registry spelling is canonical.  Source lookup itself
@@ -379,7 +384,7 @@ ORIGINAL is the backend's original special-block transcoder.
 Ordinary special blocks are delegated to ORIGINAL unchanged."
   (if
       (not
-       (emarccs-shared--org-extension-block--namespace-block-p
+       (emarccs-shared--org-extension-block--source-namespace-block-p
         block))
       (funcall
        original
@@ -435,7 +440,7 @@ Ordinary special blocks are delegated to ORIGINAL unchanged."
        :options)
     (user-error
      "%s blocks cannot use ATTR_LATEX :options; use extension parameters"
-     emarccs-shared--org-extension-block--namespace))
+     emarccs-shared--org-extension-block--source-namespace))
 
   (let* ((options
           (when parameters
@@ -456,7 +461,7 @@ Ordinary special blocks are delegated to ORIGINAL unchanged."
          (environment
           (if
               emarccs-shared--org-extension-block-preserve-namespace
-              emarccs-shared--org-extension-block--namespace
+              emarccs-shared--org-extension-block--export-namespace
             kind))
          (begin
           (if
@@ -543,25 +548,40 @@ Ordinary special blocks are delegated to ORIGINAL unchanged."
     (if
         emarccs-shared--org-extension-block-preserve-namespace
 
-        ;; Preserve the native `ext' outer special block.  KIND is
-        ;; represented explicitly inside that namespace.
-        (funcall
-         original
-         block
-         (concat
-          (format
-           "<div class=\"org-extension-block-kind org-extension-block-%s\" \
+        ;; Preserve the extension namespace in a backend-facing form.
+        ;; The Org source-level name `ext' is not exposed in HTML.
+        (let ((namespaced-block
+               (org-element-copy
+                block)))
+          (org-element-put-property
+           namespaced-block
+           :type
+           emarccs-shared--org-extension-block--export-namespace)
+
+          ;; The original value is source syntax for the extension
+          ;; header, not parameters of the exported special block.
+          (org-element-put-property
+           namespaced-block
+           :parameters
+           nil)
+
+          (funcall
+           original
+           namespaced-block
+           (concat
+            (format
+             "<div class=\"org-extension-block-kind org-extension-block-%s\" \
 data-extension-kind=\"%s\">\n"
-           kind
-           kind)
-          metadata
-          "<div class=\"org-extension-block-body\">\n"
-          (or
-           contents
-           "")
-          "\n</div>\n"
-          "</div>")
-         info)
+             kind
+             kind)
+            metadata
+            "<div class=\"org-extension-block-body\">\n"
+            (or
+             contents
+             "")
+            "\n</div>\n"
+            "</div>")
+           info))
 
       ;; Erase the source-level namespace by presenting a copy of
       ;; BLOCK to the stock HTML transcoder as a special block whose

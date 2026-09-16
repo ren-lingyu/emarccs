@@ -14,6 +14,9 @@
 (declare-function org-latex--caption-above-p
                   "ox-latex"
                   (element info))
+(declare-function org-latex--wrap-latex-math-block
+                  "ox-latex"
+                  (data info))
 
 (defconst emarccs-shared--org-extension-block--namespace
   "ext"
@@ -324,12 +327,34 @@ extension block has normalized `:extension-kind' and
 
 BLOCK is used as the parent syntax node.  INFO is the current
 export environment."
-  (org-export-data
-   (org-element-parse-secondary-string
-    string
-    emarccs-shared--org-extension-block--secondary-string-restriction
-    block)
-   info))
+  (let ((data
+         (org-element-parse-secondary-string
+          string
+          emarccs-shared--org-extension-block--secondary-string-restriction
+          block)))
+    (when
+        (org-export-derived-backend-p
+         (plist-get info :back-end)
+         'latex)
+
+      ;; Treat DATA as an independent secondary string while the
+      ;; LaTeX math-block pass mutates it.
+      (dolist (object data)
+        (unless
+            (stringp object)
+          (org-element-put-property
+           object
+           :parent
+           data)))
+
+      (setq data
+            (org-latex--wrap-latex-math-block
+             data
+             info)))
+
+    (org-export-data
+     data
+     info)))
 
 (defun emarccs-shared--org-extension-block--export-parameters
     (block info)

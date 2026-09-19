@@ -83,7 +83,11 @@
           ("example" . (:title))
           ("remark" . (:title))
           ("claim" . (:title))
-          ("hint" . (:title)))))
+          ("hint" . (:title))
+          ("exercise" . (:title :number))
+          ("exercise*" . (:title))
+          ("proof" . ())
+          ("solution" . ()))))
 
 ;; 嵌入
 (use-package org-transclusion

@@ -109,29 +109,40 @@ in {
   };
 
   overrides = let
-    allOverrides_ = mkAttrSetFromDirectory (x_ : "override.nix") (x_ : (import x_ { inherit pkgs lib; }));
+    allOverrides_ = (mkAttrSetFromDirectory
+      (x_ : "override.nix")
+      (x_ : import x_ { inherit pkgs lib; })
+    );
   in {
 
-    input = pkgs.lib.mapAttrs (_ : x_ : x_.input) (
-      pkgs.lib.filterAttrs (_ : x_ : x_ ? input) allOverrides_
+    input = (pkgs.lib.mapAttrs
+      (_ : x_ : x_.input)
+      (pkgs.lib.filterAttrs
+        (_ : x_ : x_ ? input)
+        allOverrides_
+      )
     );
 
     scope = final_ : prev_ : {
+
       elispPackages = prev_.elispPackages.overrideScope (
-        efinal_ : esuper_ : pkgs.lib.mapAttrs (
-          name_ : x_ : esuper_.${name_}.overrideAttrs (
-            old_ : x_.scope {
+        efinal_ : esuper_ : (pkgs.lib.mapAttrs
+          (name_ : x_ : (esuper_.${name_}.overrideAttrs
+            (old_ : x_.scope.overrideAttrs {
               final = final_;
               prev = prev_;
               efinal = efinal_;
               esuper = esuper_;
               old = old_;
-            }
+            })
+          ))
+          (pkgs.lib.filterAttrs
+            (_ : x_ : (x_ ? scope) && (x_.scope ? overrideAttrs))
+            allOverrides_
           )
-        ) (
-          pkgs.lib.filterAttrs (_ : x_ : x_ ? scope) allOverrides_
         )
       );
+
     };
 
   };

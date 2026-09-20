@@ -24,7 +24,43 @@
     )
   ) dirAttrNames_)));
 
-in {
+in (config_ : (
+  assert (import ./assert.nix { inherit pkgs; }) {
+    rootDir = ./.;
+    inherit (config_) packages;
+    predicates = [
+      {
+        iff = [
+          { exists = "melpa-recipe.el"; }
+          { exists = "straight-register.el"; }
+        ];
+      }
+      {
+        any = [
+          {
+            all = [
+              { exists = "melpa-recipe.el"; }
+              { exists = "straight-register.el"; }
+            ];
+          }
+          { exists = "override.nix"; }
+        ];
+      }
+      {
+        implies = [
+          {
+            all = [
+              { exists = "melpa-recipe.el"; }
+              { exists = "straight-register.el"; }
+            ];
+          }
+          { inPackages = true; }
+        ];
+      }
+    ];
+  };
+  config_
+)) {
 
   packages = [
     "aas"

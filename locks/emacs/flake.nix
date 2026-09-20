@@ -461,6 +461,12 @@
       repo = "parsebib";
       type = "github";
     };
+    pdf-tools = {
+      flake = false;
+      owner = "vedang";
+      repo = "pdf-tools";
+      type = "github";
+    };
     posframe = {
       flake = false;
       owner = "tumashu";
@@ -550,6 +556,12 @@
       flake = false;
       owner = "abo-abo";
       repo = "swiper";
+      type = "github";
+    };
+    tablist = {
+      flake = false;
+      owner = "emacsorphanage";
+      repo = "tablist";
       type = "github";
     };
     treesit-auto = {

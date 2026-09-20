@@ -1225,6 +1225,22 @@
         "type": "github"
       }
     },
+    "pdf-tools": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1767891768,
+        "narHash": "sha256-XOg2f8H9PAaa66YYfmQXmf/R4zzd6UlkQBotU0jDxLI=",
+        "owner": "vedang",
+        "repo": "pdf-tools",
+        "rev": "365f88238f46f9b1425685562105881800f10386",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vedang",
+        "repo": "pdf-tools",
+        "type": "github"
+      }
+    },
     "posframe": {
       "flake": false,
       "locked": {
@@ -1464,6 +1480,7 @@
         "org-transclusion": "org-transclusion",
         "org-workbench": "org-workbench",
         "parsebib": "parsebib",
+        "pdf-tools": "pdf-tools",
         "posframe": "posframe",
         "powerline": "powerline",
         "pyim": "pyim",
@@ -1479,6 +1496,7 @@
         "simple-httpd": "simple-httpd",
         "string-inflection": "string-inflection",
         "swiper": "swiper",
+        "tablist": "tablist",
         "treesit-auto": "treesit-auto",
         "undo-tree": "undo-tree",
         "vertico": "vertico",
@@ -1567,6 +1585,22 @@
       "original": {
         "owner": "abo-abo",
         "repo": "swiper",
+        "type": "github"
+      }
+    },
+    "tablist": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782240911,
+        "narHash": "sha256-a7vhhAkmAwmv56PbdspIOFUdBnUgLm7YcBMIchNvhlk=",
+        "owner": "emacsorphanage",
+        "repo": "tablist",
+        "rev": "01f065e387ffe6b7a41f180f257cd12551c7a9c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacsorphanage",
+        "repo": "tablist",
         "type": "github"
       }
     },

@@ -86,6 +86,7 @@ in {
     "org-texmacs"
     "org-transclusion"
     "org-workbench"
+    "pdf-tools"
     "powerline"
     "pyim"
     "pyim-basedict"

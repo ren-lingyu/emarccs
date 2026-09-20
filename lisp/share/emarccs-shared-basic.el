@@ -402,6 +402,15 @@
 (use-package dotenv-mode
   :mode ("\\.env\\..*\\'" . dotenv-mode))
 
+(use-package pdf-tools
+  :mode
+  ("\\.pdf\\'" . pdf-view-mode)
+  :config
+  (pdf-tools-install :no-query)
+  :hook
+  (pdf-view-mode . (lambda () (display-line-numbers-mode -1)))
+  (pdf-view-mode . pdf-view-themed-minor-mode))
+
 ;; 键位设置和快捷键
 (setq x-super-keysym 'hyper)  ;通过把 Super 映射为 Hyper 在逻辑上禁用 Super 键
 

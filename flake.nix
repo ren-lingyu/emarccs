@@ -139,14 +139,7 @@
               ])
             ])
           ];
-        }).overrideScope elispkgs.overrides.scope).overrideScope (_final: prev: {
-          executablePackages = builtins.concatLists [
-            prev.executablePackages
-            (with pkgs; [
-              coreutils
-            ])
-          ];
-        })) {
+        }).overrideScope elispkgs.overrides.scope)) {
           elispkgs = twistContext_.elispkgs;
           elisp = lib.elisp;
           package = cfg_.package;

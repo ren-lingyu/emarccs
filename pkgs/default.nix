@@ -143,6 +143,20 @@ in {
         )
       );
 
+      executablePackages = pkgs.lib.unique (builtins.concatLists [
+        prev_.executablePackages
+        (builtins.concatLists (pkgs.lib.mapAttrsToList
+          (_ : x_ : x_.scope.executablePackages {
+            final = final_;
+            prev = prev_;
+          })
+          (pkgs.lib.filterAttrs
+            (_ : x_ : (x_ ? scope) && (x_.scope ? executablePackages))
+            allOverrides_
+          )
+        ))
+      ]);
+
     };
 
   };

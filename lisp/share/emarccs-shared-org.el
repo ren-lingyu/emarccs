@@ -110,29 +110,23 @@
   :after (org org-edna)
   :init
   (setq org-gtd-update-ack "4.0.0")
-  (setq org-gtd-directory (expand-file-name "./agenda" org-directory))
-  (unless
-      (file-directory-p org-gtd-directory)
+  (setq org-gtd-directory
+        (expand-file-name "agenda/" org-directory))
+  (unless (file-directory-p org-gtd-directory)
     (make-directory org-gtd-directory t))
   :custom
-  (org-todo-keywords '((sequence "TODO" "NEXT" "WAIT" "|" "DONE" "CNCL")))
+  (org-todo-keywords
+   '((sequence "TODO" "NEXT" "WAIT" "|" "DONE" "CNCL")))
   (org-gtd-keyword-mapping
    '((todo . "TODO")
      (next . "NEXT")
      (wait . "WAIT")
+     (done . "DONE")
      (canceled . "CNCL")))
   :config
   (setq org-agenda-files (list org-gtd-directory))
-  (with-eval-after-load 'org-gtd-id
-    (advice-add 'org-gtd-id--generate :override
-                (lambda () (org-id-new))))
   :bind
-  (("C-c d c" . org-gtd-capture)
-   ("C-c d e" . org-gtd-engage)
-   ("C-c d p" . org-gtd-process-inbox)
-   ("C-c d n" . org-gtd-show-all-next)
-   ("C-c d s" . org-gtd-reflect-stuck-projects)
-   ;; ("C-c d s" . emarccs-shared-org-gtd-auto-save-files)
+  (("C-c d" . org-gtd-command-center)
    :map org-gtd-clarify-mode-map
    ("C-c c" . org-gtd-organize)
    :map org-agenda-mode-map

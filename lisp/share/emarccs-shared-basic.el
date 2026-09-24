@@ -68,9 +68,7 @@
 (set-selection-coding-system 'utf-8)
 
 (unless (display-graphic-p)
-  (setq frame-background-mode 'dark)
-  (set-face-background 'default "black")
-  (set-face-foreground 'default "white"))
+  (setq frame-background-mode 'dark))
 
 (show-paren-mode 1)                           ; 高亮匹配括号
 (global-font-lock-mode 1)                     ; 全局语法高亮

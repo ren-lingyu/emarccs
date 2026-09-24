@@ -11,15 +11,21 @@
 
 (setq blink-cursor-mode nil)
 
+;; 所有 frame 的长期默认设置
 (setq default-frame-alist
+      '((fullscreen . maximized)
+        (vertical-scroll-bars . nil)
+        (menu-bar-lines . 0)
+        (tool-bar-lines . 0)))
+
+;; 仅用于启动时第一个 frame 的 bootstrap 外观
+(setq initial-frame-alist
       '((background-color . "gray10")
         (foreground-color . "gray90")
         (fullscreen . maximized)
         (vertical-scroll-bars . nil)
         (menu-bar-lines . 0)
         (tool-bar-lines . 0)))
-
-(setq initial-frame-alist default-frame-alist)
 
 (provide 'early-init)
 

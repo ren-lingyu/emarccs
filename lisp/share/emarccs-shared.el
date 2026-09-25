@@ -15,6 +15,8 @@
 
 (require 'emarccs-shared-complete) ; 自动补全
 
+(require 'emarccs-shared-lisp)
+
 (require 'emarccs-shared-org-roam) ; org-roam 及相关设置
 
 (require 'emarccs-shared-org-roam-organize) ; org-roam organize、citar 及相关设置

@@ -2,6 +2,17 @@
 
 (require 'bytecomp)
 
+(defun emarccs--load-package-autoloads ()
+  "Load package autoload files available on `load-path'."
+  (dolist (directory load-path)
+    (when (file-directory-p directory)
+      (dolist (file
+               (directory-files
+                directory t "-autoloads\\.el\\'" t))
+        (load file nil t)))))
+
+(emarccs--load-package-autoloads)
+
 (defun emarccs--getenv-required (name)
   "Return environment variable NAME or signal an error."
   (or (getenv name)

@@ -390,6 +390,10 @@
 (use-package nix-mode
   :mode "\\.nix\\'")
 
+(use-package lisp-mode
+  :mode ("\\.lisp\\'"
+         "\\.asd\\'"))
+
 (use-package nix-ts-mode
   :commands nix-ts-mode)
 

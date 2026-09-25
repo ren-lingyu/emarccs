@@ -546,6 +546,12 @@
       repo = "emacs-web-server";
       type = "github";
     };
+    sly = {
+      flake = false;
+      owner = "joaotavora";
+      repo = "sly";
+      type = "github";
+    };
     string-inflection = {
       flake = false;
       owner = "akicho8";

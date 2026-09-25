@@ -131,6 +131,7 @@ in (config_ : (
     "queue" # Transitive dependency
     "rainbow-delimiters"
     "ripgrep"
+    "sly"
     "treesit-auto"
     "undo-tree"
     "vertico"

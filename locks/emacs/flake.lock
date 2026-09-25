@@ -1494,6 +1494,7 @@
         "s": "s",
         "shrink-path": "shrink-path",
         "simple-httpd": "simple-httpd",
+        "sly": "sly",
         "string-inflection": "string-inflection",
         "swiper": "swiper",
         "tablist": "tablist",
@@ -1553,6 +1554,22 @@
       "original": {
         "owner": "skeeto",
         "repo": "emacs-web-server",
+        "type": "github"
+      }
+    },
+    "sly": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785590277,
+        "narHash": "sha256-VEvkNiLKtfs4mDVXtNxmQ4eOuLosAmW1DeOdvM1ushE=",
+        "owner": "joaotavora",
+        "repo": "sly",
+        "rev": "3ffa216d0818972f7a7fea38a566a6b570349f3b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "joaotavora",
+        "repo": "sly",
         "type": "github"
       }
     },

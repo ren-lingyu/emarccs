@@ -21,6 +21,7 @@
   EMARCCS_STRAIGHT_BASE_DIR = (pkgs.writeTextDir
     "straight/repos/straight.el/bootstrap.el"
     (builtins.concatStringsSep "\n" [
+      '';;; -*- lexical-binding: t; -*-''
       ''(defun straight-use-package (&rest _args) t)''
       ''(defun straight-register-package (&rest _args) t)''
       ''(provide 'straight)''

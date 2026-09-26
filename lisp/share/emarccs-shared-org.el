@@ -20,7 +20,7 @@
   (setq org-timestamp-formats  '("%Y-%m-%d %a %z" . "%Y-%m-%d %H:%M:%S %z"))
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
-  (setq bookmark-file (expand-file-name "./cache/bookmarks" org-directory))
+  (setq bookmark-default-file (expand-file-name "./cache/bookmarks" org-directory))
   (setq org-publish-timestamp-directory (expand-file-name "./cache/.org-timestamps/" org-directory))
   (setq org-id-locations-file (expand-file-name "./cache/.org-id-locations" org-directory))
   (set-face-attribute 'org-footnote nil

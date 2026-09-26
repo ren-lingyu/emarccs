@@ -15,7 +15,7 @@
   (setq helpful-max-buffers 5)
   ;; don't pop new window
   (setq helpful-switch-buffer-function
-        (lambda (buf) (if-let ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
+        (lambda (buf) (if-let* ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
                      ;; ensure the helpful window is selected for `helpful-update'.
                      (select-window window)
                    ;; line above returns nil if no available window is found
@@ -59,8 +59,8 @@
                                     (emarccs-shared-help--switch-to-buffer  (current-buffer)  -1)))
       (insert "\n\n")))
   (advice-add #'helpful-update :around #'emarccs-shared-help--update)
-  (advice-add #'helpful--buffer :around (lambda (oldfunc &rest _)
-                                          (let ((buf (apply oldfunc _)))
+  (advice-add #'helpful--buffer :around (lambda (oldfunc &rest args)
+                                          (let ((buf (apply oldfunc args)))
                                             (push buf emarccs-shared-help--history)
                                             buf))))
 

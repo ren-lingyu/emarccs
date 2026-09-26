@@ -45,6 +45,7 @@
     ";eyg" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquantgroup}\n\n\\end{yquantgroup}\n\\end{tikzpicture}") (forward-line -2))))
 
 (use-package laas
+  :no-require t
   :init
   (setq laas-basic-snippets
         '(";;alp" "\\alpha"

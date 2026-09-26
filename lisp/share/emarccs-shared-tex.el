@@ -163,7 +163,7 @@
   (setq org-latex-default-class "note")
   ;; (setq org-latex-title-command "")
   (setq org-export-with-toc t)
-  (defun emarccs-shared-tex--insert-toc-after-abstract-or-title (output backend info)
+  (defun emarccs-shared-tex--insert-toc-after-abstract-or-title (output backend _info)
     (when (and (org-export-derived-backend-p backend 'latex)
                (string-match-p "\\\\documentclass[[:space:]]*\\(?:\\[.*?\\][[:space:]]*\\)?{[[:space:]]*article[[:space:]]*}" output))
       (if (string-match "\\\\end{abstract}" output)
@@ -207,7 +207,7 @@
   ;; 定义\label{eq:...}和\eqref{eq:...}对应的链接类型
   (org-link-set-parameters "eq"
                            :follow
-                           (lambda (path arg)
+                           (lambda (path _arg)
                              (let ((label (concat "\\label{eq:" path "}")))
                                (org-mark-ring-push)
                                (goto-char (point-min))
@@ -235,6 +235,10 @@
                            :help-echo
                            "公式引用链接. \n格式: [[eq:<label>]]. \n跳转时采用正则表达式查找当前光标所在buffer内\\label{eq:<label>}所在行. "))
 
+(defvar org-beamer-frame-level)
+(defvar org-beamer-theme)
+(defvar org-beamer-outline-frame-title)
+(defvar org-beamer-outline-frame-options)
 (with-eval-after-load 'ox-beamer
   (setq org-beamer-frame-level 3)
   (setq org-beamer-theme nil)

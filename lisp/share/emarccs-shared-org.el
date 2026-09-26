@@ -107,6 +107,8 @@
   (setq org-edna-use-inheritance t))
 
 (use-package org-gtd
+  :no-require t
+  :defines org-gtd-clarify-mode-map
   :after (org org-edna)
   :init
   (setq org-gtd-update-ack "4.0.0")

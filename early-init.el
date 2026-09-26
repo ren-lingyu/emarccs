@@ -4,6 +4,8 @@
 
 (setq package-enable-at-startup nil)
 
+(defvar native-comp-async-report-warnings-errors)
+
 (setq native-comp-async-report-warnings-errors 'silent)
 
 ;; 初始外观

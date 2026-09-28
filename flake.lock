@@ -7,17 +7,15 @@
       "locked": {
         "lastModified": 1782098990,
         "narHash": "sha256-cdzwG8NRXtwlG25Tjfvscx9nKllZbNbEHvK/q7Sdmak=",
-        "ref": "refs/heads/master",
+        "owner": "emacs-twist",
+        "repo": "elisp-helpers",
         "rev": "6ed8c5617af3d62a456ad1407c2e22feefd48b1b",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/emacs-twist/elisp-helpers"
+        "type": "github"
       },
       "original": {
-        "ref": "refs/heads/master",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/emacs-twist/elisp-helpers"
+        "owner": "emacs-twist",
+        "repo": "elisp-helpers",
+        "type": "github"
       }
     },
     "elpa-gnu": {

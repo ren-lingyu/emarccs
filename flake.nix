@@ -11,7 +11,6 @@
     };
     twist = {
       url = "git+https://github.com/emacs-twist/twist.nix.git?ref=refs/heads/master&shallow=1";
-      inputs.elisp-helpers.url = "git+https://github.com/emacs-twist/elisp-helpers?ref=refs/heads/master&shallow=1";
     };
     nix-to-lisp = {
       url = "git+https://github.com/ren-lingyu/nix-to-lisp.git?ref=refs/heads/main&shallow=1";

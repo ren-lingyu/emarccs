@@ -29,7 +29,7 @@
       flake = false;
       ref = "main";
       type = "git";
-      url = "https://git.savannah.gnu.org/git/auctex.git";
+      url = "https://https.git.savannah.gnu.org/git/auctex.git";
     };
     avy = {
       flake = false;

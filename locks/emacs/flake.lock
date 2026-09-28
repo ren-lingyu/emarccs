@@ -67,18 +67,18 @@
     "auctex": {
       "flake": false,
       "locked": {
-        "lastModified": 1789825074,
-        "narHash": "sha256-WrywlmWC+qyPLTc288dpu07g9amtUBIInh4ytiZPk+A=",
+        "lastModified": 1790508098,
+        "narHash": "sha256-FUtrFqsU5kr1QNlFwEOU2ffDA3pIfqEA+QLsnkOe6E0=",
         "ref": "main",
-        "rev": "b3a7b226b3b9107319326e1a9792fdefdc8d20fa",
-        "revCount": 8991,
+        "rev": "1401042707c745b18fb000c47461feb3ce226525",
+        "revCount": 8995,
         "type": "git",
-        "url": "https://git.savannah.gnu.org/git/auctex.git"
+        "url": "https://https.git.savannah.gnu.org/git/auctex.git"
       },
       "original": {
         "ref": "main",
         "type": "git",
-        "url": "https://git.savannah.gnu.org/git/auctex.git"
+        "url": "https://https.git.savannah.gnu.org/git/auctex.git"
       }
     },
     "avy": {

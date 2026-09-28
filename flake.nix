@@ -83,7 +83,20 @@
         "${name_}" = (({ elispkgs, elisp, package, lockDir } : ((inputs.twist.lib.makeEnv {
           pkgs = pkgs;
           emacsPackage = package;
-          registries = [
+          registries = let
+            rewriteSavannahGit = name : path : builtins.toFile name (
+              builtins.replaceStrings
+                [
+                  "https://git.savannah.gnu.org/"
+                  "https://git.savannah.nongnu.org/"
+                ]
+                [
+                  "https://https.git.savannah.gnu.org/"
+                  "https://https.git.savannah.nongnu.org/"
+                ]
+                (builtins.readFile path)
+            );
+          in [
             {
               name = "emarccs-recipes";
               type = "melpa";
@@ -97,13 +110,13 @@
             {
               name = "gnu";
               type = "elpa";
-              path = "${inputs.elpa-gnu}/elpa-packages";
+              path = rewriteSavannahGit "gnu-elpa-packages" "${inputs.elpa-gnu}/elpa-packages";
               auto-sync-only = true;
             }
             {
               name = "nongnu";
               type = "elpa";
-              path = "${inputs.elpa-nongnu}/elpa-packages";
+              path = rewriteSavannahGit "nongnu-elpa-packages" "${inputs.elpa-nongnu}/elpa-packages";
             }
           ];
           extraPackages = elispkgs.packages;

@@ -23,11 +23,11 @@
       flake = false;
     };
     elpa-gnu = {
-      url = "git+https://git.savannah.gnu.org/git/elpa/gnu.git?ref=refs/heads/main&shallow=1";
+      url = "git+https://https.git.savannah.gnu.org/git/elpa/gnu.git?ref=refs/heads/main&shallow=1";
       flake = false;
     };
     elpa-nongnu = {
-      url = "git+https://git.savannah.gnu.org/git/elpa/nongnu.git?ref=refs/heads/main&shallow=1";
+      url = "git+https://https.git.savannah.gnu.org/git/elpa/nongnu.git?ref=refs/heads/main&shallow=1";
       flake = false;
     };
   };

@@ -5,7 +5,9 @@
 (use-package sly
   :commands sly
   :custom
-  (inferior-lisp-program "sbcl"))
+  (inferior-lisp-program "sbcl")
+  :hook
+  (lisp-mode . sly-mode))
 
 (provide 'emarccs-shared-lisp)
 

@@ -397,6 +397,15 @@
 (use-package nix-ts-mode
   :commands nix-ts-mode)
 
+(use-package haskell-ts-mode
+  :commands haskell-ts-mode
+  :custom
+  (haskell-ts-font-lock-level 4))
+
+(use-package eglot
+  :hook
+  (haskell-ts-mode . eglot-ensure))
+
 (use-package dockerfile-mode
   :mode ("Dockerfile\\'" . dockerfile-mode)
   :config (put 'dockerfile-image-name 'safe-local-variable #'stringp))

@@ -93,6 +93,7 @@ in (config_ : (
     "embark"
     "embark-consult"
     "flycheck"
+    "haskell-ts-mode"
     "helpful"
     "highlight-parentheses"
     "hl-block-mode"

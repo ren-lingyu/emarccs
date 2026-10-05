@@ -234,6 +234,11 @@
       repo = "flycheck";
       type = "github";
     };
+    haskell-ts-mode = {
+      flake = false;
+      type = "git";
+      url = "https://codeberg.org/pranshu/haskell-ts-mode";
+    };
     helpful = {
       flake = false;
       owner = "Wilfred";

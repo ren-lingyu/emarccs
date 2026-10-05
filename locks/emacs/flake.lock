@@ -625,6 +625,22 @@
         "type": "github"
       }
     },
+    "haskell-ts-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788524112,
+        "narHash": "sha256-CkC+z8vG7UwZKNf6/VWmenv0x4OZTqmPXyQrlop5oNY=",
+        "ref": "refs/heads/main",
+        "rev": "673c27eb86ced050c6b3f46920d081fcb257fee4",
+        "revCount": 193,
+        "type": "git",
+        "url": "https://codeberg.org/pranshu/haskell-ts-mode"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://codeberg.org/pranshu/haskell-ts-mode"
+      }
+    },
     "helpful": {
       "flake": false,
       "locked": {
@@ -1443,6 +1459,7 @@
         "embark-consult": "embark-consult",
         "f": "f",
         "flycheck": "flycheck",
+        "haskell-ts-mode": "haskell-ts-mode",
         "helpful": "helpful",
         "highlight-parentheses": "highlight-parentheses",
         "hl-block-mode": "hl-block-mode",

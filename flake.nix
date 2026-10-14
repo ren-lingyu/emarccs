@@ -43,8 +43,8 @@
 
       flake = {
 
-        context = { pkgs, lib } : {
-          elispkgs = import ./pkgs { inherit pkgs lib; };
+        context = { pkgs, llib } : {
+          elispkgs = import ./pkgs { inherit pkgs llib; };
           emacsTwists = {
             emacs = let
               lock_ = ./locks/emacs;
@@ -76,11 +76,11 @@
       };
 
       perSystem = { config, pkgs, ... } : let
-        lib = self.lib { inherit pkgs; };
-        twistContext_ = self.context { inherit pkgs lib; };
+        llib = self.lib { inherit pkgs; };
+        twistContext_ = self.context { inherit pkgs llib; };
       in {
 
-        packages = lib.concatMapEmacsTwists (name_ : cfg_ : {
+        packages = llib.concatMapEmacsTwists (name_ : cfg_ : {
           "${name_}" = (({ elispkgs, elisp, package, lockDir } : ((inputs.twist.lib.makeEnv {
             pkgs = pkgs;
             emacsPackage = package;
@@ -155,7 +155,7 @@
             ];
           }).overrideScope elispkgs.overrides.scope)) {
             elispkgs = twistContext_.elispkgs;
-            elisp = lib.elisp;
+            elisp = llib.elisp;
             package = cfg_.package;
             lockDir = cfg_.lockDir;
           });
@@ -163,7 +163,7 @@
 
         overlayAttrs = pkgs.lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;
 
-        apps = lib.concatMapEmacsTwists (name_ : cfg_ : let
+        apps = llib.concatMapEmacsTwists (name_ : cfg_ : let
           apps_ = config.packages.${name_}.makeApps {
             lockDirName = pkgs.lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
           };
@@ -176,7 +176,7 @@
           };
         }) twistContext_.emacsTwists;
 
-        checks = lib.concatMapEmacsTwists (name_ : cfg_ : (pkgs.lib.mapAttrs' (
+        checks = llib.concatMapEmacsTwists (name_ : cfg_ : (pkgs.lib.mapAttrs' (
           checkName_ : check_ : {
             name = "${name_}-${checkName_}";
             value = check_;

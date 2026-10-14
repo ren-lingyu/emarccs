@@ -1,4 +1,4 @@
-{ pkgs, lib } : {
+{ pkgs, llib } : {
 
   scope = {
     overrideAttrs = { old, ... } : {

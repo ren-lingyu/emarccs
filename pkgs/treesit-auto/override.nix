@@ -1,9 +1,9 @@
-{ pkgs, lib } : {
+{ pkgs, llib } : {
 
   scope = {
     overrideAttrs = { old, ... } : let
       treesitGrammars = pkgs.emacs.pkgs.treesit-grammars.with-all-grammars;
-      provideLineNumber = lib.findUniqueLineNumber "${old.src}/treesit-auto.el" "(provide 'treesit-auto)";
+      provideLineNumber = llib.findUniqueLineNumber "${old.src}/treesit-auto.el" "(provide 'treesit-auto)";
     in {
       patches = (old.patches or []) ++ [
         (pkgs.writeText "emarccs-treesit-auto-grammars.patch" (builtins.concatStringsSep "\n" [

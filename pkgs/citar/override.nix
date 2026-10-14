@@ -1,8 +1,8 @@
-{ pkgs, lib } : {
+{ pkgs, llib } : {
 
   scope = {
     overrideAttrs = { old, ... } : let
-      requireLineNumber = lib.findUniqueLineNumber "${old.src}/citar.el" "(require 'cl-lib)";
+      requireLineNumber = llib.findUniqueLineNumber "${old.src}/citar.el" "(require 'cl-lib)";
     in {
       patches = (old.patches or []) ++ [
         (pkgs.writeText "emarccs-citar-autoload.patch" (builtins.concatStringsSep "\n" [

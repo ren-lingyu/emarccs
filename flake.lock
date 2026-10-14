@@ -173,7 +173,30 @@
         "melpa": "melpa",
         "nix-to-lisp": "nix-to-lisp",
         "nixpkgs": "nixpkgs",
+        "treefmt-nix": "treefmt-nix",
         "twist": "twist"
+      }
+    },
+    "treefmt-nix": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791885023,
+        "narHash": "sha256-C3alQ2MEt0zVrUSho5NUDo3jmhbff72++bfwoqT9Omo=",
+        "ref": "refs/heads/main",
+        "rev": "0d6d739a833ba9a9c93034862e4a7b061a062a1c",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/numtide/treefmt-nix.git"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/numtide/treefmt-nix.git"
       }
     },
     "twist": {

@@ -9,6 +9,10 @@
     flake-parts = {
       url = "git+https://github.com/hercules-ci/flake-parts.git?ref=refs/heads/main&shallow=1";
     };
+    treefmt-nix = {
+      url = "git+https://github.com/numtide/treefmt-nix.git?ref=refs/heads/main&shallow=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     twist = {
       url = "git+https://github.com/emacs-twist/twist.nix.git?ref=refs/heads/master&shallow=1";
     };

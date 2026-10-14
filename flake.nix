@@ -290,7 +290,7 @@
 
               treefmt = {
                 flakeFormatter = true;
-                flakeCheck = false;
+                flakeCheck = true;
                 enableDefaultExcludes = false;
                 projectRootFile = builtins.baseNameOf __curPos.file;
                 settings.excludes = [

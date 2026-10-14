@@ -31,35 +31,71 @@
     };
   };
 
-  outputs = { self, ... }@inputs : inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+  outputs = { self, ... }@inputs : inputs.flake-parts.lib.mkFlake { inherit inputs; } (        {
+    config,
+    lib,
+    ...
+  }@toplevel : {
 
     imports = [
       inputs.flake-parts.flakeModules.easyOverlay
     ];
 
+    options = {
+      context = lib.mkOption {
+        type = lib.types.functionTo (
+          lib.types.submodule {
+            options = {
+              elispkgs = lib.mkOption {
+                type = lib.types.raw;
+              };
+              emacsTwists = lib.mkOption {
+                type = lib.types.attrsOf (
+                  lib.types.attrsOf (
+                    lib.types.submodule {
+                      options = {
+                        package = lib.mkOption {
+                          type = lib.types.package;
+                          description = "Base Emacs package.";
+                        };
+                        lockDir = lib.mkOption {
+                          type = lib.types.path;
+                          description = "Twist lock directory.";
+                        };
+                      };
+                    }
+                  )
+                );
+              };
+            };
+          }
+        );
+      };
+    };
+
     config = {
 
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
 
-      flake = {
-
-        context = { pkgs, lib, llib } : {
-          elispkgs = import ./pkgs { inherit pkgs lib llib; };
-          emacsTwists = {
-            emacs = let
-              lock_ = ./locks/emacs;
-            in {
-              pgtk = {
-                package = pkgs.emacs-pgtk;
-                lockDir = lock_;
-              };
-              gtk = {
-                package = pkgs.emacs-gtk;
-                lockDir = lock_;
-              };
+      context = { pkgs, lib, llib } : {
+        elispkgs = import ./pkgs { inherit pkgs lib llib; };
+        emacsTwists = {
+          emacs = let
+            lock_ = ./locks/emacs;
+          in {
+            pgtk = {
+              package = pkgs.emacs-pgtk;
+              lockDir = lock_;
+            };
+            gtk = {
+              package = pkgs.emacs-gtk;
+              lockDir = lock_;
             };
           };
         };
+      };
+
+      flake = {
 
         lib = { lib } : lib.mergeAttrsList [
 
@@ -77,7 +113,7 @@
 
       perSystem = { config, pkgs, lib, ... } : let
         llib = self.lib { inherit lib; };
-        twistContext_ = self.context { inherit pkgs lib llib; };
+        twistContext_ = toplevel.config.context { inherit pkgs lib llib; };
       in {
 
         packages = llib.concatMapEmacsTwists (name_ : cfg_ : {
@@ -207,6 +243,6 @@
 
     };
 
-  };
+  });
 
 }

@@ -42,6 +42,7 @@
   }@toplevel : {
 
     imports = [
+      inputs.treefmt-nix.flakeModule
       inputs.flake-parts.flakeModules.easyOverlay
     ];
 
@@ -242,6 +243,29 @@
             "${./early-init.el}"
           ];
         }))) twistContext_.emacsTwists;
+
+        treefmt = {
+          flakeFormatter = true;
+          flakeCheck = false;
+          enableDefaultExcludes = false;
+          projectRootFile = builtins.baseNameOf __curPos.file;
+          settings.excludes = [
+            "flake.lock"
+            "locks/**"
+            ".gitignore"
+            "LICENSE"
+            "README.org"
+          ];
+          programs = {
+            nixfmt = {
+              enable = true;
+              package = pkgs.nixfmt;
+              width = 100;
+              indent = 2;
+              strict = true;
+            };
+          };
+        };
 
       };
 

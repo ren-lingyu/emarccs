@@ -1,9 +1,12 @@
-{ pkgs, lib, llib } : let
+{
+  pkgs,
+  lib,
+  llib,
+}:
+let
 
-  removeReferences_ = (lib.concatMapStringsSep
-    (builtins.fromJSON "\"\\u0020\"")
-    (x_ : "-t ${x_}")
-    (
+  removeReferences_ = (
+    lib.concatMapStringsSep (builtins.fromJSON "\"\\u0020\"") (x_: "-t ${x_}") (
       builtins.concatLists [
         [
           pkgs.glib.dev
@@ -12,32 +15,30 @@
           pkgs.zlib.dev
           pkgs.cairo.dev
         ]
-        (lib.optional
-          pkgs.stdenv.hostPlatform.isLinux
-          pkgs.stdenv.cc.libc.dev
-        )
+        (lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.stdenv.cc.libc.dev)
       ]
     )
   );
 
-in {
+in
+{
 
   scope = {
 
-    overrideAttrs = { old, ... } : {
+    overrideAttrs = { old, ... }: {
 
-      env = (old.env or {}) // {
+      env = (old.env or { }) // {
         CXXFLAGS = "-std=c++17";
       };
 
-      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
         pkgs.autoconf
         pkgs.automake
         pkgs.pkg-config
         pkgs.removeReferencesTo
       ];
 
-      buildInputs = (old.buildInputs or []) ++ [
+      buildInputs = (old.buildInputs or [ ]) ++ [
         pkgs.libpng
         pkgs.zlib
         pkgs.poppler

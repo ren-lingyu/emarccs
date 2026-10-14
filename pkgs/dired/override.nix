@@ -1,9 +1,12 @@
-{ pkgs, lib, llib } : {
+{
+  pkgs,
+  lib,
+  llib,
+}:
+{
 
   scope = {
-    executablePackages = { ... } : with pkgs; [
-      coreutils
-    ];
+    executablePackages = { ... }: with pkgs; [ coreutils ];
   };
 
 }

@@ -1,13 +1,16 @@
-{ pkgs, lib, llib } : {
+{
+  pkgs,
+  lib,
+  llib,
+}:
+{
 
   scope = {
-    overrideAttrs = { old, ... } : {
-      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+    overrideAttrs = { old, ... }: {
+      nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
         pkgs.git
         pkgs.perl
-        (pkgs.texliveMinimal.withPackages (ps : with ps; [
-          latex
-        ]))
+        (pkgs.texliveMinimal.withPackages (ps: with ps; [ latex ]))
       ];
       preBuild = builtins.concatStringsSep "\n" [
         "export HOME=\"$TMPDIR/home\""

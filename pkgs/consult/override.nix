@@ -1,10 +1,16 @@
-{ pkgs, lib, llib } : {
+{
+  pkgs,
+  lib,
+  llib,
+}:
+{
 
   scope = {
-    executablePackages = { final, prev } : with pkgs; [
-      gnugrep
-      ripgrep
-    ];
+    executablePackages = { final, prev }: with pkgs;
+      [
+        gnugrep
+        ripgrep
+      ];
   };
 
 }

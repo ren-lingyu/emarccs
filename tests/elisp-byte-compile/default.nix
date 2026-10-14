@@ -1,4 +1,10 @@
-{ pkgs, lib, emacsPackage, elispSource } : builtins.derivation {
+{
+  pkgs,
+  lib,
+  emacsPackage,
+  elispSource,
+}:
+builtins.derivation {
 
   name = "emarccs-elisp-byte-compile";
 
@@ -18,14 +24,15 @@
 
   EMARCCS_ELISP_SOURCE = elispSource;
 
-  EMARCCS_STRAIGHT_BASE_DIR = (pkgs.writeTextDir
-    "straight/repos/straight.el/bootstrap.el"
-    (builtins.concatStringsSep "\n" [
-      '';;; -*- lexical-binding: t; -*-''
-      ''(defun straight-use-package (&rest _args) t)''
-      ''(defun straight-register-package (&rest _args) t)''
-      ''(provide 'straight)''
-    ])
+  EMARCCS_STRAIGHT_BASE_DIR = (
+    pkgs.writeTextDir "straight/repos/straight.el/bootstrap.el" (
+      builtins.concatStringsSep "\n" [
+        ";;; -*- lexical-binding: t; -*-"
+        "(defun straight-use-package (&rest _args) t)"
+        "(defun straight-register-package (&rest _args) t)"
+        "(provide 'straight)"
+      ]
+    )
   );
 
   HOME = "/tmp/home/";

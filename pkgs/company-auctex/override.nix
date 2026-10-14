@@ -1,7 +1,12 @@
-{ pkgs, lib, llib } : {
+{
+  pkgs,
+  lib,
+  llib,
+}:
+{
 
   scope = {
-    overrideAttrs = { old, ... } : {
+    overrideAttrs = { old, ... }: {
       preBuild = builtins.concatStringsSep "\n" [
         "export HOME=\"$TMPDIR/home\""
         "mkdir -p \"$HOME\""

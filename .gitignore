@@ -24,6 +24,7 @@
 !pkgs/**/
 !pkgs/**/*.nix
 !pkgs/**/*.el
+!pkgs/**/*.patch
 
 !locks/
 !locks/**/

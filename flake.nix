@@ -43,8 +43,8 @@
 
       flake = {
 
-        context = { pkgs, llib } : {
-          elispkgs = import ./pkgs { inherit pkgs llib; };
+        context = { pkgs, lib, llib } : {
+          elispkgs = import ./pkgs { inherit pkgs lib llib; };
           emacsTwists = {
             emacs = let
               lock_ = ./locks/emacs;
@@ -61,7 +61,7 @@
           };
         };
 
-        lib = { pkgs } : pkgs.lib.mergeAttrsList [
+        lib = { lib } : lib.mergeAttrsList [
 
           {
 
@@ -69,15 +69,15 @@
 
           }
 
-          (import ./lib { inherit pkgs; })
+          (import ./lib { inherit lib; })
 
         ];
 
       };
 
-      perSystem = { config, pkgs, ... } : let
-        llib = self.lib { inherit pkgs; };
-        twistContext_ = self.context { inherit pkgs llib; };
+      perSystem = { config, pkgs, lib, ... } : let
+        llib = self.lib { inherit lib; };
+        twistContext_ = self.context { inherit pkgs lib llib; };
       in {
 
         packages = llib.concatMapEmacsTwists (name_ : cfg_ : {
@@ -142,14 +142,14 @@
                 ])
               ])
               (elisp.form "require" [
-                (elisp.quote (elisp.symbol (pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el))))
+                (elisp.quote (elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el))))
               ])
               (elisp.form "advice-add" [
                 (elisp.quote (elisp.symbol "startup--load-user-init-file"))
                 (elisp.symbol ":around")
                 (elisp.form "emarccs-twist--load-user-init-file" [
                   ./early-init.el
-                  (elisp.quote (elisp.symbol (pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/share/emarccs-shared.el))))
+                  (elisp.quote (elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/share/emarccs-shared.el))))
                 ])
               ])
             ];
@@ -161,11 +161,11 @@
           });
         }) twistContext_.emacsTwists;
 
-        overlayAttrs = pkgs.lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;
+        overlayAttrs = lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;
 
         apps = llib.concatMapEmacsTwists (name_ : cfg_ : let
           apps_ = config.packages.${name_}.makeApps {
-            lockDirName = pkgs.lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
+            lockDirName = lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
           };
         in {
           "${name_}-lock" = apps_.lock // {
@@ -176,17 +176,17 @@
           };
         }) twistContext_.emacsTwists;
 
-        checks = llib.concatMapEmacsTwists (name_ : cfg_ : (pkgs.lib.mapAttrs' (
+        checks = llib.concatMapEmacsTwists (name_ : cfg_ : (lib.mapAttrs' (
           checkName_ : check_ : {
             name = "${name_}-${checkName_}";
             value = check_;
           }
         ) (import ./tests {
-          inherit pkgs;
+          inherit pkgs lib;
           emacsPackage = config.packages.${name_};
-          elispSource = pkgs.lib.fileset.toSource {
+          elispSource = lib.fileset.toSource {
             root = ./.;
-            fileset = pkgs.lib.fileset.unions [
+            fileset = lib.fileset.unions [
               ./early-init.el
               ./init.el
               ./lisp
@@ -197,7 +197,7 @@
             "eval-and-compile"
             "${./lisp/twist-emacs}"
             "${./lisp/share}"
-            "${pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el)}"
+            "${lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el)}"
             "startup--load-user-init-file"
             "${./early-init.el}"
           ];

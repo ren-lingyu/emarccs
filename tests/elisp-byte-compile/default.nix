@@ -1,10 +1,10 @@
-{ pkgs, emacsPackage, elispSource } : builtins.derivation {
+{ pkgs, lib, emacsPackage, elispSource } : builtins.derivation {
 
   name = "emarccs-elisp-byte-compile";
 
   system = pkgs.stdenv.buildPlatform.system;
 
-  builder = pkgs.lib.getExe' pkgs.guile "guile";
+  builder = lib.getExe' pkgs.guile "guile";
 
   args = [
     "--no-auto-compile"
@@ -12,7 +12,7 @@
     ./lisp/builder.scm
   ];
 
-  EMACS = pkgs.lib.getExe' emacsPackage "emacs";
+  EMACS = lib.getExe' emacsPackage "emacs";
 
   EMARCCS_BYTE_COMPILE_SCRIPT = ./lisp/elisp-byte-compile.el;
 

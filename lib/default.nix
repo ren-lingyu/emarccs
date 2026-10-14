@@ -1,13 +1,13 @@
-{ pkgs } : {
+{ lib } : {
 
-  concatMapEmacsTwists = f_ : emacsTwists_ : (pkgs.lib.concatMapAttrs (emacsName_ : variants_ : (
-    pkgs.lib.concatMapAttrs (variantName_ : cfg_ : let
+  concatMapEmacsTwists = f_ : emacsTwists_ : (lib.concatMapAttrs (emacsName_ : variants_ : (
+    lib.concatMapAttrs (variantName_ : cfg_ : let
       name_ = "${emacsName_}-${variantName_}-twist";
     in (f_ name_ cfg_)) variants_)
   ) emacsTwists_);
 
   findUniqueLineNumber = file_ : line_ : let
-    sourceLines_ = pkgs.lib.splitString "\n" (builtins.readFile file_);
+    sourceLines_ = lib.splitString "\n" (builtins.readFile file_);
     matchingLineNumbers_ = let
       go_ = lineNumber_ : lines_ : (
         if lines_ == [] then []

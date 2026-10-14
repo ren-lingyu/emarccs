@@ -1,6 +1,6 @@
-{ pkgs, llib } : let
+{ pkgs, lib, llib } : let
 
-  removeReferences_ = (pkgs.lib.concatMapStringsSep
+  removeReferences_ = (lib.concatMapStringsSep
     (builtins.fromJSON "\"\\u0020\"")
     (x_ : "-t ${x_}")
     (
@@ -12,7 +12,7 @@
           pkgs.zlib.dev
           pkgs.cairo.dev
         ]
-        (pkgs.lib.optional
+        (lib.optional
           pkgs.stdenv.hostPlatform.isLinux
           pkgs.stdenv.cc.libc.dev
         )

@@ -1,4 +1,4 @@
-{ pkgs } : let
+{ lib } : let
 
   boolToString_ = x_ : if x_ then "true" else "false";
 
@@ -102,7 +102,7 @@
   );
 
   renderFailure_ = failure_ : let
-    entries_ = (pkgs.lib.mapAttrsToList
+    entries_ = (lib.mapAttrsToList
       (name_ : type_ : "${name_} (${type_})")
       failure_.files
     );
@@ -125,12 +125,12 @@
 
 in { rootDir, packages, predicates } : let
 
-  directories_ = (pkgs.lib.filterAttrs
+  directories_ = (lib.filterAttrs
     (_ : type_ : type_ == "directory")
     (builtins.readDir rootDir)
   );
 
-  results_ = (pkgs.lib.mapAttrsToList
+  results_ = (lib.mapAttrsToList
     (name_ : _ : let
       files_ = builtins.readDir (rootDir + "/${name_}");
 
@@ -164,7 +164,7 @@ in { rootDir, packages, predicates } : let
   );
 
 in (
-  assert (pkgs.lib.assertMsg
+  assert (lib.assertMsg
     (failures_ == [])
     (builtins.concatStringsSep
       "\n"

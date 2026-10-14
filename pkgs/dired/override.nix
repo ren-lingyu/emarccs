@@ -1,4 +1,4 @@
-{ pkgs, llib } : {
+{ pkgs, lib, llib } : {
 
   scope = {
     executablePackages = { ... } : with pkgs; [

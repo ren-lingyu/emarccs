@@ -1,19 +1,19 @@
-{ pkgs, emacsPackage, elispSource, elispPackages, siteStartCheckList } : {
+{ pkgs, lib, emacsPackage, elispSource, elispPackages, siteStartCheckList } : {
 
   elisp-byte-compile = import ./elisp-byte-compile {
-    inherit pkgs emacsPackage elispSource;
+    inherit pkgs lib emacsPackage elispSource;
   };
 
   startup-smoke = import ./startup-smoke {
-    inherit pkgs emacsPackage siteStartCheckList;
+    inherit pkgs lib emacsPackage siteStartCheckList;
   };
 
   package-availability-smoke = import ./package-availability-smoke {
-    inherit pkgs emacsPackage elispPackages;
+    inherit pkgs lib emacsPackage elispPackages;
   };
 
   treesit-grammars-runtime = import ./treesit-grammars-runtime {
-    inherit pkgs emacsPackage;
+    inherit pkgs lib emacsPackage;
   };
 
 }

@@ -1,4 +1,4 @@
-{ pkgs, emacsPackage, siteStartCheckList } : let
+{ pkgs, lib, emacsPackage, siteStartCheckList } : let
 
   minEmacsVersion_ = "31.0";
 
@@ -15,7 +15,7 @@ in (
     ]
     (builtins.map (item_ : "grep -Fq \"${item_}\" \"$site_start\"") siteStartCheckList)
     [
-      "MIN_EMACS_VERSION=${minEmacsVersion_} ${pkgs.lib.getExe' emacsPackage "emacs"} --batch --load ${./lisp/startup-smoke.el}"
+      "MIN_EMACS_VERSION=${minEmacsVersion_} ${lib.getExe' emacsPackage "emacs"} --batch --load ${./lisp/startup-smoke.el}"
       "touch \"$out\""
     ]
   ]))

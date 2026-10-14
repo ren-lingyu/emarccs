@@ -1,4 +1,4 @@
-{ pkgs, llib } : let
+{ pkgs, lib, llib } : let
 
   mkMelpaRecipes = x_ : (
     pkgs.runCommand "emarccs-melpa-recipes" {} (
@@ -25,7 +25,7 @@
   ) dirAttrNames_)));
 
 in (config_ : (
-  assert (import ./assert.nix { inherit pkgs; }) {
+  assert (import ./assert.nix { inherit lib; }) {
     rootDir = ./.;
     inherit (config_) packages;
     predicates = [
@@ -149,13 +149,13 @@ in (config_ : (
   overrides = let
     allOverrides_ = (mkAttrSetFromDirectory
       (x_ : "override.nix")
-      (x_ : import x_ { inherit pkgs llib; })
+      (x_ : import x_ { inherit pkgs lib llib; })
     );
   in {
 
-    input = (pkgs.lib.mapAttrs
+    input = (lib.mapAttrs
       (_ : x_ : x_.input)
-      (pkgs.lib.filterAttrs
+      (lib.filterAttrs
         (_ : x_ : x_ ? input)
         allOverrides_
       )
@@ -164,7 +164,7 @@ in (config_ : (
     scope = final_ : prev_ : {
 
       elispPackages = prev_.elispPackages.overrideScope (
-        efinal_ : esuper_ : (pkgs.lib.mapAttrs
+        efinal_ : esuper_ : (lib.mapAttrs
           (name_ : x_ : (esuper_.${name_}.overrideAttrs
             (old_ : x_.scope.overrideAttrs {
               final = final_;
@@ -174,21 +174,21 @@ in (config_ : (
               old = old_;
             })
           ))
-          (pkgs.lib.filterAttrs
+          (lib.filterAttrs
             (_ : x_ : (x_ ? scope) && (x_.scope ? overrideAttrs))
             allOverrides_
           )
         )
       );
 
-      executablePackages = pkgs.lib.unique (builtins.concatLists [
+      executablePackages = lib.unique (builtins.concatLists [
         prev_.executablePackages
-        (builtins.concatLists (pkgs.lib.mapAttrsToList
+        (builtins.concatLists (lib.mapAttrsToList
           (_ : x_ : x_.scope.executablePackages {
             final = final_;
             prev = prev_;
           })
-          (pkgs.lib.filterAttrs
+          (lib.filterAttrs
             (_ : x_ : (x_ ? scope) && (x_.scope ? executablePackages))
             allOverrides_
           )

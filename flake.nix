@@ -37,169 +37,173 @@
       inputs.flake-parts.flakeModules.easyOverlay
     ];
 
-    systems = inputs.nixpkgs.lib.systems.flakeExposed;
+    config = {
 
-    flake = {
+      systems = inputs.nixpkgs.lib.systems.flakeExposed;
 
-      context = { pkgs, lib } : {
-        elispkgs = import ./pkgs { inherit pkgs lib; };
-        emacsTwists = {
-          emacs = let
-            lock_ = ./locks/emacs;
-          in {
-            pgtk = {
-              package = pkgs.emacs-pgtk;
-              lockDir = lock_;
-            };
-            gtk = {
-              package = pkgs.emacs-gtk;
-              lockDir = lock_;
+      flake = {
+
+        context = { pkgs, lib } : {
+          elispkgs = import ./pkgs { inherit pkgs lib; };
+          emacsTwists = {
+            emacs = let
+              lock_ = ./locks/emacs;
+            in {
+              pgtk = {
+                package = pkgs.emacs-pgtk;
+                lockDir = lock_;
+              };
+              gtk = {
+                package = pkgs.emacs-gtk;
+                lockDir = lock_;
+              };
             };
           };
         };
+
+        lib = { pkgs } : pkgs.lib.mergeAttrsList [
+
+          {
+
+            elisp = inputs.nix-to-lisp.lib.elisp;
+
+          }
+
+          (import ./lib { inherit pkgs; })
+
+        ];
+
       };
 
-      lib = { pkgs } : pkgs.lib.mergeAttrsList [
-
-        {
-
-          elisp = inputs.nix-to-lisp.lib.elisp;
-
-        }
-
-        (import ./lib { inherit pkgs; })
-
-      ];
-
-    };
-
-    perSystem = { config, pkgs, ... } : let
-      lib = self.lib { inherit pkgs; };
-      twistContext_ = self.context { inherit pkgs lib; };
-    in {
-
-      packages = lib.concatMapEmacsTwists (name_ : cfg_ : {
-        "${name_}" = (({ elispkgs, elisp, package, lockDir } : ((inputs.twist.lib.makeEnv {
-          pkgs = pkgs;
-          emacsPackage = package;
-          registries = let
-            rewriteSavannahGit = name : path : builtins.toFile name (
-              builtins.replaceStrings
-                [
-                  "https://git.savannah.gnu.org/"
-                  "https://git.savannah.nongnu.org/"
-                ]
-                [
-                  "https://https.git.savannah.gnu.org/"
-                  "https://https.git.savannah.nongnu.org/"
-                ]
-                (builtins.readFile path)
-            );
-          in [
-            {
-              name = "emarccs-recipes";
-              type = "melpa";
-              path = "${elispkgs.recipes.melpa}";
-            }
-            {
-              name = "melpa";
-              type = "melpa";
-              path = "${inputs.melpa}/recipes";
-            }
-            {
-              name = "gnu";
-              type = "elpa";
-              path = rewriteSavannahGit "gnu-elpa-packages" "${inputs.elpa-gnu}/elpa-packages";
-              auto-sync-only = true;
-            }
-            {
-              name = "nongnu";
-              type = "elpa";
-              path = rewriteSavannahGit "nongnu-elpa-packages" "${inputs.elpa-nongnu}/elpa-packages";
-            }
-          ];
-          extraPackages = elispkgs.packages;
-          inputOverrides = elispkgs.overrides.input;
-          initFiles = [];
-          initParser = _ : {
-            elispPackages = [];
-            elispPackagePins = {};
-            systemPackages = [];
-          };
-          lockDir = lockDir;
-          nativeCompileAheadDefault = true;
-          extraSiteStartElisp = elisp.renderForms [
-            (elisp.form "eval-and-compile" [
-              (elisp.form "add-to-list" [
-                (elisp.quote (elisp.symbol "load-path"))
-                ./lisp/twist-emacs
-              ])
-              (elisp.form "add-to-list" [
-                (elisp.quote (elisp.symbol "load-path"))
-                ./lisp/share
-              ])
-            ])
-            (elisp.form "require" [
-              (elisp.quote (elisp.symbol (pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el))))
-            ])
-            (elisp.form "advice-add" [
-              (elisp.quote (elisp.symbol "startup--load-user-init-file"))
-              (elisp.symbol ":around")
-              (elisp.form "emarccs-twist--load-user-init-file" [
-                ./early-init.el
-                (elisp.quote (elisp.symbol (pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/share/emarccs-shared.el))))
-              ])
-            ])
-          ];
-        }).overrideScope elispkgs.overrides.scope)) {
-          elispkgs = twistContext_.elispkgs;
-          elisp = lib.elisp;
-          package = cfg_.package;
-          lockDir = cfg_.lockDir;
-        });
-      }) twistContext_.emacsTwists;
-
-      overlayAttrs = pkgs.lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;
-
-      apps = lib.concatMapEmacsTwists (name_ : cfg_ : let
-        apps_ = config.packages.${name_}.makeApps {
-          lockDirName = pkgs.lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
-        };
+      perSystem = { config, pkgs, ... } : let
+        lib = self.lib { inherit pkgs; };
+        twistContext_ = self.context { inherit pkgs lib; };
       in {
-        "${name_}-lock" = apps_.lock // {
-          meta.description = "Generate lock files for ${name_}.";
-        };
-        "${name_}-update" = apps_.update // {
-          meta.description = "Update lock files for ${name_}.";
-        };
-      }) twistContext_.emacsTwists;
 
-      checks = lib.concatMapEmacsTwists (name_ : cfg_ : (pkgs.lib.mapAttrs' (
-        checkName_ : check_ : {
-          name = "${name_}-${checkName_}";
-          value = check_;
-        }
-      ) (import ./tests {
-        inherit pkgs;
-        emacsPackage = config.packages.${name_};
-        elispSource = pkgs.lib.fileset.toSource {
-          root = ./.;
-          fileset = pkgs.lib.fileset.unions [
-            ./early-init.el
-            ./init.el
-            ./lisp
+        packages = lib.concatMapEmacsTwists (name_ : cfg_ : {
+          "${name_}" = (({ elispkgs, elisp, package, lockDir } : ((inputs.twist.lib.makeEnv {
+            pkgs = pkgs;
+            emacsPackage = package;
+            registries = let
+              rewriteSavannahGit = name : path : builtins.toFile name (
+                builtins.replaceStrings
+                  [
+                    "https://git.savannah.gnu.org/"
+                    "https://git.savannah.nongnu.org/"
+                  ]
+                  [
+                    "https://https.git.savannah.gnu.org/"
+                    "https://https.git.savannah.nongnu.org/"
+                  ]
+                  (builtins.readFile path)
+              );
+            in [
+              {
+                name = "emarccs-recipes";
+                type = "melpa";
+                path = "${elispkgs.recipes.melpa}";
+              }
+              {
+                name = "melpa";
+                type = "melpa";
+                path = "${inputs.melpa}/recipes";
+              }
+              {
+                name = "gnu";
+                type = "elpa";
+                path = rewriteSavannahGit "gnu-elpa-packages" "${inputs.elpa-gnu}/elpa-packages";
+                auto-sync-only = true;
+              }
+              {
+                name = "nongnu";
+                type = "elpa";
+                path = rewriteSavannahGit "nongnu-elpa-packages" "${inputs.elpa-nongnu}/elpa-packages";
+              }
+            ];
+            extraPackages = elispkgs.packages;
+            inputOverrides = elispkgs.overrides.input;
+            initFiles = [];
+            initParser = _ : {
+              elispPackages = [];
+              elispPackagePins = {};
+              systemPackages = [];
+            };
+            lockDir = lockDir;
+            nativeCompileAheadDefault = true;
+            extraSiteStartElisp = elisp.renderForms [
+              (elisp.form "eval-and-compile" [
+                (elisp.form "add-to-list" [
+                  (elisp.quote (elisp.symbol "load-path"))
+                  ./lisp/twist-emacs
+                ])
+                (elisp.form "add-to-list" [
+                  (elisp.quote (elisp.symbol "load-path"))
+                  ./lisp/share
+                ])
+              ])
+              (elisp.form "require" [
+                (elisp.quote (elisp.symbol (pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el))))
+              ])
+              (elisp.form "advice-add" [
+                (elisp.quote (elisp.symbol "startup--load-user-init-file"))
+                (elisp.symbol ":around")
+                (elisp.form "emarccs-twist--load-user-init-file" [
+                  ./early-init.el
+                  (elisp.quote (elisp.symbol (pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/share/emarccs-shared.el))))
+                ])
+              ])
+            ];
+          }).overrideScope elispkgs.overrides.scope)) {
+            elispkgs = twistContext_.elispkgs;
+            elisp = lib.elisp;
+            package = cfg_.package;
+            lockDir = cfg_.lockDir;
+          });
+        }) twistContext_.emacsTwists;
+
+        overlayAttrs = pkgs.lib.optionalAttrs (pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system) config.packages;
+
+        apps = lib.concatMapEmacsTwists (name_ : cfg_ : let
+          apps_ = config.packages.${name_}.makeApps {
+            lockDirName = pkgs.lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
+          };
+        in {
+          "${name_}-lock" = apps_.lock // {
+            meta.description = "Generate lock files for ${name_}.";
+          };
+          "${name_}-update" = apps_.update // {
+            meta.description = "Update lock files for ${name_}.";
+          };
+        }) twistContext_.emacsTwists;
+
+        checks = lib.concatMapEmacsTwists (name_ : cfg_ : (pkgs.lib.mapAttrs' (
+          checkName_ : check_ : {
+            name = "${name_}-${checkName_}";
+            value = check_;
+          }
+        ) (import ./tests {
+          inherit pkgs;
+          emacsPackage = config.packages.${name_};
+          elispSource = pkgs.lib.fileset.toSource {
+            root = ./.;
+            fileset = pkgs.lib.fileset.unions [
+              ./early-init.el
+              ./init.el
+              ./lisp
+            ];
+          };
+          elispPackages = twistContext_.elispkgs.packages;
+          siteStartCheckList = [
+            "eval-and-compile"
+            "${./lisp/twist-emacs}"
+            "${./lisp/share}"
+            "${pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el)}"
+            "startup--load-user-init-file"
+            "${./early-init.el}"
           ];
-        };
-        elispPackages = twistContext_.elispkgs.packages;
-        siteStartCheckList = [
-          "eval-and-compile"
-          "${./lisp/twist-emacs}"
-          "${./lisp/share}"
-          "${pkgs.lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el)}"
-          "startup--load-user-init-file"
-          "${./early-init.el}"
-        ];
-      }))) twistContext_.emacsTwists;
+        }))) twistContext_.emacsTwists;
+
+      };
 
     };
 

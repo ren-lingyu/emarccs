@@ -48,11 +48,11 @@
             lock_ = ./locks/emacs;
           in {
             pgtk = {
-              package = pkgs.emacs31-pgtk;
+              package = pkgs.emacs-pgtk;
               lockDir = lock_;
             };
             gtk = {
-              package = pkgs.emacs31-gtk3;
+              package = pkgs.emacs-gtk;
               lockDir = lock_;
             };
           };

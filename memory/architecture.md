@@ -40,12 +40,18 @@ common context. This replaces the former Home Manager file-deployment interface.
 ## Nix interfaces and package adaptation
 Flake-parts `config.context` is a typed function result with raw elispkgs and
 nested variant package/lockDir options. It replaces the old flake.context output.
-This centralizes repeated inputs for packages, apps and checks. Complete original
-debate over alternative module structures is not recoverable.
+This centralizes repeated inputs for packages, apps and checks. The owner's
+retrospective clarification identifies the broader goal: keep configuration data
+within an explicit module system wherever practical, instead of maintaining a
+parallel non-module configuration source. Prior NixOS practice may have informed
+this choice. Options/submodules express ownership and constraints; ordinary
+functions still transform data and construct outputs. This is an architectural
+preference, not a requirement to turn every local value or function into an option.
 Nixpkgs helpers are `lib`; project helpers are `llib`, instantiated through
 `self.lib { inherit lib; }`. `lib/default.nix` receives nixpkgs lib rather than
 capturing pkgs. Generated variant names/configurations and unique-source-line
-lookup are reusable helper responsibilities.
+lookup are reusable helper responsibilities. The lib/llib distinction clarifies
+helper ownership; it supports the configuration-data goal rather than defining it.
 
 `pkgs/default.nix` owns explicit packages, recipe discovery and override assembly.
 Local copied MELPA recipes outrank MELPA, GNU and NonGNU registries. Files are
@@ -59,12 +65,23 @@ Savannah input and registry URLs are rewritten through the HTTPS mirror.
 Input overrides own recipe/package metadata and Elisp dependency edges.
 `scope.overrideAttrs` owns native derivation changes; `scope.executablePackages`
 contributes runtime tools, aggregated and deduplicated with inherited tools.
+Recovered user decisions favor local consumer ownership: each package may declare
+the same tool independently, and the assembly layer uses lib.unique to deduplicate.
+Consumers should not need to coordinate a manually deduplicated global tool list.
+Runtime environment tools belong beside derivation adjustments in scope, not
+inside an individual Elisp derivation's attributes.
 Dired owns coreutils, search packages own search tools, org-texmacs owns the
 font-enabled TeXmacs executable. SLY requests sbcl by name; no package-local
 SBCL executable contribution is established by this tree.
 Directory assertions require paired straight/MELPA recipes, a recipe pair or
 override in package directories, and recipe-defined packages in the explicit
 list. Override-only built-ins remain valid.
+The owner clarified that directory/framework constraints should be enforced
+during relevant Nix evaluation, before invalid structure reaches package builds
+or runtime. The generic predicate evaluator receives the root, packages and
+rules from its caller; recipe filenames are policy in pkgs/default.nix rather
+than hardcoded validator knowledge. Because evaluation is lazy, assertions run
+when the asserted expression is evaluated, not merely when flake.nix is parsed.
 
 Important adaptations include Org fork version metadata generation with an
 exact Emacs binary; explicit AUCTeX manual builds with native TeX/Perl/Git;
@@ -99,11 +116,25 @@ literature backend fields with bibliography support. The handwritten provider
 is gone; Citar-Org-Roam remains declared but disabled. Citar waits for Org and
 Org-roam to avoid the earlier unbound-directory failure.
 
-Publishing orchestration belongs to external org-roam-blog. The local module
-owns site presentation, content groups, roots, export bindings, static assets
-and article/sitemap renderers. Old native publishing advice and the local
-after-save publication hook were removed. External package behavior is not
-independently audited by reading this configuration.
+Publishing orchestration belongs to external org-roam-blog. Recovered historical
+decisions describe extraction as a responsibility and side-effect boundary:
+Emarccs configures the site, org-roam-organize manages nodes/literature, and the
+publishing package orchestrates output. The local module owns presentation,
+content groups, roots, export bindings, static assets and article/sitemap
+renderers. Old native publishing advice and the local after-save hook were removed.
+
+The recovered publishing requirements make the Org-roam DB the sole source of
+publishable level-0 nodes, without a directory-scan fallback. Handwritten index
+and about pages remain legitimate nodes. Canonical output should preserve
+source-relative structure for existing links; generated public entries/redirects
+need not determine canonical content paths. Node metadata comes from the DB,
+while position-sensitive #+INDEX annotations belong to the export parse tree.
+Plan output and detect target collisions before writing.
+Publishing should leave no permanent global project-list changes, advice, export
+filters or save hooks. This scoped operation must still run normal Org Export
+hooks/filters, including citation preprocessing. Git deployment remains outside
+publishing orchestration. These are recovered design requirements, not a claim
+that every external-package behavior has been independently verified here.
 The former orgraph aggregate is gone: TeX owns export tools, preview owns preview,
 and Org-roam owns date/post-query behavior. Org Element is required at use sites.
 Public/private helper ownership follows provided features and domain, using
@@ -111,20 +142,28 @@ one/two hyphens respectively; underscore lexical locals are a separate conventio
 The former AI module and unused package definitions are removed.
 
 ## Extension-block semantics
-The project-local layer accepts `#+begin_ext KIND :KEY VALUE`, avoiding collision
-with native block names such as example. Native Org special-block types and raw
-type/parameters are preserved; normalization adds `:extension-kind` and validated
-`:extension-parameters`. Registry spelling is canonical with case-insensitive
+The project-local layer accepts `#+begin_ext KIND :KEY VALUE`. Recovered user
+decisions chose one namespace to avoid native block-name collisions such as
+example while keeping Org documents canonical and leaving the native parser
+unchanged. Native special-block types and raw type/parameters are preserved;
+normalization adds `:extension-kind` and validated `:extension-parameters`.
+Registry spelling is canonical with case-insensitive
 lookup; unknown, duplicate or valueless parameters are errors.
 Values remain source-form Org secondary strings until backend export.
 HTML/LaTeX can lower to KIND or preserve the distinct org-extension-block export
-namespace; local configuration preserves it. Source naming, normalized semantics
-and backend output have separate responsibilities. HTML lowers a copied node;
+namespace; local configuration preserves it. The stable writing syntax is
+deliberately independent of a backend's representation name. preserve-namespace
+changes export lowering only, not canonical source or normalized AST semantics.
+Source naming, normalized semantics and backend output have separate
+responsibilities. HTML lowers a copied node;
 LaTeX parameter export performs math wrapping and rejects conflicting ATTR_LATEX
 options. Advice supports delayed exporter activation and feature unload cleanup.
 Kinds include reply, mathematical statements, exercise/exercise*, proof and
 solution. This is not a new native Org AST element type.
 
+Recovered user reports describe ordinary inline markup and links working in
+HTML/LaTeX secondary-string export; this is limited historical evidence, not
+acceptance of every secondary syntax.
 Reference material reports that citations inside parameters can miss document-wide
 citation preprocessing because synthetic secondary AST is parsed during block
 transcoding. No corresponding fix is established by this reconstruction; do not

@@ -11,12 +11,13 @@ time. Those inspections do not establish which commit an original session
 executed against. Session-level commit provenance is incomplete and is not
 inferred from dates.
 
-The authorized horizon includes eight archived Codex sessions whose initial
-working directory is this project, from the early display and packaging work
+The initial archived-session reconstruction covered eight Codex sessions whose
+initial working directory was this project, from early display and packaging work
 through the late-July Org workflow and testing discussion. The long packaging
 session also works in the nested Twist repository; those experiments explain
 design choices but do not turn that repository into the main project.
-Other-directory sessions are outside scope. Entire source horizons were surveyed
+Other-directory archived Codex sessions were outside that initial survey.
+Entire source horizons were surveyed
 for substantive intervals before selecting recoverable states; user decisions,
 corrections and relevant reported tool results were examined. Original records
 remain the evidence, rather than encrypted compaction replacements. An
@@ -50,7 +51,7 @@ is distilled and screened before writing and staging; raw logs, private paths
 and personal note identifiers are omitted. Parent relationships and source
 locations are recovered from Git rather than maintained as a parallel index.
 
-## Coverage disposition and remaining historical gaps
+## Coverage and evidence interpretation
 
 All eight matching-session horizons have been accounted for across the four
 distilled source lines: physical display corrections; structural/loading
@@ -63,11 +64,17 @@ its completion is not manufactured from another session's similar work.
 
 The earliest formal baseline summarizes an inspected complete project state.
 Earlier incremental Org/publishing history is context, not replayed commit by
-commit. Post-session publishing extraction, special-block semantics, package
-interfaces and typed context are recovered from inspected ancestral main trees
-and the user's reference accounts. Full contemporaneous discussion of these
-later decisions and rejected alternatives was not recovered. Structural rationale
-inferred from code is not presented as a recovered verbatim decision.
+commit. A later user-supplied research account adds recovered cross-project
+decision summaries for publishing extraction, extension-block semantics and
+package-local tools. These summaries support the stated historical choices;
+they are not verbatim quotations or a new raw-conversation archive.
+The owner also supplied retrospective clarification of evaluation-time directory
+constraints and module-system ownership of configuration data, with a possible
+influence from NixOS practice. These clarifications explain intent without
+claiming a contemporaneous comparison of alternatives. Local implementation
+inspection supports engineering facts, not the original session's dirty tree
+or execution commit. Complete transcripts are not a prerequisite for retaining
+the supported motivations, and no missing decision process is invented.
 
 The source's initial regular-file registry failure and later reference discussion
 of MELPA's source boundary are distinct. An upstream Nix-native registry proposal

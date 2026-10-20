@@ -1,4 +1,4 @@
-;;; emarccs-shared-basic.el -*- lexical-binding: t; -*-
+;;; emarccs-basic.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -106,7 +106,7 @@
 
 ;; (setq confirm-kill-emacs #'y-or-n-p) ; 关闭 Emacs 前确认
 
-(defconst emarccs-shared-basic--spell-check-support-enabled-p t)    ; 是否启用拼写检查
+(defconst emarccs-basic--spell-check-support-enabled-p t)    ; 是否启用拼写检查
 
 (add-hook 'prog-mode-hook #'delete-trailing-whitespace-mode)
 
@@ -449,5 +449,5 @@
    (insert "#+BEGIN_abstract\n\n#+END_abstract\n")
    (forward-line -2)))
 
-(provide 'emarccs-shared-basic)
-;;; emarccs-shared-basic.el ends here.
+(provide 'emarccs-basic)
+;;; emarccs-basic.el ends here.

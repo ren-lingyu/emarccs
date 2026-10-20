@@ -1,4 +1,4 @@
-;;; emarccs-shared-feed.el -*- lexical-binding: t; -*-
+;;; emarccs-feed.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -21,5 +21,5 @@
   (setq arxiv-default-category "cond-mat")
   (setq arxiv-frame-alist '((name . "*arXiv*"))))
 
-(provide 'emarccs-shared-feed)
-;;; emarccs-shared-feed.el ends here.
+(provide 'emarccs-feed)
+;;; emarccs-feed.el ends here.

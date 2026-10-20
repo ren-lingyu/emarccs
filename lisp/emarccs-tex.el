@@ -1,4 +1,4 @@
-;;; emarccs-shared-tex.el -*- lexical-binding: t; -*-
+;;; emarccs-tex.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -38,7 +38,7 @@
 (setq org-highlight-latex-and-related '(native script))
 
 ;; 自定义 LaTeX 高亮规则
-(defun emarccs-shared-tex--org-latex-font-lock ()
+(defun emarccs-tex--org-latex-font-lock ()
   "Strict LaTeX syntax highlighting in org-mode."
   (font-lock-add-keywords
    nil
@@ -72,8 +72,8 @@
      ("\\\\braket<\\([^| \n]+\\)|\\([^> \n]+\\)>" . font-lock-keyword-face)
      ("\\\\braket<\\([^| \n]+\\)|\\([^| \n]+\\)|\\([^> \n]+\\)>" . font-lock-keyword-face))))
 
-;; (add-hook 'org-mode-hook #'emarccs-shared-tex--org-latex-font-lock)
-(add-hook 'LaTeX-mode-hook #'emarccs-shared-tex--org-latex-font-lock)
+;; (add-hook 'org-mode-hook #'emarccs-tex--org-latex-font-lock)
+(add-hook 'LaTeX-mode-hook #'emarccs-tex--org-latex-font-lock)
 
 ;; 与latex环境有关的快捷键
 
@@ -163,7 +163,7 @@
   (setq org-latex-default-class "note")
   ;; (setq org-latex-title-command "")
   (setq org-export-with-toc t)
-  (defun emarccs-shared-tex--insert-toc-after-abstract-or-title (output backend _info)
+  (defun emarccs-tex--insert-toc-after-abstract-or-title (output backend _info)
     (when (and (org-export-derived-backend-p backend 'latex)
                (string-match-p "\\\\documentclass[[:space:]]*\\(?:\\[.*?\\][[:space:]]*\\)?{[[:space:]]*article[[:space:]]*}" output))
       (if (string-match "\\\\end{abstract}" output)
@@ -193,8 +193,8 @@
              output)))
     output)
   (add-hook 'org-export-filter-final-output-functions
-            #'emarccs-shared-tex--insert-toc-after-abstract-or-title)
-  (defun emarccs-shared-tex--remove-angle-brackets-in-timestamp (output backend info)
+            #'emarccs-tex--insert-toc-after-abstract-or-title)
+  (defun emarccs-tex--remove-angle-brackets-in-timestamp (output backend info)
     (when (org-export-derived-backend-p backend 'latex)
       (setq output
             (replace-regexp-in-string
@@ -203,7 +203,7 @@
              output)))
     output)
   (add-hook 'org-export-filter-final-output-functions
-            #'emarccs-shared-tex--remove-angle-brackets-in-timestamp)
+            #'emarccs-tex--remove-angle-brackets-in-timestamp)
   ;; 定义\label{eq:...}和\eqref{eq:...}对应的链接类型
   (org-link-set-parameters "eq"
                            :follow
@@ -246,6 +246,6 @@
   (setq org-beamer-outline-frame-options "t"))
 
 ;; The End
-(provide 'emarccs-shared-tex)
+(provide 'emarccs-tex)
 
-;;; emarccs-shared-tex.el ends here
+;;; emarccs-tex.el ends here

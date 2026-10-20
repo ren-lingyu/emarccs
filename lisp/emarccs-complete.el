@@ -1,4 +1,4 @@
-;;; emarccs-shared-complete.el -*- lexical-binding: t; -*-
+;;; emarccs-complete.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -157,5 +157,5 @@
   (org-mode . laas-mode)
   (org-mode . yas-minor-mode))
 
-(provide 'emarccs-shared-complete)
-;;; emarccs-shared-complete.el ends here
+(provide 'emarccs-complete)
+;;; emarccs-complete.el ends here

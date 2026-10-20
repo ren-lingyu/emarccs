@@ -198,26 +198,20 @@
                           (elisp.form "eval-and-compile" [
                             (elisp.form "add-to-list" [
                               (elisp.quote (elisp.symbol "load-path"))
-                              ./lisp/twist-emacs
-                            ])
-                            (elisp.form "add-to-list" [
-                              (elisp.quote (elisp.symbol "load-path"))
-                              ./lisp/share
+                              ./lisp
                             ])
                           ])
                           (elisp.form "require" [
                             (elisp.quote (
-                              elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el))
+                              elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs-bootstrap.el))
                             ))
                           ])
                           (elisp.form "advice-add" [
                             (elisp.quote (elisp.symbol "startup--load-user-init-file"))
                             (elisp.symbol ":around")
-                            (elisp.form "emarccs-twist--load-user-init-file" [
-                              ./early-init.el
-                              (elisp.quote (
-                                elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/share/emarccs-shared.el))
-                              ))
+                            (elisp.form "emarccs-bootstrap--load-user-init-file" [
+                              ./lisp/emarccs-early-init.el
+                              (elisp.quote (elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs-init.el))))
                             ])
                           ])
                         ];
@@ -268,20 +262,15 @@
                       emacsPackage = config.packages.${name_};
                       elispSource = lib.fileset.toSource {
                         root = ./.;
-                        fileset = lib.fileset.unions [
-                          ./early-init.el
-                          ./init.el
-                          ./lisp
-                        ];
+                        fileset = ./lisp;
                       };
                       elispPackages = twistContext_.elispkgs.packages;
                       siteStartCheckList = [
                         "eval-and-compile"
-                        "${./lisp/twist-emacs}"
-                        "${./lisp/share}"
-                        "${lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/twist-emacs/emarccs-twist.el)}"
+                        "${./lisp}"
+                        "${lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs-bootstrap.el)}"
                         "startup--load-user-init-file"
-                        "${./early-init.el}"
+                        "${./lisp/emarccs-early-init.el}"
                       ];
                     }
                   )

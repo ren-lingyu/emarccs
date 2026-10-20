@@ -13,27 +13,15 @@
              minver emacs-version)
      :warning)))
 
-(require 'emarccs-twist)
+(require 'emarccs-bootstrap)
 
 (emarccs-startup-smoke--check
- (featurep 'emarccs-twist)
- "emarccs-twist was not loaded")
+ (featurep 'emarccs-bootstrap)
+ "emarccs-bootstrap was not loaded")
 
 (emarccs-startup-smoke--check
- (locate-library "emarccs-shared")
- "emarccs-shared is not locatable")
-
-(emarccs-startup-smoke--check
- (seq-some (lambda (path)
-             (string-match-p "twist-emacs" path))
-           load-path)
- "twist-emacs is missing from load-path")
-
-(emarccs-startup-smoke--check
- (seq-some (lambda (path)
-             (string-match-p "-share" path))
-           load-path)
- "share is missing from load-path")
+ (locate-library "emarccs-init")
+ "emarccs-init is not locatable")
 
 (princ "startup-smoke ok\n")
 

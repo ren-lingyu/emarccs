@@ -1,4 +1,4 @@
-;;; emarccs-shared-theme.el -*- lexical-binding: t; -*-
+;;; emarccs-theme.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -26,6 +26,6 @@
     (doom-modeline-mode 1)))
 
 
-(provide 'emarccs-shared-theme)
+(provide 'emarccs-theme)
 
-;;; emarccs-shared-theme.el ends here
+;;; emarccs-theme.el ends here

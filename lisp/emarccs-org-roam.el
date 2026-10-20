@@ -1,4 +1,4 @@
-;;; emarccs-shared-org-roam.el -*- lexical-binding: t; -*-
+;;; emarccs-org-roam.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -19,7 +19,7 @@
    ("C-c n i" . org-roam-node-insert)
    ("C-c n l" . org-roam-buffer-toggle)
    ("C-c n c" . org-roam-capture)
-   ("C-c c l" . emarccs-shared-org-roam-forward-links))
+   ("C-c c l" . emarccs-org-roam-forward-links))
   :config
   (org-roam-db-autosync-mode)
   ;; (advice-add 'org-roam-mode-hook :after
@@ -47,7 +47,7 @@
                                                  "#+FILETAGS: :zettel:blog:\n"
                                                  ))
                                               :unnarrowed t))))
-  (defun emarccs-shared-org-roam-forward-links (&optional other-window)
+  (defun emarccs-org-roam-forward-links (&optional other-window)
     "Select an Org-roam node linked from the current buffer.
 
 All `id' links recognized by `org-roam-db-map-links', including
@@ -75,7 +75,7 @@ another window."
         t
         "Forward link: ")
        other-window)))
-  (defun emarccs-shared-org-roam-update-link-description ()
+  (defun emarccs-org-roam-update-link-description ()
     "Update the description of the link at point to match the title of the corresponding Org-roam node in the database.
 If the link is not an Org-roam ID link or the node cannot be found, display an appropriate message without making changes."
     (interactive)
@@ -153,5 +153,5 @@ If the link is not an Org-roam ID link or the node cannot be found, display an a
   (setq org-roam-timestamps-parent-file t)
   (setq org-roam-timestamps-remember-timestamps t))
 
-(provide 'emarccs-shared-org-roam)
-;;; emarccs-shared-org-roam.el ends here
+(provide 'emarccs-org-roam)
+;;; emarccs-org-roam.el ends here

@@ -1,4 +1,4 @@
-;;; emarccs-shared-lisp.el -*- lexical-binding: t; -*-
+;;; emarccs-lisp.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -9,6 +9,6 @@
   :hook
   (lisp-mode . sly-mode))
 
-(provide 'emarccs-shared-lisp)
+(provide 'emarccs-lisp)
 
-;;; emarccs-shared-lisp.el ends here
+;;; emarccs-lisp.el ends here

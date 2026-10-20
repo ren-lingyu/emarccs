@@ -18,10 +18,6 @@
   (or (getenv name)
       (error "%s is not set" name)))
 
-(setq straight-base-dir
-      (emarccs--getenv-required
-       "EMARCCS_STRAIGHT_BASE_DIR"))
-
 (let* ((source
         (file-name-as-directory
          (emarccs--getenv-required

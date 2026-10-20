@@ -1,16 +1,16 @@
-;;; emarccs-shared-org-roam-blog.el --- Configure the personal Org-roam blog -*- lexical-binding: t; -*-
+;;; emarccs-org-roam-blog.el --- Configure the personal Org-roam blog -*- lexical-binding: t; -*-
 
 ;;; commentary:
 ;;; code:
 
 (use-package citeproc)
 
-(defconst emarccs-shared--org-roam-blog-site-name "aRenCoco's Blog")
-(defconst emarccs-shared--org-roam-blog-site-url "https://aren-coco.com")
-(defconst emarccs-shared--org-roam-blog-beginning-year 2026)
+(defconst emarccs--org-roam-blog-site-name "aRenCoco's Blog")
+(defconst emarccs--org-roam-blog-site-url "https://aren-coco.com")
+(defconst emarccs--org-roam-blog-beginning-year 2026)
 
 ;; License strings.
-(defconst emarccs-shared--org-roam-blog-cc-license-generic-work-full-tool-name
+(defconst emarccs--org-roam-blog-cc-license-generic-work-full-tool-name
   (concat "This work is licensed under" "\u0020"
           "<a rel=\"license\" href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</a>"
           "<img src=\"https://mirrors.creativecommons.org/presskit/icons/cc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
@@ -18,17 +18,17 @@
           "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
           "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
-(defconst emarccs-shared--org-roam-blog-cc-license-no-geniric-work-full-tool-name
+(defconst emarccs--org-roam-blog-cc-license-no-geniric-work-full-tool-name
   (concat "&copy;"
           (if (= (string-to-number (format-time-string "%Y"))
-                 emarccs-shared--org-roam-blog-beginning-year)
-              (number-to-string emarccs-shared--org-roam-blog-beginning-year)
-            (concat (number-to-string emarccs-shared--org-roam-blog-beginning-year)
+                 emarccs--org-roam-blog-beginning-year)
+              (number-to-string emarccs--org-roam-blog-beginning-year)
+            (concat (number-to-string emarccs--org-roam-blog-beginning-year)
                     "-"
                     (format-time-string "%Y")))
           "\u0020"
           "<a rel=\"cc:attributionURL\" href=\""
-          emarccs-shared--org-roam-blog-site-url
+          emarccs--org-roam-blog-site-url
           "/\">aRenCoco</a>"
           "\u0020"
           "\u00B7"
@@ -39,17 +39,17 @@
           "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
           "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
-(defconst emarccs-shared--org-roam-blog-cc-license-no-genic-work-no-full-tool-name
+(defconst emarccs--org-roam-blog-cc-license-no-genic-work-no-full-tool-name
   (concat "&copy;"
           (if (= (string-to-number (format-time-string "%Y"))
-                 emarccs-shared--org-roam-blog-beginning-year)
-              (number-to-string emarccs-shared--org-roam-blog-beginning-year)
-            (concat (number-to-string emarccs-shared--org-roam-blog-beginning-year)
+                 emarccs--org-roam-blog-beginning-year)
+              (number-to-string emarccs--org-roam-blog-beginning-year)
+            (concat (number-to-string emarccs--org-roam-blog-beginning-year)
                     "-"
                     (format-time-string "%Y")))
           "\u0020"
           "<a rel=\"cc:attributionURL\" href=\""
-          emarccs-shared--org-roam-blog-site-url
+          emarccs--org-roam-blog-site-url
           "/\">aRenCoco</a>"
           "\u0020"
           "\u00B7"
@@ -61,7 +61,7 @@
           "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
 ;; Blog configuration.
-(defun emarccs-shared--org-roam-blog-article-body (context)
+(defun emarccs--org-roam-blog-article-body (context)
   "Prepend publication metadata to the article body in CONTEXT."
   (let ((format-value (lambda (value)
                         (condition-case nil
@@ -97,7 +97,7 @@
             (plist-get context
                        :body))))
 
-(defun emarccs-shared--org-roam-blog-sitemap-renderer (context)
+(defun emarccs--org-roam-blog-sitemap-renderer (context)
   "Render the blog sitemap Org source fragment from CONTEXT."
   (let* ((entries (plist-get context
                              :entries))
@@ -186,7 +186,7 @@
   (org-roam-blog-publish-directory (expand-file-name "./public/"
                                                      org-directory))
   (org-roam-blog-publish-store "store")
-  (org-roam-blog-site-url (concat emarccs-shared--org-roam-blog-site-url "/"))
+  (org-roam-blog-site-url (concat emarccs--org-roam-blog-site-url "/"))
   (org-roam-blog-published-property "PUBLISHED")
   (org-roam-blog-sitemap (list :enable t
                                :path "./sitemap.html"
@@ -197,7 +197,7 @@
                                                  "#+END_abstract\n")
                                :sort 'anti-chronologically
                                :visible-tags '("2026" "日常" "年度总结" "随笔")
-                               :renderer #'emarccs-shared--org-roam-blog-sitemap-renderer))
+                               :renderer #'emarccs--org-roam-blog-sitemap-renderer))
   (org-roam-blog-theindex (list :enable t
                                 :path "./theindex.html"
                                 :preamble (concat "#+TITLE: Index\n"
@@ -218,7 +218,7 @@
                                      :theindex t
                                      :template (list :with-toc t
                                                      :section-numbers t)
-                                     :body (list #'emarccs-shared--org-roam-blog-article-body))))
+                                     :body (list #'emarccs--org-roam-blog-article-body))))
   (org-roam-blog-static (list (list :source (expand-file-name "./static/"
                                                               org-directory)
                                     :directory "./"
@@ -248,7 +248,7 @@
                                                                     (format-time-string "%Y%m%d%z")
                                                                     "\"/>\n"
                                                                     "<link rel=\"alternate\" type=\"application/atom+xml\" title=\""
-                                                                    emarccs-shared--org-roam-blog-site-name
+                                                                    emarccs--org-roam-blog-site-name
                                                                     " - Atom\" href=\"/feed.atom\"/>\n"))
                                                       (cons 'org-html-head-extra
                                                             nil)
@@ -266,7 +266,7 @@
                                                                         "<a accesskey=\"\" href=\"/about.html\">About</a>\n"
                                                                         "<a accesskey=\"\" href=\"/style.html\">Style</a>\n"
                                                                         "<a accesskey=\"\" href=\"/theindex.html\">Index</a>\n"
-                                                                        "<a accesskey=\"\" href=\"" emarccs-shared--org-roam-blog-site-url "/feed.atom\">Feed</a>\n"
+                                                                        "<a accesskey=\"\" href=\"" emarccs--org-roam-blog-site-url "/feed.atom\">Feed</a>\n"
                                                                         "</nav>\n"
                                                                         "</header>\n"
                                                                         "<hr class=\"topline\">\n\n"))))
@@ -275,7 +275,7 @@
                                                                ,(concat "\n"
                                                                         "<footer>\n"
                                                                         "<p>\n"
-                                                                        emarccs-shared--org-roam-blog-cc-license-no-genic-work-no-full-tool-name
+                                                                        emarccs--org-roam-blog-cc-license-no-genic-work-no-full-tool-name
                                                                         "</p>\n"
                                                                         "<p>\n"
                                                                         "Generated at <span class=\"update-time\">%T</span> by %c on <a href=\"https://nixos.org\">NixOS</a>."
@@ -286,6 +286,6 @@
                                                       (cons 'org-html-metadata-timestamp-format
                                                             "%Y-%m-%d %a %H:%M %z")))))
 
-(provide 'emarccs-shared-org-roam-blog)
+(provide 'emarccs-org-roam-blog)
 
-;;; emarccs-shared-org-roam-blog.el ends here
+;;; emarccs-org-roam-blog.el ends here

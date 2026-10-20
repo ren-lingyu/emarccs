@@ -48,30 +48,14 @@ in
       inherit (config_) packages;
       predicates = [
         {
-          iff = [
-            { exists = "melpa-recipe.el"; }
-            { exists = "straight-register.el"; }
-          ];
-        }
-        {
           any = [
-            {
-              all = [
-                { exists = "melpa-recipe.el"; }
-                { exists = "straight-register.el"; }
-              ];
-            }
+            { exists = "melpa-recipe.el"; }
             { exists = "override.nix"; }
           ];
         }
         {
           implies = [
-            {
-              all = [
-                { exists = "melpa-recipe.el"; }
-                { exists = "straight-register.el"; }
-              ];
-            }
+            { exists = "melpa-recipe.el"; }
             { inPackages = true; }
           ];
         }

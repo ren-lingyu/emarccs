@@ -26,6 +26,8 @@
       ;
   };
 
+  startup-order = import ./startup-order { inherit pkgs lib emacsPackage; };
+
   package-availability-smoke = import ./package-availability-smoke {
     inherit
       pkgs

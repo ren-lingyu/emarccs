@@ -1,4 +1,4 @@
-;;; emarccs-shared-org-latex-preview.el --- Org preview configuration -*- lexical-binding: t; -*-
+;;; emarccs-org-latex-preview.el --- Org preview configuration -*- lexical-binding: t; -*-
 ;;; commentary:
 
 ;;; from https://abode.karthinks.com/org-latex-preview/
@@ -42,5 +42,5 @@
                    :latex-compiler ("%l -interaction=nonstopmode -outdir=%o %f")
                    :image-converter ("dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %B-%%9p.svg %f")))))
 
-(provide 'emarccs-shared-org-latex-preview)
-;;; emarccs-shared-org-latex-preview.el ends here.
+(provide 'emarccs-org-latex-preview)
+;;; emarccs-org-latex-preview.el ends here.

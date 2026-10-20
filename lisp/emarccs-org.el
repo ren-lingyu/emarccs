@@ -1,4 +1,4 @@
-;;; emarccs-shared-org.el --- Org mode configuration -*- lexical-binding: t; -*-
+;;; emarccs-org.el --- Org mode configuration -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -37,7 +37,7 @@
                       :weight 'ultra-bold
                       :inverse-video t)
   ;; 更新文件头
-  (defun emarccs-shared-org-update-date (path time_string insert_bool)
+  (defun emarccs-org-update-date (path time_string insert_bool)
     "Update #+DATE only for specific Org files."
     (when (and (eq major-mode 'org-mode)
                (buffer-file-name) ; 确保有文件名
@@ -69,11 +69,11 @@
                                               (forward-line)
                                               (insert "#+DATE: " now "\n"))))))))))))
 
-(use-package emarccs-shared--org-extension-block
+(use-package emarccs--org-extension-block
   :after org
   :config
-  (setq emarccs-shared--org-extension-block-preserve-namespace t)
-  (setq emarccs-shared--org-extension-block-registry
+  (setq emarccs--org-extension-block-preserve-namespace t)
+  (setq emarccs--org-extension-block-registry
         '(("reply" . (:from :subject :date))
           ("theorem" . (:title))
           ("lemma" . (:title))
@@ -152,7 +152,7 @@
 ;;       text))
 ;;   (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
 
-;; (defun emarccs-shared-org-update-setupfile (path)
+;; (defun emarccs-org-update-setupfile (path)
 ;;   "Update #+SETUPFILE only for specific Org files."
 ;;   (when (and  (eq major-mode 'org-mode)
 ;;               (buffer-file-name)
@@ -171,10 +171,10 @@
  (lambda ()
    (interactive)
    (when (buffer-file-name)
-     (emarccs-shared-org-update-date
+     (emarccs-org-update-date
       (file-name-directory (buffer-file-name))
       "<%Y-%m-%d %a %z>"
       nil))))
 
-(provide 'emarccs-shared-org)
-;;; emarccs-shared-org.el ends here.
+(provide 'emarccs-org)
+;;; emarccs-org.el ends here.

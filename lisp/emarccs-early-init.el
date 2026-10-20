@@ -1,4 +1,4 @@
-;;; early-init.el -*- lexical-binding: t; -*-
+;;; emarccs-early-init.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -29,6 +29,6 @@
         (menu-bar-lines . 0)
         (tool-bar-lines . 0)))
 
-(provide 'early-init)
+(provide 'emarccs-early-init)
 
-;;; early-init.el ends here
+;;; emarccs-early-init.el ends here

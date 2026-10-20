@@ -1,4 +1,4 @@
-;;; emarccs-shared-org-roam-organize.el -*- lexical-binding: t; -*-
+;;; emarccs-org-roam-organize.el -*- lexical-binding: t; -*-
 ;;; commentary:
 ;;; code:
 
@@ -87,7 +87,7 @@
   (org-roam-organize-moc-managed-tag-property "MOC_MANAGED_TAG")
   (org-roam-organize-moc-managed-node-count-property "MOC_MANAGED_NODE_COUNT")
   :config
-  (defun emarccs-shared-org-roam-organize--post-p ()
+  (defun emarccs-org-roam-organize--post-p ()
     "Return t if the current file's level-0 node is tagged `post', otherwise nil."
     (and buffer-file-name
          (not (null (org-roam-db-query (vector :select (vector 'nodes:file)
@@ -99,7 +99,7 @@
                                                             (like tag (quote "%\"post\"%")))
                                                :limit 1)
                                        buffer-file-name)))))
-  (defun emarccs-shared-org-roam-organize--before-save ()
+  (defun emarccs-org-roam-organize--before-save ()
     (when (and org-roam-organize-mode
                buffer-file-name
                (file-in-directory-p buffer-file-name
@@ -111,16 +111,16 @@
                                                org-roam-organize-directory))
         nil)
        ;; Posts are not updated.
-       ((emarccs-shared-org-roam-organize--post-p)
+       ((emarccs-org-roam-organize--post-p)
         nil)
        ;; Update all other managed notes.
        (t
-        (emarccs-shared-org-update-date org-roam-organize-directory
+        (emarccs-org-update-date org-roam-organize-directory
                                         "<%Y-%m-%d %a %z>"
                                         t)
         (message "Updated DATE in %s" buffer-file-name)))))
   (add-hook 'before-save-hook
-            #'emarccs-shared-org-roam-organize--before-save)
+            #'emarccs-org-roam-organize--before-save)
   :bind
   (("C-c o o" . org-roam-organize-mode)
    ("C-c o n c" . org-roam-organize-node-create)
@@ -176,6 +176,6 @@
           (:citar-url . ("url"))))
   (setq citar-org-roam-note-title-template "${title}"))
 
-(provide 'emarccs-shared-org-roam-organize)
+(provide 'emarccs-org-roam-organize)
 
-;;; emarccs-shared-org-roam-organize.el ends here
+;;; emarccs-org-roam-organize.el ends here

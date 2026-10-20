@@ -1,19 +1,18 @@
 # Current memory
 
-The represented state has shared-prefixed modules, source-relative entry
-loading, Emacs 31 warnings and late customization. Read `architecture.md`
-for the complete ownership and capability picture.
+The represented project separates pure bootstrap from shared configuration and
+centralizes straight recipes under package directories. Shared startup retains
+module ordering and late customization; Home Manager still deploys source files.
+Read `architecture.md` for the complete state.
 
-The active task is architecture-led retrospective reconstruction. The
-display/startup source is distilled and integrated for its contracts and
-qualifications; its transient paths do not override main's actual shared layout.
-Other source lines remain to integrate. Keep all authored memory English,
-leave reference notes unarchived and retain final aux histories after they
-reach safe-deletion readiness.
+Reconstruction has integrated the display/startup line and the relevant
+dual-entry source stage. The retained packaging stage includes later experimental
+startup findings; those explain the design but do not make the corresponding
+Nix wrapper part of this earlier main tree.
 
-The project parent identifies the exact tree statically inspected now, not
-the original session's execution commit. Historical GUI/stub reports are
-narrower than fresh startup acceptance. See `reconstruction.md`.
+Next recover the complete declarative Twist environment, variants, generated
+startup adapters and checks. Preserve the distinction between main adoption,
+nested experiments and the limits of fresh pure bootstrap.
 
-Next recover separation of pure bootstrap, shared behavior and centralized
-recipes; keep later Nix wrapper capabilities out of that earlier state.
+Project parents identify trees inspected now. No original session execution
+commit or fresh build/runtime validation is asserted. See `reconstruction.md`.

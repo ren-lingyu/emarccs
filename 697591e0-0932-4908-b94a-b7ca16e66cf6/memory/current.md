@@ -1,31 +1,40 @@
 # Display and startup contracts
 
 ## Scope and evidence
-Recovered from the archived July 7 physical-font session in the authorized
-Codex archived_sessions directory. The source horizon was surveyed through its
-conflict-resolution handoff. This independent source history is not formal
-project-current memory. No exact original project commit is established.
-Validation below is reported by the source, not rerun now. No raw log is copied.
+This source joins the July 7 physical-font work and July 10 structural/testing
+discussion, both originally started in this project. Entire horizons were
+surveyed for durable decisions. The final structural-session startup-source
+request was interrupted; no completion is attributed to that session.
+The long packaging source contains separate completed startup investigation.
+No exact original project commit is established; no runtime check is rerun.
 
-## Adopted display policy
-Prefer monitor physical dimensions for a nominal 4 mm font target, falling back
-to pixel-resolution scaling. Avoid monitor-name special cases and unnecessary
-global state; keep the calculation local. The geometry calculation is a font
-size heuristic, not proof that rendered glyphs physically measure 4 mm.
+## Display contract
+Physical-first nominal 4 mm sizing accepts list and dotted-pair mm-size values,
+then falls back to the smaller pixel ratio against 1920 by 1080 at height 110.
+Avoid per-monitor names and unnecessary global configuration. Source GUI
+checks reported physical height 114 and fallback heights 110/176; those values
+are face parameters, not measured glyph dimensions. Conflict edits did not
+constitute an agent-completed rebase.
 
-A GUI investigation found monitor mm-size returned a list such as (310 200),
-where an earlier implementation assumed a dotted pair. That mismatch silently
-selected fallback sizing. Supporting both shapes corrected the calculation.
-The fallback uses the smaller width/height ratio against 1920 by 1080 at
-face height 110; 3072 by 1920 therefore yields 176.
+## Module and initialization contract
+Use project-prefixed provided features, keeping requires consistent when files
+move. A transient staged layout used lisp/init names; main's tree determines
+the adopted share directory and later shared prefix. Do not substitute the
+transient layout for the repository's actual architecture.
+Load custom.el after configuration modules so user customization can override
+defaults. The version policy changed from a hard error toward a warning.
+An intermediate 30.2 target is historical; later main targets Emacs 31.
+Resolve source loading relative to the loaded entry file. The owner explicitly
+rejected resetting user-emacs-directory for tests: inject load-path instead.
 
-## Verification and unresolved scope
-The source reports isolated GUI results 114 for physical sizing, 110 at base
-resolution and 176 for scaled fallback, plus a parenthesis check. A later
-conflict resolution combined physical-first behavior with that fallback.
-The agent edited the conflict but did not continue the rebase; the owner staged
-the result. This is not fresh end-to-end startup acceptance.
+## Validation limits
+The source reports static/contract checks and a stub-based resolver suite
+(18 cases), not complete GUI startup or dependency availability. Two trailing
+whitespace findings were noted without a supported final resolution here.
+The real-configuration test/startup-source tail is incomplete in this source.
+No tests are inferred from a proposal or interrupted command.
 
-## Next action
-Recover the module/loading contract discussion separately, preserving the
-distinction between source experiments and the names adopted on main.
+## Handoff
+The recoverable source scope is distilled. Formal integration should adopt the
+display and loading contracts only at the relevant main-tree boundary, with
+the completed packaging startup evidence considered separately.

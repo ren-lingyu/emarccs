@@ -2,15 +2,17 @@
 
 ## Represented baseline
 
-This state is a personal Emacs configuration organized around one interactive
-startup and a shared Org-based knowledge workflow. It predates a separate
-package environment or a pure/shared directory split.
+This state is a mature single-entry Emacs configuration with an early startup
+phase and a Home Manager deployment interface. Package acquisition is still
+owned by interactive configuration; no separate package environment exists.
 
 ## Startup and package ownership
 
-Root `init.el` adds its `lisp/` directory to the load path and loads
-`custom.el` before the configuration modules. The minimum version is enforced
-at Emacs 28.1, with a message below 30.1. There is no separate early-init entry.
+Root `init.el` adds `lisp/` relative to the user's Emacs directory and loads an
+optional `custom.el` before configuration modules. The minimum is enforced at
+Emacs 28.1, with a message below 30.1. `early-init.el` disables package.el startup,
+sets straight defaults, suppresses asynchronous compiler warnings, and establishes
+initial/default frame parameters before normal module loading.
 
 `init-basic.el` owns straight.el bootstrap and use-package defaults as well as
 general editor behavior. A missing bootstrap can initiate a synchronous
@@ -24,13 +26,17 @@ Backup and state locations depend on the user's Emacs directory.
 Modules cover editing and completion, help, theme, Org, TeX, snippets,
 Org-roam, citation integration, LaTeX preview, publishing, the personal
 integration layer and debugging. Entry-point require order supplies implicit
-dependencies. An AI file exists but is not required by this entry; a project
-module's presence likewise does not establish that startup enables it.
+dependencies. Feed and AI modules are now enabled by the entry point. A file's presence
+alone still does not establish that startup enables it.
 
 The editor layer combines Consult, Vertico, Orderless, Marginalia and Embark
 with general navigation, input and language conveniences. Theme and frame
-preferences are configuration responsibilities rather than a portable GUI
-measurement contract.
+preferences include daemon display guards and resolution-based proportional
+font scaling. The selected display state precedes physical-dimension sizing;
+resolution is a fallback heuristic rather than a physical glyph measurement.
+Dirvish-based file management, structural highlights, large-file handling,
+Tree-sitter language conveniences and expanded mathematical snippets have joined
+the basic workflow.
 
 Org is the central document and task substrate. It uses the tecosaur Org fork
 and a recipe pre-build step to generate Org version metadata. Capture, agenda,
@@ -64,9 +70,11 @@ Local content, tag identifiers and site details are intentionally not reproduced
 
 The repository is configuration source, not the Org database or note archive.
 Its inverted ignore whitelist controls which files become visible to Git.
-The empty README at this baseline supplies no independent operational guide.
-A flake, declarative package registry, startup smoke suite and grammar runtime
-checks do not yet belong to this represented state.
+The Home Manager flake links early-init, init and the Lisp tree into a configurable
+Emacs configuration directory. This deploys configuration files; it does not
+provide or lock the Emacs package environment. Straight bootstrap remains the
+package acquisition path. Declarative registries, startup smoke suites and
+whole-set grammar runtime checks do not yet belong to this represented state.
 
 Static inspection establishes these responsibilities and entry relationships.
 It does not prove a fresh bootstrap, GUI startup, publishing, database mutation

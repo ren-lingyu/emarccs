@@ -2,8 +2,7 @@
 
 ## Represented state
 
-The early single-entry Emacs configuration has been reconstructed as a complete
-architectural baseline. Read `architecture.md` for startup, package ownership,
+The mature early-init/Home Manager single-entry configuration is represented. Read `architecture.md` for startup, package ownership,
 the Org workflow and publishing coupling. This is a historical state, not a
 claim that today's project still has this layout.
 
@@ -23,6 +22,6 @@ See `reconstruction.md` for source coverage and retention boundaries.
 
 ## Next action
 
-Recover the mature early-init/Home Manager state before introducing the
-shared-module and dual-entry refactors. Then integrate supported source stages
-in main's ancestral order without replaying every commit.
+Establish the display/startup source history, then recover shared-module naming,
+source-relative loading and late customization. Keep resolution-only display
+behavior distinct from the subsequent physical-dimension implementation.

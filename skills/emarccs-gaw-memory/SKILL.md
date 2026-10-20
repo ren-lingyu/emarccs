@@ -36,14 +36,19 @@ Distinguish original discussion and validation from retrospective explanation
 and later repository inspection. Memory is a useful prior, not fresh proof of
 runtime behavior.
 
+GAW commit parents encode the historical dependencies necessary to interpret
+the knowledge state represented by the commit. The first parent supplies its
+inherited knowledge history, while additional parents supply other required
+historical context, without merging their trees.
+
 Recover relevant evolution through formal first-parent history. Inspect actual
-parents and committed trees when source context matters. Auxiliary content is
+parents and committed trees when historical context matters. Auxiliary content is
 located beneath the UUID root found in its tree. Additional-parent positions do
 not have fixed business roles.
 
-Formal GAW remains project-current-memory authority. Reachability proves
-retention, not adoption or validation of every retained claim. Do not maintain
-a parallel checkpoint or source registry.
+Formal GAW remains project-current-memory authority. Git reachability describes
+which commits remain retained. Recover ancestry and parent relationships from
+Git rather than maintaining a parallel checkpoint or source registry.
 
 Maintain this entry point when memory organization or interpretation changes,
 not after every memory update. It grants no project-write, test, network,

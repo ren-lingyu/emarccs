@@ -1,10 +1,15 @@
 # Reconstruction scope and evidence
 
 This is a retrospective reconstruction performed now, without backdating.
-The represented project state follows formal first-parent evolution; additional
-project parents identify exact trees inspected during this reconstruction.
-They do not establish which commit an original session executed against.
-Session-level commit provenance is incomplete and is not inferred from dates.
+GAW commit parents encode the historical dependencies necessary to interpret
+the knowledge state represented by the commit. The first parent supplies its
+inherited knowledge history, while additional parents supply other required
+historical context, without merging their trees.
+
+Project snapshots used in this reconstruction were inspected at reconstruction
+time. Those inspections do not establish which commit an original session
+executed against. Session-level commit provenance is incomplete and is not
+inferred from dates.
 
 The authorized horizon includes eight archived Codex sessions whose initial
 working directory is this project, from the early display and packaging work
@@ -29,7 +34,8 @@ packaging, Nix helper/grammar evolution, and Org workflow ownership. Their
 selection reflects consequential decisions rather than one checkpoint per
 session or edit. Formal memory adopts applicable knowledge at architecture
 boundaries; source conclusions may precede or exceed the represented project
-tree. Retention is not blanket adoption of every source assertion.
+tree. Formal descriptions distinguish applicable findings from source-stage
+experiments and superseded conclusions.
 
 Present static inspection, historical tool reports and user-reported checks
 are distinct evidence classes. No Emacs runtime, Nix build, dependency update
@@ -70,9 +76,10 @@ preprocessing gap is preserved without claiming the external issue was checked
 or resolved. No external issue, foreign repository or source transcript is
 persisted as a project parent.
 
-Each retained source stage was reviewed as distilled English memory and used
-at a meaningful formal integration boundary. Final source tips are retained,
-their temporary clean worktrees have been removed and all four public auxiliary
-readiness reports were ready. Branches remain intentionally available. The
-ordinary project HEAD and index were left unchanged. The two reference notes
-remain on disk and outside GAW archives and source branches.
+Selected source stages supply required historical context for interpreting
+the relevant formal knowledge states. At reconstruction completion, final
+source tips had been retained in formal ancestry, their temporary clean worktrees
+had been removed and all four public auxiliary readiness reports were ready.
+Branches were intentionally retained. The ordinary project HEAD and index were
+left unchanged. The two reference notes remained on disk and outside GAW
+archives and source branches.

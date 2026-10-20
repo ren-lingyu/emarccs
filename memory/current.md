@@ -7,13 +7,14 @@ Read `backlog.md` for deferred documentation work and its verified scope.
 Read `reconstruction.md` when interpreting historical claims and evidence limits.
 Use `git gaw status` and relevant public checks for live GAW lifecycle state.
 
-## Uncommitted project state (pure-entry removal and lisp flattening)
-Step one is complete in the reviewed working state and accepted by the owner.
-The refactor and corrected batch startup-order test remain uncommitted and
-staged on `main` (45 changed paths). The subsequent README reconciliation is
-an unstaged edit on top of its already staged entry-removal changes.
-No project commit represents the completed candidate; read the index and
-README worktree rather than assuming project HEAD contains that state.
+## Committed project state (pure-entry removal and lisp flattening)
+Step one and README reconciliation are committed on main and accepted by the
+owner. During the requested three-minute polling window, a new project HEAD
+was observed; its full tree matches the complete staged snapshot captured
+before polling (45 changed paths, 432 insertions and 564 deletions relative
+to the pre-removal baseline). The project worktree/index were clean at
+confirmation. The owner made the project commit; the agent prepared only
+`tmp/commit.md` and performed read-only confirmation.
 
 The owner clarified step one: remove the pure-emacs entry, its mechanisms and
 test support; flatten `lisp/`; move early initialization there; consolidate the
@@ -39,7 +40,7 @@ Content of that state:
 - `tests/`: the startup smoke test targets `emarccs-bootstrap` / `emarccs-init`
   and dropped two now-meaningless load-path substring checks; the fake straight
   bootstrap input was removed from the byte-compile check.
-- `tests/startup-order/` is now staged and wired into `tests/default.nix`.
+- `tests/startup-order/` is committed and wired into `tests/default.nix`.
   It now uses batch ERT and minimal generated payloads to check adapter phase
   ordering, argument forwarding and skipping configuration when init-file-user
   is nil. The owner removed the former unused interactive fixtures.
@@ -84,7 +85,7 @@ Explicit fixture cleanup replaced it; the corrected owner-run check now passes.
 The owner regards pure-emacs entry/mechanism/test-support removal, Lisp
 flattening, entry consolidation and namespace migration as basically complete.
 Removing twist.nix is the subsequent objective and remains unstarted here.
-README reconciliation is now complete against the current worktree: the
+README reconciliation is complete and included in the confirmed project tree: the
 structure includes lib, package assertions and startup-order; all five check
 families and treefmt have explicit scopes; input, scope.overrideAttrs and
 scope.executablePackages have separate responsibilities. Removed superchat
@@ -94,19 +95,19 @@ startup delegation description were corrected. No builds or formatters were
 run for this documentation edit; README is excluded by treefmt. Read-only diff
 validation passed, and project staging was not changed by the agent.
 
-This checkpoint associates the pre-removal project HEAD as a non-first parent:
-that exact commit supplies the old pure-emacs entry, bootstrap/recipes and
-split Lisp structure needed to explain the removal and its comparisons.
-It is the historical context for this work record, not a claim that the parent
-contains the completed refactor or is the tree on which the owner's successful
-check ran. It was inspected directly and used as the staged-diff baseline.
-The removed mechanisms remain available there to interpret this work record.
+The preceding memory state preserves the pre-removal project context needed
+to interpret the removed pure-emacs entry, bootstrap/recipes and split Lisp
+structure. The current checkpoint additionally associates the exact resulting
+project commit whose tree was inspected and matched to the reviewed index.
+These are successive historical contexts, not claims that the old baseline
+contained the refactor or was the successful check's input. No tests were
+rerun after commit; the owner's supplied validation above remains the evidence,
+and the later README edit is documentation-only.
 
-Next action: await the owner's next task. Step one and its README are ready
-for project review/commit by the owner; further twist removal has not been
-started or authorized here. The current request authorizes a single GAW
-checkpoint consolidating these memory updates, not project index/history
-mutation, builds or tests.
+Next action: await the owner's next task. Step one, its tests and README are
+committed; removing twist.nix remains the next architectural objective and has
+not been started here. The commit-message draft remains in ignored tmp/.
+No project index/history mutation, build or test was performed by the agent.
 
 ## Known limitation and validation boundary
 Extension-parameter citations have a reported preprocessing gap tracked in

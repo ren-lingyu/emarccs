@@ -204,7 +204,7 @@ bootstrap source and ERT minimal payloads. It checks adapter ordering and
 init-file-user=nil behavior without loading the full configuration; it does
 not test the actual native startup sequence or wrapper wiring. The original
 interactive version failed in an owner-run flake check; the replacement is
-staged and its corrected GTK/PGTK checks passed in the owner-run x86_64-linux
+committed and its corrected GTK/PGTK checks passed in the owner-run x86_64-linux
 flake validation. The agent did not run that validation.
 Grammar checks do not prove real-source parsing, modes, font locking or indentation.
 Stale dtd/ocaml-interface/tsx aliases were removed when native symbols changed,
@@ -213,7 +213,7 @@ Treefmt/nixfmt also supplies a formatter and flake check.
 
 No Nix build or Emacs runtime suite was executed during memory reconstruction.
 Historical source probes and owner reports retain their narrower scopes.
-README is reconciled against the current uncommitted worktree, including the
+README is reconciled and committed with the step-one refactor, including the
 single-entry layout, helpers, package-directory assertions, the input and two
 scope interfaces, current package adaptations, all five checks and treefmt.
 It attributes the passing x86_64-linux flake validation to the owner and does

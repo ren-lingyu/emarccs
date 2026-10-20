@@ -1,15 +1,17 @@
 # Current memory
 
-The represented state uses the complete Nix grammar output with a runtime suite
-that locates and instantiates every enumerated language. Source findings
-explain why a shortlist and library existence were insufficient.
-Read `architecture.md` for the complete dual-entry and workflow architecture.
+The represented state dismantles orgraph, assigns behavior to feature modules,
+consolidates organization/citation configuration and namespaces owned helpers.
+The grammar alias correction and adjusted patch hunk are present. Read
+`architecture.md` for the complete state.
 
-The full-runtime source stage is integrated. Load-name aliases are coupled to
-actual native outputs and may become stale after updates. This suite covers
-loadability rather than editor behavior or real-source parsing correctness.
+Both the final grammar-correction and Org-ownership source states are integrated.
+The owner reported checks passing; the agent did not rerun the corrected full
+suite. The ERT discussion remains a proposal, not an implemented test system.
+Retained source histories preserve decisions and corrections without making
+every old package choice authoritative for later main.
 
-Next recover subsequent alias/hunk corrections alongside Org registry,
-citation-provider and module-ownership evolution. Project snapshots are
-statically inspected now; original commit provenance and historical versus
-fresh validation remain distinguished in `reconstruction.md`.
+Next recover publishing extraction into org-roam-blog, then special-block export
+infrastructure, package override interfaces and the current typed flake context.
+Reconstruction uses present static inspection and attributed historical evidence;
+original session commit provenance is incomplete. See `reconstruction.md`.

@@ -23,7 +23,7 @@ This makes the shared entry usable by a separately supplied package environment
 without running pure bootstrap. Missing straight bootstrap may still download
 synchronously; offline fresh-start acceptance has not been demonstrated.
 Module order is basic, help, theme, Org, TeX, completion/snippets, Org-roam,
-citation integration, LaTeX preview, feed, AI, native publishing, orgraph and
+organization/citation integration, LaTeX preview, feed, AI, native publishing and
 debugging, followed by customization. Completion uses Consult/Vertico/Orderless/
 Marginalia/Embark; editing includes Dirvish, language modes and Tree-sitter
 conveniences. Presence of a package does not prove every feature is active.
@@ -58,7 +58,11 @@ a package-local treesit-auto patch. Unique-anchor lookup locates the patch
 insertion point. The package now uses with-all-grammars rather than a shortlist.
 Runtime checks enumerate produced libtree-sitter shared objects, verify language
 availability and create parsers; failures report candidate initialization symbols.
-Special aliases handle mismatched output names. These validate loadability, not
+Special aliases handle mismatched output names. Later native outputs made the
+dtd/xml, ocaml-interface/ocaml and tsx/typescript aliases stale; those three
+were removed and the generated patch hunk length corrected. The owner reported
+tests passing after correction; the agent did not rerun a full check.
+These validate loadability, not
 major modes, font locking, indentation or correctness on real source corpora.
 Input metadata and native derivation adjustments stay distinct.
 Startup smoke checks generated structure;
@@ -69,19 +73,27 @@ Historical GUI checks support ordering in three modes, but are not fresh tests.
 The tecosaur Org fork uses recipe pre-build version metadata. Org owns capture,
 agenda/GTD, export and citation processor preferences. The runtime Org directory
 holds notes and databases outside this source repository.
-Org-roam supplies database/autosync, capture and organization. Organization
-settings have migrated away from slash-style variable names, but the later
-registry/include API is not part of this represented state.
-Citation-node and preview integrations remain separate modules. Package loading
-order supplies implicit dependencies.
+Org-roam supplies database/autosync, capture, timestamps and link navigation.
+org-roam-include and organization registries replace legacy flat settings.
+The organization module owns Citar, Citar-Embark, Citar-Org-Roam and a private
+Citar-backed literature provider. The provider's API calls use Citar directly;
+the bridge remains configured for workflow stability. Citar waits for both Org
+and Org-roam, correcting an early unbound-directory failure. Consult forward-link
+selection belongs in the roam module, not citation integration.
 
 Native Org publishing owns HTML metadata, sitemap/index handling, static assets
 and site customization. Database-aware file selection queries file-level
 Org-roam nodes by tags and path scope and includes generated sitemap/index
 paths. A legacy file generator remaining defined is not the active selection
-path. The orgraph aggregate still connects export/preview, bibliography roots,
-timestamps, selected-note automatic publication and package loading. Its
-cross-module coupling is a future ownership problem, not yet dismantled.
+path. The orgraph aggregate is removed: TeX owns export tooling, preview owns
+preview behavior, Org-roam owns timestamp/post queries, and publishing owns
+automatic selected-note publication after save. org-directory is the shared
+runtime root. Redundant shared package-loading glue and the Docker preview
+backend were removed as separate changes. Org Element is loaded where needed.
+Public helpers use their provided-feature prefix; private ones add a double
+hyphen. Ownership follows domain/API, with public cross-file interfaces.
+Seven modules were namespaced; native publishing was deliberately excluded.
+Editing also adds trailing-whitespace cleanup and margin-based diff-hl.
 
 ## Evidence and boundaries
 The inverted Git ignore whitelist controls tracked files. Runtime notes,
@@ -89,7 +101,11 @@ personal identifiers and local tool paths are not reproduced in memory.
 Static source/entry inspection establishes these responsibilities. Display
 and module-contract source reports provide narrower GUI/stub evidence:
 font checks reported 114/110/176, while the structural session does not finish
-a full real-config startup test. No fresh build or runtime test was run.
+a full real-config startup test. The owner reported manual Org smoke checks
+without blockers after namespacing. The proposed ERT suite was neither created
+nor run; missing-description link handling and other suggested targets are
+unverified suggestions rather than established fixes. No fresh build or runtime
+test was run.
 The packaging source reports successful bounded package/module/preview and
 fixture-database probes, with skips and known API drifts. Live note moves/deletes
 were deferred. A blank pure startup traced to synchronous bootstrap fetching;

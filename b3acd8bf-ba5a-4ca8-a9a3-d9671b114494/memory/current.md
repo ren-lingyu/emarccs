@@ -1,27 +1,25 @@
 # Nix helper and grammar discovery
 
-## Scope and foundation
-This is the July Nix/grammar discovery line, reconstructed from complete source
-horizons without asserting original commit provenance or rerunning tests.
-Package-specific treesit-auto patching stays self-contained and consumes the
-aggregate grammar library. Dynamic unique-anchor lookup avoids brittle fixed
-line numbers but is not fuzzy application.
+## Scope and helper contract
+The July Nix/grammar source favors self-contained package overrides and shared
+helpers after repeated use. Project helpers capture pkgs; simple interfaces
+are curried, complex ones take attrsets. Recipe/dependency metadata and native
+derivation adjustments remain distinct. No checks are run during reconstruction.
 
-## Helper ownership
-After repeated use, extract shared functions into lib and instantiate them
-with pkgs. Prefer small curried functions; use an attrset for complex options.
-concatMapEmacsTwists passes variant name and configuration rather than redundant
-pkgs arguments captured in the helper closure.
-Keep nixpkgs lib and project helpers conceptually distinct, avoiding accidental
-recursive self-reference. Do not infer that underscore-prefixed lexical locals
-need renaming merely because public APIs need namespacing.
+## Grammar acceptance boundary
+A static language shortlist first missed jsdoc. Broader selection reached 126
+languages with special load aliases, then with-all-grammars covered the actual
+282-output environment and exposed more missing names. Test the complete
+produced grammar directory, not a parallel hand-maintained whitelist.
 
-Input metadata owns Elisp dependencies, recipe source and Org's recipe preBuild.
-Scope derivation overrides own patches, native tools and phases. Org's preBuild
-stays with recipe data because it is part of the upstream recipe contract.
-Normalize selected package overrides through these boundaries rather than
-rewriting all package-specific behavior as one generic builder.
+Enumerate actual shared objects and check both treesit-language-available-p and
+parser creation, reporting candidate initialization symbols on failure.
+This validates discovery and loadability. It does not validate font locking,
+major-mode activation, indentation or correctness on a real parse corpus.
+TSX initially required a TypeScript initialization-name override; additional
+special aliases matched the then-built native libraries.
 
-## Next action
-Exercise grammar load-name behavior with actual runtime checks. A TSX library
-being found did not establish that the expected language symbol was available.
+## Open correction risk
+Load aliases depend on the actual grammar outputs and can become stale after
+lock updates. Inspect symbols and produced files before blaming a runtime test
+for rejecting a newly built grammar.

@@ -1,25 +1,25 @@
 # Backlog
 
-## Reconcile README with the implemented configuration
+## Resolve the remaining naming task before any further layout change
 
-The README was compared with the reviewed main source during memory
-reconstruction. It still describes an older environment and check surface.
+`TODO.md` (Git-ignored, therefore worktree-only) still targets `my/`-prefixed
+and other non-namespaced globals. Its target names were mechanically rewritten
+to the `emarccs-*` namespace, and its stale `emarccs-blog-publish` section was
+retargeted to `emarccs-org-roam-blog`, which is the module that actually exists.
+That retargeting is a naming decision recorded here, not a verified rename plan.
 
-When repository documentation work is authorized, compare README against an
-explicit current baseline and address these verified discrepancies together:
+Deferred alongside it: the symbols under `emarccs--org-roam-blog-*` read as
+private to `emarccs` while their feature is `emarccs-org-roam-blog`. The owner
+decided not to touch them, because the observed double hyphen marks two
+different privacy scopes and flattening it would change meaning. Do not treat
+that as an oversight and do not fix it without a new decision.
 
-- Replace the old emacs31-pgtk/emacs31-gtk3 implementation attributes with the
-  generic emacs-pgtk/emacs-gtk selection actually used by the flake.
-- Describe the four project check families: startup smoke, package availability,
-  Elisp byte compilation and grammar runtime. Include the separate treefmt
-  formatting check and preserve each check's limited validation scope.
-- Replace the older scope-only override description with scope.overrideAttrs
-  and scope.executablePackages responsibilities and package-directory assertions.
-- Remove obsolete superchat details and review the illustrated source/test tree
-  against the current helper, Lisp and exporter layout.
-- Attribute old successful build results to their historical baseline or replace
-  them only after authorized current validation; do not relabel them as fresh.
+## Deferred architecture change
 
-Use the git-maintenance README workflow when undertaking the update.
-This entry authorizes no project modification, build, dependency update or
-network action. The README remains unchanged; no new build result is available.
+Removing twist.nix in favour of packaging each Emacs package under
+`pkgs/emacsPackages/<name>` and composing Emacs with `withPackages` is a stated
+but unstarted objective. The flattening above deliberately locked the current
+state into the wrapper-injection route: the configuration is loaded by an
+advice, not through Emacs' native `init.el` / `early-init.el` filenames, so
+using the repository directly as `user-emacs-directory` no longer works.
+Reopening that route is a design decision for the future change, not a bug.

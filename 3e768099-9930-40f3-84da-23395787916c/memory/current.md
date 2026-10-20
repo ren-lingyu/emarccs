@@ -1,32 +1,44 @@
 # Org workflow ownership discovery
 
-## Scope and registry foundation
-Recovered from the July registry/include and ownership discussions. Source
-horizons were surveyed; no original exact commit association or new runtime
-acceptance is asserted. org-roam-include and organization registries replace
-legacy flat settings while keeping navigation and an explicit include-mode key.
+## Source boundary
+This source joins July 25 registry/include work, July 29 ownership/naming and
+the subsequent ERT proposal. Entire substantive horizons were surveyed.
+No original exact main commit provenance is inferred, and no checks are run now.
 
-## Citation dependency boundary
-The organization provider uses Citar selection, lookup and formatting APIs,
-not Citar-Org-Roam as its implementation dependency. External organization
-depends on Org and Org-roam. Nevertheless retain Citar-Org-Roam at this stage:
-removing it before workflow validation conflicts with the owner's stability goal.
-Consolidate Citar, Citar-Embark, Citar-Org-Roam and provider registration in the
-organization workflow module; remove the former roam-citar entry and update
-requires together.
+## Adopted ownership and integration
+Organization registries and org-roam-include replace flat legacy settings.
+The citation provider uses Citar directly; retain Citar-Org-Roam at this source
+stage until separate workflow evidence justifies removal. Citar configuration
+must wait for both Org and Org-roam to avoid an unbound roam directory.
+The workflow module owns citation selection, adapters and registry setup.
 
-An unbound org-roam-directory was caused by configuring Citar after Org alone.
-Order it after both Org and Org-roam. Static restructuring changes execution
-timing; it is not proof that every lazy-load path now works.
+Dismantle the personal integration aggregate: TeX owns export tools, preview
+owns preview setup, Org-roam owns timestamps and post queries, and publishing
+owns save/publication behavior. Use the shared Org root rather than a personal
+alias. Temporary shared package loading was later removed as redundant.
+Docker preview removal is distinct from the ownership split.
+Require org-element locally where used rather than globally through Org.
 
-## Distribute aggregate responsibilities
-Move TeX export setup to TeX, preview configuration to preview, timestamp and
-database post queries to Org-roam, and save/publication behavior to publishing.
-Use org-directory as the runtime root rather than a personal aggregate alias.
-The intermediate package-loading aggregate moves to the shared entry; its
-later removal and Docker preview removal are separate decisions.
-Localize org-element loading in the functions that need it.
+## Naming policy
+Use provided-feature-name for public symbols and provided-feature--name for
+private ones. Ownership follows domain and primary API rather than call site;
+cross-file consumers require a public interface. Do not rename underscore
+lexical locals as part of public namespacing.
+The source applied names to seven modules, explicitly excluding blog publishing.
+Helpful helpers, theme commands and Org date APIs have different owners from
+private organization provider helpers.
 
-## Next action
-Apply ownership-based symbol names, then distinguish owner smoke reports from
-a proposed test suite. Do not describe static inspection as runtime acceptance.
+## Verification and test proposals
+Static diff checks passed and the owner reported manual smoke checks with no
+blockers. This is not complete runtime acceptance. The ERT session proposed
+coverage for custom buffer logic, publishing, date handling, theme behavior and
+link descriptions, including missing-description/nil cases. It did not create
+or run that suite. Later publishing extraction changes which old targets still
+belong in this repository; do not turn the proposal into an unreviewed backlog.
+An ignored TODO note was requested to remain outside tracked project content;
+neither it nor raw conversations are archived here.
+
+## Completion
+Formal integration should adopt applicable workflow ownership and namespace
+decisions while preserving the distinction between source-stage retained
+packages, later repository changes, owner smoke checks and unimplemented tests.

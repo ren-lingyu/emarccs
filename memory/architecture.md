@@ -65,6 +65,13 @@ tests passing after correction; the agent did not rerun a full check.
 These validate loadability, not
 major modes, font locking, indentation or correctness on real source corpora.
 Input metadata and native derivation adjustments stay distinct.
+Package derivation changes now use `scope.overrideAttrs`; executable contributions
+use `scope.executablePackages` and are aggregated/deduplicated with inherited
+executables. Dired owns coreutils, search packages own their tools and org-texmacs
+owns the font-enabled TeXmacs executable. The flake no longer appends a global
+executable override. Package directory assertions require paired MELPA/straight
+recipes, a recipe pair or override in each package directory, and recipe-defined
+packages in the explicit package list. Override-only built-ins remain possible.
 Startup smoke checks generated structure;
 package-availability smoke locates libraries rather than requiring all packages.
 Historical GUI checks support ordering in three modes, but are not fresh tests.
@@ -115,8 +122,10 @@ it. Source `ext`, normalized semantics and export naming have separate roles.
 LaTeX parameter export handles math wrapping before export and rejects conflicting
 ATTR_LATEX options. HTML uses a copied block for lowering, preserving normalized
 source semantics. Backend advice supports delayed activation and unload cleanup.
-The registry includes reply and mathematical statement kinds with title options;
-the later exercise/proof/solution additions are not present yet.
+The registry includes reply and mathematical statement kinds, plus exercise,
+exercise*, proof and solution. Exercise accepts a number in addition to title.
+The pdf-tools package and tablist dependency have been added, but the later
+native epdfinfo build and PDF-view configuration are not yet present.
 
 Org now selects BibLaTeX for LaTeX citations. org-texmacs and a font-enabled
 TeXmacs executable join the environment, alongside shell tools. The AI module

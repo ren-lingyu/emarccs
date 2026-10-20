@@ -1,15 +1,15 @@
 # Current memory
 
-The represented state introduces normalized ext-block semantics with separate
-source and export namespaces. Source AST nodes retain native Org types and raw
-properties while gaining validated semantic properties. Backend lowering and
-parameter export are separate responsibilities.
+The represented package interface distinguishes derivation overrideAttrs from
+runtime executable contributions. Package-local executable declarations replace
+the global flake list, and structural assertions protect recipe pairing,
+directory contents and package-list membership. See `architecture.md`.
 
-Native Org-roam forward links replace consult-org-roam. Date helpers are scoped
-with package configuration and save-hook organization has evolved. Read
-`architecture.md` for the full project state and evidence limits.
+The extension registry adds exercise/proof/solution kinds. pdf-tools is selected,
+but its later native server build and viewer integration are outside this state.
 
-Next recover package-directory assertions, overrideAttrs contracts and
-package-local executable aggregation, then reconcile the current main tip.
-No export/runtime suite is rerun; repository inspection does not prove the
-original session used these exact snapshots. See `reconstruction.md`.
+Next reconcile the current main tip: generic Emacs attributes, typed context,
+separate nixpkgs lib/project llib, formatter checks, language integrations and
+compiler fixes. Then verify all retained source tips and remove clean temporary
+aux worktrees while keeping their branches. No project tests or builds are run
+by this memory task; see `reconstruction.md` for evidence limits.

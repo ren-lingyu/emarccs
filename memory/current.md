@@ -1,27 +1,19 @@
 # Current memory
 
-## Represented state
+The represented state has shared-prefixed modules, source-relative entry
+loading, Emacs 31 warnings and late customization. Read `architecture.md`
+for the complete ownership and capability picture.
 
-The mature early-init/Home Manager single-entry configuration is represented. Read `architecture.md` for startup, package ownership,
-the Org workflow and publishing coupling. This is a historical state, not a
-claim that today's project still has this layout.
+The active task is architecture-led retrospective reconstruction. The
+display/startup source is distilled and integrated for its contracts and
+qualifications; its transient paths do not override main's actual shared layout.
+Other source lines remain to integrate. Keep all authored memory English,
+leave reference notes unarchived and retain final aux histories after they
+reach safe-deletion readiness.
 
-## Active objective
+The project parent identifies the exact tree statically inspected now, not
+the original session's execution commit. Historical GUI/stub reports are
+narrower than fresh startup acceptance. See `reconstruction.md`.
 
-Recover architecture-led formal evolution from the repository and authorized
-sessions, incorporating important functional changes at useful boundaries.
-Keep source discovery histories independent and ultimately safe to retire;
-retain branches after readiness checks. All authored memory is English.
-
-## Evidence and limits
-
-The associated project tree was inspected now. No original session is claimed
-to have run against it. Historical validation and present inspection must remain
-distinguishable; no fresh runtime or build acceptance is implied.
-See `reconstruction.md` for source coverage and retention boundaries.
-
-## Next action
-
-Establish the display/startup source history, then recover shared-module naming,
-source-relative loading and late customization. Keep resolution-only display
-behavior distinct from the subsequent physical-dimension implementation.
+Next recover separation of pure bootstrap, shared behavior and centralized
+recipes; keep later Nix wrapper capabilities out of that earlier state.

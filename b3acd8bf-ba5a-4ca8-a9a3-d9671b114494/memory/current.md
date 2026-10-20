@@ -1,25 +1,39 @@
 # Nix helper and grammar discovery
 
-## Scope and helper contract
-The July Nix/grammar source favors self-contained package overrides and shared
-helpers after repeated use. Project helpers capture pkgs; simple interfaces
-are curried, complex ones take attrsets. Recipe/dependency metadata and native
-derivation adjustments remain distinct. No checks are run during reconstruction.
+## Source and retained design
+This line spans the July 16-18 helper/grammar work and July 26-28 correction,
+both starting in this project. Full horizons were surveyed for consequential
+states. Exact original commit provenance is incomplete; source reports do not
+constitute fresh checks now.
 
-## Grammar acceptance boundary
-A static language shortlist first missed jsdoc. Broader selection reached 126
-languages with special load aliases, then with-all-grammars covered the actual
-282-output environment and exposed more missing names. Test the complete
-produced grammar directory, not a parallel hand-maintained whitelist.
+Shared helpers capture pkgs, offer curried small interfaces and attrsets for
+complex operations. Input data owns Elisp dependencies and recipe hooks;
+derivation overrides own native tools, patches and phases. Package-specific
+patching remains self-contained with unique-anchor lookup.
 
-Enumerate actual shared objects and check both treesit-language-available-p and
-parser creation, reporting candidate initialization symbols on failure.
-This validates discovery and loadability. It does not validate font locking,
-major-mode activation, indentation or correctness on a real parse corpus.
-TSX initially required a TypeScript initialization-name override; additional
-special aliases matched the then-built native libraries.
+## Full grammar policy
+Use with-all-grammars and enumerate actual output shared objects. Check language
+availability and parser creation, with symbol candidates in diagnostics.
+The earlier shortlist missed languages; a whole-output test avoids maintaining
+a stale parallel grammar list. Loadability is narrower than real parsing,
+font locking or editor-mode correctness.
 
-## Open correction risk
-Load aliases depend on the actual grammar outputs and can become stale after
-lock updates. Inspect symbols and produced files before blaming a runtime test
-for rejecting a newly built grammar.
+## Corrected failure diagnosis
+Later outputs exported their own dtd, ocaml_interface and tsx initialization
+names. Old aliases to xml, ocaml and typescript became wrong. The initial claim
+that the test was too strict was corrected after inspecting actual files:
+remove the three stale aliases.
+Removing patch lines without adjusting its hunk length caused a separate
+malformed-patch failure; the hunk length was corrected from eleven to eight.
+The owner subsequently reported tests passing. The agent did not perform a
+new complete check after that correction.
+
+A lock update alone can expose this integration mismatch; pair the relevant
+patch correction with it. This is not automatically a public breaking change.
+An earlier org-roam-organize parse/EOF build failure is a separate event and
+must not be conflated with the later native grammar failure.
+
+## Completion
+The source is ready for formal adoption at the helper, full-runtime and
+later correction boundaries. Preserve the actual-output diagnosis and
+owner-reported validation qualification when retaining this final state.

@@ -1,32 +1,38 @@
 # Dual-entry packaging discovery
 
-## Scope and foundation
-This is the long July packaging source, including nested Twist experiments.
-Exact main commit provenance is not reconstructed. Reported tests are source
-evidence, not checks run now. Shared configuration should serve both straight
-and explicit Nix package selection; alwaysEnsure was rejected for fetching
-built-ins. Use locked explicit seeds and dependency closure, not per-package
-flake inputs or automatic activation of installed packages.
+## Source and adopted foundation
+The full long July packaging horizon was surveyed, including nested Twist work.
+It supports dual straight/Nix package ownership with shared configuration.
+Reject broad :ensure rewrites and alwaysEnsure; explicit locked package seeds
+plus dependency closure avoid fetching built-ins. The tecosaur Org recipe
+generates version metadata. Native tools are separate from Elisp dependencies.
+Historical probes cover packages, modules, API drifts, preview and fixture
+databases, not every real user workflow. No checks are rerun in reconstruction.
 
-## Adapter findings
-Register local recipes centrally and keep native tools separate from Elisp
-packageRequires. laas needs math-symbol-lists declared; company-auctex and
-superchat perform build-time operations that need writable HOME, so override
-them narrowly rather than changing all packages.
-AUCTeX's generic Texinfo scan includes subordinate todo content and fails on
-unknown macros; placeholder outputs are a temporary workaround, not the final
-manual-build policy.
+## Configured startup contract
+A direct site-start require of shared configuration was too early relative to
+autoload initialization and init-file-user. Batch mode cannot prove GUI
+ordering because its initialization conditions differ.
+Emacs 31 startup integration targets the native user-init boundary with advice:
+store early-init precedes real user early-init; shared configuration precedes
+the user's init overlay. When init-file-user is nil, including --no-init-file,
+the wrapper skips configuration. The owner rejected changing user-emacs-directory.
+The wrapper supplies load-path; pure bootstrap and shared behavior stay separate.
 
-## Historical functional probes
-The session reports package availability 201 pass/4 skip, enablement 19/5,
-module configuration 87/7, all with zero failures. API probes found 9 passes
-and 9 known drifts, with no unexpected drift; this is not compatibility of
-every API. Org-roam fixture/database probes reported 13 passes/4 skips;
-moving/deleting live notes remained deferred.
-Org LaTeX preview probes reported 23 passes with no failures and owner-confirmed
-GUI overlays. Require org-latex-preview explicitly instead of assuming Org
-loads it. These probes have narrower scope than complete startup acceptance.
+A citar generated autoload uses cl-defsubst and needs cl-lib. Attempts to fix
+postBuild or a build command input were ineffective. Adding a cl-lib autoload
+cookie in preBuild addressed the generated-autoload failure.
+The source reports three GUI cases: overlay sees shared configuration,
+no-user-config still runs the wrapper, and --no-init-file skips it.
+Batch locate-library checks alone establish package visibility.
 
-## Open work
-Finish configured-wrapper startup, generated autoload requirements and GUI
-ordering. Preserve fixture and skip limits when adopting the reported results.
+## Package/validation limits
+Writable HOME is narrowly needed by selected package builds. laas requires
+math-symbol-lists. The AUCTeX documentation workaround still needs a complete
+native build policy. Earlier package/module/preview suites reported no failures
+within their stated scopes; real note mutation remained deferred.
+
+## Next action
+Complete Nix-to-Lisp generation, variants/checks and upstream workarounds before
+the source's final main handoff. Do not read later source capabilities into an
+earlier pure/shared main snapshot.

@@ -18,6 +18,9 @@ identify workspace data, not resources bundled with this skill.
   objective, validation limits, unresolved questions, and next action.
 - Read `memory/architecture.md` when present for project responsibilities,
   integration boundaries, capabilities, and consequential design reasons.
+- Read `memory/backlog.md` when present for deferred work, its motivation and
+  evidence limits. Use current memory and active authorization to choose what
+  to resume; backlog entries do not grant permission to execute them.
 - Read `memory/reconstruction.md` when interpreting recovered historical
   claims, source limitations, corrections, or attributed validation.
 

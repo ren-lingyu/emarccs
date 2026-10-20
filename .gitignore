@@ -1,15 +1,12 @@
-# 全局忽略
 *
 */
 
-# 根目录文件白名单
 !.gitignore
 !README.org
 !LICENSE
 !flake.nix
 !flake.lock
 
-# 子目录文件白名单
 !lib/
 !lib/**/
 !lib/**/*.nix
@@ -35,7 +32,6 @@
 !tests/**/lisp/*.el
 !tests/**/lisp/*.scm
 
-# 全局黑名单
 **/tmp/
 *~
 *#*

@@ -1,18 +1,18 @@
 # Current memory
 
-The represented project separates pure bootstrap from shared configuration and
-centralizes straight recipes under package directories. Shared startup retains
-module ordering and late customization; Home Manager still deploys source files.
-Read `architecture.md` for the complete state.
+The represented project has both straight-based pure startup and configured
+Twist GTK/PGTK packages using one shared configuration layer. Declarative
+recipes, package overrides, generated startup advice, apps, checks and overlays
+now belong to main. Read `architecture.md` for responsibilities and limits.
 
-Reconstruction has integrated the display/startup line and the relevant
-dual-entry source stage. The retained packaging stage includes later experimental
-startup findings; those explain the design but do not make the corresponding
-Nix wrapper part of this earlier main tree.
+The packaging source's final state has been integrated as explanatory context.
+Its earlier experiments, upstream reports and historical GUI/functional probes
+do not imply fresh runtime acceptance. Pure first-install and live note mutation
+remain unverified at the reported scope.
 
-Next recover the complete declarative Twist environment, variants, generated
-startup adapters and checks. Preserve the distinction between main adoption,
-nested experiments and the limits of fresh pure bootstrap.
-
-Project parents identify trees inspected now. No original session execution
-commit or fresh build/runtime validation is asserted. See `reconstruction.md`.
+Next recover reusable Nix helpers and normalized overrides, then actual-output
+Tree-sitter grammar runtime coverage. Org workflow ownership follows later.
+The reconstruction remains in progress; source notes stay unarchived, aux
+branches will be retained once safe-deletion readiness is established.
+Project parents are exact trees inspected now; original session commit
+provenance remains incomplete. See `reconstruction.md`.

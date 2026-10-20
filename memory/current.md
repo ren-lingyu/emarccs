@@ -1,16 +1,15 @@
 # Current memory
 
-The represented state adds the first Babel-like special-block export layer,
-Elisp byte-compilation checks and org-texmacs integration. Citation creation
-uses a declarative backend; the old handwritten provider is gone and
-Citar-Org-Roam is disabled. AI configuration and unused packages are removed.
+The represented state introduces normalized ext-block semantics with separate
+source and export namespaces. Source AST nodes retain native Org types and raw
+properties while gaining validated semantic properties. Backend lowering and
+parameter export are separate responsibilities.
 
-Read `architecture.md` for the complete state. Exporter installation/unload
-and parameter validation are source-supported design claims, not freshly
-executed export tests. Compilation probes and the old ERT proposal remain
-different kinds of evidence.
+Native Org-roam forward links replace consult-org-roam. Date helpers are scoped
+with package configuration and save-hook organization has evolved. Read
+`architecture.md` for the full project state and evidence limits.
 
-Next recover the normalized ext block AST and source/export namespace split.
-Later package-local executable ownership and typed context follow afterward.
-The original eight sessions are represented by distilled source histories;
-later main evolution is inspected directly. See `reconstruction.md`.
+Next recover package-directory assertions, overrideAttrs contracts and
+package-local executable aggregation, then reconcile the current main tip.
+No export/runtime suite is rerun; repository inspection does not prove the
+original session used these exact snapshots. See `reconstruction.md`.

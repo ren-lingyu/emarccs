@@ -78,8 +78,9 @@ org-roam-include and organization registries replace legacy flat settings.
 The organization module owns Citar and Citar-Embark. Literature creation now
 uses a declarative Citar backend with field mappings and bibliography support,
 replacing the handwritten provider. Citar-Org-Roam remains declared but disabled. Citar waits for both Org
-and Org-roam, correcting an early unbound-directory failure. Consult forward-link
-selection belongs in the roam module, not citation integration.
+and Org-roam, correcting an early unbound-directory failure. Native Org-roam
+forward-link selection replaces consult-org-roam and its package dependency.
+The roam module owns navigation rather than citation integration.
 
 Publishing infrastructure now belongs to the external org-roam-blog package.
 The local `emarccs-shared-org-roam-blog.el` module supplies content groups,
@@ -102,14 +103,20 @@ now supplies project-prefixed site helpers.
 Editing also adds trailing-whitespace cleanup and margin-based diff-hl.
 
 ## Export and compile-time infrastructure
-A project-local Babel-like special-block layer registers names and allowed
-parameters, validates unknown/duplicate/missing keys, and exports values as Org
-secondary strings. HTML delegates the outer container to Org while adding
-metadata/body wrappers. LaTeX preserves ordinary unparameterized behavior and
-turns parameters into options, rejecting a conflicting ATTR_LATEX option.
-Backend advice activates when exporters load and is removed on feature unload.
-The initial configured kind is reply with from/subject/date; this is still the
-Babel-like layer, not the later ext source-node model.
+The local extension-block layer replaces the Babel-like block-name registry
+with source syntax `#+begin_ext KIND :KEY VALUE`. Blocks remain native Org
+special-block nodes: normalization preserves raw type/parameters and adds
+`:extension-kind` and validated `:extension-parameters`. Parameter values
+remain source-form secondary strings until backend export. Ordinary special
+blocks bypass this extension.
+HTML/LaTeX lowering may erase the namespace to KIND or preserve the distinct
+backend-facing `org-extension-block` namespace; local configuration preserves
+it. Source `ext`, normalized semantics and export naming have separate roles.
+LaTeX parameter export handles math wrapping before export and rejects conflicting
+ATTR_LATEX options. HTML uses a copied block for lowering, preserving normalized
+source semantics. Backend advice supports delayed activation and unload cleanup.
+The registry includes reply and mathematical statement kinds with title options;
+the later exercise/proof/solution additions are not present yet.
 
 Org now selects BibLaTeX for LaTeX citations. org-texmacs and a font-enabled
 TeXmacs executable join the environment, alongside shell tools. The AI module

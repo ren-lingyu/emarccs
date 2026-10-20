@@ -81,18 +81,24 @@ the bridge remains configured for workflow stability. Citar waits for both Org
 and Org-roam, correcting an early unbound-directory failure. Consult forward-link
 selection belongs in the roam module, not citation integration.
 
-Native Org publishing owns HTML metadata, sitemap/index handling, static assets
-and site customization. Database-aware file selection queries file-level
-Org-roam nodes by tags and path scope and includes generated sitemap/index
-paths. A legacy file generator remaining defined is not the active selection
-path. The orgraph aggregate is removed: TeX owns export tooling, preview owns
-preview behavior, Org-roam owns timestamp/post queries, and publishing owns
-automatic selected-note publication after save. org-directory is the shared
-runtime root. Redundant shared package-loading glue and the Docker preview
-backend were removed as separate changes. Org Element is loaded where needed.
+Publishing infrastructure now belongs to the external org-roam-blog package.
+The local `emarccs-shared-org-roam-blog.el` module supplies content groups,
+runtime source/output roots, published-time policy, export bindings, static
+assets and custom article/sitemap renderers. The old native publishing module
+and its global file-selection advice/after-save publication hook were removed.
+Do not infer that the old hook remains active merely because source history
+describes it. The shared entry now requires the renamed provided feature.
+The repository owns personal presentation; the external package owns reusable
+publishing orchestration. Its implementation is not independently audited here.
+
+The orgraph aggregate remains removed: TeX owns export tooling, preview owns
+preview behavior and Org-roam owns timestamp/post queries. org-directory is
+the shared runtime root. The Docker backend and redundant package-loading glue
+are absent. Org Element is loaded at use sites.
 Public helpers use their provided-feature prefix; private ones add a double
 hyphen. Ownership follows domain/API, with public cross-file interfaces.
-Seven modules were namespaced; native publishing was deliberately excluded.
+The earlier seven-module naming pass excluded native publishing; its replacement
+now supplies project-prefixed site helpers.
 Editing also adds trailing-whitespace cleanup and margin-based diff-hl.
 
 ## Evidence and boundaries

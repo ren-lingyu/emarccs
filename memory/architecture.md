@@ -55,8 +55,12 @@ Package overrides receive project helpers, while nixpkgs lib remains available
 through pkgs. Org's recipe preBuild uses an exact Emacs executable path.
 Shared editing now enables nix-ts-mode and managed grammar integration through
 a package-local treesit-auto patch. Unique-anchor lookup locates the patch
-insertion point. The current grammar set is a selected shortlist, not full
-runtime coverage. Input metadata and native derivation adjustments stay distinct.
+insertion point. The package now uses with-all-grammars rather than a shortlist.
+Runtime checks enumerate produced libtree-sitter shared objects, verify language
+availability and create parsers; failures report candidate initialization symbols.
+Special aliases handle mismatched output names. These validate loadability, not
+major modes, font locking, indentation or correctness on real source corpora.
+Input metadata and native derivation adjustments stay distinct.
 Startup smoke checks generated structure;
 package-availability smoke locates libraries rather than requiring all packages.
 Historical GUI checks support ordering in three modes, but are not fresh tests.
@@ -93,4 +97,5 @@ copying bootstrap.el alone was insufficient. The owner supplied the complete
 straight repository and reported package build progress, not automated fresh
 installation acceptance. Upstream reproductions explain selected workarounds;
 external issue status is not checked now. Grammar library discovery is not
-proof of load-symbol compatibility. Full runtime coverage remains next.
+proof of load-symbol compatibility. The runtime suite makes that distinction
+executable, but source reports and the inspected suite are not a fresh pass.

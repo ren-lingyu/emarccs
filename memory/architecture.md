@@ -48,7 +48,16 @@ load paths with eval-and-compile. The adapter returns advice around Emacs 31's
 native user-init loader: store early-init, user early-init, shared configuration,
 then user init. With nil init-file-user, wrapper configuration is skipped.
 The user's Emacs directory remains their runtime state root.
-Flake helpers still live inline here. Startup smoke checks generated structure;
+Reusable functions now live in `lib/default.nix`, instantiated with pkgs.
+The flake's context function separates package/variant data from reusable helpers;
+concatMapEmacsTwists supplies the generated name and configuration to consumers.
+Package overrides receive project helpers, while nixpkgs lib remains available
+through pkgs. Org's recipe preBuild uses an exact Emacs executable path.
+Shared editing now enables nix-ts-mode and managed grammar integration through
+a package-local treesit-auto patch. Unique-anchor lookup locates the patch
+insertion point. The current grammar set is a selected shortlist, not full
+runtime coverage. Input metadata and native derivation adjustments stay distinct.
+Startup smoke checks generated structure;
 package-availability smoke locates libraries rather than requiring all packages.
 Historical GUI checks support ordering in three modes, but are not fresh tests.
 
@@ -83,5 +92,5 @@ were deferred. A blank pure startup traced to synchronous bootstrap fetching;
 copying bootstrap.el alone was insufficient. The owner supplied the complete
 straight repository and reported package build progress, not automated fresh
 installation acceptance. Upstream reproductions explain selected workarounds;
-external issue status is not checked now. Full grammar runtime coverage does
-not yet belong to this represented state.
+external issue status is not checked now. Grammar library discovery is not
+proof of load-symbol compatibility. Full runtime coverage remains next.

@@ -1,18 +1,16 @@
 # Current memory
 
-The represented project has both straight-based pure startup and configured
-Twist GTK/PGTK packages using one shared configuration layer. Declarative
-recipes, package overrides, generated startup advice, apps, checks and overlays
-now belong to main. Read `architecture.md` for responsibilities and limits.
+The represented state extracts reusable Nix helpers, separates flake context
+from helpers, normalizes package overrides and introduces managed grammars plus
+nix-ts-mode. Dual-entry startup and the Org/publishing workflow remain as
+described in `architecture.md`.
 
-The packaging source's final state has been integrated as explanatory context.
-Its earlier experiments, upstream reports and historical GUI/functional probes
-do not imply fresh runtime acceptance. Pure first-install and live note mutation
-remain unverified at the reported scope.
+The helper source stage is integrated. Its design distinguishes recipe/Elisp
+metadata from native build adjustments and favors package-local patching.
+A selected grammar library can exist without the expected initialization symbol;
+full runtime coverage has not yet been adopted at this main boundary.
 
-Next recover reusable Nix helpers and normalized overrides, then actual-output
-Tree-sitter grammar runtime coverage. Org workflow ownership follows later.
-The reconstruction remains in progress; source notes stay unarchived, aux
-branches will be retained once safe-deletion readiness is established.
-Project parents are exact trees inspected now; original session commit
-provenance remains incomplete. See `reconstruction.md`.
+Next recover actual-output grammar enumeration, availability and parser checks,
+then later alias corrections and Org workflow ownership.
+This is retrospective static reconstruction, not fresh build/runtime proof;
+project parents do not infer original session commits. See `reconstruction.md`.

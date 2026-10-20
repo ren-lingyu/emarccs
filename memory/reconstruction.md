@@ -1,10 +1,6 @@
 # Reconstruction scope and evidence
 
-This is a retrospective reconstruction performed now, without backdating.
-GAW commit parents encode the historical dependencies necessary to interpret
-the knowledge state represented by the commit. The first parent supplies its
-inherited knowledge history, while additional parents supply other required
-historical context, without merging their trees.
+This memory was reconstructed retrospectively, without backdating.
 
 Project snapshots used in this reconstruction were inspected at reconstruction
 time. Those inspections do not establish which commit an original session
@@ -14,12 +10,12 @@ inferred from dates.
 The initial archived-session reconstruction covered eight Codex sessions whose
 initial working directory was this project, from early display and packaging work
 through the late-July Org workflow and testing discussion. The long packaging
-session also works in the nested Twist repository; those experiments explain
+session also worked in the nested Twist repository; those experiments explain
 design choices but do not turn that repository into the main project.
 Other-directory archived Codex sessions were outside that initial survey.
-Entire source horizons were surveyed
-for substantive intervals before selecting recoverable states; user decisions,
-corrections and relevant reported tool results were examined. Original records
+Entire source horizons were surveyed for substantive intervals before selecting
+recoverable states; user decisions, corrections and relevant reported tool
+results were examined. Original records
 remain the evidence, rather than encrypted compaction replacements. An
 interrupted structural-session tail has no recoverable completion there.
 A separate packaging session supplies relevant completed startup investigation.
@@ -44,23 +40,13 @@ or network validation is performed by this reconstruction. Repository ancestry
 and changed code support structural claims; they cannot establish runtime
 success. Historical skips, interrupted work and proposed tests remain limits.
 
-Before associating project history, its reachable blob/path closure was
-screened for likely credentials and private keys; no candidate was found.
-This pattern-based review is not a confidentiality guarantee. Source memory
-is distilled and screened before writing and staging; raw logs, private paths
-and personal note identifiers are omitted. Parent relationships and source
-locations are recovered from Git rather than maintained as a parallel index.
-
 ## Coverage and evidence interpretation
 
-All eight matching-session horizons have been accounted for across the four
-distilled source lines: physical display corrections; structural/loading
-contracts; explicit-package selection, adapters, workflow probes and wrapper
-startup; Nix helper/override design and grammar correction; Org registry,
-citation/ownership/naming and the unimplemented ERT proposal. Repeated edits,
-rollback attempts, discarded workarounds and settings-only tails do not each
-require a checkpoint. The interrupted structural-session tail remains incomplete;
-its completion is not manufactured from another session's similar work.
+The source lines cover the eight matching-session horizons, including package
+and workflow probes, grammar corrections and Org ownership decisions. The ERT
+discussion proposed tests but implemented none; its old theme/publishing targets
+are not an adopted current backlog. Repeated edits and settings-only tails did
+not warrant separate historical states.
 
 The earliest formal baseline summarizes an inspected complete project state.
 Earlier incremental Org/publishing history is context, not replayed commit by
@@ -80,13 +66,4 @@ The source's initial regular-file registry failure and later reference discussio
 of MELPA's source boundary are distinct. An upstream Nix-native registry proposal
 does not establish current implementation. The reference-reported citation
 preprocessing gap is preserved without claiming the external issue was checked
-or resolved. No external issue, foreign repository or source transcript is
-persisted as a project parent.
-
-Selected source stages supply required historical context for interpreting
-the relevant formal knowledge states. At reconstruction completion, final
-source tips had been retained in formal ancestry, their temporary clean worktrees
-had been removed and all four public auxiliary readiness reports were ready.
-Branches were intentionally retained. The ordinary project HEAD and index were
-left unchanged. The two reference notes remained on disk and outside GAW
-archives and source branches.
+or resolved.

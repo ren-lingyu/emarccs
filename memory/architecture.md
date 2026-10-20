@@ -1,46 +1,54 @@
 # Emarccs architecture
 
 ## Purpose and initialization
-Personal Emacs configuration targeting Emacs 31+. Only the Nix entry exists:
-`flake.nix` builds a twist.nix wrapper. No elisp file lives at the repository
-root, and the configuration is not loaded through Emacs' native `init.el` /
-`early-init.el` filenames.
+Personal configuration targeting Emacs 31.1+, organized as an Elisp source
+package under the existing flat lisp/ directory. Source normalization does
+not add a Nix derivation, distribution archive or complete Package-Requires
+closure. Third-party packages still come from the Twist wrapper; Emarccs
+itself is loaded directly from source. No root native init.el/early-init.el
+entry or straight bootstrap remains.
 
-`lisp/` is a flat set of `emarccs-*.el` modules carrying one namespace. The
-wrapper's generated `site-start.el` adds `lisp/` to load-path with
-eval-and-compile, requires `emarccs-bootstrap`, and installs an advice on
-`startup--load-user-init-file`. That advice, when init-file-user is non-nil,
-loads `emarccs-early-init.el` in the early-init phase and requires
-`emarccs-init` in the init phase before delegating to the original function, so
-nil init-file-user (including --no-init-file) still skips the whole
-configuration. `emarccs-init` is the single entry; it requires the modules in a
-fixed order and loads optional custom.el last.
+emarccs.el is the sole startup registration owner. Requiring it loads the
+bootstrap/early-init/init interface definitions and installs one named
+emarccs-startup :before advice on startup--load-user-init-file. It does not
+load Org, AUCTeX or the functional configuration modules. Reloading the entry
+checks the advice name to avoid stacking; the name supports lookup/removal.
 
-`emarccs-early-init` disables package.el startup. Persistent frame defaults are
-separate from first-frame bootstrap colors; theme configuration owns lasting
-colors. Graphical font sizing prefers a nominal 4 mm face parameter when
-physical dimensions are valid, accepting list or dotted-pair mm-size data,
-then falls back to the smaller pixel ratio against 1920x1080 at height 110.
-These are font parameters, not measured glyph dimensions.
+emarccs-bootstrap.el only defines the adapter. Non-nil init-file-user allows
+emarccs-initialize-early in the early phase and emarccs-initialize in the
+load-defaults phase. Native :before advice preserves original arguments,
+execution and return values. The flake's generated site-start only adds lisp/
+to load-path with eval-and-compile and requires emarccs; it no longer selects
+initializers, embeds early-init paths or registers the advice itself.
+
+The early initializer preserves existing frame/package settings and applies
+them once. The regular initializer requires use-package, disables automatic
+ensuring, requires functional modules in their established order and loads
+optional custom.el last. It prevents recursive initialization, skips successful
+repeat calls and marks completion only after success. Functional module hooks
+and advice remain local to those modules. Actual macro users explicitly require
+use-package at compile time rather than depending on compilation order.
+
+Persistent frame defaults are separate from first-frame bootstrap colors;
+theme configuration owns lasting colors. Graphical font sizing prefers a
+nominal 4 mm face parameter when physical dimensions are valid, accepting
+list or dotted-pair mm-size data, then falls back to the smaller pixel ratio
+against 1920x1080 at height 110. These are font parameters, not measured glyph
+dimensions.
 
 ## Package ownership and startup adapter
-Packages come solely from the twist.nix wrapper. The former `lisp/pure-emacs/`
-straight bootstrap, the root `init.el`/`early-init.el`, and the
-`pkgs/*/straight-register.el` recipe convention were removed; the pure entry is
-gone rather than merely unmaintained. Module files use `emarccs-<name>.el` /
-feature `emarccs-<name>`, while `emarccs--<name>.el` (currently
-`emarccs--org-extension-block.el`) marks a private module. The double hyphen
-inside symbols such as `emarccs--org-extension-block--source-namespace` denotes
-a second, different privacy scope and is not planned for flattening.
+Files/features use emarccs-<name>, with emarccs.el providing emarccs as the main
+library. The double hyphen in the private extension module and inside symbols
+such as emarccs--org-extension-block--source-namespace marks distinct privacy
+scopes; it is not planned for flattening. The former pure-emacs/straight entry,
+recipe convention and split shared/twist source directories were removed in
+the preceding accepted step, not left unmaintained.
 
-`emarccs-bootstrap.el` exists solely because the advice defining a non-standard
-early-init must be loaded at site-start time while the configuration itself must
-run in the init phase; loading `emarccs-init` from site-start would run the whole
-configuration before early-init. The flake renders these three forms through
-nix-to-lisp. Emacs 31's native loader boundary preserves store early-init, real
-user early-init, configuration and real user init ordering. Do not reset
-user-emacs-directory to test this behavior. The advice parameter was renamed to
-avoid shadowing Emacs' early-init-file.
+Loading interface definitions, installing startup scheduling and executing
+configuration are separate responsibilities. Future hooks or a startup.el
+patch should change the entry's registration logic while retaining initializer
+interfaces; neither alternative is introduced now. Do not reset
+user-emacs-directory to emulate the startup boundary.
 
 The flake uses Twist makeEnv with explicit package seeds and locked dependency
 closure, not blanket alwaysEnsure or parsing real init.el for :ensure.
@@ -187,37 +195,49 @@ changing it.
 treesit-auto receives a package-local patch using unique-source-anchor lookup.
 It adds the aggregate with-all-grammars library path instead of copying individual
 parsers or maintaining a shortlist. Unique exact matching is not fuzzy patching.
-Five project check families cover independent byte compilation, startup injection,
-adapter phase ordering, library availability and produced-grammar loadability.
-Compilation loads package autoloads, fakes local feature presence and uses disposable destinations;
-it does not run the modules, and it no longer needs a fake straight bootstrap now
-that no source file references straight.el. The byte-compile input is `lisp/` only.
-Startup injection greps the wrapper's generated site-start.el for the load-path
-setup, the bootstrap feature, the advice target and the early-init path, then runs
-a batch smoke test asserting the bootstrap feature loaded and `emarccs-init` is
-locatable; the two former load-path substring checks were dropped because the
-flattened layout made them meaningless. Grammar checks enumerate actual output
-libraries, test language availability and create parsers with diagnostic symbol
-candidates.
-The fifth family, startup-order, now uses `--batch -Q` with explicitly loaded
-bootstrap source and ERT minimal payloads. It checks adapter ordering and
-init-file-user=nil behavior without loading the full configuration; it does
-not test the actual native startup sequence or wrapper wiring. The original
-interactive version failed in an owner-run flake check; the replacement is
-committed and its corrected GTK/PGTK checks passed in the owner-run x86_64-linux
-flake validation. The agent did not run that validation.
-Grammar checks do not prove real-source parsing, modes, font locking or indentation.
+Six project check families cover independent byte compilation, startup
+injection, adapter/initializer behavior, source package lint, library
+availability and produced-grammar loadability. Compilation loads package
+autoloads, supplies local feature placeholders and uses disposable output
+files; it does not initialize the complete configuration. Its input remains
+lisp/ and includes all eighteen source libraries. Existing warnings are not
+fatal; passing byte compilation is not a warning-free claim.
+
+Startup smoke greps the wrapper's generated site-start for the source path
+and main entry, then checks that emarccs was loaded, its named advice and
+initializer interfaces exist, and batch startup has not run configuration.
+Startup-order uses bounded --batch -Q ERT with substitutes to check lazy entry
+loading, unique/removable registration, phase ordering, native parameter/return
+semantics, disabled user initialization, repeat/recursive initialization and
+failure retry. No interactive session or complete personal configuration is
+required by that test.
+
+Package-lint uses independent Nixpkgs test tooling and the public buffer API,
+with emarccs.el as main file. It checks all lisp libraries. The owner approved
+only reserved-key and with-eval-after-load diagnostics in functional personal
+configuration modules as explicit, printed exemptions; every other diagnostic
+fails and the four initialization/entry libraries are strict. This intermediate
+source-package stage declares only verified metadata, not a full independently
+installable third-party dependency closure.
+
+Grammar checks enumerate actual output libraries, test language availability
+and create parsers with diagnostic symbol candidates. They do not prove real
+source parsing, modes, font locking or indentation. All six GTK/PGTK families
+and treefmt passed in the agent-run x86_64-linux selected-source-snapshot check
+for the current uncommitted implementation. Other platforms and complete
+interactive configuration startup were not validated.
 Stale dtd/ocaml-interface/tsx aliases were removed when native symbols changed,
 and patch hunk length was corrected; the final reported pass came from the owner.
 Treefmt/nixfmt also supplies a formatter and flake check.
 
 No Nix build or Emacs runtime suite was executed during memory reconstruction.
 Historical source probes and owner reports retain their narrower scopes.
-README is reconciled and committed with the step-one refactor, including the
-single-entry layout, helpers, package-directory assertions, the input and two
-scope interfaces, current package adaptations, all five checks and treefmt.
-It attributes the passing x86_64-linux flake validation to the owner and does
-not claim complete interactive startup or coverage of omitted platforms.
+README now describes the uncommitted source-package entry, guarded
+initializers, source-injected wrapper, six check families and explicit lint
+exemptions. The owner explicitly requires README to remain stable project
+documentation, not an execution/experiment log; validation runs and temporary
+verification methods belong in current memory. The current step's validation
+is agent-executed, separate from the owner's passing checks for step one.
 The inverted ignore whitelist requires explicit inclusion of new tracked files,
 and TODO.md / INBOX.md / AGENTS.md are Git-ignored, so edits to them are
 worktree-only.

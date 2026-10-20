@@ -43,3 +43,36 @@ This pattern-based review is not a confidentiality guarantee. Source memory
 is distilled and screened before writing and staging; raw logs, private paths
 and personal note identifiers are omitted. Parent relationships and source
 locations are recovered from Git rather than maintained as a parallel index.
+
+## Coverage disposition and remaining historical gaps
+
+All eight matching-session horizons have been accounted for across the four
+distilled source lines: physical display corrections; structural/loading
+contracts; explicit-package selection, adapters, workflow probes and wrapper
+startup; Nix helper/override design and grammar correction; Org registry,
+citation/ownership/naming and the unimplemented ERT proposal. Repeated edits,
+rollback attempts, discarded workarounds and settings-only tails do not each
+require a checkpoint. The interrupted structural-session tail remains incomplete;
+its completion is not manufactured from another session's similar work.
+
+The earliest formal baseline summarizes an inspected complete project state.
+Earlier incremental Org/publishing history is context, not replayed commit by
+commit. Post-session publishing extraction, special-block semantics, package
+interfaces and typed context are recovered from inspected ancestral main trees
+and the user's reference accounts. Full contemporaneous discussion of these
+later decisions and rejected alternatives was not recovered. Structural rationale
+inferred from code is not presented as a recovered verbatim decision.
+
+The source's initial regular-file registry failure and later reference discussion
+of MELPA's source boundary are distinct. An upstream Nix-native registry proposal
+does not establish current implementation. The reference-reported citation
+preprocessing gap is preserved without claiming the external issue was checked
+or resolved. No external issue, foreign repository or source transcript is
+persisted as a project parent.
+
+Each retained source stage was reviewed as distilled English memory and used
+at a meaningful formal integration boundary. Final source tips are retained,
+their temporary clean worktrees have been removed and all four public auxiliary
+readiness reports were ready. Branches remain intentionally available. The
+ordinary project HEAD and index were left unchanged. The two reference notes
+remain on disk and outside GAW archives and source branches.

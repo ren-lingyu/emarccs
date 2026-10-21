@@ -142,8 +142,22 @@ were not found; epdfinfo was not on PATH either but worked via its packaged
 path. Do not equate load success with complete runtime tool/grammar propagation
 or interpret PATH probes as proving absence from the whole Nix closure.
 Results are observations, not full application-workflow acceptance.
-Current owner worktree changes include staged flake.lock, changed lock-flake
-and removed local Org recipe/build overrides; do not alter them.
+At the experiment's initial inspection, owner changes included staged
+flake.lock, changed lock-flake and removed local Org recipe/build overrides.
+At experiment completion the owner had committed the input update
+(subject: chore(flake): update flake inputs), and the root worktree was clean.
+The agent did not change the project index or make that project commit. The
+archive's working-input provenance refers to the initial source inspection;
+this later commit is not a new test baseline or an added project parent.
+Subsequent read-only review found a further owner commit switching the root
+Twist Org recipe and lock source from tecosaur/dev to the official
+https://github.com/bzg/org-mode.git main branch. The existing Org pre-build
+version-metadata helper remains present. This is a real source change in the
+root configuration, separate from the isolated experiment's unmodified
+Nixpkgs Org 9.8.10. No build or full-config check against the new root state
+was run; the experiment does not establish its Org version or compatibility.
+The project worktree is currently clean. The completion archive remains
+unchanged, preserving its original input and test scope.
 For later configuration-package work, the owner requires explicit package
 parameters through tests/default.nix and relevant tests, not ../../lisp.
 Archive assessment selected the bounded experiment because its independent

@@ -104,8 +104,12 @@ rules from its caller; recipe filenames are policy in pkgs/default.nix rather
 than hardcoded validator knowledge. Because evaluation is lazy, assertions run
 when the asserted expression is evaluated, not merely when flake.nix is parsed.
 
-Important adaptations include Org fork version metadata generation with an
-exact Emacs binary; explicit AUCTeX manual builds with native TeX/Perl/Git;
+The root Twist Org recipe and lock now select the official bzg/org-mode main
+branch, replacing tecosaur/dev. The existing pre-build version-metadata helper
+still invokes an exact Emacs binary. This source change has only been inspected;
+the separate Nixpkgs experiment tested Org 9.8.10 and does not validate this
+upstream checkout or the complete root configuration.
+Important adaptations also include explicit AUCTeX manual builds with native TeX/Perl/Git;
 citar's cl-lib autoload prerequisite; package-specific writable HOME needs;
 and laas/math-symbol-lists dependency metadata. The company source patch corrects
 Texinfo example placement for the updated locked package. pdf-tools builds native

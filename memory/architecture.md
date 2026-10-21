@@ -106,9 +106,11 @@ when the asserted expression is evaluated, not merely when flake.nix is parsed.
 
 The root Twist Org recipe and lock now select the official bzg/org-mode main
 branch, replacing tecosaur/dev. The existing pre-build version-metadata helper
-still invokes an exact Emacs binary. This source change has only been inspected;
-the separate Nixpkgs experiment tested Org 9.8.10 and does not validate this
-upstream checkout or the complete root configuration.
+still invokes an exact Emacs binary. The owner supplied a successful root
+nix flake check after this switch: x86_64-linux GTK/PGTK checks and their
+required builds passed, with an Org 10.0-pre derivation visible in the build
+output. The separate independent Nixpkgs experiment used Org 9.8.10; its result
+must not be substituted for this owner-run upstream-source validation.
 Important adaptations also include explicit AUCTeX manual builds with native TeX/Perl/Git;
 citar's cl-lib autoload prerequisite; package-specific writable HOME needs;
 and laas/math-symbol-lists dependency metadata. The company source patch corrects
@@ -229,9 +231,10 @@ and create parsers with diagnostic symbol candidates. They do not prove real
 source parsing, modes, font locking or indentation. All six GTK/PGTK families
 and treefmt passed in the agent-run x86_64-linux selected-source-snapshot check
 for the source-normalization implementation before final README cleanup and
-the Nix smoke minimum-version parameter correction. That final parameter change
-was statically reviewed but not rebuilt. Other platforms and complete
-interactive configuration startup were not validated.
+the Nix smoke minimum-version parameter correction. A later owner-run root
+nix flake check passed with the final parameter correction and official Org
+source switch included, covering the required builds as well as checks. Other
+platforms and complete interactive configuration startup were not validated.
 Stale dtd/ocaml-interface/tsx aliases were removed when native symbols changed,
 and patch hunk length was corrected; the final reported pass came from the owner.
 Treefmt/nixfmt also supplies a formatter and flake check.

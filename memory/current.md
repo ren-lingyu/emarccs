@@ -48,8 +48,9 @@ The owner clarified the minimum-version boundary: keep emarccs.el/README at
 31.1 and pass MIN_EMACS_VERSION=31.1 from tests/startup-smoke/default.nix.
 The Lisp test's generic fallback remains 31.0; it need not duplicate the
 project's explicitly supplied minimum. The attempted fallback change was
-reverted. Diff checks passed; the full Nix run below predates this final
-parameter-only correction, which has not been rebuilt.
+reverted. The earlier agent-run Nix check predates the final parameter-only
+correction; the later owner-run root flake check described below passed with
+that correction included.
 
 Six local batch ERT tests pass. GTK and PGTK Nix checks also pass for the new
 six-family suite: byte compilation, package-lint, startup smoke, startup order,
@@ -86,9 +87,8 @@ was complete with a clean project worktree at that confirmation. The prior
 checkpoint preserves
 the pre-normalization source context; the completion checkpoint associates the
 inspected committed implementation for subsequent recovery and source review.
-The source-normalization suite was not rerun after the owner committed.
-The final Nix minimum-version
-parameter adjustment still has only static verification, as described above.
+The later owner-run root flake check passed after the source-normalization
+commit and final minimum-version parameter correction, as recorded below.
 The owner requested a read-only feasibility assessment of installing lisp/ as
 an independent Nix derivation while retaining Twist dependencies and wrapper.
 This is a proposal, not an adopted implementation or authorization to edit code.
@@ -154,8 +154,17 @@ Twist Org recipe and lock source from tecosaur/dev to the official
 https://github.com/bzg/org-mode.git main branch. The existing Org pre-build
 version-metadata helper remains present. This is a real source change in the
 root configuration, separate from the isolated experiment's unmodified
-Nixpkgs Org 9.8.10. No build or full-config check against the new root state
-was run; the experiment does not establish its Org version or compatibility.
+Nixpkgs Org 9.8.10. The owner subsequently supplied the complete output of a
+manual root `nix flake check`: exit 0, all checks passed in about 55.4 seconds.
+The output covers x86_64-linux GTK and PGTK six-family checks plus treefmt,
+and includes actual dependent builds (not just evaluation), including the
+GTK Org 10.0-pre derivation and its dependents. Therefore both the required
+builds and the flake checks passed for the official-upstream root state.
+This is owner-executed evidence, not a fresh agent-run command. Read-only
+inspection still found the inspected source-switch commit at HEAD and a clean
+worktree. The run omitted incompatible systems and does not prove complete
+interactive startup or every configuration workflow. The independent Nixpkgs
+experiment remains a separate Org 9.8.10 result.
 The project worktree is currently clean. The completion archive remains
 unchanged, preserving its original input and test scope.
 For later configuration-package work, the owner requires explicit package

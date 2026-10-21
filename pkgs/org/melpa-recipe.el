@@ -1,5 +1,5 @@
 (org
  :fetcher git
- :url "https://git.tecosaur.net/tec/org-mode.git"
- :branch "dev"
+ :url "https://github.com/bzg/org-mode.git"
+ :branch "main"
  :files (:defaults "etc"))

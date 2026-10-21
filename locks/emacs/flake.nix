@@ -377,9 +377,9 @@
     };
     org = {
       flake = false;
-      ref = "dev";
+      ref = "main";
       type = "git";
-      url = "https://git.tecosaur.net/tec/org-mode.git";
+      url = "https://github.com/bzg/org-mode.git";
     };
     org-edna = {
       flake = false;

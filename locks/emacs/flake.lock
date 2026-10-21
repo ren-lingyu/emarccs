@@ -1012,18 +1012,18 @@
     "org": {
       "flake": false,
       "locked": {
-        "lastModified": 1768407528,
-        "narHash": "sha256-kPVFT2fgoOO5aCCAifzlSwDhMR2RqhhT1akOKfRyalw=",
-        "ref": "dev",
-        "rev": "1ef59f0aa02e3cff40bae68b756a29bc2001739e",
-        "revCount": 28749,
+        "lastModified": 1792520791,
+        "narHash": "sha256-Jw3edwuFDvtzX6bG+D3KviIkCkgBf9LRWjF3DLZkqg0=",
+        "ref": "main",
+        "rev": "21e976594d3081f7bc45ebec312275aec49778e0",
+        "revCount": 29546,
         "type": "git",
-        "url": "https://git.tecosaur.net/tec/org-mode.git"
+        "url": "https://github.com/bzg/org-mode.git"
       },
       "original": {
-        "ref": "dev",
+        "ref": "main",
         "type": "git",
-        "url": "https://git.tecosaur.net/tec/org-mode.git"
+        "url": "https://github.com/bzg/org-mode.git"
       }
     },
     "org-edna": {

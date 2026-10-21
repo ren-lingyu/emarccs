@@ -37,262 +37,263 @@
 
   outputs =
     { self, ... }@inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
-      { config, lib, ... }@toplevel:
+    inputs.flake-parts.lib.mkFlake
       {
+        inherit inputs;
 
-        imports = [
-          inputs.treefmt-nix.flakeModule
-          inputs.flake-parts.flakeModules.easyOverlay
-        ];
-
-        options = {
-          context = lib.mkOption {
-            type = lib.types.functionTo (
-              lib.types.submodule {
-                options = {
-                  elispkgs = lib.mkOption { type = lib.types.raw; };
-                  emacsTwists = lib.mkOption {
-                    type = lib.types.attrsOf (
-                      lib.types.attrsOf (
-                        lib.types.submodule {
-                          options = {
-                            package = lib.mkOption {
-                              type = lib.types.package;
-                              description = "Base Emacs package.";
-                            };
-                            lockDir = lib.mkOption {
-                              type = lib.types.path;
-                              description = "Twist lock directory.";
-                            };
-                          };
-                        }
-                      )
-                    );
-                  };
-                };
-              }
-            );
+        specialArgs =
+          let
+            lib = inputs.nixpkgs.lib;
+          in
+          {
+            llib = lib.mergeAttrsList [
+              { elisp = inputs.nix-to-lisp.lib.elisp; }
+              (import ./lib { inherit lib; })
+            ];
           };
-        };
+      }
+      (
+        {
+          llib,
+          config,
+          lib,
+          ...
+        }@toplevel:
+        {
 
-        config = {
+          imports = [
+            inputs.treefmt-nix.flakeModule
+            inputs.flake-parts.flakeModules.easyOverlay
+          ];
 
-          systems = inputs.nixpkgs.lib.systems.flakeExposed;
+          options = {
+            context = lib.mkOption {
+              type = lib.types.functionTo (
+                lib.types.submodule {
+                  options = {
+                    elispkgs = lib.mkOption { type = lib.types.raw; };
+                    emacsTwists = lib.mkOption {
+                      type = lib.types.attrsOf (
+                        lib.types.attrsOf (
+                          lib.types.submodule {
+                            options = {
+                              package = lib.mkOption {
+                                type = lib.types.package;
+                                description = "Base Emacs package.";
+                              };
+                              lockDir = lib.mkOption {
+                                type = lib.types.path;
+                                description = "Twist lock directory.";
+                              };
+                            };
+                          }
+                        )
+                      );
+                    };
+                  };
+                }
+              );
+            };
+          };
 
-          context =
-            {
-              pkgs,
-              lib,
-              llib,
-            }:
-            {
-              elispkgs = import ./pkgs { inherit pkgs lib llib; };
-              emacsTwists = {
-                emacs =
+          config = {
+
+            systems = inputs.nixpkgs.lib.systems.flakeExposed;
+
+            context =
+              {
+                pkgs,
+                lib,
+                llib,
+              }:
+              {
+                elispkgs = import ./pkgs { inherit pkgs lib llib; };
+                emacsTwists = {
+                  emacs =
+                    let
+                      lock_ = ./locks/emacs;
+                    in
+                    {
+                      pgtk = {
+                        package = pkgs.emacs-pgtk;
+                        lockDir = lock_;
+                      };
+                      gtk = {
+                        package = pkgs.emacs-gtk;
+                        lockDir = lock_;
+                      };
+                    };
+                };
+              };
+
+            perSystem =
+              {
+                config,
+                pkgs,
+                lib,
+                ...
+              }:
+              let
+                twistContext_ = toplevel.config.context { inherit pkgs lib llib; };
+              in
+              {
+
+                packages = llib.concatMapEmacsTwists (name_: cfg_: {
+                  "${name_}" = (
+                    (
+                      {
+                        elispkgs,
+                        elisp,
+                        package,
+                        lockDir,
+                      }:
+                      (
+                        (inputs.twist.lib.makeEnv {
+                          pkgs = pkgs;
+                          emacsPackage = package;
+                          registries =
+                            let
+                              rewriteSavannahGit =
+                                name: path:
+                                builtins.toFile name (
+                                  builtins.replaceStrings
+                                    [ "https://git.savannah.gnu.org/" "https://git.savannah.nongnu.org/" ]
+                                    [ "https://https.git.savannah.gnu.org/" "https://https.git.savannah.nongnu.org/" ]
+                                    (builtins.readFile path)
+                                );
+                            in
+                            [
+                              {
+                                name = "emarccs-recipes";
+                                type = "melpa";
+                                path = "${elispkgs.recipes.melpa}";
+                              }
+                              {
+                                name = "melpa";
+                                type = "melpa";
+                                path = "${inputs.melpa}/recipes";
+                              }
+                              {
+                                name = "gnu";
+                                type = "elpa";
+                                path = rewriteSavannahGit "gnu-elpa-packages" "${inputs.elpa-gnu}/elpa-packages";
+                                auto-sync-only = true;
+                              }
+                              {
+                                name = "nongnu";
+                                type = "elpa";
+                                path = rewriteSavannahGit "nongnu-elpa-packages" "${inputs.elpa-nongnu}/elpa-packages";
+                              }
+                            ];
+                          extraPackages = elispkgs.packages;
+                          inputOverrides = elispkgs.overrides.input;
+                          initFiles = [ ];
+                          initParser = _: {
+                            elispPackages = [ ];
+                            elispPackagePins = { };
+                            systemPackages = [ ];
+                          };
+                          lockDir = lockDir;
+                          nativeCompileAheadDefault = true;
+                          extraSiteStartElisp = elisp.renderForms [
+                            (elisp.form "eval-and-compile" [
+                              (elisp.form "add-to-list" [
+                                (elisp.quote (elisp.symbol "load-path"))
+                                ./lisp
+                              ])
+                            ])
+                            (elisp.form "require" [
+                              (elisp.quote (elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs.el))))
+                            ])
+                          ];
+                        }).overrideScope
+                          elispkgs.overrides.scope
+                      )
+                    )
+                      {
+                        elispkgs = twistContext_.elispkgs;
+                        elisp = llib.elisp;
+                        package = cfg_.package;
+                        lockDir = cfg_.lockDir;
+                      }
+                  );
+                }) twistContext_.emacsTwists;
+
+                overlayAttrs = lib.optionalAttrs (
+                  pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system
+                ) config.packages;
+
+                apps = llib.concatMapEmacsTwists (
+                  name_: cfg_:
                   let
-                    lock_ = ./locks/emacs;
+                    apps_ = config.packages.${name_}.makeApps {
+                      lockDirName = lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
+                    };
                   in
                   {
-                    pgtk = {
-                      package = pkgs.emacs-pgtk;
-                      lockDir = lock_;
+                    "${name_}-lock" = apps_.lock // {
+                      meta.description = "Generate lock files for ${name_}.";
                     };
-                    gtk = {
-                      package = pkgs.emacs-gtk;
-                      lockDir = lock_;
+                    "${name_}-update" = apps_.update // {
+                      meta.description = "Update lock files for ${name_}.";
+                    };
+                  }
+                ) twistContext_.emacsTwists;
+
+                checks = llib.concatMapEmacsTwists (
+                  name_: cfg_:
+                  (lib.mapAttrs'
+                    (checkName_: check_: {
+                      name = "${name_}-${checkName_}";
+                      value = check_;
+                    })
+                    (
+                      import ./tests {
+                        inherit pkgs lib;
+                        emacsPackage = config.packages.${name_};
+                        elispSource = lib.fileset.toSource {
+                          root = ./.;
+                          fileset = ./lisp;
+                        };
+                        elispPackages = twistContext_.elispkgs.packages;
+                        siteStartCheckList = [
+                          "eval-and-compile"
+                          "${./lisp}"
+                          "${lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs.el)}"
+                        ];
+                      }
+                    )
+                  )
+                ) twistContext_.emacsTwists;
+
+                treefmt = {
+                  flakeFormatter = true;
+                  flakeCheck = true;
+                  enableDefaultExcludes = false;
+                  projectRootFile = builtins.baseNameOf __curPos.file;
+                  settings.excludes = [
+                    "flake.lock"
+                    "locks/**"
+                    ".gitignore"
+                    "LICENSE"
+                    "README.org"
+                  ];
+                  programs = {
+                    nixfmt = {
+                      enable = true;
+                      package = pkgs.nixfmt;
+                      width = 100;
+                      indent = 2;
+                      strict = true;
                     };
                   };
+                };
+
               };
-            };
-
-          flake = {
-
-            lib =
-              { lib }:
-              lib.mergeAttrsList [
-
-                {
-
-                  elisp = inputs.nix-to-lisp.lib.elisp;
-
-                }
-
-                (import ./lib { inherit lib; })
-
-              ];
 
           };
 
-          perSystem =
-            {
-              config,
-              pkgs,
-              lib,
-              ...
-            }:
-            let
-              llib = self.lib { inherit lib; };
-              twistContext_ = toplevel.config.context { inherit pkgs lib llib; };
-            in
-            {
-
-              packages = llib.concatMapEmacsTwists (name_: cfg_: {
-                "${name_}" = (
-                  (
-                    {
-                      elispkgs,
-                      elisp,
-                      package,
-                      lockDir,
-                    }:
-                    (
-                      (inputs.twist.lib.makeEnv {
-                        pkgs = pkgs;
-                        emacsPackage = package;
-                        registries =
-                          let
-                            rewriteSavannahGit =
-                              name: path:
-                              builtins.toFile name (
-                                builtins.replaceStrings
-                                  [ "https://git.savannah.gnu.org/" "https://git.savannah.nongnu.org/" ]
-                                  [ "https://https.git.savannah.gnu.org/" "https://https.git.savannah.nongnu.org/" ]
-                                  (builtins.readFile path)
-                              );
-                          in
-                          [
-                            {
-                              name = "emarccs-recipes";
-                              type = "melpa";
-                              path = "${elispkgs.recipes.melpa}";
-                            }
-                            {
-                              name = "melpa";
-                              type = "melpa";
-                              path = "${inputs.melpa}/recipes";
-                            }
-                            {
-                              name = "gnu";
-                              type = "elpa";
-                              path = rewriteSavannahGit "gnu-elpa-packages" "${inputs.elpa-gnu}/elpa-packages";
-                              auto-sync-only = true;
-                            }
-                            {
-                              name = "nongnu";
-                              type = "elpa";
-                              path = rewriteSavannahGit "nongnu-elpa-packages" "${inputs.elpa-nongnu}/elpa-packages";
-                            }
-                          ];
-                        extraPackages = elispkgs.packages;
-                        inputOverrides = elispkgs.overrides.input;
-                        initFiles = [ ];
-                        initParser = _: {
-                          elispPackages = [ ];
-                          elispPackagePins = { };
-                          systemPackages = [ ];
-                        };
-                        lockDir = lockDir;
-                        nativeCompileAheadDefault = true;
-                        extraSiteStartElisp = elisp.renderForms [
-                          (elisp.form "eval-and-compile" [
-                            (elisp.form "add-to-list" [
-                              (elisp.quote (elisp.symbol "load-path"))
-                              ./lisp
-                            ])
-                          ])
-                          (elisp.form "require" [
-                            (elisp.quote (elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs.el))))
-                          ])
-                        ];
-                      }).overrideScope
-                        elispkgs.overrides.scope
-                    )
-                  )
-                    {
-                      elispkgs = twistContext_.elispkgs;
-                      elisp = llib.elisp;
-                      package = cfg_.package;
-                      lockDir = cfg_.lockDir;
-                    }
-                );
-              }) twistContext_.emacsTwists;
-
-              overlayAttrs = lib.optionalAttrs (
-                pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system
-              ) config.packages;
-
-              apps = llib.concatMapEmacsTwists (
-                name_: cfg_:
-                let
-                  apps_ = config.packages.${name_}.makeApps {
-                    lockDirName = lib.removePrefix "${builtins.toString ./.}/" (builtins.toString cfg_.lockDir);
-                  };
-                in
-                {
-                  "${name_}-lock" = apps_.lock // {
-                    meta.description = "Generate lock files for ${name_}.";
-                  };
-                  "${name_}-update" = apps_.update // {
-                    meta.description = "Update lock files for ${name_}.";
-                  };
-                }
-              ) twistContext_.emacsTwists;
-
-              checks = llib.concatMapEmacsTwists (
-                name_: cfg_:
-                (lib.mapAttrs'
-                  (checkName_: check_: {
-                    name = "${name_}-${checkName_}";
-                    value = check_;
-                  })
-                  (
-                    import ./tests {
-                      inherit pkgs lib;
-                      emacsPackage = config.packages.${name_};
-                      elispSource = lib.fileset.toSource {
-                        root = ./.;
-                        fileset = ./lisp;
-                      };
-                      elispPackages = twistContext_.elispkgs.packages;
-                      siteStartCheckList = [
-                        "eval-and-compile"
-                        "${./lisp}"
-                        "${lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs.el)}"
-                      ];
-                    }
-                  )
-                )
-              ) twistContext_.emacsTwists;
-
-              treefmt = {
-                flakeFormatter = true;
-                flakeCheck = true;
-                enableDefaultExcludes = false;
-                projectRootFile = builtins.baseNameOf __curPos.file;
-                settings.excludes = [
-                  "flake.lock"
-                  "locks/**"
-                  ".gitignore"
-                  "LICENSE"
-                  "README.org"
-                ];
-                programs = {
-                  nixfmt = {
-                    enable = true;
-                    package = pkgs.nixfmt;
-                    width = 100;
-                    indent = 2;
-                    strict = true;
-                  };
-                };
-              };
-
-            };
-
-        };
-
-      }
-    );
+        }
+      );
 
 }

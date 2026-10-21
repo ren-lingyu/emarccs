@@ -93,10 +93,10 @@
     "melpa": {
       "flake": false,
       "locked": {
-        "lastModified": 1791739963,
-        "narHash": "sha256-VGF1fiSTDkQZC+J4JsfypgGomubGWYj3JEGgKKPmLEQ=",
+        "lastModified": 1792478654,
+        "narHash": "sha256-fBLxvezUJPHAKt5K7NrSszBZPw9KW0MhhKzLzjzeOLQ=",
         "ref": "refs/heads/master",
-        "rev": "62b1143e6d9019a689b293bb8080838c69f6cf7a",
+        "rev": "33709ee5aa14b6d8b30f2a8dc00ce33a6c6d5ffd",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/melpa/melpa.git"
@@ -135,10 +135,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1791487292,
-        "narHash": "sha256-tqM7xDEsaeK1p6VvRygeZ9LkQRpUUkbRT02BHv6hnTM=",
+        "lastModified": 1792506237,
+        "narHash": "sha256-Q/8KLB6jNfpaUN1HAedE/u/Et9feE/zYSsutBLKrCFk=",
         "ref": "refs/heads/nixpkgs-unstable",
-        "rev": "8edc0c72e3a38faf5434e40d1f19431125fe4b30",
+        "rev": "5adc50831c259f87faeb09ddf930d43597197473",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/NixOS/nixpkgs.git"
@@ -204,10 +204,10 @@
         "elisp-helpers": "elisp-helpers"
       },
       "locked": {
-        "lastModified": 1790049679,
-        "narHash": "sha256-lr1sv26RxQqy8APt48mdqMsua46StI1+JQTqFT8jSCk=",
+        "lastModified": 1792370800,
+        "narHash": "sha256-jGoxyy+yJKFckLFVmiBhHhDdQ10Czjs1suZH4Pm4B9s=",
         "ref": "refs/heads/master",
-        "rev": "cfdb9127d9be7444f7eafcb7a15780165fea3486",
+        "rev": "708e5c216dfd5095b509a6d79e672af68cc11651",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/emacs-twist/twist.nix.git"

@@ -1,0 +1,1053 @@
+{
+  "nixpkgs_revision": "5adc50831c259f87faeb09ddf930d43597197473",
+  "platform": "x86_64-linux",
+  "base": "emacs-pgtk",
+  "build": {
+    "exit_code": 0,
+    "elapsed_seconds": 3.42,
+    "check_count": 72
+  },
+  "packages": [
+    {
+      "package": "aas",
+      "library": "aas",
+      "path": "/nix/store/5409adjj6a1raya6lqdd3ss9k5f7jx10-emacs-packages-deps/share/emacs/site-lisp/elpa/aas-20230303.2214/aas.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "ace-window",
+      "library": "ace-window",
+      "path": "/nix/store/cfka1ga7diw6v335k81j9m1qq3vnvcxp-emacs-packages-deps/share/emacs/site-lisp/elpa/ace-window-20220911.358/ace-window.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "arxiv-mode",
+      "library": "arxiv-mode",
+      "path": "/nix/store/95kfmb9p43xy2wpp086f36mf71gdciz3-emacs-packages-deps/share/emacs/site-lisp/elpa/arxiv-mode-20240111.2203/arxiv-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "auctex",
+      "library": "tex-site",
+      "path": "/nix/store/4m4yaxv9knqbfv5qv8m1dq2spx20zyb0-emacs-packages-deps/share/emacs/site-lisp/elpa/auctex-14.1.2/tex-site.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "avy",
+      "library": "avy",
+      "path": "/nix/store/adjdwr0rj6vbhcw1rz59yg4wrii0zfmm-emacs-packages-deps/share/emacs/site-lisp/elpa/avy-20241101.1357/avy.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "catppuccin-theme",
+      "library": "catppuccin-theme",
+      "path": "/nix/store/fxiyiy2d836my29r4ybyxj8ww1gz6cnj-emacs-packages-deps/share/emacs/site-lisp/elpa/catppuccin-theme-20260406.30/catppuccin-theme.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "cdlatex",
+      "library": "cdlatex",
+      "path": "/nix/store/y2hpzh19zvdq1mcjdxlarxg534xp5g7f-emacs-packages-deps/share/emacs/site-lisp/elpa/cdlatex-20241007.1623/cdlatex.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "citar",
+      "library": "citar",
+      "path": "/nix/store/d8p1jdkd4nbj2k0gf5imdsr8yxnkn09g-emacs-packages-deps/share/emacs/site-lisp/elpa/citar-20260706.1221/citar.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "citar-embark",
+      "library": "citar-embark",
+      "path": "/nix/store/ld47733ln9b9zcshn78a60bbzrsgdi3d-emacs-packages-deps/share/emacs/site-lisp/elpa/citar-embark-20251027.1830/citar-embark.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "citar-org-roam",
+      "library": "citar-org-roam",
+      "path": "/nix/store/xd62q1z0lckx9b0kfij89gidc9j1zsrf-emacs-packages-deps/share/emacs/site-lisp/elpa/citar-org-roam-20250424.1511/citar-org-roam.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/xd62q1z0lckx9b0kfij89gidc9j1zsrf-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "citeproc",
+      "library": "citeproc",
+      "path": "/nix/store/81v6qcq630hihjifcxr1c2xr63kk82cd-emacs-packages-deps/share/emacs/site-lisp/elpa/citeproc-20260113.1047/citeproc.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/81v6qcq630hihjifcxr1c2xr63kk82cd-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "company",
+      "library": "company",
+      "path": "/nix/store/586837krns42f516q0byw4wcjccw9gzp-emacs-packages-deps/share/emacs/site-lisp/elpa/company-20260721.100/company.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "company-auctex",
+      "library": "company-auctex",
+      "path": "/nix/store/ljrz6sf49gwrj199mzlpcy9jz9jgms6x-emacs-packages-deps/share/emacs/site-lisp/elpa/company-auctex-20200529.1835/company-auctex.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "company-math",
+      "library": "company-math",
+      "path": "/nix/store/ys2kp3d99ipyib433si2g3a5h6vin9za-emacs-packages-deps/share/emacs/site-lisp/elpa/company-math-20221227.1329/company-math.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "consult",
+      "library": "consult",
+      "path": "/nix/store/i4ig3xvnmssnld5qm3571zqli8yqyz7z-emacs-packages-deps/share/emacs/site-lisp/elpa/consult-20260910.1909/consult.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "counsel",
+      "library": "counsel",
+      "path": "/nix/store/7vzsc2567qi3b8d1ksv86pdnr1gr3q27-emacs-packages-deps/share/emacs/site-lisp/elpa/counsel-20260214.1004/counsel.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "diff-hl",
+      "library": "diff-hl",
+      "path": "/nix/store/81v512s06rfpibfxa8anq4hkmnnikqhz-emacs-packages-deps/share/emacs/site-lisp/elpa/diff-hl-20260909.39/diff-hl.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "dired-rainbow",
+      "library": "dired-rainbow",
+      "path": "/nix/store/ydplsw47jkljn423prqp5h6qcz4hbsmd-emacs-packages-deps/share/emacs/site-lisp/elpa/dired-rainbow-20240629.1857/dired-rainbow.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "diredfl",
+      "library": "diredfl",
+      "path": "/nix/store/z2ir001qwlp3crawr52g9a87a5pix5a8-emacs-packages-deps/share/emacs/site-lisp/elpa/diredfl-20241201.1141/diredfl.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "dirvish",
+      "library": "dirvish",
+      "path": "/nix/store/g7prhqvdl44vl8arg1kpr95fp4z7dq4k-emacs-packages-deps/share/emacs/site-lisp/elpa/dirvish-20260725.1520/dirvish.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "dockerfile-mode",
+      "library": "dockerfile-mode",
+      "path": "/nix/store/3x80kcrxrrmlinhx33ahc4rfb9m85rkd-emacs-packages-deps/share/emacs/site-lisp/elpa/dockerfile-mode-20251221.1644/dockerfile-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "doom-modeline",
+      "library": "doom-modeline",
+      "path": "/nix/store/c1dc7x4j7hk3qxs27zjmpckmcy9pqi9x-emacs-packages-deps/share/emacs/site-lisp/elpa/doom-modeline-20260911.1831/doom-modeline.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "doom-themes",
+      "library": "doom-themes",
+      "path": "/nix/store/la21kj0jjiyq7s6gs17i3r0s3p72z6cp-emacs-packages-deps/share/emacs/site-lisp/elpa/doom-themes-20260826.1413/doom-themes.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "dotenv-mode",
+      "library": "dotenv-mode",
+      "path": "/nix/store/psal5m2zs1qbf9bgc95c7hjwnrbadxrc-emacs-packages-deps/share/emacs/site-lisp/elpa/dotenv-mode-20191027.2129/dotenv-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "elfeed",
+      "library": "elfeed",
+      "path": "/nix/store/5yay5sixxff01bc8c53jjnijgsp82iyf-emacs-packages-deps/share/emacs/site-lisp/elpa/elfeed-20260909.758/elfeed.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "elfeed-dashboard",
+      "library": "elfeed-dashboard",
+      "path": "/nix/store/5jzgb1wlp4nmz5f9grxf2dd63zwkyc27-emacs-packages-deps/share/emacs/site-lisp/elpa/elfeed-dashboard-20210727.603/elfeed-dashboard.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.7",
+      "org_path": "/nix/store/yxmbl6xs6vz1ly49h8x8rd2s9f7lck46-emacs-pgtk-31.1/share/emacs/31.1/lisp/org/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "elfeed-org",
+      "library": "elfeed-org",
+      "path": "/nix/store/yan2rm9yb834pfl1785y44cfjmsm0227-emacs-packages-deps/share/emacs/site-lisp/elpa/elfeed-org-20250219.950/elfeed-org.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/yan2rm9yb834pfl1785y44cfjmsm0227-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "embark",
+      "library": "embark",
+      "path": "/nix/store/db6a73snh3lhr9nbvs1llsx1b7dj654x-emacs-packages-deps/share/emacs/site-lisp/elpa/embark-20260610.302/embark.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "embark-consult",
+      "library": "embark-consult",
+      "path": "/nix/store/89a48aznfms2nvgb595dnm5hpi1kbyg9-emacs-packages-deps/share/emacs/site-lisp/elpa/embark-consult-20260503.118/embark-consult.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "flycheck",
+      "library": "flycheck",
+      "path": "/nix/store/8dggjp0gzc8dgl03wp62avx1vwqz3ja2-emacs-packages-deps/share/emacs/site-lisp/elpa/flycheck-20260902.1403/flycheck.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "haskell-ts-mode",
+      "library": "haskell-ts-mode",
+      "path": "/nix/store/68qjf8yzivg47nk7mca4izlfr3aln1z4-emacs-packages-deps/share/emacs/site-lisp/elpa/haskell-ts-mode-1.3.5/haskell-ts-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "helpful",
+      "library": "helpful",
+      "path": "/nix/store/am8bmzsdxdxa4bymqzrzvl6sw2y16wm0-emacs-packages-deps/share/emacs/site-lisp/elpa/helpful-20250408.334/helpful.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "highlight-parentheses",
+      "library": "highlight-parentheses",
+      "path": "/nix/store/jqbi27fn22j7j58dsj92zdbwm66wxc32-emacs-packages-deps/share/emacs/site-lisp/elpa/highlight-parentheses-20240408.1126/highlight-parentheses.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "hl-block-mode",
+      "library": "hl-block-mode",
+      "path": "/nix/store/zqvpcalmqyswqhv00si0qdhzyfl51sa5-emacs-packages-deps/share/emacs/site-lisp/elpa/hl-block-mode-20251230.731/hl-block-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "hl-indent-scope",
+      "library": "hl-indent-scope",
+      "path": "/nix/store/mmki7awjwxc88ffmf6amwm657854q4cg-emacs-packages-deps/share/emacs/site-lisp/elpa/hl-indent-scope-20260726.536/hl-indent-scope.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "kdl-mode",
+      "library": "kdl-mode",
+      "path": "/nix/store/4nr9ql4l11ribjbk4p51prh5k5mjdg0w-emacs-packages-deps/share/emacs/site-lisp/elpa/kdl-mode-20260818.637/kdl-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "koishi-theme",
+      "library": "koishi-theme",
+      "path": "/nix/store/fqmlghfw6b63vb7m65x2cvki2mxfg70v-emacs-packages-deps/share/emacs/site-lisp/elpa/koishi-theme-20260810.1337/koishi-theme.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "laas",
+      "library": "laas",
+      "path": "/nix/store/71maash9jv480lvbl0lyb9hnpxw9h26m-emacs-packages-deps/share/emacs/site-lisp/elpa/laas-20241212.1314/laas.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "lisp-semantic-hl",
+      "library": "lisp-semantic-hl",
+      "path": "/nix/store/pjfb9dx4j7x71i8zkalbig8ncizxrk1s-emacs-packages-deps/share/emacs/site-lisp/elpa/lisp-semantic-hl-20260223.521/lisp-semantic-hl.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "marginalia",
+      "library": "marginalia",
+      "path": "/nix/store/mrdf2avm2qdp0b9ldrzhxfi1c9r4qvz2-emacs-packages-deps/share/emacs/site-lisp/elpa/marginalia-20260907.511/marginalia.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "markdown-mode",
+      "library": "markdown-mode",
+      "path": "/nix/store/lw3pc1ir9gn6ah1h7v0jz5c5df5fcw1p-emacs-packages-deps/share/emacs/site-lisp/elpa/markdown-mode-20260827.909/markdown-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "modus-themes",
+      "library": "modus-themes",
+      "path": "/nix/store/m1wys7q35r9m2v8dqyqq8wvgqb8fxf92-emacs-packages-deps/share/emacs/site-lisp/elpa/modus-themes-20260911.443/modus-themes.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "neotree",
+      "library": "neotree",
+      "path": "/nix/store/rwsw9cxb5q3j9gis9bpgysjv7zp6p5a8-emacs-packages-deps/share/emacs/site-lisp/elpa/neotree-20250703.2202/neotree.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "nerd-icons",
+      "library": "nerd-icons",
+      "path": "/nix/store/r7jb65wkpr2vyq7rhpkvfzc1fkcg72bf-emacs-packages-deps/share/emacs/site-lisp/elpa/nerd-icons-20260823.17/nerd-icons.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "nix-mode",
+      "library": "nix-mode",
+      "path": "/nix/store/602la0azkzz4hylk3v535ndwlnqilhsg-emacs-packages-deps/share/emacs/site-lisp/elpa/nix-mode-20260810.1740/nix-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "nix-ts-mode",
+      "library": "nix-ts-mode",
+      "path": "/nix/store/prgp3cdqda2spnwvdpj19cj0agsda7rr-emacs-packages-deps/share/emacs/site-lisp/elpa/nix-ts-mode-20260705.1600/nix-ts-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "orderless",
+      "library": "orderless",
+      "path": "/nix/store/07z1j8l2q85hp7rc6kc0maxipnc17jp6-emacs-packages-deps/share/emacs/site-lisp/elpa/orderless-20260909.1506/orderless.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "org",
+      "library": "org",
+      "path": "/nix/store/q16fgxhgai35cn4g57s4qb9j0nr9dmgr-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/q16fgxhgai35cn4g57s4qb9j0nr9dmgr-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "org-gtd",
+      "library": "org-gtd",
+      "path": "/nix/store/zqh5vqv5cxmbm3nspwck890dx6x4x6f3-emacs-packages-deps/share/emacs/site-lisp/elpa/org-gtd-20260605.2210/org-gtd.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/zqh5vqv5cxmbm3nspwck890dx6x4x6f3-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "org-roam",
+      "library": "org-roam",
+      "path": "/nix/store/bh9w8d7937xgfhxvyr05bzf0l0kki1sh-emacs-packages-deps/share/emacs/site-lisp/elpa/org-roam-20260425.1623/org-roam.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/bh9w8d7937xgfhxvyr05bzf0l0kki1sh-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "org-roam-timestamps",
+      "library": "org-roam-timestamps",
+      "path": "/nix/store/fda0l23xz13cj28a2k93ww46lp6qf22z-emacs-packages-deps/share/emacs/site-lisp/elpa/org-roam-timestamps-20221104.1544/org-roam-timestamps.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/fda0l23xz13cj28a2k93ww46lp6qf22z-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "org-roam-ui",
+      "library": "org-roam-ui",
+      "path": "/nix/store/qw4s1009ybswv6hjal0yi2dmqml6s03b-emacs-packages-deps/share/emacs/site-lisp/elpa/org-roam-ui-20221105.1040/org-roam-ui.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/qw4s1009ybswv6hjal0yi2dmqml6s03b-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "org-transclusion",
+      "library": "org-transclusion",
+      "path": "/nix/store/27lrxrxxgmsagr369xjscgc6p9fzys23-emacs-packages-deps/share/emacs/site-lisp/elpa/org-transclusion-1.4.0/org-transclusion.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/27lrxrxxgmsagr369xjscgc6p9fzys23-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "epdfinfo": null
+    },
+    {
+      "package": "pdf-tools",
+      "library": "pdf-tools",
+      "path": "/nix/store/v8mwckf6kdbqxj73xdyfmamqznzxjsf9-emacs-packages-deps/share/emacs/site-lisp/elpa/pdf-tools-20260102.1101/pdf-tools.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": "/nix/store/v8mwckf6kdbqxj73xdyfmamqznzxjsf9-emacs-packages-deps/share/emacs/site-lisp/elpa/pdf-tools-20260102.1101/epdfinfo"
+    },
+    {
+      "package": "powerline",
+      "library": "powerline",
+      "path": "/nix/store/xm893glgrsk48ncgqrhlryl2ln3pc9qd-emacs-packages-deps/share/emacs/site-lisp/elpa/powerline-20221110.1956/powerline.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "pyim",
+      "library": "pyim",
+      "path": "/nix/store/l4vzv6xdgiksyy92jlma44gc6rn81g3k-emacs-packages-deps/share/emacs/site-lisp/elpa/pyim-20251230.809/pyim.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "pyim-basedict",
+      "library": "pyim-basedict",
+      "path": "/nix/store/hjbn2jhd3rzf9h11a9ksld5j22nchnsd-emacs-packages-deps/share/emacs/site-lisp/elpa/pyim-basedict-20240923.739/pyim-basedict.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "pyim-cangjiedict",
+      "library": "pyim-cangjiedict",
+      "path": "/nix/store/vpihnxi90a0fvj727hdg98vfv9s687xb-emacs-packages-deps/share/emacs/site-lisp/elpa/pyim-cangjiedict-20250924.1320/pyim-cangjiedict.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "qml-mode",
+      "library": "qml-mode",
+      "path": "/nix/store/x9zx1jr67df4in4qy31wif9l9b49phgi-emacs-packages-deps/share/emacs/site-lisp/elpa/qml-mode-20161016.31/qml-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "rainbow-delimiters",
+      "library": "rainbow-delimiters",
+      "path": "/nix/store/yjl3z6wlyaagd7kp7rdfg4irf02n5pif-emacs-packages-deps/share/emacs/site-lisp/elpa/rainbow-delimiters-20210515.1254/rainbow-delimiters.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "ripgrep",
+      "library": "ripgrep",
+      "path": "/nix/store/gx6pxc41jb6d6zccz8illgzr6n1m4jrk-emacs-packages-deps/share/emacs/site-lisp/elpa/ripgrep-20220520.1410/ripgrep.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "sly",
+      "library": "sly",
+      "path": "/nix/store/9q4zykh553xp1xamiqza2l3350zhrb0w-emacs-packages-deps/share/emacs/site-lisp/elpa/sly-20260402.2249/sly.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "treesit-auto",
+      "library": "treesit-auto",
+      "path": "/nix/store/y5w9hjbjbkfw86h2f825qwy1mgjrms41-emacs-packages-deps/share/emacs/site-lisp/elpa/treesit-auto-20260831.1012/treesit-auto.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "undo-tree",
+      "library": "undo-tree",
+      "path": "/nix/store/0vz7kri0s1sc4krk0wy6zwamz000dwx1-emacs-packages-deps/share/emacs/site-lisp/elpa/undo-tree-0.8.2/undo-tree.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "vertico",
+      "library": "vertico",
+      "path": "/nix/store/grjd8mjg2d20wbgcw68db2cwyh7gmfvg-emacs-packages-deps/share/emacs/site-lisp/elpa/vertico-20260907.519/vertico.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "vlf",
+      "library": "vlf",
+      "path": "/nix/store/g2bxnvpilpa45gnd9xf4wfsp80bxb2fg-emacs-packages-deps/share/emacs/site-lisp/elpa/vlf-1.7.2/vlf.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "vundo",
+      "library": "vundo",
+      "path": "/nix/store/2kfsmn9zakg9m6ba5bh7z3lbv7hs77mf-emacs-packages-deps/share/emacs/site-lisp/elpa/vundo-2.4.0/vundo.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "yaml-mode",
+      "library": "yaml-mode",
+      "path": "/nix/store/ss5269kkl1w8wgvqycyx5f7042igwr7k-emacs-packages-deps/share/emacs/site-lisp/elpa/yaml-mode-20260830.2340/yaml-mode.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    },
+    {
+      "package": "yasnippet",
+      "library": "yasnippet",
+      "path": "/nix/store/qpywanyalakrwp6bl3rzyyq7jwvh0jwx-emacs-packages-deps/share/emacs/site-lisp/elpa/yasnippet-20250602.1342/yasnippet.elc",
+      "emacs_version": "31.1",
+      "status": "pass",
+      "error": null,
+      "org_version": null,
+      "org_path": null,
+      "epdfinfo": null
+    }
+  ],
+  "runtime": [
+    {
+      "checks": [
+        {
+          "test": "coexistence",
+          "status": "pass",
+          "detail": "All 69 entry features loaded in one process"
+        },
+        {
+          "test": "org-parse",
+          "status": "pass",
+          "detail": "9.8.10"
+        },
+        {
+          "test": "org-roam-sqlite",
+          "status": "pass",
+          "detail": "((1))"
+        },
+        {
+          "test": "pdf-tools-helper",
+          "status": "pass",
+          "detail": "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/share/emacs/site-lisp/elpa/pdf-tools-20260102.1101/epdfinfo"
+        },
+        {
+          "test": "auctex-mode",
+          "status": "pass",
+          "detail": "LaTeX-mode"
+        }
+      ],
+      "emacs_version": "31.1",
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "tools": [
+        {
+          "name": "rg",
+          "path": null
+        },
+        {
+          "name": "git",
+          "path": null
+        },
+        {
+          "name": "diff",
+          "path": null
+        },
+        {
+          "name": "find",
+          "path": null
+        },
+        {
+          "name": "latex",
+          "path": null
+        },
+        {
+          "name": "sbcl",
+          "path": null
+        },
+        {
+          "name": "epdfinfo",
+          "path": null
+        }
+      ],
+      "treesit_available": true,
+      "grammar_path": [
+        "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/lib/"
+      ],
+      "grammars": [
+        {
+          "language": "nix",
+          "available": false
+        },
+        {
+          "language": "haskell",
+          "available": false
+        },
+        {
+          "language": "bash",
+          "available": false
+        },
+        {
+          "language": "json",
+          "available": false
+        },
+        {
+          "language": "python",
+          "available": false
+        }
+      ]
+    },
+    {
+      "checks": [
+        {
+          "test": "coexistence",
+          "status": "pass",
+          "detail": "All 69 entry features loaded in one process"
+        },
+        {
+          "test": "org-parse",
+          "status": "pass",
+          "detail": "9.8.10"
+        },
+        {
+          "test": "org-roam-sqlite",
+          "status": "pass",
+          "detail": "((1))"
+        },
+        {
+          "test": "pdf-tools-helper",
+          "status": "pass",
+          "detail": "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/share/emacs/site-lisp/elpa/pdf-tools-20260102.1101/epdfinfo"
+        },
+        {
+          "test": "auctex-mode",
+          "status": "pass",
+          "detail": "LaTeX-mode"
+        }
+      ],
+      "emacs_version": "31.1",
+      "org_version": "9.8.10",
+      "org_path": "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+      "tools": [
+        {
+          "name": "rg",
+          "path": null
+        },
+        {
+          "name": "git",
+          "path": null
+        },
+        {
+          "name": "diff",
+          "path": null
+        },
+        {
+          "name": "find",
+          "path": null
+        },
+        {
+          "name": "latex",
+          "path": null
+        },
+        {
+          "name": "sbcl",
+          "path": null
+        },
+        {
+          "name": "epdfinfo",
+          "path": null
+        }
+      ],
+      "treesit_available": true,
+      "grammar_path": [
+        "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/lib/"
+      ],
+      "grammars": [
+        {
+          "language": "nix",
+          "available": false
+        },
+        {
+          "language": "haskell",
+          "available": false
+        },
+        {
+          "language": "bash",
+          "available": false
+        },
+        {
+          "language": "json",
+          "available": false
+        },
+        {
+          "language": "python",
+          "available": false
+        }
+      ]
+    }
+  ],
+  "negative_control": {
+    "package": "epkgs-intentionally-missing-library",
+    "library": "epkgs-intentionally-missing-library",
+    "path": null,
+    "emacs_version": "31.1",
+    "status": "fail",
+    "error": "Library not found: epkgs-intentionally-missing-library",
+    "new_features": [],
+    "org_version": null,
+    "org_path": null,
+    "epdfinfo": null
+  },
+  "runtime_negative_control": {
+    "checks": [
+      {
+        "test": "coexistence",
+        "status": "fail",
+        "error": "Cannot open load file: No such file or directory, epkgs-intentionally-missing-library"
+      },
+      {
+        "test": "org-parse",
+        "status": "pass",
+        "detail": "9.8.10"
+      },
+      {
+        "test": "org-roam-sqlite",
+        "status": "pass",
+        "detail": "((1))"
+      },
+      {
+        "test": "pdf-tools-helper",
+        "status": "pass",
+        "detail": "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/share/emacs/site-lisp/elpa/pdf-tools-20260102.1101/epdfinfo"
+      },
+      {
+        "test": "auctex-mode",
+        "status": "pass",
+        "detail": "LaTeX-mode"
+      }
+    ],
+    "emacs_version": "31.1",
+    "org_version": "9.8.10",
+    "org_path": "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/share/emacs/site-lisp/elpa/org-9.8.10/org.elc",
+    "tools": [
+      {
+        "name": "rg",
+        "path": null
+      },
+      {
+        "name": "git",
+        "path": null
+      },
+      {
+        "name": "diff",
+        "path": null
+      },
+      {
+        "name": "find",
+        "path": null
+      },
+      {
+        "name": "latex",
+        "path": null
+      },
+      {
+        "name": "sbcl",
+        "path": null
+      },
+      {
+        "name": "epdfinfo",
+        "path": null
+      }
+    ],
+    "treesit_available": true,
+    "grammar_path": [
+      "/nix/store/a8q87406bgh33l44m01byzj71lnr4109-emacs-packages-deps/lib/"
+    ],
+    "grammars": [
+      {
+        "language": "nix",
+        "available": false
+      },
+      {
+        "language": "haskell",
+        "available": false
+      },
+      {
+        "language": "bash",
+        "available": false
+      },
+      {
+        "language": "json",
+        "available": false
+      },
+      {
+        "language": "python",
+        "available": false
+      }
+    ]
+  },
+  "warnings": [
+    "haskell-ts-mode loads but warns that the Haskell grammar is missing",
+    "org-gtd emits its v3-to-v4 configuration/data migration notice"
+  ]
+}

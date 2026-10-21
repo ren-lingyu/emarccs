@@ -1,21 +1,24 @@
-;;; emarccs-bootstrap.el --- Load the Emarccs configuration from site-start -*- lexical-binding: t; -*-
+;;; emarccs-bootstrap.el --- Adapt Emacs startup phases -*- lexical-binding: t; -*-
+
 ;;; Commentary:
-;; Required from the wrapper's generated site-start.el.  It must not run the
-;; configuration itself, because site-start runs before the early-init phase.
-;; It only defines the advice that loads the early-init settings and the
-;; configuration entry at the right phases of `startup--load-user-init-file'.
+
+;; Define the startup adapter without registering or running it.
+;; The main emarccs library owns registration and initialization timing.
+
 ;;; Code:
 
-(defun emarccs-bootstrap--load-user-init-file (early-init-file-path init-feature)
-  "Return an advice for `startup--load-user-init-file'.
-EARLY-INIT-FILE-PATH is loaded before the real user early init file.
-INIT-FEATURE is required before the real user init file."
-  (lambda (orig-fun filename-function &optional alternate-filename-function load-defaults)
-    (when init-file-user
-      (if load-defaults
-          (require init-feature)
-        (load early-init-file-path nil t)))
-    (funcall orig-fun filename-function alternate-filename-function load-defaults)))
+(declare-function emarccs-initialize "emarccs-init" ())
+(declare-function emarccs-initialize-early "emarccs-early-init" ())
+
+(defun emarccs-bootstrap--before-user-init-file
+    (_filename-function &optional _alternate-filename-function load-defaults)
+  "Initialize Emarccs before the corresponding user init file.
+LOAD-DEFAULTS selects regular initialization; nil selects early initialization.
+Skip both phases when `init-file-user' is nil."
+  (when init-file-user
+    (if load-defaults
+        (emarccs-initialize)
+      (emarccs-initialize-early))))
 
 (provide 'emarccs-bootstrap)
 

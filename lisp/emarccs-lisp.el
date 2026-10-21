@@ -2,6 +2,9 @@
 ;;; commentary:
 ;;; code:
 
+(eval-when-compile
+  (require 'use-package))
+
 (use-package sly
   :commands sly
   :custom

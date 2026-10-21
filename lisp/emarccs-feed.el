@@ -2,6 +2,9 @@
 ;;; commentary:
 ;;; code:
 
+(eval-when-compile
+  (require 'use-package))
+
 (use-package elfeed
   :config
   (setq elfeed-feeds '(("https://aren-coco.com/feed.atom" blog)

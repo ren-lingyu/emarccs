@@ -17,6 +17,15 @@
       ;
   };
 
+  package-lint = import ./package-lint {
+    inherit
+      pkgs
+      lib
+      emacsPackage
+      elispSource
+      ;
+  };
+
   startup-smoke = import ./startup-smoke {
     inherit
       pkgs

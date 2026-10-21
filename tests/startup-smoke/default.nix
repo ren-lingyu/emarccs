@@ -6,7 +6,7 @@
 }:
 let
 
-  minEmacsVersion_ = "31.0";
+  minEmacsVersion_ = "31.1";
 
 in
 (

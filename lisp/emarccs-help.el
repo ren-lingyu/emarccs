@@ -5,6 +5,9 @@
 
 ;;; code:
 
+(eval-when-compile
+  (require 'use-package))
+
 (use-package helpful
   :bind
   (("C-h f" . helpful-callable)

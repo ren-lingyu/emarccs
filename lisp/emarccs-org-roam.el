@@ -2,6 +2,9 @@
 ;;; commentary:
 ;;; code:
 
+(eval-when-compile
+  (require 'use-package))
+
 ;; org-roam
 (use-package org-roam
   ;; :defer
@@ -44,8 +47,7 @@
                                                  "#+AUTHOR: aRenCoco\n"
                                                  "#+EMAIL: aRen_Coco@outlook.com\n"
                                                  "#+DATE: " (format-time-string "<%Y-%m-%d %a %z>") "\n"
-                                                 "#+FILETAGS: :zettel:blog:\n"
-                                                 ))
+                                                 "#+FILETAGS: :zettel:blog:\n"))
                                               :unnarrowed t))))
   (defun emarccs-org-roam-forward-links (&optional other-window)
     "Select an Org-roam node linked from the current buffer.

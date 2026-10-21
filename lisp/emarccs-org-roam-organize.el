@@ -2,6 +2,9 @@
 ;;; commentary:
 ;;; code:
 
+(eval-when-compile
+  (require 'use-package))
+
 (use-package org-roam-organize
   :after (org-roam)
   :custom

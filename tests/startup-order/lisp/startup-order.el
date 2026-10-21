@@ -1,90 +1,202 @@
-;;; startup-order.el --- Test Emarccs bootstrap phases -*- lexical-binding: t; -*-
+;;; startup-order.el --- Test Emarccs initialization and scheduling -*- lexical-binding: t; -*-
 
 (require 'ert)
-(require 'emarccs-bootstrap)
+(require 'cl-lib)
 
-(defvar emarccs-startup-order--events nil
-  "Events recorded by startup order test fixtures.")
+(defvar emarccs--early-initialized)
+(defvar emarccs--initialized)
+(defvar emarccs--initializing)
+(defvar use-package-always-ensure)
+(defvar native-comp-async-report-warnings-errors)
+(defvar emarccs-startup-order--events nil)
+(defvar emarccs-startup-order--custom-loads 0)
 
-(defun emarccs-startup-order--check-phases ()
-  "Check adapter phase ordering using isolated temporary fixtures."
-  (should-not (featurep 'emarccs-startup-order-main-fixture))
-  (let* ((fixture-dir (make-temp-file "emarccs-startup-order-" t))
-         (early-file (expand-file-name "early.el" fixture-dir))
-         (main-file (expand-file-name "emarccs-startup-order-main-fixture.el" fixture-dir))
-         (load-path (cons fixture-dir load-path))
-         (init-file-user "test-user")
-         (emarccs-startup-order--events nil))
-    (unwind-protect
-        (progn
-          (with-temp-file early-file
-            (insert "(push 'emarccs-early emarccs-startup-order--events)\n"))
-          (with-temp-file main-file
-            (insert "(push 'emarccs-main emarccs-startup-order--events)\n"
-                    "(provide 'emarccs-startup-order-main-fixture)\n"))
-          (let ((advice (emarccs-bootstrap--load-user-init-file
-                         early-file 'emarccs-startup-order-main-fixture))
-                (alternate (lambda () "alternate-init.el")))
-            (should
-             (eq (funcall advice
-                     (lambda (filename-function alternate-filename-function load-defaults)
-                       (should (equal (funcall filename-function) "user-early.el"))
-                       (should (eq alternate-filename-function alternate))
-                       (should (null load-defaults))
-                       (push 'user-early emarccs-startup-order--events)
-                       'early-result)
-                     (lambda () "user-early.el") alternate nil)
-                 'early-result))
-            (should
-             (eq (funcall advice
-                     (lambda (filename-function alternate-filename-function load-defaults)
-                       (should (equal (funcall filename-function) "user-init.el"))
-                       (should (eq alternate-filename-function alternate))
-                       (should (eq load-defaults t))
-                       (push 'user-init emarccs-startup-order--events)
-                       'init-result)
-                     (lambda () "user-init.el") alternate t)
-                 'init-result)))
-          (should (equal (nreverse emarccs-startup-order--events)
-                         '(emarccs-early user-early emarccs-main user-init))))
-      ;; Unload only our fixture.  Loading Lisp can legitimately load other
-      ;; libraries, so restoring the entire feature/history lists is unsafe.
-      (unwind-protect
-          (when (featurep 'emarccs-startup-order-main-fixture)
-            (unload-feature 'emarccs-startup-order-main-fixture t))
-        (setq load-history
-              (assoc-delete-all main-file
-                                (assoc-delete-all early-file load-history)))
-        (delete-directory fixture-dir t)))))
+(defmacro emarccs-startup-order--with-startup (original &rest body)
+  "Register the entry on ORIGINAL, run BODY, then restore startup."
+  (declare (indent 1))
+  `(cl-letf (((symbol-function 'startup--load-user-init-file) ,original))
+     (unwind-protect
+         (progn
+           (load (locate-library "emarccs") nil t)
+           ,@body)
+       (advice-remove 'startup--load-user-init-file 'emarccs-startup))))
+
+(ert-deftest emarccs-startup-order--entry-is-lazy-and-registration-is-unique ()
+  "Loading interfaces and reloading the entry does not run configuration."
+  (let ((emarccs--early-initialized nil)
+        (emarccs--initialized nil)
+        (emarccs--initializing nil)
+        (package-enable-at-startup 'unchanged)
+        (default-frame-alist '((unchanged . default)))
+        (initial-frame-alist '((unchanged . initial)))
+        (frame-resize-pixelwise nil)
+        (blink-cursor-mode t)
+        (custom-file "unchanged-custom.el")
+        (use-package-always-ensure 'unchanged)
+        (original-require (symbol-function 'require))
+        required)
+    (cl-letf (((symbol-function 'require)
+               (lambda (feature &optional filename noerror)
+                 (push feature required)
+                 (funcall original-require feature filename noerror))))
+      (emarccs-startup-order--with-startup (lambda (&rest _) 'original)
+        ;; Force the definition files to be evaluated even in repeated ERT runs.
+        (dolist (library '("emarccs-bootstrap" "emarccs-early-init" "emarccs-init"))
+          (load (locate-library library) nil t))
+        (dotimes (_run 2)
+          (load (locate-library "emarccs") nil t))
+        (should (advice-member-p 'emarccs-startup 'startup--load-user-init-file))
+        (let ((count 0))
+          (advice-mapc (lambda (_function properties)
+                         (when (eq (alist-get 'name properties) 'emarccs-startup)
+                           (setq count (1+ count))))
+                       'startup--load-user-init-file)
+          (should (= count 1)))
+        (dolist (feature '(use-package org auctex emarccs-basic emarccs-org))
+          (should-not (memq feature required)))
+        (should-not emarccs--early-initialized)
+        (should-not emarccs--initialized)
+        (should-not emarccs--initializing)
+        (should (eq package-enable-at-startup 'unchanged))
+        (should (equal default-frame-alist '((unchanged . default))))
+        (should (equal initial-frame-alist '((unchanged . initial))))
+        (should-not frame-resize-pixelwise)
+        (should blink-cursor-mode)
+        (should (equal custom-file "unchanged-custom.el"))
+        (should (eq use-package-always-ensure 'unchanged))
+        (advice-remove 'startup--load-user-init-file 'emarccs-startup)
+        (should-not (advice-member-p 'emarccs-startup 'startup--load-user-init-file))
+        (should (eq (startup--load-user-init-file #'ignore) 'original))))))
 
 (ert-deftest emarccs-startup-order--adapter-phases ()
-  "Check ordering, forwarding and fixture isolation across repeated runs."
-  (let ((original-load-path load-path))
+  "Named before advice preserves arguments, results and both phase orders."
+  (let ((init-file-user "test-user")
+        (filename-function (lambda () "user-init.el"))
+        (alternate (lambda () "alternate-init.el")))
     (dotimes (_run 2)
-      (emarccs-startup-order--check-phases)
-      (should-not (featurep 'emarccs-startup-order-main-fixture))
-      (should (eq load-path original-load-path)))))
+      (let ((emarccs-startup-order--events nil))
+        (emarccs-startup-order--with-startup
+            (lambda (filename alternate-filename &optional load-defaults)
+              (should (eq filename filename-function))
+              (should (eq alternate-filename alternate))
+              (if load-defaults
+                  (progn (push 'user-init emarccs-startup-order--events) 'init-result)
+                (push 'user-early emarccs-startup-order--events)
+                'early-result))
+          (cl-letf (((symbol-function 'emarccs-initialize-early)
+                     (lambda () (push 'emarccs-early emarccs-startup-order--events)
+                       'ignored-early-result))
+                    ((symbol-function 'emarccs-initialize)
+                     (lambda () (push 'emarccs-main emarccs-startup-order--events)
+                       'ignored-main-result)))
+            (should (eq (startup--load-user-init-file filename-function alternate nil)
+                        'early-result))
+            (should (eq (startup--load-user-init-file filename-function alternate t)
+                        'init-result))
+            (should (equal (nreverse emarccs-startup-order--events)
+                           '(emarccs-early user-early emarccs-main user-init)))))))))
 
 (ert-deftest emarccs-startup-order--skip-without-user-init ()
-  "Check that no config is loaded when user init is disabled."
+  "Disabling user init skips both initializers and still calls the original."
   (let ((init-file-user nil)
-        (emarccs-startup-order--events nil)
-        (advice (emarccs-bootstrap--load-user-init-file
-                 "/missing/early.el" 'emarccs-startup-order-missing-fixture)))
-    (dolist (phase '(nil t))
-      (let* ((filename-function (lambda () "unused-init.el"))
-             (alternate (lambda () "unused-alternate.el"))
-             (result (make-symbol "original-result")))
-        (should
-         (eq (funcall advice
-                      (lambda (filename alternate-filename load-defaults)
-                        (should (eq filename filename-function))
-                        (should (eq alternate-filename alternate))
-                        (should (eq load-defaults phase))
-                        (push 'original emarccs-startup-order--events)
-                        result)
-                      filename-function alternate phase)
-             result))))
-    (should (equal emarccs-startup-order--events '(original original)))))
+        (filename-function (lambda () "unused-init.el"))
+        (alternate (lambda () "unused-alternate.el")))
+    (emarccs-startup-order--with-startup
+        (lambda (filename alternate-filename &optional load-defaults)
+          (should (eq filename filename-function))
+          (should (eq alternate-filename alternate))
+          (if load-defaults 'main-result 'early-result))
+      (cl-letf (((symbol-function 'emarccs-initialize-early)
+                 (lambda () (ert-fail "Early initialization should be skipped")))
+                ((symbol-function 'emarccs-initialize)
+                 (lambda () (ert-fail "Regular initialization should be skipped"))))
+        (should (eq (startup--load-user-init-file filename-function alternate nil)
+                    'early-result))
+        (should (eq (startup--load-user-init-file filename-function alternate t)
+                    'main-result))))))
+
+(ert-deftest emarccs-startup-order--early-initializes-once ()
+  "Early initialization applies settings once and preserves later overrides."
+  (require 'emarccs-early-init)
+  (let ((emarccs--early-initialized nil)
+        (package-enable-at-startup t)
+        (native-comp-async-report-warnings-errors t)
+        (default-frame-alist nil)
+        (initial-frame-alist nil)
+        (frame-resize-pixelwise nil)
+        (blink-cursor-mode t))
+    (emarccs-initialize-early)
+    (should emarccs--early-initialized)
+    (should-not package-enable-at-startup)
+    (should (eq native-comp-async-report-warnings-errors 'silent))
+    (should frame-resize-pixelwise)
+    (should-not blink-cursor-mode)
+    (should (eq (alist-get 'fullscreen default-frame-alist) 'maximized))
+    (should (equal (alist-get 'background-color initial-frame-alist) "gray10"))
+    (setq default-frame-alist '((user . override)))
+    (emarccs-initialize-early)
+    (should (equal default-frame-alist '((user . override))))))
+
+(ert-deftest emarccs-startup-order--regular-initializes-once ()
+  "Preserve module order and run custom.el once, including recursive calls."
+  (require 'emarccs-init)
+  (let ((fixture-dir (make-temp-file "emarccs-custom-" t))
+        (emarccs--initialized nil)
+        (emarccs--initializing nil)
+        (emarccs-startup-order--custom-loads 0)
+        (use-package-always-ensure t)
+        (custom-file "unchanged")
+        required)
+    (unwind-protect
+        (let ((user-emacs-directory (file-name-as-directory fixture-dir)))
+          (with-temp-file (expand-file-name "custom.el" fixture-dir)
+            (insert ";;; -*- lexical-binding: t; -*-\n"
+                    "(setq emarccs-startup-order--custom-loads\n"
+                    "      (1+ emarccs-startup-order--custom-loads))\n"
+                    "(emarccs-initialize)\n"))
+          (cl-letf (((symbol-function 'require)
+                     (lambda (feature &optional _filename _noerror)
+                       (push feature required)
+                       ;; Reenter before initialization has completed.
+                       (emarccs-initialize)
+                       feature)))
+            (emarccs-initialize)
+            (emarccs-initialize))
+          (should emarccs--initialized)
+          (should-not emarccs--initializing)
+          (should-not use-package-always-ensure)
+          (should (equal custom-file (expand-file-name "custom.el" fixture-dir)))
+          (should (= emarccs-startup-order--custom-loads 1))
+          (should (equal (nreverse required)
+                         '(use-package emarccs-basic emarccs-help emarccs-theme
+                           emarccs-org emarccs-tex emarccs-complete emarccs-lisp
+                           emarccs-org-roam emarccs-org-roam-organize
+                           emarccs-org-latex-preview emarccs-feed
+                           emarccs-org-roam-blog emarccs-debug))))
+      (delete-directory fixture-dir t))))
+
+(ert-deftest emarccs-startup-order--failed-initialization-can-retry ()
+  "An initialization error does not leave either guard stuck."
+  (require 'emarccs-init)
+  (let ((emarccs--initialized nil)
+        (emarccs--initializing nil)
+        (use-package-always-ensure t)
+        (custom-file nil)
+        (user-emacs-directory (make-temp-file "emarccs-retry-" t))
+        (fail t))
+    (unwind-protect
+        (cl-letf (((symbol-function 'require)
+                   (lambda (feature &optional _filename _noerror)
+                     (when (and fail (eq feature 'emarccs-basic))
+                       (error "Simulated module failure"))
+                     feature)))
+          (should-error (emarccs-initialize) :type 'error)
+          (should-not emarccs--initialized)
+          (should-not emarccs--initializing)
+          (setq fail nil)
+          (emarccs-initialize)
+          (should emarccs--initialized)
+          (should-not emarccs--initializing))
+      (delete-directory user-emacs-directory t))))
 
 ;;; startup-order.el ends here

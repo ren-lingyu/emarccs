@@ -2,6 +2,9 @@
 ;;; commentary:
 ;;; code:
 
+(eval-when-compile
+  (require 'use-package))
+
 (use-package auctex
   :defer t
   :init
@@ -48,8 +51,7 @@
      ;; 环境名, 如 \begin{equation}
      ("\\\\\\(begin\\|end\\){\\([^}]+\\)}"
       (1 font-lock-keyword-face)
-      (2 font-lock-type-face)
-      )
+      (2 font-lock-type-face))
      ;; LaTeX 命令, 如 \frac, \alpha
      ("\\\\[a-zA-Z@]+" . font-lock-keyword-face)
      ;; 匹配 ^{...} 或 ^单个字符
@@ -175,8 +177,7 @@
                  (setq output
                        (replace-regexp-in-string "\\\\end{abstract}"
                                                  "\\\\end{abstract}\n\n\\\\tableofcontents\n"
-                                                 output))
-                 )
+                                                 output)))
         ;; 如果没有 abstract 块, 在 \maketitle 后插入目录
         (progn (setq output
                      (replace-regexp-in-string "\\\\tableofcontents"

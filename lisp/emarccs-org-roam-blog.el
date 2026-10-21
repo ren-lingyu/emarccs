@@ -3,6 +3,9 @@
 ;;; commentary:
 ;;; code:
 
+(eval-when-compile
+  (require 'use-package))
+
 (use-package citeproc)
 
 (defconst emarccs--org-roam-blog-site-name "aRenCoco's Blog")

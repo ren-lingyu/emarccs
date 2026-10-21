@@ -13,15 +13,22 @@
              minver emacs-version)
      :warning)))
 
-(require 'emarccs-bootstrap)
+(emarccs-startup-smoke--check
+ (featurep 'emarccs)
+ "emarccs was not loaded by site-start.el")
 
 (emarccs-startup-smoke--check
- (featurep 'emarccs-bootstrap)
- "emarccs-bootstrap was not loaded")
+ (advice-member-p 'emarccs-startup 'startup--load-user-init-file)
+ "emarccs startup advice was not registered")
+
+(dolist (function '(emarccs-initialize-early emarccs-initialize))
+  (emarccs-startup-smoke--check
+   (fboundp function)
+   (format "%s is not defined" function)))
 
 (emarccs-startup-smoke--check
- (locate-library "emarccs-init")
- "emarccs-init is not locatable")
+ (not (or emarccs--early-initialized emarccs--initialized))
+ "Emarccs configuration ran during batch site-start")
 
 (princ "startup-smoke ok\n")
 

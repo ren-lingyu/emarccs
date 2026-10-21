@@ -202,17 +202,7 @@
                             ])
                           ])
                           (elisp.form "require" [
-                            (elisp.quote (
-                              elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs-bootstrap.el))
-                            ))
-                          ])
-                          (elisp.form "advice-add" [
-                            (elisp.quote (elisp.symbol "startup--load-user-init-file"))
-                            (elisp.symbol ":around")
-                            (elisp.form "emarccs-bootstrap--load-user-init-file" [
-                              ./lisp/emarccs-early-init.el
-                              (elisp.quote (elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs-init.el))))
-                            ])
+                            (elisp.quote (elisp.symbol (lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs.el))))
                           ])
                         ];
                       }).overrideScope
@@ -268,9 +258,7 @@
                       siteStartCheckList = [
                         "eval-and-compile"
                         "${./lisp}"
-                        "${lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs-bootstrap.el)}"
-                        "startup--load-user-init-file"
-                        "${./lisp/emarccs-early-init.el}"
+                        "${lib.removeSuffix ".el" (builtins.baseNameOf ./lisp/emarccs.el)}"
                       ];
                     }
                   )

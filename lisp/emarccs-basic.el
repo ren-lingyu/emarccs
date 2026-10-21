@@ -2,6 +2,9 @@
 ;;; commentary:
 ;;; code:
 
+(eval-when-compile
+  (require 'use-package))
+
 (setenv "TZ" "Asia/Shanghai")
 
 ;; 加载最新的.el文件

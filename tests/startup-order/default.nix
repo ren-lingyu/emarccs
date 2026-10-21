@@ -14,11 +14,11 @@ pkgs.runCommand "emarccs-startup-order"
     export HOME="$TMPDIR/home"
     mkdir -p "$HOME"
 
-    # Test only the startup adapter, without interactive Emacs
+    # Test initialization interfaces and scheduling, without interactive Emacs
     # or the complete user configuration.
     timeout --kill-after=3s 20s \
       ${lib.getExe' emacsPackage "emacs"} --batch -Q \
-        --load ${../../lisp/emarccs-bootstrap.el} \
+        -L ${../../lisp} \
         --load ${./lisp/startup-order.el} \
         --funcall ert-run-tests-batch-and-exit
 

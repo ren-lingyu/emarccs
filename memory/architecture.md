@@ -224,7 +224,9 @@ Grammar checks enumerate actual output libraries, test language availability
 and create parsers with diagnostic symbol candidates. They do not prove real
 source parsing, modes, font locking or indentation. All six GTK/PGTK families
 and treefmt passed in the agent-run x86_64-linux selected-source-snapshot check
-for the current uncommitted implementation. Other platforms and complete
+for the source-normalization implementation before final README cleanup and
+the Nix smoke minimum-version parameter correction. That final parameter change
+was statically reviewed but not rebuilt. Other platforms and complete
 interactive configuration startup were not validated.
 Stale dtd/ocaml-interface/tsx aliases were removed when native symbols changed,
 and patch hunk length was corrected; the final reported pass came from the owner.
@@ -232,7 +234,7 @@ Treefmt/nixfmt also supplies a formatter and flake check.
 
 No Nix build or Emacs runtime suite was executed during memory reconstruction.
 Historical source probes and owner reports retain their narrower scopes.
-README now describes the uncommitted source-package entry, guarded
+README now describes the committed source-package entry, guarded
 initializers, source-injected wrapper, six check families and explicit lint
 exemptions. The owner explicitly requires README to remain stable project
 documentation, not an execution/experiment log; validation runs and temporary

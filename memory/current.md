@@ -9,9 +9,11 @@ evidence limits. Use public GAW status/check for live lifecycle state.
 The owner supplied detailed implementation guidance after accepting the
 committed pure-emacs entry/mechanism removal and Lisp flattening. The baseline
 also contains subsequent README/.gitignore presentation-only commits.
-The package normalization is now implemented and validated in uncommitted,
-unstaged project changes, including a new lisp/emarccs.el and package-lint
-check. No project staging or project commit was performed by the agent.
+The owner committed the source-package normalization, including lisp/emarccs.el,
+the package-lint check, README cleanup and the final startup-smoke Nix minimum
+correction. Read-only inspection confirmed the reviewed commit subject and
+change summary, committed interfaces/version boundaries and a clean project
+worktree. The agent did not stage or commit project files.
 
 The selected architecture is implemented:
 - emarccs.el requires bootstrap, early-init and init interfaces, then uniquely
@@ -42,6 +44,12 @@ The four entry/initialization interface libraries receive no exemptions.
 The current result is fifteen approved diagnostics, zero other diagnostics.
 Do not silently broaden this policy or claim a completely diagnostic-free lint.
 Package-lint is separate test tooling, not a configuration runtime dependency.
+The owner clarified the minimum-version boundary: keep emarccs.el/README at
+31.1 and pass MIN_EMACS_VERSION=31.1 from tests/startup-smoke/default.nix.
+The Lisp test's generic fallback remains 31.0; it need not duplicate the
+project's explicitly supplied minimum. The attempted fallback change was
+reverted. Diff checks passed; the full Nix run below predates this final
+parameter-only correction, which has not been rebuilt.
 
 Six local batch ERT tests pass. GTK and PGTK Nix checks also pass for the new
 six-family suite: byte compilation, package-lint, startup smoke, startup order,
@@ -73,13 +81,13 @@ failures were corrected before the passing runs; no third-party config was
 loaded by the isolated scheduling tests.
 
 ## Completion and next action
-Source normalization and related calls/tests/README are ready for owner review.
-New source/check files remain untracked; a normal Git-backed root flake check
-requires their inclusion in the source (owner-authorized staging), or an
-explicit selected-file source snapshot as used here. Do not stage automatically.
-The checkpoint's project parent is the inspected pre-normalization source
-context, not a committed result of the new work. The current project worktree
-contains the validated implementation; await owner instructions for its commit.
+Source normalization and related calls/tests/README are committed. This step
+is complete; no project changes are pending. The prior checkpoint preserves
+the pre-normalization source context; the completion checkpoint associates the
+inspected committed implementation for subsequent recovery and source review.
+No tests were rerun after the owner committed. The final Nix minimum-version
+parameter adjustment still has only static verification, as described above.
+Await the owner's next objective rather than extending this intermediate step.
 The broader twist.nix removal remains deferred and is not authorized here.
 
 ## Known limitation and historical evidence

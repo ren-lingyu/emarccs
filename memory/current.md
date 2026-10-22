@@ -16,6 +16,42 @@ reported all build targets passed. Inputs and README remain deliberately
 unchanged. No further implementation is pending in this migration's authorized
 scope. Future work requires a new objective; deferred items remain in backlog.md.
 
+## Follow-up: committed generic library hardening
+After the migration commit, the owner staged and then committed a further
+lib/packages.nix update as "fix(lib): validate discovery boundaries and scope
+requirements", confirmed by read-only log inspection during the next task. Static review found unchanged
+public arguments/call sites, explicit errors for descendant overlays under a
+derivation leaf, explicit missing-newScope diagnostics for scope construction,
+and rejection of descendant modules below a discovered module entry. The latter
+replaces the earlier behavior that stopped recursion at the parent module and
+silently ignored its descendant modules; it is a stricter library contract.
+The unused private mkScope_ helper was removed and redundant parentheses were
+simplified. Scoped staged diff --check passed. No build/evaluation/test was run
+for this follow-up, and the migration's earlier passing checks do not validate
+these new branches. No source edits or project Git writes were made by the agent.
+
+## Completed follow-up: inline pure package overrides
+The owner explicitly requested folding pure overrides into overlay.nix and
+removing their package.nix files. Consult, ripgrep and treesit-auto are the three
+matching packages; their overrideAttrs bodies now live in the corresponding
+overlay.nix files and their package.nix files are deleted. Consumer propagation
+and treesit-auto's existing grammar-name patch are preserved. System ripgrep
+and GNU grep use outer pkgs explicitly; treesit grammars use the final Emacs
+scope. Other packages construct derivations and retain package.nix.
+Overlay-file-based discovery still makes these three derivation leaves eligible
+for legacyPackages without package.nix; no library/caller change is needed.
+Scoped source/diff review and diff --check passed. The owner reports running
+full pkgs/ build validation: all targets succeeded using existing cached outputs.
+This supports the expected file-organization-only effect without introducing
+rebuilds; it is owner-reported build evidence, not fresh execution of tests.
+The agent did not repeat builds or checks. Read-only confirmation subsequently
+found the owner committed the six-file change as "refactor(pkgs): inline package
+overrides into overlays" and the ordinary project worktree/index are clean.
+This checkpoint associates the inspected committed result; no project index or
+history was changed by the agent. Inputs and README remain untouched. The
+requested inlining and owner build validation are complete; no further action
+is pending in this task.
+
 The following implementation/validation sections describe the completed phases;
 references to their then-staged or uncommitted state are historical.
 
@@ -113,7 +149,7 @@ rename was initially verified by scoped search and diff --check. Subsequent
 final validation below also covers the updated discovery/interface.
 The owner prefers consumer-local overrides: Consult propagates system GNU grep
 and ripgrep; the ripgrep Elisp package propagates system ripgrep. New overlay
-files explicitly pass pkgs.ripgrep as rg to avoid the same-named Elisp package.
+files explicitly select outer pkgs.ripgrep to avoid the same-named Elisp package.
 The Emacs scope does not expose pkgs directly; its callPackage can retrieve the
 outer system pkgs binding. Dired has no separate package derivation here.
 The owner suggested adding coreutils directly through flake withPackages;

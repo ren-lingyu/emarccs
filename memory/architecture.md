@@ -21,7 +21,7 @@ variant, 17-library lint, 75 dependency availability and 334 grammar parsers.
 See current.md for evidence, preserved lint exemptions and verification limits.
 Runtime program supply follows ownership: Consult's local override propagates
 GNU grep and ripgrep, and the ripgrep Elisp override propagates system ripgrep.
-Their overlays explicitly pass outer pkgs.ripgrep as rg; Emacs scope lookup
+Their overlays explicitly select outer pkgs.ripgrep; Emacs scope lookup
 must not accidentally choose the Elisp package. Built-in Dired has no separate
 package derivation; flake withPackages includes pkgs.coreutils alongside
 emarccs. Nixpkgs' wrapper supports ordinary derivations and links their bin/
@@ -41,6 +41,12 @@ derivation attributes, not package.nix presence. Both mkLegacyPackages and
 mkOverlays take overlayFile (private parameters use overlayFile_); callers in
 pkgs/default.nix supply "overlay.nix". Pure overrides may be inlined into their
 overlay without losing export eligibility. The rename did not modify NixOS.
+A subsequent committed edit inlines the pure Consult, ripgrep and treesit-auto
+overrides into overlay.nix and removes their package.nix files. The grammar
+patch remains beside treesit-auto's overlay; standalone package definitions
+elsewhere retain package.nix. The owner reports full pkgs/ build validation
+passed with every target using cached outputs; the agent confirmed the committed
+change and clean project worktree. See current.md for evidence attribution.
 Final revalidation of the staged repository passed nix flake check on
 x86_64-linux after these discovery/naming edits, reusing all existing check
 outputs. The owner also reports all build targets passed. See current.md for

@@ -1,6 +1,6 @@
 {
   lib,
-  trivialBuild,
+  melpaBuild,
 
   aas,
   ace-window,
@@ -79,16 +79,19 @@
   yasnippet,
 }@args:
 
-trivialBuild (finalAttrs_: {
+melpaBuild (finalAttrs_: {
   src = ./lisp;
 
   pname = "emarccs";
   version = "0.1.0";
+  melpaVersion = "0.1.0";
+
+  files = "(:defaults)";
 
   packageRequires = builtins.attrValues (
     builtins.removeAttrs args [
       "lib"
-      "trivialBuild"
+      "melpaBuild"
     ]
   );
 

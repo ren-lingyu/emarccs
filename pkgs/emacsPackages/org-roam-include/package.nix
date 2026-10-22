@@ -1,13 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  trivialBuild,
+  melpaBuild,
   org,
   org-roam,
   nix-update-script,
 }:
 
-trivialBuild (finalAttrs_: {
+melpaBuild (finalAttrs_: {
   src = fetchFromGitHub {
     owner = "ren-lingyu";
     repo = "org-roam-include";
@@ -16,7 +16,10 @@ trivialBuild (finalAttrs_: {
   };
 
   pname = finalAttrs_.src.repo;
-  version = "0.1.0";
+  version = "0.1.0-unstable-2026-09-10";
+  melpaVersion = "0.1.0";
+
+  files = "(:defaults)";
 
   packageRequires = [
     org

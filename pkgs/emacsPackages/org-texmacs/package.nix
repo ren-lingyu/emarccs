@@ -1,14 +1,14 @@
 {
   lib,
   fetchFromGitHub,
-  trivialBuild,
+  melpaBuild,
   org,
   org-roam,
   texmacs,
   nix-update-script,
 }:
 
-trivialBuild (finalAttrs_: {
+melpaBuild (finalAttrs_: {
   src = fetchFromGitHub {
     owner = "ren-lingyu";
     repo = "org-texmacs";
@@ -17,7 +17,10 @@ trivialBuild (finalAttrs_: {
   };
 
   pname = finalAttrs_.src.repo;
-  version = "0.4.0";
+  version = "0.4.0-unstable-2026-10-18";
+  melpaVersion = "0.5.0";
+
+  files = ''(:defaults "org-texmacs-worker.scm")'';
 
   packageRequires = [
     org
@@ -32,8 +35,6 @@ trivialBuild (finalAttrs_: {
     "'(defcustom org-texmacs-program \"texmacs\"'"
     "'(defcustom org-texmacs-program \"${lib.getExe' texmacs "texmacs"}\"'"
   ];
-
-  postInstall = "install -m644 org-texmacs-worker.scm \"$out/share/emacs/site-lisp/\"";
 
   meta = {
     homepage = "https://github.com/${finalAttrs_.src.owner}/${finalAttrs_.src.repo}";

@@ -1,11 +1,11 @@
 {
   lib,
   fetchFromGitHub,
-  trivialBuild,
+  melpaBuild,
   org,
   nix-update-script,
 }:
-trivialBuild (finalAttrs_: {
+melpaBuild (finalAttrs_: {
   src = fetchFromGitHub {
     owner = "yibie";
     repo = "org-include-inline";
@@ -14,7 +14,10 @@ trivialBuild (finalAttrs_: {
   };
 
   pname = finalAttrs_.src.repo;
-  version = "0.1.0";
+  version = "0-unstable-2025-07-05";
+  melpaVersion = "0.1.0";
+
+  files = "(:defaults)";
 
   patches = [ ./fix-byte-compile-warnings.patch ];
 

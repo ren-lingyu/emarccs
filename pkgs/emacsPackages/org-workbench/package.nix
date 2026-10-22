@@ -1,12 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  trivialBuild,
+  melpaBuild,
   org,
   nix-update-script,
 }:
 
-trivialBuild (finalAttrs_: {
+melpaBuild (finalAttrs_: {
   src = fetchFromGitHub {
     owner = "yibie";
     repo = "org-workbench";
@@ -15,7 +15,10 @@ trivialBuild (finalAttrs_: {
   };
 
   pname = finalAttrs_.src.repo;
-  version = "0.3.0";
+  version = "0-unstable-2025-11-18";
+  melpaVersion = "0.3.0";
+
+  files = "(:defaults)";
 
   packageRequires = [ org ];
 

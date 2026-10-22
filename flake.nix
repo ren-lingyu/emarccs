@@ -13,26 +13,6 @@
       url = "git+https://github.com/numtide/treefmt-nix.git?ref=refs/heads/main&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    twist = {
-      url = "git+https://github.com/emacs-twist/twist.nix.git?ref=refs/heads/master&shallow=1";
-    };
-    nix-to-lisp = {
-      url = "git+https://github.com/ren-lingyu/nix-to-lisp.git?ref=refs/heads/main&shallow=1";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-parts.follows = "flake-parts";
-    };
-    melpa = {
-      url = "git+https://github.com/melpa/melpa.git?ref=refs/heads/master&shallow=1";
-      flake = false;
-    };
-    elpa-gnu = {
-      url = "git+https://https.git.savannah.gnu.org/git/elpa/gnu.git?ref=refs/heads/main&shallow=1";
-      flake = false;
-    };
-    elpa-nongnu = {
-      url = "git+https://https.git.savannah.gnu.org/git/elpa/nongnu.git?ref=refs/heads/main&shallow=1";
-      flake = false;
-    };
   };
 
   outputs =
@@ -46,10 +26,7 @@
             lib = inputs.nixpkgs.lib;
           in
           rec {
-            llib = lib.mergeAttrsList [
-              { elisp = inputs.nix-to-lisp.lib.elisp; }
-              (import ./lib { inherit lib; })
-            ];
+            llib = import ./lib { inherit lib; };
             lpkgs = import ./pkgs { inherit lib llib; };
           };
       }

@@ -1,59 +1,5 @@
 {
   "nodes": {
-    "elisp-helpers": {
-      "inputs": {
-        "fromElisp": "fromElisp"
-      },
-      "locked": {
-        "lastModified": 1782098990,
-        "narHash": "sha256-cdzwG8NRXtwlG25Tjfvscx9nKllZbNbEHvK/q7Sdmak=",
-        "owner": "emacs-twist",
-        "repo": "elisp-helpers",
-        "rev": "6ed8c5617af3d62a456ad1407c2e22feefd48b1b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "emacs-twist",
-        "repo": "elisp-helpers",
-        "type": "github"
-      }
-    },
-    "elpa-gnu": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1790099159,
-        "narHash": "sha256-6+FpcgrScg5uIM+PFfNOK7Da6UTg9GagU+q3JNbJbc8=",
-        "ref": "refs/heads/main",
-        "rev": "2129d367ed03c8e5d6e3cedca1c4224b62d03eb6",
-        "shallow": true,
-        "type": "git",
-        "url": "https://https.git.savannah.gnu.org/git/elpa/gnu.git"
-      },
-      "original": {
-        "ref": "refs/heads/main",
-        "shallow": true,
-        "type": "git",
-        "url": "https://https.git.savannah.gnu.org/git/elpa/gnu.git"
-      }
-    },
-    "elpa-nongnu": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791923522,
-        "narHash": "sha256-MffHYfUmIi3i7d5O5S/pNttfu+9DtaD2+LpTyXo05W4=",
-        "ref": "refs/heads/main",
-        "rev": "c39098d5ab4b1252ee44aefcfd604044bcca7861",
-        "shallow": true,
-        "type": "git",
-        "url": "https://https.git.savannah.gnu.org/git/elpa/nongnu.git"
-      },
-      "original": {
-        "ref": "refs/heads/main",
-        "shallow": true,
-        "type": "git",
-        "url": "https://https.git.savannah.gnu.org/git/elpa/nongnu.git"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -72,65 +18,6 @@
         "shallow": true,
         "type": "git",
         "url": "https://github.com/hercules-ci/flake-parts.git"
-      }
-    },
-    "fromElisp": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1723987997,
-        "narHash": "sha256-OhaVgTG6zjLByzl+uPTvtCld3p2uqgbCXmOl/s3LVRo=",
-        "owner": "talyz",
-        "repo": "fromElisp",
-        "rev": "f071a0e262c02c0895b575c4e322b7fd90713543",
-        "type": "github"
-      },
-      "original": {
-        "owner": "talyz",
-        "repo": "fromElisp",
-        "type": "github"
-      }
-    },
-    "melpa": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1792478654,
-        "narHash": "sha256-fBLxvezUJPHAKt5K7NrSszBZPw9KW0MhhKzLzjzeOLQ=",
-        "ref": "refs/heads/master",
-        "rev": "33709ee5aa14b6d8b30f2a8dc00ce33a6c6d5ffd",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/melpa/melpa.git"
-      },
-      "original": {
-        "ref": "refs/heads/master",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/melpa/melpa.git"
-      }
-    },
-    "nix-to-lisp": {
-      "inputs": {
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1786893193,
-        "narHash": "sha256-u+0OAt2Y3w9gTr4JdP11mM/NDbQN40laKSJQelLmUCE=",
-        "ref": "refs/heads/main",
-        "rev": "69e760eb522700ed81f736ea1a05b8286dff2c04",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/ren-lingyu/nix-to-lisp.git"
-      },
-      "original": {
-        "ref": "refs/heads/main",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/ren-lingyu/nix-to-lisp.git"
       }
     },
     "nixpkgs": {
@@ -167,14 +54,9 @@
     },
     "root": {
       "inputs": {
-        "elpa-gnu": "elpa-gnu",
-        "elpa-nongnu": "elpa-nongnu",
         "flake-parts": "flake-parts",
-        "melpa": "melpa",
-        "nix-to-lisp": "nix-to-lisp",
         "nixpkgs": "nixpkgs",
-        "treefmt-nix": "treefmt-nix",
-        "twist": "twist"
+        "treefmt-nix": "treefmt-nix"
       }
     },
     "treefmt-nix": {
@@ -197,26 +79,6 @@
         "shallow": true,
         "type": "git",
         "url": "https://github.com/numtide/treefmt-nix.git"
-      }
-    },
-    "twist": {
-      "inputs": {
-        "elisp-helpers": "elisp-helpers"
-      },
-      "locked": {
-        "lastModified": 1792370800,
-        "narHash": "sha256-jGoxyy+yJKFckLFVmiBhHhDdQ10Czjs1suZH4Pm4B9s=",
-        "ref": "refs/heads/master",
-        "rev": "708e5c216dfd5095b509a6d79e672af68cc11651",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/emacs-twist/twist.nix.git"
-      },
-      "original": {
-        "ref": "refs/heads/master",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/emacs-twist/twist.nix.git"
       }
     }
   },

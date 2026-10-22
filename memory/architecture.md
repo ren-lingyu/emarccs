@@ -1,13 +1,13 @@
 # Emarccs architecture
 
-## Working-tree transition notice
-The staged 2026-10-22 migration supersedes the committed Twist architecture
+## Committed Nixpkgs migration
+The committed 2026-10-22 migration supersedes the earlier Twist architecture
 below: Nixpkgs emacsPackagesFor/withPackages now consumes a local emarccs
 trivialBuild package at pkgs/emacsPackages/emarccs, with local dependency
 overlays. The wrapper's injected site-start owns early initialization and a
 before-init-hook registration; emarccs.el only requires interface definitions.
 Old bootstrap/advice scheduling, root lisp/, Twist runtime integration and
-lock/update apps are removed in the working tree; inputs remain. Tests have
+lock/update apps are removed; inputs remain. Tests have
 now been adapted and reconnected for all three Emacs outputs through explicit
 configurationPackage/grammarPackage parameters. flake.nix passes only
 { pkgs, packages = config.packages, lib } to tests/, which owns check naming
@@ -45,9 +45,10 @@ Final revalidation of the staged repository passed nix flake check on
 x86_64-linux after these discovery/naming edits, reusing all existing check
 outputs. The owner also reports all build targets passed. See current.md for
 validation attribution, scope and the single-commit assessment.
-The migration and test edits are still uncommitted. The remaining sections
-are the previously committed Twist baseline, retained as historical context;
-where they conflict, this notice and current.md describe the working tree.
+The owner committed the migration as "build(nix): replace Twist packaging with
+Nixpkgs"; the project worktree was confirmed clean. The remaining sections
+retain the preceding Twist baseline as historical context; where they conflict,
+this section and current.md describe the committed architecture.
 
 ## Purpose and initialization
 Personal configuration targeting Emacs 31.1+, organized as an Elisp source

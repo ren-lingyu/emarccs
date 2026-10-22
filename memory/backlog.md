@@ -16,9 +16,9 @@ that as an oversight and do not fix it without a new decision.
 
 ## Remaining migration follow-up
 
-The Nixpkgs emacsPackagesFor/withPackages migration is implemented in the working
-tree and its reconnected tests pass on x86_64-linux; see current.md and the
-working-tree notice in architecture.md. The older description of this work as
+The Nixpkgs emacsPackagesFor/withPackages migration is committed and its
+reconnected tests pass on x86_64-linux; see current.md and the committed
+migration section in architecture.md. The older description of this work as
 unstarted is superseded. Inputs and README are deliberately retained unchanged
 for now. Library extraction is a future objective: lib/packages.nix intentionally includes
 generic logic that may have no local callers. Evaluate it as a cross-repository

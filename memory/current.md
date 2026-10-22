@@ -5,6 +5,20 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
+## Current state: Nixpkgs migration committed
+The owner committed the migration as "build(nix): replace Twist packaging with
+Nixpkgs". Read-only confirmation found that HEAD contains the reviewed 93-file
+migration and that the ordinary project worktree/index are clean. This
+checkpoint associates that inspected committed migration as a project parent;
+it does not imply tests were rerun after the commit. Pre-commit agent flake
+check passed with all 19 checks satisfied from existing outputs, and the owner
+reported all build targets passed. Inputs and README remain deliberately
+unchanged. No further implementation is pending in this migration's authorized
+scope. Future work requires a new objective; deferred items remain in backlog.md.
+
+The following implementation/validation sections describe the completed phases;
+references to their then-staged or uncommitted state are historical.
+
 ## Completed work: tests reconnected to the Nixpkgs package architecture
 The owner requested adapting and reconnecting the existing tests. Project edits
 are limited to flake.nix and tests/; no source-package behavior, dependencies,
@@ -136,8 +150,9 @@ The obsolete Scheme builder was deleted and flake/entry descriptions corrected.
 Inputs, lock, README, private library helpers and project index were unchanged
 by this cleanup. The owner subsequently staged all project changes, including
 the new consumer overlay files and discovery/interface changes. There are no
-unstaged project changes at final review. No exact committed project state
-represents these tests, so this checkpoint needs no new project parent.
+unstaged project changes at final review. That review checkpoint had no exact
+committed project snapshot to associate. The owner has now committed the
+reviewed migration; the current checkpoint associates the inspected result.
 Maintained tests and distilled memory suffice; no additional raw-evidence
 archive is warranted.
 
@@ -160,8 +175,9 @@ its future extraction is a separate objective. Staged diff --check succeeds
 excluding patch payloads; diagnostics within the two new upstream patches are
 context/upstream whitespace, not a functional blocker or a reason to rewrite
 patches during this review. Suggested subject: build(nix): replace Twist
-packaging with Nixpkgs. Next action is owner commit/review; no project source,
-index or history was changed during this final assessment.
+packaging with Nixpkgs. The owner subsequently used this subject and committed
+the migration; the commit/review next action is complete. No project source,
+index or history was changed by the agent during assessment or confirmation.
 
 The following worktree inspection describes the starting state, before these
 test edits. Its disconnected-test statements are historical; validation above

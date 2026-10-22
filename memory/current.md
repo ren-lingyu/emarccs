@@ -5,6 +5,221 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
+## Current state: standalone overlay fix committed
+The owner committed the seven-file change as "fix(overlays): make the default
+overlay usable independently". Read-only confirmation found the expected wrapper
+package extraction, direct overlay export and equivalence checks in HEAD and
+an ordinary project worktree/index with no changes. This checkpoint associates
+the inspected resulting project commit; tests below ran before the commit and
+were not rerun during confirmation. README remains intentionally unchanged.
+No implementation remains pending for the authorized overlay task.
+
+## Completed implementation: overlay equivalence checks
+The owner authorized adding overlay regression checks using the existing
+<package>-<test> naming. flake.nix now passes its actual exported default overlay
+to tests/. tests/default.nix imports pkgs.path once with the existing pkgs.config,
+the host system and only the supplied overlay; it shares this independent
+package set across variants. Existing pkgs still supplies callPackage/tools.
+It generates emarccs-overlay-equivalence, emarccs-pgtk-overlay-equivalence and
+emarccs-gtk-overlay-equivalence. tests/overlay-equivalence/default.nix asserts
+actual/expected drvPath equality during evaluation, then returns an empty
+runCommand result named for the wrapper. The assertion discards drvPath string
+contexts through boolean comparison, so wrappers are not build inputs of the
+check. Missing overlay exports fail ordinary attribute lookup.
+Validation on x86_64-linux: all three new checks passed via a timeout 120s
+offline/no-write-lock-file/no-link nix build of a selected source snapshot that
+includes the untracked new test file. Logs showed only three tiny check results
+built, no wrapper rebuild. Two offline eval negative controls also passed:
+an empty overlay failed on missing emarccs despite the existing pkgs already
+containing that package; an overlay producing a different derivation failed the
+explicit assertion. nixfmt was applied to the three edited/new Nix files and
+diff --check passed. All 65 snapshot files were compared byte-for-byte to the
+current sources after validation. No full-suite rerun was needed or performed.
+No project staging, commit, lock update or result link was done by the agent.
+The owner subsequently staged and committed all seven project paths, including
+the new test file. The authorized implementation and review/commit next action
+are complete. Earlier org-texmacs findings below were reviewed for this memory
+snapshot and retain their original validation limits.
+
+## Current verification: package-directory wrapper strategy passes
+The owner abandoned the explicit wrapper constructor in flake.overlays.default
+and moved the common wrapper constructor/startup injection to
+pkgs/emarccs/package.nix. Root overlays provide emarccs and derive GTK/PGTK
+variants through final_.emarccs.override with the corresponding final Emacs.
+The first revision retained easyOverlay/overlayAttrs and inherited packages
+from perSystem.pkgs. Independent exported-overlay evaluation failed because
+locked easyOverlay forces perSystem.pkgs to external prev, where emarccs is
+absent; flake's own packages still evaluated. That failure is now resolved:
+the owner removed easyOverlay/overlayAttrs and exports
+flake.overlays.default = lpkgs.overlays.default directly. perSystem uses the
+same local overlay and packages inherits all three wrappers.
+On the owner's follow-up request, offline independent import of locked Nixpkgs
+with only flake.overlays.default passed on x86_64-linux. All three wrappers
+expose the matching configuration package/scope and exactly match the drvPaths
+of flake.packages for their names. A timeout 120s nix build --offline
+--no-write-lock-file --no-link --print-out-paths -L --impure expression realized
+all three independently constructed wrappers and startup-smoke derivations
+created through pkgs.callPackage; all six outputs succeeded using cached
+results. The smoke derivations are the same outputs freshly executed during
+the earlier explicit-overlay test below. This latest run did not freshly
+execute cached scripts. No interactive startup, cross compilation, other
+systems or full-suite check was performed. Both Nix commands had 120s bounds.
+Staged diff --check passed. At this validation phase the changes were the
+owner's five wrapper/flake paths; the later regression-check implementation
+adds tests/ edits, and the resulting seven-path change is now committed. The agent
+made no project source/index changes, lock update or result link; tests used
+offline mode. The overlay task is verified complete and the owner has committed
+it; these tests originally targeted the staged state. The resulting commit is
+associated by the current checkpoint after inspection. These checks do not
+resolve unrelated interactive/export issues. Shared-library import integration
+is exercised by these successful current-overlay evaluations/build realizations.
+
+## Earlier verification: abandoned explicit default overlay strategy
+On 2026-10-23 the owner requested testing flake.overlays.default. Current staged
+flake.nix explicitly composes the package overlays and all three Emarccs wrapper
+constructors, removes easyOverlay, imports Nixpkgs with that exported overlay
+for perSystem, and exposes packages by inheriting those pkgs attributes. No
+project code/index changes were made by the agent during this test.
+Independent offline evaluation imported the locked Nixpkgs with only the
+consumer flake's overlays.default, using the current Git worktree flake. On
+x86_64-linux, emarccs/emarccs-pgtk/emarccs-gtk all evaluate, expose the matching
+configuration package/scope and grammar propagation, and have exactly the same
+drvPaths as flake.packages for their names. This also exercises the imported
+personal-nixpkgs library in the current integration.
+A separate timeout 120s nix build --offline --no-write-lock-file --no-link
+--print-out-paths -L --impure expression realized those three independently
+constructed wrappers and the three startup-smoke derivations instantiated with
+pkgs.callPackage. It exited zero: wrapper outputs were cached and all three
+smoke derivations freshly executed, each printing Emacs 31.1 and startup-smoke
+ok. Existing smoke coverage checks disabled-user-init/lazy interfaces, installed
+configuration resolution, exact system grep/rg/ls resolution with an empty
+incoming PATH, and real package activation with initializer substitutes.
+No interactive startup, cross compilation, other systems or full-suite run was
+performed. Each Nix command had a 120s timeout; smoke has its existing 20s bound.
+No lock update, result link, dependency download or test-source change occurred.
+Only the owner's staged flake.nix differs in the ordinary project worktree.
+These are tests of the staged working state, not a new exact project commit;
+no new project parent is claimed. Pre-existing uncheckpointed org-texmacs memory
+was preserved; this test does not resolve unrelated interactive/export issues.
+
+## Earlier org-texmacs diagnosis and package migration
+These findings predate the current overlay task. The package migration is now
+committed ("build(pkgs): use melpaBuild to generate package autoloads"). Current
+source inspection confirms the final explicit MELPA defaults and Scheme-worker
+selection described below. Earlier intermediate file-selection failures and
+then-staged states are historical. No fresh frontend/export or full interactive
+acceptance is implied by the current overlay tests. The original batch probe's
+exact uncommitted source provenance is not reconstructed or assigned a parent.
+
+The owner reports missing org-texmacs-export-* commands in nix run
+.#emarccs-pgtk, despite loading the package in their custom.el. Read-only
+inspection confirms the configuration dependency includes org-texmacs, with no
+explicit reference in the configuration Lisp. The owner authorized reading
+~/Projects/org-texmacs: its clean HEAD matches the consumer's pinned source
+revision. That source is version 0.5.0 although the consumer derivation still
+labels it 0.4.0. Its upgrade documentation explicitly makes main-library exports
+noninteractive APIs and moves three interactive commands to ox-texmacs:
+org-texmacs-export-as-texmacs, org-texmacs-export-to-texmacs and
+org-texmacs-export-to-pdf. Main org-texmacs does not require ox-texmacs.
+The frontend commands have autoload cookies and (interactive nil org-mode).
+The owner subsequently authorized reading custom.el:
+it contains a use-package org-texmacs declaration with settings, but no
+ox-texmacs loading. The owner reports explicitly requiring ox-texmacs via M-:
+restores the commands, then authorized read-only inspection of relevant Nix
+store outputs and build/startup sources to investigate startup/autoload behavior.
+The existing result PGTK output installs org-texmacs as flat site-lisp .el/.elc
+files without autoloads or a package descriptor, and without an elpa entry.
+Its site-start calls package-activate-all before the early initializer and
+regular initialization/custom.el. Installed Emacs package-activate.el discovers
+descriptors and loads their autoloads; it does not scan arbitrary source cookies.
+The exact locked Nixpkgs trivial.nix, read from its public upstream URL, only
+byte-compiles/installs sources by default; it generates neither autoloads nor
+descriptors. The gap originates in the trivialBuild packaging contract, so
+moving/repeating activation alone cannot fix this inspected output. Earlier
+assumptions that package-provided autoloads existed are superseded.
+Startup smoke checks citar/consult/org activation, while availability checks
+only locate libraries; neither covers this custom-package command gap. Other
+custom packages also use trivialBuild, but broader effects are unverified.
+The owner subsequently authorized migrating every current trivialBuild package
+to melpaBuild. All seven package.nix files now use melpaBuild: emarccs,
+org-include-inline, org-roam-blog, org-roam-include, org-roam-organize,
+org-texmacs and org-workbench. Each recipe explicitly includes root *.el files,
+matching the former source installation scope. org-texmacs additionally includes
+org-texmacs-worker.scm in its recipe so it stays beside its Lisp library in the
+ELPA layout; its obsolete flat-site-lisp postInstall was removed. The owner
+clarified that 0.5.0 is prepared Elisp metadata, not a formal release, and
+restored the Nix version to 0.4.0. On request to add melpaVersion where needed,
+the agent added melpaVersion = "0.5.0" to org-texmacs, retaining version 0.4.0.
+The owner also broadened its files selection to *.el/*.scm; preserve this edit.
+Other migrated packages' source versions agree with their Nix version values
+(org-include-inline has an uppercase VERSION header). The owner subsequently
+requested explicit melpaVersion values for these packages too: emarccs,
+org-include-inline, org-roam-blog and org-roam-include use 0.1.0;
+org-workbench uses 0.3.0; org-roam-organize uses 0.7.0.
+Org retains its existing explicit 10.0pre value.
+emarccs excludes melpaBuild from
+the args-derived packageRequires list in place of trivialBuild. Source pins,
+patches, other dependencies, startup scheduling and custom.el were not changed.
+Scoped diff --check passed and source search found no remaining trivialBuild
+references in pkgs. The owner subsequently changed the six fetched packages'
+Nix version strings to dated unstable versions, retained their explicit
+melpaVersion values, and reported all builds passed. The new result points to
+the PGTK wrapper containing ELPA installations with descriptors/autoloads for
+all seven migrated packages. org-texmacs includes all three interactive frontend
+autoloads targeting ox-texmacs and its Scheme worker beside the Lisp libraries.
+The owner explicitly authorized one bounded batch verification. Running
+timeout 30s result/bin/emacs --batch -q with an inline probe exited zero:
+all seven packages activated; all three frontend commands satisfied commandp
+and autoloadp and target ox-texmacs, while ox-texmacs remained unloaded. The
+probe disabled JIT native compilation and redirected user-package/quickstart
+lookup to nonexistent paths; it loaded no personal init/custom.el, invoked no
+export and performed no networking. The missing-autoload defect is resolved
+in this built PGTK output without eager frontend require or startup changes.
+This is activation-level runtime verification, not full interactive startup or
+export acceptance. The owner then reported commands still absent in their
+interactive session: do not treat the isolated probe as end-to-end resolution.
+Requested a read-only M-: report from that session before any manual require or
+reactivation: major-mode, commandp/function definition for export-to-pdf,
+locate-library ox-texmacs, membership in package-activated-list, and
+read-extended-command-predicate. The supplied report has major-mode=org-mode,
+commandp=nil, function definition=nil, locate-library ox-texmacs=nil,
+org-texmacs activated=t, and filter=transient-command-completion-not-suffix-only-p.
+This excludes mere completion filtering; the frontend library is unavailable.
+Requested a second read-only M-: report of package descriptor versions/dirs,
+main library location, loaded check-setup definition source, quickstart path
+and executable to identify the selected package. No explicit load-path or
+package-system mutation was found in configuration Lisp/custom.el.
+The second report identified a different live wrapper/dependency output than
+the earlier successful probe. Reading that exact live ELPA directory confirmed
+ox-texmacs.el/.elc are absent, and its autoload file contains no frontend command
+definitions. Current owner-edited org-texmacs files selection is
+("${finalAttrs_.src.repo}*.el" "${finalAttrs_.src.repo}*.scm"), which excludes
+ox-texmacs.el. This explains activated=t with no frontend library/commands;
+it is a later file-selection regression, not a demonstrated startup failure.
+Required correction is adding "ox-texmacs.el" explicitly to that recipe,
+then rebuilding/restarting the intended wrapper. Earlier successful runtime
+verification applies only to the output built with the wider *.el selection.
+No project file was changed during this diagnosis.
+The owner later confirmed the narrowed glob omission and reported fixing it;
+read-only inspection subsequently found ox-texmacs.el explicitly restored in
+their staged recipe. They then authorized adopting MELPA defaults for the seven
+custom packages, excluding Org, and specified that even defaults be explicit.
+Current edits therefore use files = "(:defaults)" in emarccs, org-include-inline,
+org-roam-blog, org-roam-include, org-roam-organize and org-workbench;
+org-texmacs uses (:defaults "org-texmacs-worker.scm"). Org is unchanged.
+Those file-selection edits were later committed with the package migration.
+No direct frontend-specific probe was rerun for that final selection; current
+overlay builds/smoke are later passing evidence with their own narrower scope.
+custom.el still declares only
+org-texmacs; no obvious explicit command filtering was found in custom.el or
+emarccs-basic.el. Native startup source confirms site-start precedes early init,
+automatic package activation and before-init-hook. Personal init/early-init and
+quickstart state have not been inspected. Persistent activation test coverage
+has not been added.
+No project edits or index changes were made during that diagnosis/verification.
+The then-staged/unstaged package edits are now committed; the ordinary project
+worktree is clean at current confirmation.
+
 ## Current state: Nixpkgs migration committed
 The owner committed the migration as "build(nix): replace Twist packaging with
 Nixpkgs". Read-only confirmation found that HEAD contains the reviewed 93-file

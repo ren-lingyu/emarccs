@@ -1,5 +1,30 @@
 # Emarccs architecture
 
+## Latest committed integration
+Emarccs wrapper construction and site-start injection live in
+pkgs/emarccs/package.nix. Root overlays define emarccs and derive GTK/PGTK
+variants through override with their matching final Emacs. flake.nix directly
+exports lpkgs.overlays.default and inherits its packages; easyOverlay and
+perSystem.overlayAttrs are removed. easyOverlay's forced external prev could
+omit the local package definitions required by the old wrapper construction.
+The explicit export now composes package and wrapper definitions independently.
+Tests receive this exported overlay and import the same pkgs.path/config/system
+with only that overlay. Each <package>-overlay-equivalence check compares drvPath
+against the regular package during evaluation, then produces an empty result.
+No wrapper build dependency is introduced by the equality assertion. Native
+x86_64-linux independent overlay imports and all three new checks passed;
+missing exports and mismatched derivations were rejected by negative controls.
+Wrapper/smoke outputs were also successfully realized, using cached outputs at
+the final revision. The owner committed the fix and the worktree is clean.
+
+The preceding custom-package migration now uses melpaBuild for all seven former
+trivialBuild derivations, generating ELPA metadata/autoloads. Explicit files
+recipes use MELPA defaults; org-texmacs also includes its Scheme worker. The
+original trivialBuild gap and later narrowing-glob omission explain earlier
+missing interactive frontend commands; see current.md for evidence and limits.
+This section supersedes older builder/layout statements in the historical
+migration phases below. README is still deliberately deferred.
+
 ## Committed Nixpkgs migration
 The committed 2026-10-22 migration supersedes the earlier Twist architecture
 below: Nixpkgs emacsPackagesFor/withPackages now consumes a local emarccs

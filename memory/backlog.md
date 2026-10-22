@@ -23,8 +23,8 @@ unstarted is superseded. README remains deliberately unchanged. The owner has
 now committed the removal of unused inputs and their nix-to-lisp interface glue;
 this cleanup has static review but no new build/check validation yet. Library extraction is now committed: the shared implementation is supplied by
 personal-nixpkgs and local lib/packages.nix is removed. External exports and extracted implementation equivalence have been checked
-against the locked revision using ~/nixpkgs; Nix integration evaluation/build
-validation remains. Generic shared-library logic may have
+against the locked revision using ~/nixpkgs; Nix integration is now exercised by the standalone overlay evaluation/build
+checks; no new full-suite run is implied. Generic shared-library logic may have
 no local callers; evaluate it as a cross-repository library; ~/nixos/pkgs/lib/ is an owner-provided comparison reference. Its
 packages.nix matched the Emarccs copy in a read-only comparison before later
 discovery/interface changes; do not assume the copies remain synchronized.

@@ -20,6 +20,8 @@
         ];
         injection_ = builtins.concatStringsSep "\n" [
           "cat >> \"$siteStart\" <<'EOF'"
+          "(declare-function emarccs-initialize-early \"emarccs-early-init\" ())"
+          "(declare-function emarccs-initialize \"emarccs-init\" ())"
           "(when init-file-user"
           "  (package-activate-all)"
           "  (require 'emarccs)"

@@ -32,7 +32,8 @@
       (condition-case nil
           (while t
             (let ((form (read (current-buffer))))
-              (when (memq 'emarccs-initialize-early (flatten-tree form))
+              (when (and (consp form) (eq (car form) 'when)
+                         (eq (cadr form) 'init-file-user))
                 (push form forms))))
         (end-of-file nil))
       (should (= (length forms) 1))

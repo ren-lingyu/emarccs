@@ -13,6 +13,14 @@
       url = "git+https://github.com/numtide/treefmt-nix.git?ref=refs/heads/main&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    personal-nixpkgs = {
+      url = "git+https://github.com/ren-lingyu/nixpkgs?ref=refs/heads/main&shallow=1";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-parts.follows = "flake-parts";
+        treefmt-nix.follows = "treefmt-nix";
+      };
+    };
   };
 
   outputs =
@@ -26,7 +34,10 @@
             lib = inputs.nixpkgs.lib;
           in
           rec {
-            llib = import ./lib { inherit lib; };
+            llib = inputs.personal-nixpkgs.lib.mergeAttrsRecursive { allowOverrides = false; } [
+              inputs.personal-nixpkgs.lib
+              (import ./lib { inherit lib; })
+            ];
             lpkgs = import ./pkgs { inherit lib llib; };
           };
       }

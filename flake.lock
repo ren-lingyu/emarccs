@@ -52,10 +52,39 @@
         "type": "github"
       }
     },
+    "personal-nixpkgs": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792674130,
+        "narHash": "sha256-uV4txGSr7IEn14TyimBYbGDJfP5KiHjGfNX6Q4mIi5Y=",
+        "ref": "refs/heads/main",
+        "rev": "e461ed75abb9c00fb3393094f883bba418a8cbb3",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/ren-lingyu/nixpkgs"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/ren-lingyu/nixpkgs"
+      }
+    },
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs",
+        "personal-nixpkgs": "personal-nixpkgs",
         "treefmt-nix": "treefmt-nix"
       }
     },

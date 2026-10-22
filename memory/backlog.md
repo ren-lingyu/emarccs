@@ -19,11 +19,11 @@ that as an oversight and do not fix it without a new decision.
 The Nixpkgs emacsPackagesFor/withPackages migration is committed and its
 reconnected tests pass on x86_64-linux; see current.md and the committed
 migration section in architecture.md. The older description of this work as
-unstarted is superseded. Inputs and README are deliberately retained unchanged
-for now. Library extraction is a future objective: lib/packages.nix intentionally includes
+unstarted is superseded. README remains deliberately unchanged. The owner has
+now committed the removal of unused inputs and their nix-to-lisp interface glue;
+this cleanup has static review but no new build/check validation yet. Library extraction is a future objective: lib/packages.nix intentionally includes
 generic logic that may have no local callers. Evaluate it as a cross-repository
 library; ~/nixos/pkgs/lib/ is an owner-provided comparison reference. Its
 packages.nix matched the Emarccs copy in a read-only comparison before later
 discovery/interface changes; do not assume the copies remain synchronized.
-Unused flake interface glue remains deferred separately. These follow-ups are
-not permission to edit them.
+These follow-ups are not permission to edit them.

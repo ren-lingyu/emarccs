@@ -7,7 +7,7 @@ trivialBuild package at pkgs/emacsPackages/emarccs, with local dependency
 overlays. The wrapper's injected site-start owns early initialization and a
 before-init-hook registration; emarccs.el only requires interface definitions.
 Old bootstrap/advice scheduling, root lisp/, Twist runtime integration and
-lock/update apps are removed; inputs remain. Tests have
+lock/update apps are removed; obsolete inputs were removed in a follow-up. Tests have
 now been adapted and reconnected for all three Emacs outputs through explicit
 configurationPackage/grammarPackage parameters. flake.nix passes only
 { pkgs, packages = config.packages, lib } to tests/, which owns check naming
@@ -51,6 +51,11 @@ Final revalidation of the staged repository passed nix flake check on
 x86_64-linux after these discovery/naming edits, reusing all existing check
 outputs. The owner also reports all build targets passed. See current.md for
 validation attribution, scope and the single-commit assessment.
+A newer committed cleanup removes the remaining unused Twist/registry/nix-to-lisp
+inputs and their obsolete lock graph, leaving nixpkgs, flake-parts and treefmt-nix.
+llib directly imports the local library. Retained input revisions are unchanged;
+this cleanup has only static review so far. Its commit and clean project
+worktree were confirmed read-only. README remains deferred.
 The owner committed the migration as "build(nix): replace Twist packaging with
 Nixpkgs"; the project worktree was confirmed clean. The remaining sections
 retain the preceding Twist baseline as historical context; where they conflict,

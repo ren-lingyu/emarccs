@@ -52,6 +52,24 @@ history was changed by the agent. Inputs and README remain untouched. The
 requested inlining and owner build validation are complete; no further action
 is pending in this task.
 
+## Completed follow-up: removal of unused inputs
+The owner removed Twist, nix-to-lisp, MELPA, GNU ELPA and NonGNU ELPA from root
+inputs and committed flake.nix/flake.lock as "chore(flake): remove unused twist
+and package registry inputs". llib now imports ./lib directly, removing
+the unused nix-to-lisp elisp binding. Read-only review confirmed lock cleanup
+also removes the transitive elisp-helpers/fromElisp nodes, while every retained
+non-root lock node is unchanged. Remaining direct inputs are nixpkgs,
+flake-parts and treefmt-nix. Scoped searches found no old input or llib.elisp
+references in active Nix code; melpaBuild/melpaVersion in the Org derivation are
+Nixpkgs builder/metadata names, not dependencies on the deleted MELPA flake input.
+Staged diff --check passed. No Nix evaluation/build/check was run for this
+follow-up. The earlier build/cache report predates this input cleanup. README
+remains intentionally unchanged. No agent source edits or project Git writes
+were made. Read-only confirmation found the two-file cleanup committed and the
+ordinary project worktree/index clean. This checkpoint associates that inspected
+commit as a project parent. Input cleanup is complete; README remains deferred.
+No new build/check result is inferred from the commit confirmation.
+
 The following implementation/validation sections describe the completed phases;
 references to their then-staged or uncommitted state are historical.
 

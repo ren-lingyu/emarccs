@@ -1,0 +1,80 @@
+diff --git a/org-workbench.el b/org-workbench.el
+index 4500d40..5e29edc 100644
+--- a/org-workbench.el
++++ b/org-workbench.el
+@@ -1,4 +1,4 @@
+-;;; org-workbench.el --- Digital card workbench for org-mode -*- lexical-binding: t -*-
++;;; org-workbench.el --- Digital card workbench for org-mode -*- lexical-binding: t; byte-compile-warnings: (not docstrings); -*-
+ 
+ ;; Copyright (C) 2025 Yibie
+ 
+@@ -218,7 +218,7 @@ Returns content string truncated to configured length."
+   (unless (gethash "default" org-workbench-workbenches)
+     (puthash "default" nil org-workbench-workbenches)))
+ 
+-(defun org-workbench--extract-card-info (heading)
++(defun org-workbench--extract-card-info (_heading)
+   "Extract card information from heading."
+   (let* ((title (org-get-heading t t t t))
+          (level (org-current-level))
+@@ -306,7 +306,7 @@ Returns a card plist with :level 0 to indicate it's a file card."
+                            (format "%s (%d cards)"
+                                    name
+                                    (length (gethash name org-workbench-workbenches))))
+-                         workbench-names)
++                         workbench-names))
+          (choice (completing-read "Delete workbench: " choices nil t)))
+     (when choice
+       (let ((name (car (split-string choice " ("))))
+@@ -318,7 +318,7 @@ Returns a card plist with :level 0 to indicate it's a file card."
+             (setq org-workbench-current-workbench "default"))
+           (org-workbench--save)
+           (org-workbench-show)
+-          (message "Deleted workbench: %s" name)))))))
++          (message "Deleted workbench: %s" name))))))
+ 
+ (defun org-workbench-rename ()
+   "Rename a workbench."
+@@ -328,7 +328,7 @@ Returns a card plist with :level 0 to indicate it's a file card."
+                            (format "%s (%d cards)"
+                                    name
+                                    (length (gethash name org-workbench-workbenches))))
+-                         workbench-names)
++                         workbench-names))
+          (choice (completing-read "Rename workbench: " choices nil t)))
+     (when choice
+       (let ((old-name (car (split-string choice " (")))
+@@ -341,7 +341,7 @@ Returns a card plist with :level 0 to indicate it's a file card."
+               (setq org-workbench-current-workbench new-name))
+             (org-workbench--save)
+             (org-workbench-show)
+-            (message "Renamed workbench from '%s' to '%s'" old-name new-name))))))))
++            (message "Renamed workbench from '%s' to '%s'" old-name new-name)))))))
+ 
+ ;;------------------------------------------------------------------------------
+ ;; Card Operations
+@@ -465,7 +465,7 @@ Returns a card plist with :level 0 to indicate it's a file card."
+     (let* ((title (org-get-heading t t t t))
+            (number (when (string-match "^\\([0-9]+\\(?:[a-z]*\\)?\\(?:\\.[0-9]+\\(?:[a-z]*\\)?\\)*\\)" title)
+                     (match-string 1 title)))
+-           (point (point))
++           (_point (point))
+            (file (buffer-file-name))
+            (level (org-current-level))
+            (content ""))
+@@ -1014,15 +1014,6 @@ Users can bind commands to their preferred keys in their configuration."
+   (when org-workbench-org-mode
+     (add-hook 'org-after-refile-insert-hook 'org-workbench-save-order nil t)))
+ 
+-;;------------------------------------------------------------------------------
+-;; Setup and Cleanup
+-;;------------------------------------------------------------------------------
+-
+-(defun org-workbench-setup ()
+-  "Setup org-workbench."
+-  (org-workbench--load)
+-  (org-workbench--ensure-default-workbench))
+-
+ ;; Ensure setup is run when org-mode is loaded
+ (eval-after-load 'org
+   '(org-workbench-setup))

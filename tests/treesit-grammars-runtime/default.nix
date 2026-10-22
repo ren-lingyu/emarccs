@@ -1,15 +1,20 @@
 {
-  pkgs,
+  runCommand,
+  coreutils,
   lib,
   emacsPackage,
+  grammarPackage,
 }:
-(
-
-  pkgs.runCommand "emarccs-treesit-grammars-runtime" { nativeBuildInputs = [ emacsPackage ]; } (
-    builtins.concatStringsSep "\n" [
-      "${lib.getExe' emacsPackage "emacs"} --batch --load ${./lisp/treesit-grammars-runtime.el}"
-      "touch \"$out\""
-    ]
-  )
-
-)
+runCommand "emarccs-treesit-grammars-runtime"
+  {
+    nativeBuildInputs = [ coreutils ];
+    EMARCCS_GRAMMAR_DIRECTORY = "${grammarPackage}/lib";
+  }
+  ''
+    export HOME="$TMPDIR/home"
+    mkdir -p "$HOME"
+    timeout --kill-after=3s 60s \
+      ${lib.getExe' emacsPackage "emacs"} --batch -q \
+        --load ${./lisp/treesit-grammars-runtime.el}
+    touch "$out"
+  ''

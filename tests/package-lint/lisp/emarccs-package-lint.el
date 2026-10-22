@@ -11,11 +11,10 @@ interfaces do not receive these exemptions.")
 
 (let* ((source (or (getenv "EMARCCS_ELISP_SOURCE")
                    (error "EMARCCS_ELISP_SOURCE is not set")))
-       (main-file (expand-file-name "lisp/emarccs.el" source))
-       (interfaces '("emarccs.el" "emarccs-bootstrap.el"
-                     "emarccs-early-init.el" "emarccs-init.el"))
+       (main-file (expand-file-name "emarccs.el" source))
+       (interfaces '("emarccs.el" "emarccs-early-init.el" "emarccs-init.el"))
        (files (sort (directory-files-recursively
-                     (expand-file-name "lisp" source) "\\.el\\'")
+                     source "\\.el\\'")
                     #'string<))
        (accepted 0)
        (failures 0))

@@ -1,51 +1,37 @@
 {
   pkgs,
+  packages,
   lib,
-  emacsPackage,
-  elispSource,
-  elispPackages,
-  siteStartCheckList,
 }:
-{
+lib.concatMapAttrs (
+  name_: emacsPackage:
+  let
+    epkgs_ = emacsPackage.emacs.pkgs;
+    configurationPackage = epkgs_.emarccs;
+  in
+  lib.mapAttrs'
+    (checkName_: check_: {
+      name = "${name_}-${checkName_}";
+      value = check_;
+    })
+    {
+      elisp-byte-compile = pkgs.callPackage ./elisp-byte-compile {
+        inherit emacsPackage configurationPackage;
+      };
 
-  elisp-byte-compile = import ./elisp-byte-compile {
-    inherit
-      pkgs
-      lib
-      emacsPackage
-      elispSource
-      ;
-  };
+      package-lint = pkgs.callPackage ./package-lint { inherit emacsPackage configurationPackage; };
 
-  package-lint = import ./package-lint {
-    inherit
-      pkgs
-      lib
-      emacsPackage
-      elispSource
-      ;
-  };
+      startup-smoke = pkgs.callPackage ./startup-smoke { inherit emacsPackage configurationPackage; };
 
-  startup-smoke = import ./startup-smoke {
-    inherit
-      pkgs
-      lib
-      emacsPackage
-      siteStartCheckList
-      ;
-  };
+      startup-order = pkgs.callPackage ./startup-order { inherit emacsPackage configurationPackage; };
 
-  startup-order = import ./startup-order { inherit pkgs lib emacsPackage; };
+      package-availability-smoke = pkgs.callPackage ./package-availability-smoke {
+        inherit emacsPackage configurationPackage;
+      };
 
-  package-availability-smoke = import ./package-availability-smoke {
-    inherit
-      pkgs
-      lib
-      emacsPackage
-      elispPackages
-      ;
-  };
-
-  treesit-grammars-runtime = import ./treesit-grammars-runtime { inherit pkgs lib emacsPackage; };
-
-}
+      treesit-grammars-runtime = pkgs.callPackage ./treesit-grammars-runtime {
+        inherit emacsPackage;
+        grammarPackage = epkgs_.treesit-grammars.with-all-grammars;
+      };
+    }
+) packages

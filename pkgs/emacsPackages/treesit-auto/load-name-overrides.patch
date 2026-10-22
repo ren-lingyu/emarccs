@@ -1,0 +1,15 @@
+diff --git a/treesit-auto.el b/treesit-auto.el
+--- a/treesit-auto.el
++++ b/treesit-auto.el
+@@ -717,2 +717,11 @@
++(with-eval-after-load 'treesit
++  (dolist (entry
++           '((go-template "libtree-sitter-go-template" "tree_sitter_gotmpl")
++             (go-template-helm "libtree-sitter-go-template-helm" "tree_sitter_helm")
++             (org-nvim "libtree-sitter-org-nvim" "tree_sitter_org")
++             (php-only "libtree-sitter-php-only" "tree_sitter_php")
++             (sshclientconfig "libtree-sitter-sshclientconfig" "tree_sitter_ssh_client_config")))
++    (add-to-list 'treesit-load-name-override-list entry)))
++
+ (provide 'treesit-auto)
+ ;;; treesit-auto.el ends here

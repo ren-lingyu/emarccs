@@ -1,30 +1,27 @@
 {
-  pkgs,
+  runCommand,
+  coreutils,
+  gnugrep,
+  ripgrep,
   lib,
   emacsPackage,
-  siteStartCheckList,
+  configurationPackage,
 }:
-let
-
-  minEmacsVersion_ = "31.1";
-
-in
-(
-
-  pkgs.runCommand "emarccs-startup-smoke" { nativeBuildInputs = [ emacsPackage ]; } (
-    builtins.concatStringsSep "\n" (
-      builtins.concatLists [
-        [
-          "site_start=\"${emacsPackage}/share/emacs/site-lisp/site-start.el\""
-          "test -f \"$site_start\""
-        ]
-        (builtins.map (item_: "grep -Fq \"${item_}\" \"$site_start\"") siteStartCheckList)
-        [
-          "MIN_EMACS_VERSION=${minEmacsVersion_} ${lib.getExe' emacsPackage "emacs"} --batch --load ${./lisp/startup-smoke.el}"
-          "touch \"$out\""
-        ]
-      ]
-    )
-  )
-
-)
+runCommand "emarccs-startup-smoke"
+  {
+    nativeBuildInputs = [ coreutils ];
+    MIN_EMACS_VERSION = "31.1";
+    EMARCCS_SITE_START = "${emacsPackage.deps}/share/emacs/site-lisp/site-start.el";
+    EMARCCS_GREP = lib.getExe gnugrep;
+    EMARCCS_RG = lib.getExe ripgrep;
+    EMARCCS_LS = lib.getExe' coreutils "ls";
+    EMARCCS_PACKAGE_DIRECTORY = "${configurationPackage}/share/emacs/site-lisp";
+  }
+  ''
+    export HOME="$TMPDIR/home"
+    mkdir -p "$HOME"
+    PATH=/nonexistent ${coreutils}/bin/timeout --kill-after=3s 20s \
+      ${lib.getExe' emacsPackage "emacs"} --batch -q \
+        --load ${./lisp/startup-smoke.el}
+    touch "$out"
+  ''

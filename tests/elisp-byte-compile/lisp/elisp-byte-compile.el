@@ -1,6 +1,8 @@
 ;;; elisp-byte-compile.el --- Byte-compile Emarccs sources -*- lexical-binding: t; -*-
 
 (require 'bytecomp)
+;; Generated dependency autoloads may expand cl-defsubst while loading.
+(require 'cl-lib)
 
 (defun emarccs--load-package-autoloads ()
   "Load package autoload files available on `load-path'."

@@ -10,12 +10,6 @@
 (require 'treesit)
 (require 'treesit-auto)
 
-(defun emarccs-treesit-grammars-runtime--grammar-dir ()
-  (seq-find (lambda (path)
-              (and (string-match-p "emacs-treesit-grammars" path)
-                   (string-suffix-p "/lib" path)))
-            treesit-extra-load-path))
-
 (defun emarccs-treesit-grammars-runtime--language-from-library (file)
   (intern (string-remove-prefix "libtree-sitter-" (file-name-base file))))
 
@@ -49,16 +43,18 @@
         t)
     (error (list 'error err))))
 
-(let* ((grammar-dir (emarccs-treesit-grammars-runtime--grammar-dir))
+(let* ((grammar-dir (or (getenv "EMARCCS_GRAMMAR_DIRECTORY")
+                        (error "EMARCCS_GRAMMAR_DIRECTORY is not set")))
        (libraries
         (and grammar-dir
-             (sort (directory-files grammar-dir t "\\`libtree-sitter-.*\\.so\\'")
+             (sort (directory-files grammar-dir t "\\`libtree-sitter-.*\\.\\(?:so\\|dylib\\|dll\\)\\'")
                    #'string<)))
        (find-failures nil)
        (use-failures nil))
-  (unless grammar-dir
-    (error "emacs-treesit-grammars is missing from treesit-extra-load-path: %S"
-           treesit-extra-load-path))
+  (unless libraries
+    (error "No grammar libraries in supplied package: %s" grammar-dir))
+  ;; Enumerate the supplied output, but never add it to the runtime path:
+  ;; availability must come from the wrapper's propagated grammar dependency.
   ;; The test follows the actual Nix output, so with-all-grammars additions are
   ;; checked automatically without maintaining a second static grammar list.
   (dolist (library libraries)

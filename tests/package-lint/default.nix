@@ -1,16 +1,18 @@
 {
-  pkgs,
+  runCommand,
+  coreutils,
   lib,
+  emacsPackages,
   emacsPackage,
-  elispSource,
+  configurationPackage,
 }:
 let
-  packageLint = pkgs.emacsPackages.package-lint;
+  packageLint = emacsPackages.package-lint;
 in
-pkgs.runCommand "emarccs-package-lint"
+runCommand "emarccs-package-lint"
   {
-    nativeBuildInputs = [ pkgs.coreutils ];
-    EMARCCS_ELISP_SOURCE = elispSource;
+    nativeBuildInputs = [ coreutils ];
+    EMARCCS_ELISP_SOURCE = configurationPackage.src;
   }
   ''
     export HOME="$TMPDIR/home"

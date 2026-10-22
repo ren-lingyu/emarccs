@@ -11,20 +11,11 @@
 !lib/**/
 !lib/**/*.nix
 
-!lisp/
-!lisp/**/
-!lisp/**/*.el
-
 !pkgs/
 !pkgs/**/
 !pkgs/**/*.nix
 !pkgs/**/*.el
 !pkgs/**/*.patch
-
-!locks/
-!locks/**/
-!locks/**/*.nix
-!locks/**/*.lock
 
 !tests/
 !tests/**/

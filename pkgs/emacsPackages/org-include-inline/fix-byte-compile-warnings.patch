@@ -1,0 +1,138 @@
+diff --git a/org-include-inline.el b/org-include-inline.el
+index b60615e..c93a265 100644
+--- a/org-include-inline.el
++++ b/org-include-inline.el
+@@ -1,4 +1,4 @@
+-;; -*- lexical-binding: t; -*-
++;; -*- lexical-binding: t; byte-compile-warnings: (not docstrings) -*-
+ 
+ ;;; org-include-inline.el --- Display #+INCLUDE contents inline in Org mode buffers.
+ 
+@@ -20,6 +20,7 @@
+ (require 'org-element)
+ (require 'org-src)  
+ (require 'org-id)
++(require 'filenotify)
+ 
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;; Customization
+@@ -89,6 +90,16 @@ Possible values:
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;; Internal Variables and Data Structures
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
++;; The mode itself is defined later by `define-minor-mode'.
++(defvar org-include-inline-mode)
++
++;; These values are set in the visited file buffer and read again by
++;; `org-include-inline-confirm-lines'.  Declare them before compilation.
++(defvar-local org-include-inline--target-org-buffer nil
++  "Org buffer waiting for an INCLUDE directive.")
++
++(defvar-local org-include-inline--relative-target-file nil
++  "Path used for the pending INCLUDE directive.")
+ 
+ (defvar-local org-include-inline--overlays nil
+   "Buffer-local list of overlays created by org-include-inline-mode.")
+@@ -261,8 +272,7 @@ If BLOCK-TYPE is provided, wrap content in appropriate block.
+ LANGUAGE is used when BLOCK-TYPE is 'src' or 'export'.
+ Note that for 'example', 'export', or 'src' blocks, content is escaped."
+   (unless (file-readable-p file)
+-    (message "Error: File not readable: %s" file)
+-    (format "Error: File not readable: %s" file))
++    (error "Error: File not readable: %s" file))
+ 
+   (let ((start-line 1)
+         (end-line most-positive-fixnum)
+@@ -351,11 +361,9 @@ HEADLINE-SPEC 可以是 \"*Headline Text\" 或 \"#custom-id\"。
+ If ONLY-CONTENTS is non-nil, return only the content (excluding property drawers, planning, etc.).
+ LINES-SPEC is like \"1-10\", returning only a portion of the content."
+   (unless (file-readable-p file)
+-    (message "Error: Org file not readable: %s" file)
+-    (format "Error: Org file not readable: %s" file))
++    (error "Error: Org file not readable: %s" file))
+   (unless headline-spec
+-    (message "Error: No headline specification provided for file %s" file)
+-    (format "Error: No headline specified for %s" file))
++    (error "Error: No headline specification provided for file %s" file))
+   
+   (org-include-inline--with-temp-org-buffer
+    file
+@@ -430,8 +438,7 @@ LINES-SPEC is like \"1-10\", returning only a portion of the content."
+ BLOCK-NAME is the name of the block to fetch.
+ Returns only the content of the block, without the #+NAME:, #+begin_src, and #+end_src lines."
+   (unless (file-readable-p file)
+-    (message "Error: File not readable: %s" file)
+-    (format "Error: File not readable: %s" file))
++    (error "Error: File not readable: %s" file))
+   
+   (org-include-inline--with-temp-org-buffer
+    file
+@@ -472,7 +479,7 @@ Each property list contains :name, :type (src, example, etc), and :language (for
+                     blocks)))))
+        (nreverse blocks)))))
+ 
+-(defun org-include-inline--fetch-org-id-content (id &optional only-contents lines-spec)
++(defun org-include-inline--fetch-org-id-content (id &optional _only-contents lines-spec)
+   "Fetch content of an entry with ID.
+ ID is the entry ID (UUID, internal format, or custom format).
+ If ONLY-CONTENTS is non-nil, return only the contents (excluding properties).
+@@ -1009,7 +1016,7 @@ Otherwise, return the path relative to the current file."
+           (let* ((selection (cl-find chosen-display headlines :key #'car :test #'string=))
+                  (custom-id (nth 1 selection))
+                  (title (nth 2 selection))
+-                 (level (nth 3 selection))
++                 (_level (nth 3 selection))
+                  (include-spec (if custom-id
+                                  (format "#%s" custom-id)
+                                (format "*%s" title))))
+@@ -1175,8 +1182,12 @@ Otherwise, call the original function OLD-FN with PATH and ARG."
+     (funcall old-fn path arg)))
+ 
+ ;; Remove old advice if it exists
+-(when (advice-member-p #'org-include-inline--advice-org-open-at-point 'org-open-at-point)
+-  (advice-remove 'org-open-at-point #'org-include-inline--advice-org-open-at-point))
++;; The quoted symbol is intentional: nadvice compares by symbol identity, so the
++;; stale advice installed by a previous version is matched even though this
++;; version no longer defines that function.  A function quote would make the
++;; byte compiler report an undefined function.
++(when (advice-member-p 'org-include-inline--advice-org-open-at-point 'org-open-at-point)
++  (advice-remove 'org-open-at-point 'org-include-inline--advice-org-open-at-point))
+ 
+ ;; Add new advice
+ (unless (advice-member-p #'org-include-inline--advice-org-link-open-as-file 'org-link-open-as-file)
+@@ -1227,7 +1238,7 @@ Argument _CYCLE-STATE is ignored but kept for compatibility with `org-cycle-hook
+                                  (when should-hide 'org-include-inline)
+                                  before-str)))))))))
+ 
+-(defun org-include-inline--export-filter (backend)
++(defun org-include-inline--export-filter (_backend)
+   "Filter function for export process.
+ Handles includes according to `org-include-inline-export-behavior':
+ - selective: process includes normally, except those marked with :export: no
+@@ -1298,7 +1309,7 @@ Handles includes according to `org-include-inline-export-behavior':
+ This fallback implementation simply binds the special variable
+ `delay-mode-hooks` to t while evaluating BODY.  On newer Emacs
+ versions the built-in macro will be used instead, which avoids the
+-\="Making delay-mode-hooks buffer-local while locally let-bound!" warning."
++\"Making delay-mode-hooks buffer-local while locally let-bound!\" warning."
+     `(let ((delay-mode-hooks t))
+        ,@body)))
+ 
+@@ -1332,7 +1343,7 @@ Available commands:
+         (unless org-include-inline--source-buffers
+           (org-include-inline--load-associations))
+         ;; Add export hooks
+-        (add-hook 'org-export-before-processing-hook 
++        (add-hook 'org-export-before-processing-functions 
+                   #'org-include-inline--export-filter nil t)
+         (add-hook 'org-export-after-processing-hook 
+                   #'org-include-inline--after-export nil t)
+@@ -1352,7 +1363,7 @@ Available commands:
+     (progn
+       ;; Silently disable the mode
+       ;; Remove export hooks
+-      (remove-hook 'org-export-before-processing-hook 
++      (remove-hook 'org-export-before-processing-functions 
+                    #'org-include-inline--export-filter t)
+       (remove-hook 'org-export-after-processing-hook 
+                    #'org-include-inline--after-export t)

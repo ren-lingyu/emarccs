@@ -1,29 +1,21 @@
 {
-  pkgs,
+  runCommand,
+  coreutils,
   lib,
   emacsPackage,
-  elispSource,
+  configurationPackage,
 }:
-builtins.derivation {
-
-  name = "emarccs-elisp-byte-compile";
-
-  system = pkgs.stdenv.buildPlatform.system;
-
-  builder = lib.getExe' pkgs.guile "guile";
-
-  args = [
-    "--no-auto-compile"
-    "-s"
-    ./lisp/builder.scm
-  ];
-
-  EMACS = lib.getExe' emacsPackage "emacs";
-
-  EMARCCS_BYTE_COMPILE_SCRIPT = ./lisp/elisp-byte-compile.el;
-
-  EMARCCS_ELISP_SOURCE = elispSource;
-
-  HOME = "/tmp/home/";
-
-}
+# Recompile sources independently of the package build without running config.
+runCommand "emarccs-elisp-byte-compile"
+  {
+    nativeBuildInputs = [ coreutils ];
+    EMARCCS_ELISP_SOURCE = configurationPackage.src;
+  }
+  ''
+    export HOME="$TMPDIR/home"
+    mkdir -p "$HOME"
+    timeout --kill-after=3s 60s \
+      ${lib.getExe' emacsPackage "emacs"} --batch -q \
+        --load ${./lisp/elisp-byte-compile.el}
+    touch "$out"
+  ''

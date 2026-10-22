@@ -1,16 +1,22 @@
 {
-  pkgs,
+  runCommand,
+  coreutils,
   lib,
   emacsPackage,
-  elispPackages,
+  configurationPackage,
 }:
-(
-
-  pkgs.runCommand "emarccs-package-availability-smoke" { nativeBuildInputs = [ emacsPackage ]; } (
-    builtins.concatStringsSep "\n" [
-      "PACKAGE_NAMES=${lib.escapeShellArg (builtins.concatStringsSep " " elispPackages)} ${lib.getExe' emacsPackage "emacs"} --batch --load ${./lisp/package-availability-smoke.el}"
-      "touch \"$out\""
-    ]
-  )
-
-)
+runCommand "emarccs-package-availability-smoke"
+  {
+    nativeBuildInputs = [ coreutils ];
+    PACKAGE_NAMES = lib.concatStringsSep " " (
+      map (package: package.pname) configurationPackage.packageRequires
+    );
+  }
+  ''
+    export HOME="$TMPDIR/home"
+    mkdir -p "$HOME"
+    timeout --kill-after=3s 30s \
+      ${lib.getExe' emacsPackage "emacs"} --batch -q \
+        --load ${./lisp/package-availability-smoke.el}
+    touch "$out"
+  ''

@@ -60,14 +60,17 @@
 
             perSystem =
               {
-                inputs',
+                system,
                 config,
                 pkgs,
                 lib,
                 ...
               }:
               {
-                _module.args.pkgs = inputs'.nixpkgs.legacyPackages.appendOverlays [ lpkgs.overlays.default ];
+                _module.args.pkgs = import inputs.nixpkgs {
+                  inherit system;
+                  overlays = [ lpkgs.overlays.default ];
+                };
 
                 legacyPackages = lpkgs.mkLegacyPackages pkgs;
 

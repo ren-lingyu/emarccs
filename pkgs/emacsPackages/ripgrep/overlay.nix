@@ -4,8 +4,10 @@ let
   pkgs = final_.callPackage ({ pkgs }: pkgs) { };
 in
 {
-  ripgrep = final_.callPackage ./package.nix {
-    ripgrep = prev_.ripgrep;
-    rg = pkgs.ripgrep;
-  };
+  ripgrep = prev_.ripgrep.overrideAttrs (old_: {
+    propagatedUserEnvPkgs = builtins.concatLists [
+      (old_.propagatedUserEnvPkgs or [ ])
+      [ pkgs.ripgrep ]
+    ];
+  });
 }

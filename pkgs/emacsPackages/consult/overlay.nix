@@ -4,8 +4,13 @@ let
   pkgs = final_.callPackage ({ pkgs }: pkgs) { };
 in
 {
-  consult = final_.callPackage ./package.nix {
-    consult = prev_.consult;
-    rg = pkgs.ripgrep;
-  };
+  consult = prev_.consult.overrideAttrs (old_: {
+    propagatedUserEnvPkgs = builtins.concatLists [
+      (old_.propagatedUserEnvPkgs or [ ])
+      [
+        pkgs.ripgrep
+        pkgs.gnugrep
+      ]
+    ];
+  });
 }

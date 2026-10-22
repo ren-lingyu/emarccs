@@ -20,5 +20,10 @@ The Nixpkgs emacsPackagesFor/withPackages migration is implemented in the workin
 tree and its reconnected tests pass on x86_64-linux; see current.md and the
 working-tree notice in architecture.md. The older description of this work as
 unstarted is superseded. Inputs and README are deliberately retained unchanged
-for now. Removing unused library glue/private helpers also remains deferred by
-the owner. These follow-ups are not permission to edit them.
+for now. Library extraction is a future objective: lib/packages.nix intentionally includes
+generic logic that may have no local callers. Evaluate it as a cross-repository
+library; ~/nixos/pkgs/lib/ is an owner-provided comparison reference. Its
+packages.nix matched the Emarccs copy in a read-only comparison before later
+discovery/interface changes; do not assume the copies remain synchronized.
+Unused flake interface glue remains deferred separately. These follow-ups are
+not permission to edit them.

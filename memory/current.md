@@ -83,6 +83,20 @@ The owner authorized restoring runtime executable supply, checking real package
 activation, removing the obsolete Scheme byte-compile builder, and correcting
 flake/entry descriptions. Inputs and README stay unchanged. Unused library
 bindings/helpers stay for now; the owner already cleaned treefmt exclusions.
+The owner subsequently clarified that lib/packages.nix is intended for extraction
+as a standalone cross-repository library. Local non-use alone does not establish
+that generic logic is redundant. Another implementation reference identified by
+the owner is ~/nixos/pkgs/lib/. A subsequent read-only comparison of its
+packages.nix with Emarccs lib/packages.nix found them byte-identical (5,518 bytes
+each) before the subsequent discovery changes. The owner clarified that
+legacyPackages should expose pure-override packages too, for individual builds,
+and changed discovery to follow overlay files and the corresponding derivation
+attributes rather than requiring package.nix. The agent then renamed the
+Emarccs library's overlayPath_/overlayPath parameters to overlayFile_/overlayFile,
+including both public helpers and pkgs/default.nix callers; the private mkScope_
+parameter was aligned as well. No NixOS repository files were modified. This
+rename was initially verified by scoped search and diff --check. Subsequent
+final validation below also covers the updated discovery/interface.
 The owner prefers consumer-local overrides: Consult propagates system GNU grep
 and ripgrep; the ripgrep Elisp package propagates system ripgrep. New overlay
 files explicitly pass pkgs.ripgrep as rg to avoid the same-named Elisp package.
@@ -120,11 +134,34 @@ the previous run; this is not a full personal configuration startup acceptance.
 
 The obsolete Scheme builder was deleted and flake/entry descriptions corrected.
 Inputs, lock, README, private library helpers and project index were unchanged
-by this cleanup. New consumer overlay files remain untracked; project staging
-is left to the owner. No exact committed project state represents these tests,
-so this checkpoint needs no new project parent. Maintained tests and distilled
-memory suffice; no additional raw-evidence archive is warranted. Next action:
-owner review and staging of the cleanup including the four new Nix files.
+by this cleanup. The owner subsequently staged all project changes, including
+the new consumer overlay files and discovery/interface changes. There are no
+unstaged project changes at final review. No exact committed project state
+represents these tests, so this checkpoint needs no new project parent.
+Maintained tests and distilled memory suffice; no additional raw-evidence
+archive is warranted.
+
+Final validation and commit assessment: the owner reported that their own
+nix flake check and all nix build targets passed. At their request the agent
+ran timeout 120s nix flake check --no-write-lock-file --keep-going -L once on
+the current repository, after all discovery/naming edits were staged. It exited
+zero with all checks passed on x86_64-linux. All 19 check derivations were
+satisfied from existing outputs (the log says running 0 flake checks); this run
+did not freshly execute cached test scripts or test other systems. The agent
+did not repeat the owner's builds. Inputs, root flake.lock and README remain
+unchanged by explicit owner decision.
+
+The staged migration is suitable as one standalone commit: packaging, local
+overlays, source relocation, wrapper startup, old locks/recipes/framework
+removal and adapted tests implement one coherent transition away from Twist.
+Splitting is not necessary; separating them would require designing intermediate
+working integration states. The reusable library supports this migration and
+its future extraction is a separate objective. Staged diff --check succeeds
+excluding patch payloads; diagnostics within the two new upstream patches are
+context/upstream whitespace, not a functional blocker or a reason to rewrite
+patches during this review. Suggested subject: build(nix): replace Twist
+packaging with Nixpkgs. Next action is owner commit/review; no project source,
+index or history was changed during this final assessment.
 
 The following worktree inspection describes the starting state, before these
 test edits. Its disconnected-test statements are historical; validation above

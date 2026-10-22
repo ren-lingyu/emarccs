@@ -28,6 +28,23 @@ emarccs. Nixpkgs' wrapper supports ordinary derivations and links their bin/
 into its runtime executable directory. Startup smoke now verifies this with a
 clean incoming PATH, plus real package activation without preloading cl-lib.
 The removed old Citar patch did not reproduce a real-activation failure.
+The owner intends lib/packages.nix to become a standalone cross-repository Nix
+library. Some generic logic can intentionally be unused by Emarccs; assess it
+against that reusable scope rather than treating lack of local callers as a
+cleanup defect. The owner identified ~/nixos/pkgs/lib/ as another practice to
+consult during library design/review. A subsequent read-only comparison found
+the two packages.nix files byte-identical (5,518 bytes each) before the owner's
+subsequent discovery changes; no broader NixOS repository behavior was inspected.
+The owner needs legacyPackages to expose pure overrides for individual builds.
+Current Emarccs discovery therefore selects using overlay files and package-set
+derivation attributes, not package.nix presence. Both mkLegacyPackages and
+mkOverlays take overlayFile (private parameters use overlayFile_); callers in
+pkgs/default.nix supply "overlay.nix". Pure overrides may be inlined into their
+overlay without losing export eligibility. The rename did not modify NixOS.
+Final revalidation of the staged repository passed nix flake check on
+x86_64-linux after these discovery/naming edits, reusing all existing check
+outputs. The owner also reports all build targets passed. See current.md for
+validation attribution, scope and the single-commit assessment.
 The migration and test edits are still uncommitted. The remaining sections
 are the previously committed Twist baseline, retained as historical context;
 where they conflict, this notice and current.md describe the working tree.

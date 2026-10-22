@@ -5,6 +5,25 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
+## Current state: org-edna direct dependency committed
+The owner requested comparing use-package declarations in the configuration with
+emarccs' direct Nix dependencies. Scoped static inspection found 80 distinct
+use-package names and 75 direct packageRequires arguments. The only external
+configured package absent from that direct dependency list is org-edna,
+explicitly configured in emarccs-org.el with org-edna-mode and org-edna settings.
+The other unmatched names are seven Emacs built-ins (dired, dired-x, eglot,
+lisp-mode, recentf, savehist, which-key) and internal emarccs--org-extension-block.
+No package build/evaluation, installed-closure/transitive dependency verification
+or source modification was done. This is a direct-declaration omission, not a
+reproduced missing-library runtime failure. The owner then added org-edna to
+the args-derived packageRequires list and committed the one-line change as
+"fix(emarccs): declare org-edna as a direct dependency". Read-only confirmation
+found the expected change in HEAD and a clean ordinary project worktree/index.
+The direct dependency count is now 76; this specific omission is resolved.
+This checkpoint associates the inspected resulting project commit. No new
+build/test was run or reported for this addition. The broader non-blocking
+normalization/dependency audit remains open; it is not completed by this fix.
+
 ## Current state: README synchronization committed
 The owner authorized updating README after the backlog review. The project
 worktree was clean at start; the factual baseline is the committed standalone

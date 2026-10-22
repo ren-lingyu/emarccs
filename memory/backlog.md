@@ -15,6 +15,16 @@ use-package declarations with actual requirements while preserving intended
 lazy loading and configuration behavior. Record any intentionally remaining
 warnings rather than hiding them with blanket suppression.
 
+A targeted read-only comparison found 80 distinct use-package names and an
+org-edna direct-dependency omission. The owner subsequently committed its
+addition, bringing the direct packageRequires argument count from 75 to 76;
+this specific finding is resolved and must not be re-added as pending work.
+Other unmatched names are seven Emacs built-ins (dired, dired-x, eglot,
+lisp-mode, recentf, savehist, which-key) and internal
+emarccs--org-extension-block. No new build/test or transitive-dependency audit
+was performed for that correction. The broader warning/dependency review above
+remains non-blocking and incomplete.
+
 This entry records scope and motivation only. No source changes, dependency
 updates, warning-policy changes or build/test runs are authorized by adding it.
 

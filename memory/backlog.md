@@ -21,9 +21,11 @@ reconnected tests pass on x86_64-linux; see current.md and the committed
 migration section in architecture.md. The older description of this work as
 unstarted is superseded. README remains deliberately unchanged. The owner has
 now committed the removal of unused inputs and their nix-to-lisp interface glue;
-this cleanup has static review but no new build/check validation yet. Library extraction is a future objective: lib/packages.nix intentionally includes
-generic logic that may have no local callers. Evaluate it as a cross-repository
-library; ~/nixos/pkgs/lib/ is an owner-provided comparison reference. Its
+this cleanup has static review but no new build/check validation yet. Library extraction is now committed: the shared implementation is supplied by
+personal-nixpkgs and local lib/packages.nix is removed. External exports and extracted implementation equivalence have been checked
+against the locked revision using ~/nixpkgs; Nix integration evaluation/build
+validation remains. Generic shared-library logic may have
+no local callers; evaluate it as a cross-repository library; ~/nixos/pkgs/lib/ is an owner-provided comparison reference. Its
 packages.nix matched the Emarccs copy in a read-only comparison before later
 discovery/interface changes; do not assume the copies remain synchronized.
 These follow-ups are not permission to edit them.

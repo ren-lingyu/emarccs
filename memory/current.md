@@ -70,6 +70,38 @@ ordinary project worktree/index clean. This checkpoint associates that inspected
 commit as a project parent. Input cleanup is complete; README remains deferred.
 No new build/check result is inferred from the commit confirmation.
 
+## Completed follow-up: reusable Nix library extraction
+The owner removed lib/packages.nix, retained lib/default.nix as an empty local
+extension function, and committed the new personal-nixpkgs input plus lock and
+call-site changes as "refactor(lib): consume shared helpers from personal-nixpkgs". The input points at ren-lingyu/nixpkgs and follows this repository's
+nixpkgs, flake-parts and treefmt-nix. specialArgs.llib now uses the external
+lib.mergeAttrsRecursive with allowOverrides = false to combine that external
+library with the local extension; lpkgs and pkgs/default.nix still consume the
+same llib.packages interfaces. No external package overlay is appended here:
+the new input is used for its shared library.
+Read-only lock comparison found exactly one new node, personal-nixpkgs, and no
+changes to existing non-root nodes. Read-only confirmation found the four-file
+extraction committed and the ordinary project worktree/index clean. This
+checkpoint associates the inspected project commit as a non-first parent.
+Scoped diff --check passed before commit. Public web retrieval initially failed,
+but the owner then explicitly pointed
+to ~/nixpkgs for read-only inspection. Its lib/default.nix, packages.nix and
+merge-attrs-recursive.nix match the Emarccs input's locked revision exactly;
+the extracted packages.nix is byte-identical to the pre-extraction Emarccs file.
+The input exposes flake.lib containing packages and mergeAttrsRecursive. Static
+inspection confirms allowOverrides = false recursively rejects overlapping leaf
+definitions while merging attribute-set namespaces, with derivations treated as
+leaves; unique leaves are not forced by conflict checking. The empty local
+extension cannot introduce conflicts. The local reference repository is clean
+and one commit ahead of the locked input: only flake.nix gained that library's
+own checks wiring, with no changes to its library exports or implementations.
+No input pin update is required for the current consumer API. No Nix evaluation,
+build/check or source edit was performed by the agent. Earlier passing builds
+predate this extraction and are not validation of it. README remains unchanged.
+Extraction and static API review are complete. Nix integration validation has
+not been reported or run for this extraction; no new check is inferred from
+commit confirmation. README remains the deliberately deferred documentation task.
+
 The following implementation/validation sections describe the completed phases;
 references to their then-staged or uncommitted state are historical.
 

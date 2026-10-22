@@ -56,6 +56,17 @@ inputs and their obsolete lock graph, leaving nixpkgs, flake-parts and treefmt-n
 llib directly imports the local library. Retained input revisions are unchanged;
 this cleanup has only static review so far. Its commit and clean project
 worktree were confirmed read-only. README remains deferred.
+The latest committed change extracts lib/packages.nix to the personal-nixpkgs
+input, leaving an empty local lib/default.nix extension. External and local
+libraries are combined through the external mergeAttrsRecursive helper with
+allowOverrides = false; consumer interfaces remain llib.packages. The input's
+nixpkgs/flake-parts/treefmt-nix all follow this repository. Existing input pins
+are unchanged. Owner-authorized read-only inspection of ~/nixpkgs verified the
+external exports and merge semantics; its three library files match the locked
+input, and packages.nix matches the removed Emarccs implementation byte-for-byte.
+The reference checkout's newer commit only adds its own checks wiring.
+The extraction commit and clean project worktree are confirmed; Nix integration
+evaluation/build behavior for the extraction has not been verified.
 The owner committed the migration as "build(nix): replace Twist packaging with
 Nixpkgs"; the project worktree was confirmed clean. The remaining sections
 retain the preceding Twist baseline as historical context; where they conflict,

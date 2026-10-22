@@ -50,6 +50,7 @@
   nix-ts-mode,
   orderless,
   org,
+  org-edna,
   org-gtd,
   org-include-inline,
   org-roam,

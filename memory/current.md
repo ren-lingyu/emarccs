@@ -5,14 +5,50 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
+## Current state: README synchronization committed
+The owner authorized updating README after the backlog review. The project
+worktree was clean at start; the factual baseline is the committed standalone
+overlay fix, compared with the last README update at the earlier Elisp source
+normalization phase. README.org is now updated for Nixpkgs/MELPA packaging,
+configuration-vs-wrapper ownership and actual directories, startup phases,
+three wrapper outputs/legacyPackages, standalone overlay use, shared-library
+merge/follows wiring, package overrides/runtime supply and seven check families.
+Old Twist recipes/locks/update apps and bootstrap advice descriptions are gone.
+The document keeps the minimum Emacs version at 31.1, existing lint exemptions
+and stable maintenance/initialization conventions. It contains no build-result
+or experiment log. All changed factual areas were checked against source and
+root lock; concrete entry paths exist, Org source-block pairs match, obsolete
+references are absent, and diff --check passes. No Nix evaluation, build/test,
+formatter or project index/history write was performed by the agent. The owner
+subsequently committed the one-file update as "docs(readme): describe Nixpkgs
+packaging and standalone overlay". Read-only confirmation found that expected
+README change in HEAD and the ordinary project worktree/index clean. The current
+checkpoint associates this inspected documentation commit; it does not imply
+new test execution. README synchronization is removed from backlog. Its remaining
+coverage item is the candidate custom-package frontend/autoload regression test;
+naming privacy rules remain constraints, not pending renames.
+
 ## Current state: standalone overlay fix committed
 The owner committed the seven-file change as "fix(overlays): make the default
 overlay usable independently". Read-only confirmation found the expected wrapper
 package extraction, direct overlay export and equivalence checks in HEAD and
 an ordinary project worktree/index with no changes. This checkpoint associates
 the inspected resulting project commit; tests below ran before the commit and
-were not rerun during confirmation. README remains intentionally unchanged.
+were not rerun during confirmation. README was synchronized in the later
+documentation commit described above.
 No implementation remains pending for the authorized overlay task.
+
+## Backlog review
+Read-only inspection after the overlay commit found the project worktree clean.
+The backlog was reduced to the deliberately deferred README synchronization and
+an explicit candidate for installed Org-TeXmacs frontend/autoload regression
+coverage. Completed input/library/overlay work is retired from pending tasks.
+The ignored TODO.md is absent; scoped definition searches found no my/ names,
+and non-emarccs forms only declare external Emacs/package variables. Therefore
+the old naming-before-layout prerequisite has no supported concrete target and
+is retired, without asserting an exhaustive namespace audit. Intentional
+emarccs--org-roam-blog naming remains a constraint. Only GAW memory was edited;
+no project source/docs, tests, builds, index or history were changed.
 
 ## Completed implementation: overlay equivalence checks
 The owner authorized adding overlay regression checks using the existing

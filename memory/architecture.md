@@ -23,7 +23,8 @@ recipes use MELPA defaults; org-texmacs also includes its Scheme worker. The
 original trivialBuild gap and later narrowing-glob omission explain earlier
 missing interactive frontend commands; see current.md for evidence and limits.
 This section supersedes older builder/layout statements in the historical
-migration phases below. README is still deliberately deferred.
+migration phases below. README has now been synchronized with this architecture
+and committed; see current.md for documentation scope and static checks.
 
 ## Committed Nixpkgs migration
 The committed 2026-10-22 migration supersedes the earlier Twist architecture

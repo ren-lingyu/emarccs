@@ -1,31 +1,35 @@
 # Backlog
 
-## Resolve the remaining naming task before any further layout change
+## Candidate regression coverage: custom-package command autoloads
 
-`TODO.md` (Git-ignored, therefore worktree-only) still targets `my/`-prefixed
-and other non-namespaced globals. Its target names were mechanically rewritten
-to the `emarccs-*` namespace, and its stale `emarccs-blog-publish` section was
-retargeted to `emarccs-org-roam-blog`, which is the module that actually exists.
-That retargeting is a naming decision recorded here, not a verified rename plan.
+The earlier Org-TeXmacs issue established two distinct failure modes: trivialBuild
+installed sources without ELPA descriptors/autoloads, and a narrowed files recipe
+omitted ox-texmacs.el even after activation worked. The committed migration uses
+melpaBuild with explicit MELPA defaults and includes the Scheme worker.
+Existing startup-smoke tests Citar/Consult/Org activation and library availability
+checks locate dependencies; no maintained test directly verifies the three
+Org-TeXmacs frontend commands are autoloaded from the installed package.
+Consider a bounded batch regression check of frontend library presence and
+command/autoload availability without eager require of ox-texmacs or invoking
+TeXmacs/export. This is a coverage candidate, not a currently reproduced failure
+or authorization to implement/run it. Preserve the earlier probe's validation
+limits recorded in current.md.
 
-Deferred alongside it: the symbols under `emarccs--org-roam-blog-*` read as
-private to `emarccs` while their feature is `emarccs-org-roam-blog`. The owner
-decided not to touch them, because the observed double hyphen marks two
-different privacy scopes and flattening it would change meaning. Do not treat
-that as an oversight and do not fix it without a new decision.
+## Naming constraints and retired pending work
 
-## Remaining migration follow-up
+The former naming task depended on a Git-ignored TODO.md that is no longer
+present. Current scoped source review found no my/ definitions; the remaining
+non-emarccs definition forms are declarations of external package/Emacs variables.
+There is no supported concrete rename list to resume, and no naming prerequisite
+blocking future layout work. Re-establish a specific target before new renaming.
 
-The Nixpkgs emacsPackagesFor/withPackages migration is committed and its
-reconnected tests pass on x86_64-linux; see current.md and the committed
-migration section in architecture.md. The older description of this work as
-unstarted is superseded. README remains deliberately unchanged. The owner has
-now committed the removal of unused inputs and their nix-to-lisp interface glue;
-this cleanup has static review but no new build/check validation yet. Library extraction is now committed: the shared implementation is supplied by
-personal-nixpkgs and local lib/packages.nix is removed. External exports and extracted implementation equivalence have been checked
-against the locked revision using ~/nixpkgs; Nix integration is now exercised by the standalone overlay evaluation/build
-checks; no new full-suite run is implied. Generic shared-library logic may have
-no local callers; evaluate it as a cross-repository library; ~/nixos/pkgs/lib/ is an owner-provided comparison reference. Its
-packages.nix matched the Emarccs copy in a read-only comparison before later
-discovery/interface changes; do not assume the copies remain synchronized.
-These follow-ups are not permission to edit them.
+The owner deliberately preserves emarccs--org-roam-blog-* despite the feature
+being emarccs-org-roam-blog: the double hyphens express distinct privacy scopes.
+This is a design constraint, not an outstanding defect.
+
+Inputs cleanup, cross-repository library extraction, standalone overlay repair,
+its equivalence checks and README synchronization are committed; they are no
+longer backlog items.
+The shared library may intentionally contain logic unused by Emarccs. The older
+~/nixos/pkgs/lib/ comparison was historical; the current shared-library input
+comes from personal-nixpkgs. Do not assume the reference copies stay synchronized.

@@ -2,11 +2,11 @@
 #+AUTHOR: aRenCoco
 
 * 项目介绍
-这是本人自用的 Emacs 配置. =flake.nix= 通过 =twist.nix= 提供第三方包并构建配置好的 Emacs wrapper.
+这是本人自用的 Emacs 配置. =flake.nix= 通过 Nixpkgs 的 Emacs package scope 打包配置和第三方依赖, 并构建配置好的 Emacs wrapper.
 
-配置主体位于 =lisp/=, 按多文件 Elisp package 组织, 主入口是 =emarccs.el=. wrapper 将源码目录加入 =load-path= 后加载该入口.
+配置主体位于 =pkgs/emacsPackages/emarccs/lisp/=, 按多文件 Elisp package 组织, 主入口是 =emarccs.el=. 配置包由 =melpaBuild= 构建, 通过 ELPA 描述文件和 autoloads 接入 package activation; wrapper 负责启动调度.
 
-最低 Emacs 版本为 *31.1*. Nix wrapper 使用 =pkgs.emacs-pgtk= 和 =pkgs.emacs-gtk=, 提供配置所需的运行依赖.
+最低 Emacs 版本为 *31.1*. 提供基于 =pkgs.emacs=, =pkgs.emacs-pgtk= 和 =pkgs.emacs-gtk= 的三个 wrapper.
 
 * 项目结构
 #+begin_src text
@@ -15,26 +15,31 @@
 ├── flake.lock
 ├── lib/
 │   └── default.nix
-├── lisp/
-│   ├── emarccs.el
-│   ├── emarccs-bootstrap.el
-│   ├── emarccs-early-init.el
-│   ├── emarccs-init.el
-│   └── emarccs-*.el
 ├── pkgs/
 │   ├── default.nix
-│   ├── assert.nix
-│   └── <package>/
-│       ├── melpa-recipe.el
-│       ├── override.nix
-│       └── ...
-├── locks/
-│   └── emacs/
-│       ├── archive.lock
-│       ├── flake.lock
-│       └── flake.nix
+│   ├── emarccs/
+│   │   ├── overlay.nix
+│   │   └── package.nix
+│   ├── emarccs-pgtk/
+│   │   └── overlay.nix
+│   ├── emarccs-gtk/
+│   │   └── overlay.nix
+│   └── emacsPackages/
+│       ├── overlay.nix
+│       ├── emarccs/
+│       │   ├── overlay.nix
+│       │   ├── package.nix
+│       │   └── lisp/
+│       │       ├── emarccs.el
+│       │       ├── emarccs-early-init.el
+│       │       ├── emarccs-init.el
+│       │       └── emarccs-*.el
+│       └── <package>/
+│           ├── overlay.nix
+│           └── ...
 └── tests/
     ├── default.nix
+    ├── overlay-equivalence/
     ├── startup-smoke/
     ├── startup-order/
     ├── package-availability-smoke/
@@ -45,39 +50,40 @@
 
 关键约定:
 
-- =lisp/= 是配置主体的唯一 elisp 来源, 仓库根目录不放 elisp 文件. =pkgs/= 和 =tests/= 另有构建辅助脚本和测试脚本.
-- =lisp/emarccs.el= 是 package 入口和启动调度的唯一注册入口.
-- =lisp/emarccs-init.el= 定义 =emarccs-initialize=, 模块加载顺序应保持稳定.
-- =lisp/emarccs-early-init.el= 定义 =emarccs-initialize-early=, 加载文件不执行早期配置.
-- =lisp/emarccs-bootstrap.el= 只定义启动适配函数, 不注册 advice 或 hook.
-- =pkgs/<package>/melpa-recipe.el= 和 =override.nix= 服务 twist.nix.
-- =lib/default.nix= 提供 variant 输出组装和源码唯一行定位等项目 Nix helper, 以 =llib= 与 Nixpkgs 的 =lib= 区分.
-- =locks/emacs/= 由 twist.nix 维护, 当前 pgtk/gtk 共享同一 Emacs 大版本 lock.
-- =tests/default.nix= 汇总六类检查, 由 flake 分别为 pgtk/gtk wrapper 生成 checks.
+- =pkgs/emacsPackages/emarccs/= 定义 Elisp 配置包, =pkgs/emarccs/= 定义包含配置和依赖的 Emacs wrapper.
+- =emarccs.el= 只加载早期和常规初始化接口, require 本身不执行配置或注册启动调度.
+- =emarccs-early-init.el= 定义 =emarccs-initialize-early=, =emarccs-init.el= 定义 =emarccs-initialize=. 加载这两个文件不执行初始化.
+- wrapper 的启动调度由 =pkgs/emarccs/package.nix= 生成, 各功能模块管理其内部的 hooks/advice.
+- =lib/default.nix= 保留本仓库的 Nix helper 扩展入口. 通用 helper 来自 =personal-nixpkgs= input, 合并后以 =llib= 与 Nixpkgs 的 =lib= 区分.
+- =tests/default.nix= 接收 =pkgs=, =packages=, =lib= 和 =overlay=, 为每个 wrapper 生成 =<package>-<test>= checks.
 
 * 启动注入
-配置不是由 Emacs 原生的 =init.el= / =early-init.el= 文件名加载的. wrapper 生成的 =site-start.el= 会:
+配置通过 wrapper 的 =site-start.el= 接入启动流程. =init-file-user= 非 nil 时, wrapper 依次:
 
-1. 把 =lisp/= 加入 =load-path=.
-2. require =emarccs=.
+1. 调用 =package-activate-all=, 激活安装的 Elisp packages 及其 autoloads.
+2. require =emarccs=, 加载初始化函数定义.
+3. 调用 =emarccs-initialize-early=, 在用户 =early-init.el= 前应用早期配置.
+4. 将 =emarccs-initialize= 注册到 =before-init-hook=, 在用户 =init.el= 前执行常规配置.
 
-=emarccs.el= 加载三个初始化接口模块, 并在 =startup--load-user-init-file= 上注册名为 =emarccs-startup= 的 =:before= advice. 重复加载入口不会叠加该 advice, 也不会提前执行配置. 可以通过 =advice-member-p= 查询、通过 =advice-remove= 按名称移除.
+用户的原生 init 文件仍由 Emacs 加载. =init-file-user= 为 nil 时, 如 =-q= / =--no-init-file= 或 batch 启动, wrapper 跳过上述 Emarccs 启动调度.
 
-适配函数在 early-init 阶段调用 =emarccs-initialize-early=, 在 init 阶段调用 =emarccs-initialize=; 然后由原生实现加载真实用户对应的 init 文件. =:before= advice 不接管原函数的参数和返回值. =init-file-user= 为 nil 时 (=-q=, =--no-init-file=) 会跳过本配置.
+初始化成功后不重复执行, 保留用户后续覆盖. 常规初始化加载 =use-package= 并设置 =use-package-always-ensure= 为 nil, 按固定顺序加载内部模块, 最后设置 =custom-file= 并加载用户 Emacs 目录中可选的 =custom.el=. 重入时跳过, 失败时不置完成标记.
 
-初始化成功后不重复执行, 保留用户后续覆盖. 常规初始化按固定顺序加载模块, 最后设置并加载可选的用户 =custom.el=; 重入时跳过, 失败时不置完成标记. 各功能模块管理其内部的 hooks/advice.
-
-* Nix / twist 入口
-=flake.nix= 使用 =flake-parts= 和 =twist.nix= 构建 configured Emacs wrapper. 当前主要输出:
+* Nix 入口
+=flake.nix= 使用 =flake-parts= 组织输出. 当前主要输出:
 
 #+begin_src text
-packages.<system>.emacs-pgtk-twist
-packages.<system>.emacs-gtk-twist
+packages.<system>.emarccs
+packages.<system>.emarccs-pgtk
+packages.<system>.emarccs-gtk
 
-apps.<system>.emacs-pgtk-twist-lock
-apps.<system>.emacs-pgtk-twist-update
-apps.<system>.emacs-gtk-twist-lock
-apps.<system>.emacs-gtk-twist-update
+legacyPackages.<system>.emarccs
+legacyPackages.<system>.emarccs-pgtk
+legacyPackages.<system>.emarccs-gtk
+legacyPackages.<system>.emacsPackages.<package>
+
+checks.<system>.<package>-<test>
+checks.<system>.treefmt
 
 overlays.default
 formatter.<system>
@@ -86,65 +92,65 @@ formatter.<system>
 常用命令:
 
 #+begin_src sh
+nix build .#emarccs-pgtk -L --show-trace
+nix run .#emarccs-pgtk
 nix flake check -L --show-trace
-nix build .#emacs-pgtk-twist -L --show-trace
-nix run .#emacs-pgtk-twist-lock --impure
-nix run .#emacs-pgtk-twist-update --impure
+nix build .#legacyPackages.x86_64-linux.emacsPackages.org-texmacs
+nix build .#checks.x86_64-linux.emarccs-pgtk-overlay-equivalence
+nix fmt
 #+end_src
 
-Nix wrapper 的策略:
+三个 wrapper 共用 =pkgs/emarccs/package.nix= 的构造逻辑, 使用 =emacsPackagesFor= / =withPackages= 加入配置包和 GNU coreutils. GTK/PGTK 变体通过 =override= 选择对应的基础 Emacs. 配置依赖从该 Emacs 对应的 package scope 解析.
 
-- =initFiles= 为空, =initParser= 返回空 package set; =extraPackages= 使用 =pkgs/default.nix= 的显式包列表.
-- =config.context= 用 flake-parts options/submodules 组织 package set、Emacs variant 和 lock 路径, packages/apps/checks 共用这些配置. =overlays.default= 在 build/host platform 相同时暴露 wrapper packages.
-- =extraSiteStartElisp= 仅把 =lisp/= 加入 =load-path= 并 require =emarccs=, 具体初始化调度由 package 入口管理.
-- 本配置在真实用户 init 前加载; =--no-init-file= 仍保留 Emacs 原生命令行语义.
+=overlays.default= 直接导出 =pkgs/default.nix= 组合的 overlay, 包含本地 Elisp package 定义、覆盖及三个 wrapper. flake 自身导入 Nixpkgs 时也使用同一 overlay, =packages= 直接继承其中的 wrapper. 在其他 flake 中将本仓库作为 =emarccs= input 后, 可以这样使用:
 
-当前 =checks= 依赖实际 wrapper 和 package/grammar 构建产物, 所以第一次 =nix flake check= 可能较重. =nix fmt= 使用 treefmt/nixfmt 格式化 Nix 文件, 对应的格式检查也纳入 flake checks.
+#+begin_src nix
+pkgs = import inputs.nixpkgs {
+  inherit system;
+  overlays = [ inputs.emarccs.overlays.default ];
+};
+#+end_src
+
+=personal-nixpkgs= 提供通用的 package/overlay 发现等 helper, 其 =nixpkgs=, =flake-parts= 和 =treefmt-nix= 依赖 follows 本仓库对应输入. =llib= 使用 =mergeAttrsRecursive { allowOverrides = false; }= 合并共享库和本地扩展, 重叠的叶节点定义会报错.
 
 * Package 定义
-=pkgs/default.nix= 自动发现:
+=pkgs/default.nix= 通过共享库递归发现 =overlay.nix=, 组合本地覆盖. =pkgs/emacsPackages/overlay.nix= 通过 =emacsPackagesFor= 的 =overrideScope= 将后代 overlay 应用到对应 Emacs 的 package scope.
 
-- =pkgs/<package>/melpa-recipe.el=
-- =pkgs/<package>/override.nix=
+- 独立构建的包保留 =package.nix=, 由同目录的 =overlay.nix= 使用 =callPackage= 接入.
+- 仅覆盖已有包的目录可只保留 =overlay.nix=. 例如 =consult=, =ripgrep= 和 =treesit-auto= 直接调用原包的 =overrideAttrs=.
+- =legacyPackages= 按 overlay 文件和包集合中的 derivation 属性导出本地定义或覆盖的包, 不要求存在 =package.nix=.
+- =pkgs/emacsPackages/emarccs/package.nix= 显式声明配置所需的 =packageRequires=. 本地配置和自定义 Elisp packages 使用 =melpaBuild=, 显式指定 =files= 和 =melpaVersion=, 生成 ELPA 描述文件及 autoloads.
+- 文件选择通常使用 =(:defaults)=. 额外运行资源要写入 recipe, 例如 =org-texmacs-worker.scm=; 只按主包名前缀选择文件可能漏掉其他入口库.
 
-并显式维护 twist 使用的 package list. 本地 MELPA recipe 在仓库中保留 =melpa-recipe.el= 后缀, 由 =runCommand + cp= 生成以包名命名的 regular recipe 文件供 twist 读取.
+主要包适配和运行依赖:
 
-=pkgs/assert.nix= 在 package 配置求值时检查目录约定: 每个 package 目录至少有 =melpa-recipe.el= 或 =override.nix=, 有 recipe 的包必须出现在显式 package list 中. override-only 的内置包目录也有效.
+- =org=: 使用官方 =bzg/org-mode= 源码, 构建 autoloads 时显式指定 Org/Git 版本.
+- =org-include-inline= 和 =org-workbench=: 在本地包定义中应用源码补丁.
+- =consult=: 通过 =propagatedUserEnvPkgs= 提供 GNU grep 和系统 ripgrep.
+- =ripgrep=: Elisp 包传播系统 ripgrep. 系统程序从外层 Nixpkgs 取值, 避免与同名 Elisp package 混淆.
+- =treesit-auto=: 传播对应 scope 的 =with-all-grammars=, 并补充 grammar 库名及初始化符号映射.
+- =org-texmacs=: 将 TeXmacs 程序路径写入配置默认值, 并把 Scheme worker 与 Lisp 文件一起打包.
+- Dired 所需的 GNU coreutils 直接加入 wrapper 的 =withPackages= 列表.
 
-当前 override 接口:
-
-- =input=: 作用于 twist package data, 适合补 metadata, =packageRequires=, =preBuild= 等.
-- =scope.overrideAttrs=: 调整 =elispPackages= 中对应包的 derivation, 例如 =nativeBuildInputs=、patch 和 Info 文档构建.
-- =scope.executablePackages=: 声明该包需要的运行工具, 由 =pkgs/default.nix= 与继承的工具列表合并并用 =lib.unique= 去重. 各包可以独立声明相同工具.
-
-重要 override:
-
-- =org=: 使用 tecosaur fork, 构建前生成 =org-version.el=.
-- =auctex=: 通过 =scope.overrideAttrs= 注入 TeX/Perl/Git 构建依赖, 显式构建并安装 =auctex.info= 和 =preview-latex.info=.
-- =citar=: 修正 generated autoload 缺少 =cl-lib= 的问题.
-- =company-auctex=: 构建期设置可写 =HOME=.
-- =company=: 修正源码中的 Texinfo example 排布.
-- =laas=: 补充缺失依赖 =math-symbol-lists=.
-- =pdf-tools=: 构建原生 =epdfinfo= 并向包暴露该程序.
-- =treesit-auto=: 注入 Nix 提供的 =with-all-grammars= 库路径及必要的 language/symbol 映射.
-- =dired=、=consult=、=ripgrep=、=org-texmacs=: 分别贡献 coreutils、搜索工具和启用字体支持的 TeXmacs 等运行工具.
+传播的程序和 grammar 库由 Nixpkgs wrapper 接入运行时查找路径.
 
 * 检查
-当前仓库为 pgtk/gtk 分别提供六类 flake checks:
+=tests/default.nix= 为默认、PGTK 和 GTK wrapper 分别提供七类 flake checks. 各项检查通过 =callPackage= 获取工具依赖, 显式接收对应的配置包或 grammar 包; 源码检查使用配置包的 =src=, 运行时检查使用安装产物.
 
-- =startup-smoke=: 检查 wrapper 的路径和 package 入口注入, 以及 package 已加载、具名 advice 已注册、初始化接口存在且 batch 启动未执行配置.
-- =startup-order=: 用有界 batch ERT 和替身验证接口加载无配置副作用、具名注册不叠加、两阶段顺序、参数/返回值、禁用用户 init、初始化重入/重复调用和失败后重试. 不启动交互式 Emacs 或加载完整功能配置; 执行限时 20 秒, 再给 3 秒强制终止宽限.
-- =package-availability-smoke=: 用 =locate-library= 检查显式声明包可被 Emacs 找到, 不验证包的完整运行行为.
-- =elisp-byte-compile=: 独立字节编译 =lisp/= 的配置文件, 不执行整套配置.
-- =package-lint=: 检查全部 =lisp/*.el=, 以 =emarccs.el= 为主文件. 经明确约定, 仅豁免功能配置中的保留键位和 =with-eval-after-load= 两类诊断并逐项输出; 其他诊断均失败, 四个入口/初始化接口文件无此豁免. 使用独立 lint 工具, 不将其加入配置的第三方 package 集合.
-- =treesit-grammars-runtime=: 枚举产物中的 grammar 库, 检查 Emacs 可找到语言并创建 parser, 不验证真实源码解析、major mode、font-lock 或缩进.
+- =overlay-equivalence=: 从同一份 Nixpkgs 独立导入只应用传入 overlay 的包集合, 比较它与 flake package 的 =drvPath=. 缺少导出、求值失败或 derivation 不一致都会失败; 通过后仅生成空检查产物, 不重复构建 wrapper.
+- =startup-smoke=: 验证禁用用户初始化时配置不执行、require 入口保持惰性、配置库来自指定安装产物, 并在空的外部 =PATH= 下检查 =grep=, =rg= 和 =ls=. 随后执行实际 wrapper 启动表达式, 保留真实 package activation, 仅替换配置初始化函数, 检查激活结果和调度.
+- =startup-order=: 用有界 batch ERT 和替身验证接口加载无配置副作用、hook 注册不叠加、用户 init 前的执行顺序、禁用用户 init、初始化重入/重复调用及失败后重试. 不启动交互式 Emacs; 执行限时 20 秒, 再给 3 秒强制终止宽限.
+- =package-availability-smoke=: 根据配置包的 =packageRequires= 用 =locate-library= 检查依赖可被 Emacs 找到, 不验证包的完整运行行为.
+- =elisp-byte-compile=: 独立字节编译配置包的 Elisp 源码, 不执行整套配置; 现有编译警告不作为失败条件.
+- =package-lint=: 检查全部配置源码, 以 =emarccs.el= 为主文件. 仅豁免功能配置中的保留键位和 =with-eval-after-load= 两类诊断并逐项输出; 其他诊断均失败, 三个入口/初始化接口文件无此豁免. lint 工具不加入配置的运行依赖.
+- =treesit-grammars-runtime=: 枚举指定产物中的 grammar 库, 检查 Emacs 的实际查找路径可找到语言并创建 parser, 不向查找路径补目录; 不验证真实源码解析、major mode、font-lock 或缩进.
 
-另有 =treefmt= 检查 Nix 文件格式.
+另有 =treefmt= 检查 Nix 文件格式. 首次全量检查可能需要构建 wrapper、依赖和 grammar 产物.
 
 * 维护注意事项
 - =.gitignore= 使用倒置白名单模式. 新增可追踪文件时, 需要同时确认对应 =!pattern= 已放行.
-- 修改 =lisp/emarccs-init.el= 的模块顺序时要谨慎, 当前顺序是配置初始化语义的一部分.
-- =lisp/= 定义配置和启动调度, wrapper 负责提供源码路径和运行依赖.
+- 修改 =pkgs/emacsPackages/emarccs/lisp/emarccs-init.el= 的模块顺序时要谨慎, 当前顺序是配置初始化语义的一部分.
+- 新增或调整 Elisp 包时, 同时核对 =packageRequires=, MELPA recipe 的文件选择、ELPA metadata/autoloads 和所需运行资源.
 
 * 许可证
 本项目采用 MIT 许可证, 见 [[file:LICENSE][LICENSE]].

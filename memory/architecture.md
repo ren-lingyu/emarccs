@@ -1,5 +1,23 @@
 # Emarccs architecture
 
+## Working-tree transition notice
+The staged 2026-10-22 migration supersedes the committed Twist architecture
+below: Nixpkgs emacsPackagesFor/withPackages now consumes a local emarccs
+trivialBuild package at pkgs/emacsPackages/emarccs, with local dependency
+overlays. The wrapper's injected site-start owns early initialization and a
+before-init-hook registration; emarccs.el only requires interface definitions.
+Old bootstrap/advice scheduling, root lisp/, Twist runtime integration and
+lock/update apps are removed in the working tree; inputs remain. Tests have
+now been adapted and reconnected for all three Emacs outputs through explicit
+configurationPackage/grammarPackage parameters. Sources come from the package's
+src; runtime/ERT use installed libraries and actual generated site-start forms.
+The new 19-check flake run passed on x86_64-linux, including seven ERT cases per
+variant, 17-library lint, 75 dependency availability and 334 grammar parsers.
+See current.md for evidence, preserved lint exemptions and verification limits.
+The migration and test edits are still uncommitted. The remaining sections
+are the previously committed Twist baseline, retained as historical context;
+where they conflict, this notice and current.md describe the working tree.
+
 ## Purpose and initialization
 Personal configuration targeting Emacs 31.1+, organized as an Elisp source
 package under the existing flat lisp/ directory. Source normalization does

@@ -5,7 +5,110 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
-## Current step: Elisp source-package normalization
+## Completed work: tests reconnected to the Nixpkgs package architecture
+The owner requested adapting and reconnecting the existing tests. Project edits
+are limited to flake.nix and tests/; no source-package behavior, dependencies,
+inputs, index or README changes are part of this task. The new checks take an
+explicit configurationPackage and, where needed, grammarPackage. They cover all
+three configured Emacs outputs. Startup ERT reads the generated wrapper's real
+Emarccs scheduling form and uses bounded batch substitutes, replacing old
+bootstrap/advice contracts. Runtime smoke verifies installed-package resolution
+and disabled-user-init behavior. Compilation/lint use configurationPackage.src;
+availability follows packageRequires; grammar enumeration uses the supplied
+output without adding it to treesit-extra-load-path.
+
+Agent-run validation on x86_64-linux passed: timeout 120s nix flake check
+--no-write-lock-file --keep-going -L. All 19 exposed checks (six families for
+emarccs/emarccs-pgtk/emarccs-gtk plus treefmt) were evaluated and satisfied;
+the final run reused previously built checks and rebuilt the changed treefmt
+source check. Startup-order passed seven bounded batch ERT tests per variant.
+Runtime smoke verified that batch/-q leaves configuration uninitialized, then
+explicit require resolves the provided installed package and stays lazy.
+Lint checks all 17 source libraries: 15 approved personal-configuration
+exemptions and zero other diagnostics. Availability checks 75 declared direct
+dependencies, mapping the AUCTeX attribute to the tex-site library. Grammar
+runtime checks find and create parsers for all 334 supplied grammar libraries;
+the Nixpkgs wrapper's actual propagated lookup works without test-added paths.
+Compilation/lint/ERT run against the correct per-Emacs variant package.
+
+The first compile-test run failed because dependency autoload expansion needed
+cl-defsubst; the compiler harness now explicitly requires cl-lib before loading
+autoloads. The first ERT run used a slash in a basename-matching recursive
+search regex and failed to find the installed library; corrected before all
+seven tests passed for all three variants. No package/configuration behavior
+was changed to fix either test harness issue. Byte compilation still allows
+existing warnings; this is not a warning-free or full interactive acceptance
+claim. Other platforms, external executable workflows and full initialization
+were not tested. No index changes were made: the owner's migration remains
+staged, with the agent's flake/tests changes unstaged on top.
+
+No new archive was warranted: these are maintained project test sources, not
+an independent disposable experiment. Current memory distills the method and
+results; routine logs in tmp/ are not required for recovery. The old standalone
+experiment archive stays unchanged. Next action is owner review/commit of the
+migration plus tests. README and entry Commentary still describe parts of the
+old architecture and were outside the authorized test-edit scope.
+
+The following worktree inspection describes the starting state, before these
+test edits. Its disconnected-test statements are historical; validation above
+covers the new migrated working tree, not an exact committed project snapshot.
+
+## Migration starting state: Nixpkgs architecture before test reconnection
+Read-only inspection on 2026-10-22 found a substantial staged, uncommitted
+migration after the committed project-library specialArgs change. This section
+supersedes the older architecture/current-state descriptions below for the
+working tree; earlier passing runs remain evidence only for their old scopes.
+The owner asked for inspection, not implementation or new test execution.
+
+- Root flake retains Twist and registry inputs but no longer uses Twist makeEnv,
+  registries, lock/update apps or the former context interface. It now installs
+  the local overlay into per-system pkgs and builds emarccs, emarccs-pgtk and
+  emarccs-gtk via emacsPackagesFor/withPackages with only emarccs as an explicit
+  seed. The root description still mentions Twist.
+- lib/packages.nix discovers overlay/package namespaces; pkgs/default.nix
+  exposes a combined overlay and selected legacyPackages. The emacsPackages
+  overlay extends emacsPackagesFor through overrideScope, preserving variant
+  package scope. The old recipe/override assertion framework is removed.
+- Configuration moved from root lisp/ to pkgs/emacsPackages/emarccs/lisp/.
+  Its trivialBuild derivation declares third-party packageRequires from explicit
+  function arguments. Most Lisp modules were renamed without content changes;
+  the bootstrap module is deleted and emarccs.el no longer registers advice.
+- Startup is now injected into the Nixpkgs wrapper dependency derivation's
+  site-start through a guarded buildCommand replacement. Under init-file-user,
+  it activates packages, requires emarccs, calls emarccs-initialize-early, then
+  registers emarccs-initialize on before-init-hook. Startup scheduling is thus
+  owned by the wrapper, not require of the entry. Entry Commentary still
+  describes the old registration contract.
+- Local Org and the six previously missing packages now have package.nix and
+  overlay.nix definitions. Org fetches official upstream and generates 10.0-pre
+  metadata during build. org-texmacs gets an absolute TeXmacs executable path.
+  The former global runtime executable aggregation is absent. The owner then
+  restored a treesit-auto overlay: propagatedUserEnvPkgs includes the matching
+  package scope's treesit-grammars.with-all-grammars, and a static patch restores
+  five grammar library/init-symbol aliases. This has only been source-inspected,
+  not evaluated or built. package.nix and overlay.nix also have unstaged edits.
+  The old grammar test still searches for an emacs-treesit-grammars-named /lib
+  path, whereas the new supply relies on Nixpkgs wrapper propagation; do not
+  assume the actual runtime path retains the old naming/layout.
+- The six old test families remain on disk unchanged, but the root tests import
+  is commented out. Treefmt's own flakeCheck setting remains enabled; a future
+  root flake check must not be mistaken for full restored test coverage.
+- Reconnection requires explicit configuration-package parameters through
+  tests/default.nix (owner requirement), not ../../lisp. Startup-order's old
+  bootstrap/advice tests and smoke's named-advice and batch-loaded-entry claims
+  conflict with the new startup contract. Lint main-file layout and source
+  selection need adapting. Byte compilation is now part of package building,
+  with warnings allowed for Emarccs; an independent compile check has a distinct
+  purpose if retained. Availability tests should follow declared package
+  dependencies. Grammar supply has been restored in source, but its runtime
+  propagation and the grammar test's path-discovery assumptions remain to be
+  verified; the test is still disconnected.
+- README still describes root lisp/, Twist outputs and old startup scheduling.
+  No documentation or project-source edits, builds, evaluations or tests were
+  performed by the agent during this inspection. No current build success is
+  established by the earlier owner-run checks or isolated experiment.
+
+## Completed step: Elisp source-package normalization
 The owner supplied detailed implementation guidance after accepting the
 committed pure-emacs entry/mechanism removal and Lisp flattening. The baseline
 also contains subsequent README/.gitignore presentation-only commits.

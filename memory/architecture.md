@@ -9,8 +9,13 @@ before-init-hook registration; emarccs.el only requires interface definitions.
 Old bootstrap/advice scheduling, root lisp/, Twist runtime integration and
 lock/update apps are removed in the working tree; inputs remain. Tests have
 now been adapted and reconnected for all three Emacs outputs through explicit
-configurationPackage/grammarPackage parameters. Sources come from the package's
-src; runtime/ERT use installed libraries and actual generated site-start forms.
+configurationPackage/grammarPackage parameters. flake.nix passes only
+{ pkgs, packages = config.packages, lib } to tests/, which owns check naming
+and per-test callPackage injection. Variant-specific package references come
+from each wrapper.emacs.pkgs, reusing Nixpkgs' existing scope exposure without
+custom passthru or a duplicate variant map. Individual tests declare tools
+instead of accepting the whole pkgs. Sources come from the package's src;
+runtime/ERT use installed libraries and actual generated site-start forms.
 The new 19-check flake run passed on x86_64-linux, including seven ERT cases per
 variant, 17-library lint, 75 dependency availability and 334 grammar parsers.
 See current.md for evidence, preserved lint exemptions and verification limits.

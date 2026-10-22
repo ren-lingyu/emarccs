@@ -49,6 +49,34 @@ experiment archive stays unchanged. Next action is owner review/commit of the
 migration plus tests. README and entry Commentary still describe parts of the
 old architecture and were outside the authorized test-edit scope.
 
+## Checks generation interface
+The owner adopted and authorized a further tests/ refactor. perSystem now
+returns an ordinary attribute set: packages uses mapAttrs on the inline three
+base Emacs entries, and checks imports tests/ with { pkgs, packages, lib },
+where packages = config.packages. No mergeAttrsList/zipAttrsWith wrapper,
+intermediate Emacs variant set, name-to-variant table or custom passthru is
+needed. tests/default.nix owns concatMapAttrs enumeration and name prefixes,
+then invokes all six test derivations through pkgs.callPackage. Individual
+tests declare runCommand, coreutils, lib and, for lint, emacsPackages rather
+than receiving the complete pkgs. Wrapper/configuration/grammar arguments
+remain explicit project-specific parameters to individual tests.
+
+The locked Nixpkgs wrapper exposes wrapper.emacs and explicitRequires as
+ordinary derivation attributes. Its scope-specific base Emacs has passthru.pkgs
+pointing to the overridden package scope (see Nixpkgs wrapper.nix and
+pkgs/top-level/emacs-packages.nix). tests/ obtains configurationPackage and
+grammarPackage from wrapper.emacs.pkgs, preserving the actual variant and
+local overlays. Offline evaluation of all three wrappers confirmed that this
+configuration package is one of the wrapper's explicitRequires.
+
+Before/after offline evaluation of this final refactor showed identical
+names and drvPaths for all three packages and all 18 test derivations.
+The final timeout 120s nix flake check --no-write-lock-file --keep-going -L
+passed on x86_64-linux; test outputs were reused unchanged and treefmt rebuilt
+successfully. No project staging, lock update, dependency change or Elisp test
+behavior change occurred in this generation/interface refactor. Earlier
+expression-only mapping proposals are superseded by this implemented interface.
+
 The following worktree inspection describes the starting state, before these
 test edits. Its disconnected-test statements are historical; validation above
 covers the new migrated working tree, not an exact committed project snapshot.

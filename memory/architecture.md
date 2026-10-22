@@ -19,6 +19,15 @@ runtime/ERT use installed libraries and actual generated site-start forms.
 The new 19-check flake run passed on x86_64-linux, including seven ERT cases per
 variant, 17-library lint, 75 dependency availability and 334 grammar parsers.
 See current.md for evidence, preserved lint exemptions and verification limits.
+Runtime program supply follows ownership: Consult's local override propagates
+GNU grep and ripgrep, and the ripgrep Elisp override propagates system ripgrep.
+Their overlays explicitly pass outer pkgs.ripgrep as rg; Emacs scope lookup
+must not accidentally choose the Elisp package. Built-in Dired has no separate
+package derivation; flake withPackages includes pkgs.coreutils alongside
+emarccs. Nixpkgs' wrapper supports ordinary derivations and links their bin/
+into its runtime executable directory. Startup smoke now verifies this with a
+clean incoming PATH, plus real package activation without preloading cl-lib.
+The removed old Citar patch did not reproduce a real-activation failure.
 The migration and test edits are still uncommitted. The remaining sections
 are the previously committed Twist baseline, retained as historical context;
 where they conflict, this notice and current.md describe the working tree.

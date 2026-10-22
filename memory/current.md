@@ -46,8 +46,9 @@ No new archive was warranted: these are maintained project test sources, not
 an independent disposable experiment. Current memory distills the method and
 results; routine logs in tmp/ are not required for recovery. The old standalone
 experiment archive stays unchanged. Next action is owner review/commit of the
-migration plus tests. README and entry Commentary still describe parts of the
-old architecture and were outside the authorized test-edit scope.
+migration plus tests. README still describes parts of the old architecture and
+remains outside scope.
+Entry Commentary was subsequently corrected in the cleanup below.
 
 ## Checks generation interface
 The owner adopted and authorized a further tests/ refactor. perSystem now
@@ -76,6 +77,54 @@ passed on x86_64-linux; test outputs were reused unchanged and treefmt rebuilt
 successfully. No project staging, lock update, dependency change or Elisp test
 behavior change occurred in this generation/interface refactor. Earlier
 expression-only mapping proposals are superseded by this implemented interface.
+
+## Completed migration cleanup
+The owner authorized restoring runtime executable supply, checking real package
+activation, removing the obsolete Scheme byte-compile builder, and correcting
+flake/entry descriptions. Inputs and README stay unchanged. Unused library
+bindings/helpers stay for now; the owner already cleaned treefmt exclusions.
+The owner prefers consumer-local overrides: Consult propagates system GNU grep
+and ripgrep; the ripgrep Elisp package propagates system ripgrep. New overlay
+files explicitly pass pkgs.ripgrep as rg to avoid the same-named Elisp package.
+The Emacs scope does not expose pkgs directly; its callPackage can retrieve the
+outer system pkgs binding. Dired has no separate package derivation here.
+The owner suggested adding coreutils directly through flake withPackages;
+source inspection confirms the wrapper accepts ordinary derivations and links
+bin directories into its runtime PATH. This is now the chosen coreutils supply.
+No central system-tool list remains on the emarccs derivation.
+
+A batch probe against the pre-cleanup pgtk wrapper executed the actual
+startup form with real package-activate-all, replacing only personal config
+initializers. cl-lib was absent before activation and present afterward; no
+warnings/errors occurred and both initializer substitutes ran. The removed old
+Citar patch is therefore not a reproduced runtime bug. The independent compiler
+still needs its explicit cl-lib preload when manually loading autoload files.
+Startup-smoke now tests real activation and explicit executable resolution under
+an empty incoming PATH. It verifies Citar/Consult/Org are activated, captures
+activation error diagnostics and observes both initialization substitutes.
+No ERT/cl-lib preload, package-activation substitute or interactive startup is
+used by this smoke test. Existing startup-order ERT retains deterministic
+substitutes for its ordering cases.
+
+Agent validation passed on x86_64-linux: timeout 120s nix flake check
+--no-write-lock-file --keep-going -L against an explicit path: source snapshot.
+All 19 checks passed, including all three updated startup-smoke derivations,
+seven startup-order ERT cases per variant, compilation, lint with existing
+approved personal-configuration exemptions, availability, grammars and treefmt.
+The snapshot copied current tracked files plus the four new Consult/ripgrep
+Nix files, excluding the deleted builder; comparison after the checks found only
+one removed blank line in Consult package.nix; all other files matched exactly.
+This avoids staging those new files
+just to make the Git flake include them. Build warnings remain accepted as in
+the previous run; this is not a full personal configuration startup acceptance.
+
+The obsolete Scheme builder was deleted and flake/entry descriptions corrected.
+Inputs, lock, README, private library helpers and project index were unchanged
+by this cleanup. New consumer overlay files remain untracked; project staging
+is left to the owner. No exact committed project state represents these tests,
+so this checkpoint needs no new project parent. Maintained tests and distilled
+memory suffice; no additional raw-evidence archive is warranted. Next action:
+owner review and staging of the cleanup including the four new Nix files.
 
 The following worktree inspection describes the starting state, before these
 test edits. Its disconnected-test statements are historical; validation above

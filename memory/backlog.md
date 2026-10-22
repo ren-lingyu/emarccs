@@ -14,12 +14,11 @@ decided not to touch them, because the observed double hyphen marks two
 different privacy scopes and flattening it would change meaning. Do not treat
 that as an oversight and do not fix it without a new decision.
 
-## Deferred architecture change
+## Remaining migration follow-up
 
-Removing twist.nix in favour of packaging each Emacs package under
-`pkgs/emacsPackages/<name>` and composing Emacs with `withPackages` is a stated
-but unstarted objective. The flattening above deliberately locked the current
-state into the wrapper-injection route: the configuration is loaded by an
-advice, not through Emacs' native `init.el` / `early-init.el` filenames, so
-using the repository directly as `user-emacs-directory` no longer works.
-Reopening that route is a design decision for the future change, not a bug.
+The Nixpkgs emacsPackagesFor/withPackages migration is implemented in the working
+tree and its reconnected tests pass on x86_64-linux; see current.md and the
+working-tree notice in architecture.md. The older description of this work as
+unstarted is superseded. Inputs and README are deliberately retained unchanged
+for now. Removing unused library glue/private helpers also remains deferred by
+the owner. These follow-ups are not permission to edit them.

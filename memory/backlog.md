@@ -1,5 +1,23 @@
 # Backlog
 
+## Non-blocking: normalize emacsPackages.emarccs
+
+The owner requests a future normalization pass over emacsPackages.emarccs
+(pkgs/emacsPackages/emarccs), aiming to minimize byte-compilation warnings and
+handle dependencies carefully. This is non-blocking: it does not gate the
+completed migration, current builds or unrelated work, and it is not a promise
+of zero warnings.
+
+Review actual diagnostics and address their causes in declarations, compile-time
+macro availability and configuration code. Audit direct/indirect, compile-time/
+runtime and optional dependencies; align packageRequires and Elisp loading/
+use-package declarations with actual requirements while preserving intended
+lazy loading and configuration behavior. Record any intentionally remaining
+warnings rather than hiding them with blanket suppression.
+
+This entry records scope and motivation only. No source changes, dependency
+updates, warning-policy changes or build/test runs are authorized by adding it.
+
 ## Candidate regression coverage: custom-package command autoloads
 
 The earlier Org-TeXmacs issue established two distinct failure modes: trivialBuild

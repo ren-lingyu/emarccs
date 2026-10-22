@@ -25,8 +25,12 @@ packaging and standalone overlay". Read-only confirmation found that expected
 README change in HEAD and the ordinary project worktree/index clean. The current
 checkpoint associates this inspected documentation commit; it does not imply
 new test execution. README synchronization is removed from backlog. Its remaining
-coverage item is the candidate custom-package frontend/autoload regression test;
-naming privacy rules remain constraints, not pending renames.
+coverage item is the candidate custom-package frontend/autoload regression test.
+The owner subsequently added a non-blocking future normalization task for
+emacsPackages.emarccs: minimize byte-compilation warnings and carefully audit/
+handle dependencies, without making it a gate for completed or unrelated work.
+See backlog.md for scope; no implementation/testing was requested by this entry.
+Naming privacy rules remain constraints, not pending renames.
 
 ## Current state: standalone overlay fix committed
 The owner committed the seven-file change as "fix(overlays): make the default

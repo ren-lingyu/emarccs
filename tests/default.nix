@@ -2,7 +2,15 @@
   pkgs,
   packages,
   lib,
+  overlay,
 }:
+let
+  overlayPkgs_ = import pkgs.path {
+    inherit (pkgs) config;
+    system = pkgs.stdenv.hostPlatform.system;
+    overlays = [ overlay ];
+  };
+in
 lib.concatMapAttrs (
   name_: emacsPackage:
   let
@@ -15,6 +23,11 @@ lib.concatMapAttrs (
       value = check_;
     })
     {
+      overlay-equivalence = pkgs.callPackage ./overlay-equivalence {
+        inherit emacsPackage;
+        overlayPackage = overlayPkgs_.${name_};
+      };
+
       elisp-byte-compile = pkgs.callPackage ./elisp-byte-compile {
         inherit emacsPackage configurationPackage;
       };

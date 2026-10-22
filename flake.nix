@@ -50,13 +50,12 @@
           ...
         }@toplevel:
         {
-          imports = [
-            inputs.treefmt-nix.flakeModule
-            inputs.flake-parts.flakeModules.easyOverlay
-          ];
+          imports = [ inputs.treefmt-nix.flakeModule ];
 
           config = {
             systems = inputs.nixpkgs.lib.systems.flakeExposed;
+
+            flake.overlays.default = lpkgs.overlays.default;
 
             perSystem =
               {
@@ -74,57 +73,13 @@
 
                 legacyPackages = lpkgs.mkLegacyPackages pkgs;
 
-                packages =
-                  builtins.mapAttrs
-                    (
-                      name_: emacs_:
-                      ((pkgs.emacsPackagesFor emacs_).withPackages (epkgs_: [
-                        epkgs_.emarccs
-                        pkgs.coreutils
-                      ])).overrideAttrs
-                        (old_: {
-                          deps = old_.deps.overrideAttrs (
-                            deps_old_:
-                            let
-                              marker_ = builtins.concatStringsSep "\n" [
-                                "cat >\"$subdirs\" <<EOF"
-                                ";;; -*- lexical-binding: t -*-"
-                                "EOF"
-                              ];
-                              injection_ = builtins.concatStringsSep "\n" [
-                                "cat >> \"$siteStart\" <<'EOF'"
-                                "(when init-file-user"
-                                "  (package-activate-all)"
-                                "  (require 'emarccs)"
-                                "  (emarccs-initialize-early)"
-                                "  (add-hook 'before-init-hook #'emarccs-initialize))"
-                                "EOF"
-                                ""
-                                marker_
-                              ];
-                            in
-                            assert lib.assertMsg (lib.hasInfix marker_ deps_old_.buildCommand)
-                              "Unable to locate the Emacs wrapper site-start insertion point.";
-                            {
-                              buildCommand = builtins.replaceStrings [ marker_ ] [ injection_ ] deps_old_.buildCommand;
-                            }
-                          );
-                        })
-                    )
-                    {
-                      emarccs = pkgs.emacs;
-                      emarccs-pgtk = pkgs.emacs-pgtk;
-                      emarccs-gtk = pkgs.emacs-gtk;
-                    };
+                packages = { inherit (pkgs) emarccs emarccs-pgtk emarccs-gtk; };
 
                 checks = import ./tests {
                   inherit pkgs lib;
                   packages = config.packages;
+                  overlay = toplevel.config.flake.overlays.default;
                 };
-
-                overlayAttrs = lib.optionalAttrs (
-                  pkgs.stdenv.buildPlatform.system == pkgs.stdenv.hostPlatform.system
-                ) config.packages;
 
                 treefmt = {
                   flakeFormatter = true;

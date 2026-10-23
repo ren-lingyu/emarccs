@@ -1,4 +1,4 @@
-final_: prev_: {
+{ }: final_: prev_: {
 
   treesit-auto = prev_.treesit-auto.overrideAttrs (old_: {
 

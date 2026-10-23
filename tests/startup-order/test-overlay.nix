@@ -1,1 +1,1 @@
-final_: prev_: { startup-order = final_.callPackage ./test.nix { }; }
+{ }: final_: prev_: { startup-order = final_.callPackage ./test.nix { }; }

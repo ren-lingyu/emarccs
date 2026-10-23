@@ -1,3 +1,4 @@
+{ }:
 final_: prev_:
 let
   # Resolve system programs outside the Emacs package scope.

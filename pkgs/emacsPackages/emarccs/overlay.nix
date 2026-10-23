@@ -1,4 +1,4 @@
-final: prev: {
+{ }: final: prev: {
 
   emarccs = final.callPackage ./package.nix { };
 

@@ -1,5 +1,1 @@
-{ }: final: prev: {
-
-  org-workbench = final.callPackage ./package.nix { };
-
-}
+{ }: final_: prev_: { org-workbench = final_.callPackage ./package.nix { }; }

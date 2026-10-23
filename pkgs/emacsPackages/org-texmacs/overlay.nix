@@ -1,5 +1,1 @@
-{ }: final: prev: {
-
-  org-texmacs = final.callPackage ./package.nix { };
-
-}
+{ }: final_: prev_: { org-texmacs = final_.callPackage ./package.nix { }; }

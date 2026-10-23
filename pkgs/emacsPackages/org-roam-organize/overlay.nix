@@ -1,5 +1,1 @@
-{ }: final: prev: {
-
-  org-roam-organize = final.callPackage ./package.nix { };
-
-}
+{ }: final_: prev_: { org-roam-organize = final_.callPackage ./package.nix { }; }

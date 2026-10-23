@@ -1,5 +1,1 @@
-{ }: final: prev: {
-
-  org-include-inline = final.callPackage ./package.nix { };
-
-}
+{ }: final_: prev_: { org-include-inline = final_.callPackage ./package.nix { }; }

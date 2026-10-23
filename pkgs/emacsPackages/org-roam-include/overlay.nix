@@ -1,5 +1,1 @@
-{ }: final: prev: {
-
-  org-roam-include = final.callPackage ./package.nix { };
-
-}
+{ }: final_: prev_: { org-roam-include = final_.callPackage ./package.nix { }; }

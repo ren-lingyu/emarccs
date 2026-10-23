@@ -1,5 +1,1 @@
-{ }: final: prev: {
-
-  emarccs = final.callPackage ./package.nix { };
-
-}
+{ }: final_: prev_: { emarccs = final_.callPackage ./package.nix { }; }

@@ -2,13 +2,10 @@
   runCommand,
   coreutils,
   lib,
-  emacsPackages,
+  package-lint,
   emacsPackage,
   configurationPackage,
 }:
-let
-  packageLint = emacsPackages.package-lint;
-in
 runCommand "emarccs-package-lint"
   {
     nativeBuildInputs = [ coreutils ];
@@ -19,7 +16,7 @@ runCommand "emarccs-package-lint"
     mkdir -p "$HOME"
     timeout --kill-after=3s 20s \
       ${lib.getExe' emacsPackage "emacs"} --batch -Q \
-        -L ${packageLint}/share/emacs/site-lisp/elpa/package-lint-${packageLint.version} \
+        -L ${package-lint}/share/emacs/site-lisp/elpa/package-lint-${package-lint.version} \
         --load ${./lisp/emarccs-package-lint.el}
     touch "$out"
   ''

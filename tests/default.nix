@@ -2,49 +2,46 @@
   pkgs,
   packages,
   lib,
+  llib,
   overlay,
 }:
 let
-  overlayPkgs_ = import pkgs.path {
-    inherit (pkgs) config;
-    system = pkgs.stdenv.hostPlatform.system;
-    overlays = [ overlay ];
+  args_ = {
+    root = ./.;
+    overlayFile = "test-overlay.nix";
+    separator = "-";
   };
 in
 lib.concatMapAttrs (
-  name_: emacsPackage:
-  let
-    epkgs_ = emacsPackage.emacs.pkgs;
-    configurationPackage = epkgs_.emarccs;
-  in
+  name_: value_:
   lib.mapAttrs'
     (checkName_: check_: {
-      name = "${name_}-${checkName_}";
+      name = "${name_}${args_.separator}${checkName_}";
       value = check_;
     })
-    {
-      overlay-equivalence = pkgs.callPackage ./overlay-equivalence {
-        inherit emacsPackage;
-        overlayPackage = overlayPkgs_.${name_};
-      };
+    (
+      llib.tests.mkChecks {
+        inherit (args_) root overlayFile separator;
 
-      elisp-byte-compile = pkgs.callPackage ./elisp-byte-compile {
-        inherit emacsPackage configurationPackage;
-      };
-
-      package-lint = pkgs.callPackage ./package-lint { inherit emacsPackage configurationPackage; };
-
-      startup-smoke = pkgs.callPackage ./startup-smoke { inherit emacsPackage configurationPackage; };
-
-      startup-order = pkgs.callPackage ./startup-order { inherit emacsPackage configurationPackage; };
-
-      package-availability-smoke = pkgs.callPackage ./package-availability-smoke {
-        inherit emacsPackage configurationPackage;
-      };
-
-      treesit-grammars-runtime = pkgs.callPackage ./treesit-grammars-runtime {
-        inherit emacsPackage;
-        grammarPackage = epkgs_.treesit-grammars.with-all-grammars;
-      };
-    }
+        args = rec {
+          inherit lib;
+          inherit (pkgs)
+            runCommand
+            coreutils
+            gnugrep
+            ripgrep
+            ;
+          emacsPackagesPackageLint = pkgs.emacsPackages.package-lint;
+          emacsPackage = value_;
+          configurationPackage = emacsPackage.emacs.pkgs.emarccs;
+          grammarPackage = emacsPackage.emacs.pkgs.treesit-grammars.with-all-grammars;
+          overlayPackage =
+            (import pkgs.path {
+              inherit (pkgs) config;
+              system = pkgs.stdenv.hostPlatform.system;
+              overlays = [ overlay ];
+            }).${name_};
+        };
+      }
+    )
 ) packages

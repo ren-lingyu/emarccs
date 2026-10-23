@@ -35,7 +35,7 @@
           in
           rec {
             llib = inputs.personal-nixpkgs.lib.mergeAttrsRecursive { allowOverrides = false; } [
-              { inherit (inputs.personal-nixpkgs.lib) packages; }
+              { inherit (inputs.personal-nixpkgs.lib) tests packages; }
               (import ./lib { inherit lib; })
             ];
             lpkgs = import ./pkgs { inherit lib llib; };
@@ -76,7 +76,7 @@
                 packages = { inherit (pkgs) emarccs emarccs-pgtk emarccs-gtk; };
 
                 checks = import ./tests {
-                  inherit pkgs lib;
+                  inherit pkgs lib llib;
                   packages = config.packages;
                   overlay = toplevel.config.flake.overlays.default;
                 };

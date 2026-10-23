@@ -5,6 +5,106 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
+## Committed: parameterized overlay constructors
+The owner committed the 22-file migration as "refactor(overlays): adopt
+parameterized overlay constructors". Read-only confirmation found the expected
+commit and a clean ordinary project worktree/index. This checkpoint associates that
+inspected project snapshot as the context for the consolidated current memory;
+it does not imply new runtime validation. All 14 package overlay files
+and seven test-overlay files now follow the mandatory constructor protocol:
+{ }: final: prev: ... . The personal-nixpkgs lock supplies the constructor loader;
+the upstream commit description confirms plain overlays are no longer accepted.
+This is a coordinated consumer migration, not only an input refresh.
+Staged diff --check passed before the owner committed. No Nix evaluation/build/
+check ran for this migration or during commit confirmation. The agent changed
+no project source, lock, index or history. This resolves the earlier pending
+working-lock update noted below. No authorized implementation remains pending.
+
+## Committed: assemble checks with llib.tests.mkChecks
+The owner committed the 17-file migration as "refactor(tests): assemble checks
+with llib.tests.mkChecks". Read-only confirmation inspected the commit and
+resulting aggregation source. At that confirmation flake.lock still had a further uncommitted input update;
+it was subsequently included in the constructor migration described above. The committed pin is the shared-library
+revision that consolidates test assembly in mkChecks.
+
+Root flake.nix exposes llib.tests and passes llib to tests/. tests/default.nix
+is the aggregate entry; seven test-overlay.nix leaves register concrete test.nix
+files. mkChecks discovers/composes overlays and constructs the test scope
+internally; public tests.mkOverlays and the old scope parameter are gone.
+The caller explicitly injects lib/tools, wrapper, matching configuration and
+grammar packages, and the independently imported standalone-overlay wrapper.
+The committed separator is "-", preserving <package>-<test> names. Earlier
+intermediate slash naming and tests.nix entry/leaf names are superseded.
+
+Flattened dependency aliases belong in the aggregate args; explicit conversion
+belongs in test-overlay.nix, keeping concrete tests close to original/leaf names.
+The lint tool is injected as emacsPackagesPackageLint and explicitly passed as
+package-lint to the lint test. This prevents the earlier automatic-lookup
+recursion: a package-lint dependency named identically to the discovered check
+would otherwise resolve to the check itself. The earlier tentative llib-wide
+flattening was withdrawn by the owner and is not implemented.
+
+Validation during implementation: bounded offline/no-write-lock-file full
+flake checks passed on x86_64-linux, reusing all 21 functional derivations and
+freshly passing treefmt. A failed intermediate run exposed the lint scope
+collision above, then a corrected run passed. These runs predate the final
+alias-to-leaf adapter, final test.nix paths and separator adjustment. Final
+formatting, staged diff --check and aggregation/leaf reference checks passed;
+no Nix check was rerun for the final test-aggregation commit or subsequent
+constructor migration.
+No project staging/history mutation was performed by the agent. README remains
+explicitly deferred. The commit draft was updated for the final staged API and
+naming before the owner committed it; no implementation work remains pending
+for this authorized test-aggregation refactor.
+
+## Latest review: shared built-in Emacs aggregation
+The owner made a personal-nixpkgs lock bump to its built-in aggregation-rules
+revision and deleted pkgs/emacsPackages/overlay.nix, then committed the reviewed
+change as "refactor(pkgs): use built-in Emacs package aggregation". Subsequent
+read-only confirmation found the ordinary project worktree/index clean. The local reference
+~/nixpkgs is newer than this lock; review used exact locked Git blobs, not its
+current working-tree paths. The built-in lib/packages/rules/emacsPackages.nix
+matches the deleted local factory byte-for-byte. The locked mkOverlays applies
+that rule for a top-level emacsPackages directory with descendant overlays and
+no explicit local overlay; factory ownership avoids duplicate generic namespace
+aggregation. emacsPackagesFor/overrideScope variant behavior and legacyPackages
+selection remain intact by static source review. Only personal-nixpkgs changed
+in the lock graph, with no root input/follows changes. Upstream committed tests
+cover implicit rules, variants, single application and extraction; they were
+inspected, not executed. Staged diff --check passed; no Nix eval/build/check ran.
+No blocking implementation issue was found and a two-file refactor commit message
+was drafted in tmp/commit.md. A non-blocking documentation omission remains:
+README's package-definition paragraph still attributes aggregation to the now
+deleted local overlay path, instead of the shared library's built-in rule.
+The agent did not modify README, source, lock or project index. The implementation is committed; documentation alignment is deferred by the
+owner as described below. The owner subsequently supplied a successful nix flake check run for this
+working state: exit zero, all 22 x86_64-linux check derivations satisfied from
+cached outputs (running 0 flake checks), including all three overlay-equivalence
+checks. The agent did not repeat it; no fresh execution of cached test scripts
+or validation on other systems is implied. The owner explicitly deferred README
+alignment until the next planned shared-library update and associated changes;
+this documentation mismatch is known and intentionally deferred, not a blocker
+for the current aggregation migration.
+
+## Latest fix: select executable startup forms structurally
+The owner added two declare-function forms for emarccs-initialize-early and
+emarccs-initialize to the injected site-start source to remove byte-compiler
+unknown-function warnings. The old startup-order helper matched any form whose
+flatten-tree contained emarccs-initialize-early, so the new declaration collided
+with the executable guard and violated its exactly-one-form assertion.
+After read-only diagnosis, the owner authorized fixing the test. The helper now
+selects a top-level (when init-file-user ...) structurally, matching the existing
+startup-smoke strategy, while retaining the exactly-one assertion and all
+ordering/idempotence/disabled-init checks. The owner's compiler declarations
+were preserved and no runtime startup code was changed by the agent.
+Validation passed: timeout 120s nix build --offline --no-write-lock-file
+--no-link -L for all three startup-order checks. Each derivation freshly ran
+seven bounded batch ERT cases; all 21 passed with zero unexpected results.
+Diff --check passed. No full-suite rerun, lock update, result link or project
+index/history mutation occurred. The owner subsequently committed the declarations and test correction as
+"fix(startup): declare initialization functions for byte compilation", confirmed
+read-only during the later aggregation review. The authorized fix is complete.
+
 ## Current state: org-edna direct dependency committed
 The owner requested comparing use-package declarations in the configuration with
 emarccs' direct Nix dependencies. Scoped static inspection found 80 distinct

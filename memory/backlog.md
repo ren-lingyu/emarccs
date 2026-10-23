@@ -28,6 +28,18 @@ remains non-blocking and incomplete.
 This entry records scope and motivation only. No source changes, dependency
 updates, warning-policy changes or build/test runs are authorized by adding it.
 
+## Deferred: README alignment with shared-library integration
+
+The owner deferred README alignment to the shared-library integration work.
+The tests API and overlay constructor migrations are now committed, while
+README alignment remains outstanding; no documentation edit was included. README.org
+currently still attributes Emacs package aggregation to the removed local
+pkgs/emacsPackages/overlay.nix; the committed shared-library revision supplies the
+same rule implicitly. Do not edit README separately before that grouped task.
+The owner supplied a passing full nix flake check for the current aggregation
+change, using cached check outputs on x86_64-linux. The known documentation
+mismatch does not block this implementation change.
+
 ## Candidate regression coverage: custom-package command autoloads
 
 The earlier Org-TeXmacs issue established two distinct failure modes: trivialBuild

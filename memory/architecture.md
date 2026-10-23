@@ -26,6 +26,29 @@ This section supersedes older builder/layout statements in the historical
 migration phases below. README has now been synchronized with this architecture
 and committed; see current.md for documentation scope and static checks.
 
+## Overlay constructor protocol
+The shared-library loader requires source overlays to be constructors. Package
+and test overlay files use { }: final: prev: ... even when they need no
+construction parameters. The loader instantiates this outer function before
+applying the resulting ordinary overlay. The owner committed the coordinated
+input/consumer migration; no Nix validation was run for it by the agent.
+
+## Current test aggregation
+The shared llib.tests.mkChecks API internally discovers and composes
+test-overlay.nix registrations in tests/, constructs its own independent test
+scope and extracts derivations. Each leaf registers its test.nix
+through that scope's callPackage. tests/default.nix calls mkChecks per wrapper,
+explicitly injecting lib/tools and matching wrapper/configuration/grammar/
+standalone-overlay package references via args, then prefixes names with the
+wrapper name and "-". No public tests.mkOverlays or caller-built scope remains.
+The standalone-overlay package import remains independent of already configured
+pkgs. Optional checks are unused here; derivation-valued helper args are not
+exported as extra checks. Test bodies and variant selection remain unchanged.
+
+Flattened tool aliases are adapted explicitly in test-overlay.nix; the lint
+check accepts package-lint, passed from args.emacsPackagesPackageLint, avoiding
+a same-name dependency/check fixed-point collision.
+
 ## Committed Nixpkgs migration
 The committed 2026-10-22 migration supersedes the earlier Twist architecture
 below: Nixpkgs emacsPackagesFor/withPackages now consumes a local emarccs
@@ -36,8 +59,8 @@ Old bootstrap/advice scheduling, root lisp/, Twist runtime integration and
 lock/update apps are removed; obsolete inputs were removed in a follow-up. Tests have
 now been adapted and reconnected for all three Emacs outputs through explicit
 configurationPackage/grammarPackage parameters. flake.nix passes only
-{ pkgs, packages = config.packages, lib } to tests/, which owns check naming
-and per-test callPackage injection. Variant-specific package references come
+{ pkgs, packages = config.packages, lib, llib, overlay } to tests/, which owns
+check naming and per-test callPackage injection. Variant-specific package references come
 from each wrapper.emacs.pkgs, reusing Nixpkgs' existing scope exposure without
 custom passthru or a duplicate variant map. Individual tests declare tools
 instead of accepting the whole pkgs. Sources come from the package's src;

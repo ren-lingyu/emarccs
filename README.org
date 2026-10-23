@@ -25,7 +25,6 @@
 │   ├── emarccs-gtk/
 │   │   └── overlay.nix
 │   └── emacsPackages/
-│       ├── overlay.nix
 │       ├── emarccs/
 │       │   ├── overlay.nix
 │       │   ├── package.nix
@@ -55,7 +54,7 @@
 - =emarccs-early-init.el= 定义 =emarccs-initialize-early=, =emarccs-init.el= 定义 =emarccs-initialize=. 加载这两个文件不执行初始化.
 - wrapper 的启动调度由 =pkgs/emarccs/package.nix= 生成, 各功能模块管理其内部的 hooks/advice.
 - =lib/default.nix= 保留本仓库的 Nix helper 扩展入口. 通用 helper 来自 =personal-nixpkgs= input, 合并后以 =llib= 与 Nixpkgs 的 =lib= 区分.
-- =tests/default.nix= 接收 =pkgs=, =packages=, =lib= 和 =overlay=, 为每个 wrapper 生成 =<package>-<test>= checks.
+- =tests/default.nix= 接收 =pkgs=, =packages=, =lib=, =llib= 和 =overlay=, 通过 =llib.tests.mkChecks= 为每个 wrapper 生成 =<package>-<test>= checks. 各项测试由 =test-overlay.nix= 注册, 具体定义位于同目录的 =test.nix=.
 
 * 启动注入
 配置通过 wrapper 的 =site-start.el= 接入启动流程. =init-file-user= 非 nil 时, wrapper 依次:
@@ -111,10 +110,20 @@ pkgs = import inputs.nixpkgs {
 };
 #+end_src
 
-=personal-nixpkgs= 提供通用的 package/overlay 发现等 helper, 其 =nixpkgs=, =flake-parts= 和 =treefmt-nix= 依赖 follows 本仓库对应输入. =llib= 使用 =mergeAttrsRecursive { allowOverrides = false; }= 合并共享库和本地扩展, 重叠的叶节点定义会报错.
+=personal-nixpkgs= 提供 package/overlay 发现和测试聚合等通用 helper, 其 =nixpkgs=, =flake-parts= 和 =treefmt-nix= 依赖 follows 本仓库对应输入. =llib= 使用 =mergeAttrsRecursive { allowOverrides = false; }= 合并共享库中的 =packages=, =tests= 和本地扩展, 重叠的叶节点定义会报错.
 
 * Package 定义
-=pkgs/default.nix= 通过共享库递归发现 =overlay.nix=, 组合本地覆盖. =pkgs/emacsPackages/overlay.nix= 通过 =emacsPackagesFor= 的 =overrideScope= 将后代 overlay 应用到对应 Emacs 的 package scope.
+=pkgs/default.nix= 通过 =llib.packages.mkOverlays= 递归发现 =overlay.nix=, 组合本地覆盖. 共享库为顶层 =emacsPackages/= 目录提供内置聚合规则, 通过 =emacsPackagesFor= 的 =overrideScope= 将后代 overlay 应用到对应 Emacs 的 package scope; 本仓库无需单独定义该目录的聚合 overlay.
+
+由共享库加载的 =overlay.nix= 和 =test-overlay.nix= 都采用 constructor 协议. 当前文件无需构造参数, 使用如下形式:
+
+#+begin_src nix
+{ }: final: prev: {
+  emarccs = final.callPackage ./package.nix { };
+}
+#+end_src
+
+外层函数由共享库实例化, 返回标准的 =final: prev: ...= overlay. 对外导出的 =overlays.default= 仍按普通 Nixpkgs overlay 使用.
 
 - 独立构建的包保留 =package.nix=, 由同目录的 =overlay.nix= 使用 =callPackage= 接入.
 - 仅覆盖已有包的目录可只保留 =overlay.nix=. 例如 =consult=, =ripgrep= 和 =treesit-auto= 直接调用原包的 =overrideAttrs=.
@@ -135,7 +144,9 @@ pkgs = import inputs.nixpkgs {
 传播的程序和 grammar 库由 Nixpkgs wrapper 接入运行时查找路径.
 
 * 检查
-=tests/default.nix= 为默认、PGTK 和 GTK wrapper 分别提供七类 flake checks. 各项检查通过 =callPackage= 获取工具依赖, 显式接收对应的配置包或 grammar 包; 源码检查使用配置包的 =src=, 运行时检查使用安装产物.
+=tests/default.nix= 为默认、PGTK 和 GTK wrapper 分别调用 =llib.tests.mkChecks=, 发现并组合各目录的 =test-overlay.nix=. =mkChecks= 构造独立的测试 scope, 通过 =args= 接收显式注入的工具、wrapper、配置包和 grammar 包, 并提取七类检查. 测试 overlay 不修改 =pkgs=, 注入的辅助依赖不会自动导出为 checks.
+
+每个 =test-overlay.nix= 通过测试 scope 的 =callPackage= 加载同目录的 =test.nix=. 聚合入口使用避免同名冲突的依赖名称, 需要时在测试 overlay 中显式转换为具体测试的参数名. 例如 =emacsPackagesPackageLint= 在 lint 测试中作为 =package-lint= 传入. 源码检查使用配置包的 =src=, 运行时检查使用安装产物.
 
 - =overlay-equivalence=: 从同一份 Nixpkgs 独立导入只应用传入 overlay 的包集合, 比较它与 flake package 的 =drvPath=. 缺少导出、求值失败或 derivation 不一致都会失败; 通过后仅生成空检查产物, 不重复构建 wrapper.
 - =startup-smoke=: 验证禁用用户初始化时配置不执行、require 入口保持惰性、配置库来自指定安装产物, 并在空的外部 =PATH= 下检查 =grep=, =rg= 和 =ls=. 随后执行实际 wrapper 启动表达式, 保留真实 package activation, 仅替换配置初始化函数, 检查激活结果和调度.

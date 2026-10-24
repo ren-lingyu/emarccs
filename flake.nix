@@ -68,10 +68,10 @@
               {
                 _module.args.pkgs = import inputs.nixpkgs {
                   inherit system;
-                  overlays = [ lpkgs.overlays.default ];
+                  overlays = [ lpkgs.overlays.legacy ];
                 };
 
-                legacyPackages = lpkgs.mkLegacyPackages pkgs;
+                legacyPackages = pkgs.legacyPackages;
 
                 packages = { inherit (pkgs) emarccs emarccs-pgtk emarccs-gtk; };
 

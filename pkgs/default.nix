@@ -1,12 +1,4 @@
-{ lib, llib }: {
-  mkLegacyPackages =
-    pkgs:
-    llib.packages.mkLegacyPackages {
-      root = ./.;
-      overlayFile = "overlay.nix";
-      inherit pkgs;
-    };
-
+{ lib, llib }: rec {
   overlays = {
     default = lib.composeManyExtensions (
       builtins.attrValues (
@@ -16,5 +8,22 @@
         }
       )
     );
+
+    legacy = lib.composeManyExtensions [
+      overlays.default
+      (
+        final_: prev_:
+        assert lib.assertMsg (
+          !(prev_ ? legacyPackages)
+        ) "legacy overlay: `legacyPackages` already exists in the package set";
+        {
+          legacyPackages = llib.packages.mkLegacyPackages {
+            root = ./.;
+            overlayFile = "overlay.nix";
+            pkgs = final_;
+          };
+        }
+      )
+    ];
   };
 }

@@ -26,6 +26,17 @@ This section supersedes older builder/layout statements in the historical
 migration phases below. README has now been synchronized with this architecture
 and committed; see current.md for documentation scope and static checks.
 
+## Current package groups and exports
+pkgs/default.nix uses llib.packages.mkOverlays with groups.default = { } and
+groups.legacy.export = true. Both groups use root pkgs/ and overlay.nix without
+exclusions. The flake applies lpkgs.overlays.legacy to its perSystem Nixpkgs,
+then exports pkgs.legacyPackages directly. Package selection/export is handled
+by the shared library from the final package set. The separately exposed
+flake.overlays.default remains lpkgs.overlays.default, without the legacy
+export member. This supersedes the earlier local mkLegacyPackages wrapper and
+manually composed legacy-export extension; the locked library no longer
+provides the mkLegacyPackages API. No Nix validation was run for this migration.
+
 ## Overlay constructor protocol
 The shared-library loader requires source overlays to be constructors. Package
 and test overlay files use { }: final: prev: ... even when they need no
@@ -85,9 +96,9 @@ consult during library design/review. A subsequent read-only comparison found
 the two packages.nix files byte-identical (5,518 bytes each) before the owner's
 subsequent discovery changes; no broader NixOS repository behavior was inspected.
 The owner needs legacyPackages to expose pure overrides for individual builds.
-Current Emarccs discovery therefore selects using overlay files and package-set
-derivation attributes, not package.nix presence. Both mkLegacyPackages and
-mkOverlays take overlayFile (private parameters use overlayFile_); callers in
+Emarccs discovery selects using overlay files and package-set derivation
+attributes, not package.nix presence. The former mkLegacyPackages and retained
+mkOverlays interfaces used overlayFile (private parameters use overlayFile_); callers in
 pkgs/default.nix supply "overlay.nix". Pure overrides may be inlined into their
 overlay without losing export eligibility. The rename did not modify NixOS.
 A subsequent committed edit inlines the pure Consult, ripgrep and treesit-auto

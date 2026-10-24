@@ -5,12 +5,64 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
+## Committed: shared overlay groups for package exports
+The owner committed the two-file migration as "refactor(pkgs): use shared
+overlay groups for package exports". Its exact commit was located by title and
+verified through its full diff and resulting pkgs/default.nix and flake.nix,
+rather than assuming current HEAD is the relevant source snapshot. The root
+worktree/index are clean; subsequent gitignore and flake-format commits are
+outside this checkpoint's project association and were not implementation-audited.
+
+pkgs/default.nix now delegates to llib.packages.mkOverlays with explicit groups:
+default = { }; legacy.export = true. The shared-library pin provides group
+aggregation/export and removes the old mkLegacyPackages API. This replaces the
+preceding local legacy overlay extension and direct package-selection call.
+The preceding commit moved perSystem Nixpkgs construction to overlays.legacy
+and made flake legacyPackages read pkgs.legacyPackages; this wiring remains.
+The public overlays.default still exports the default group. Both group
+configurations use the same discovery root/filename without exclusions.
+No local export assertion or manual composeManyExtensions remains in this entry.
+
+The coordinated lock/consumer change and its immediately preceding internal
+legacy-overlay extraction were reviewed for commit-message preparation and
+subsequently confirmed in committed history. Static diff --check passes for
+the inspected interval. No Nix evaluation, build or check was run for either
+migration; earlier test results must not be attributed to these revisions.
+The separately committed Org-TeXmacs cleanup removes org-roam from its function
+arguments/packageRequires, leaving org; its exact diff was confirmed read-only,
+without a new dependency audit or runtime/build validation.
+
+The authorized implementation and documentation changes are committed. Current
+memory retains the testing limits and resolved README backlog removal. No new
+project source, lock, index or history changes were made by the agent. Future
+work is governed by the remaining non-blocking backlog, not by an inferred
+unfinished migration.
+
+## Committed: README shared-library alignment
+The owner explicitly authorized updating README. Ordinary worktree/index were
+clean; HEAD includes the later compact-overlay style commit after the constructor
+migration. The audit compared changes since the last README commit with current
+HEAD, inspected the affected package/test/flake sources and exact locked shared
+library docs/rule. README.org now removes the deleted emacsPackages parent
+overlay from the tree, describes the built-in aggregation rule, explicit
+packages/tests library selection, constructor source protocol versus exported
+standard overlay, and mkChecks scope/discovery with test-overlay.nix/test.nix
+and explicit lint argument conversion. Existing startup and seven-family test
+semantics remain intact; no experimental log or validation claim was added.
+Static reference checks, Org source-block balance and diff --check pass; no Nix
+build/check/formatter was run for documentation. Only README was modified in the
+ordinary project; no staging/history mutation was performed by the agent.
+The owner committed the one-file change as "docs(readme): document the shared
+overlay and check interfaces". Read-only confirmation found the expected diff
+in HEAD and a clean ordinary project worktree/index. No new build/check ran
+during confirmation. The deferred README backlog item is resolved and removed.
+This supersedes earlier statements that alignment remains deferred.
+
 ## Committed: parameterized overlay constructors
 The owner committed the 22-file migration as "refactor(overlays): adopt
 parameterized overlay constructors". Read-only confirmation found the expected
-commit and a clean ordinary project worktree/index. This checkpoint associates that
-inspected project snapshot as the context for the consolidated current memory;
-it does not imply new runtime validation. All 14 package overlay files
+commit and a clean ordinary project worktree/index. Inspection of that resulting
+snapshot did not include new runtime validation. All 14 package overlay files
 and seven test-overlay files now follow the mandatory constructor protocol:
 { }: final: prev: ... . The personal-nixpkgs lock supplies the constructor loader;
 the upstream commit description confirms plain overlays are no longer accepted.

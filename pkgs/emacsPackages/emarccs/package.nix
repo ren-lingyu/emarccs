@@ -79,7 +79,6 @@
   yaml-mode,
   yasnippet,
 }@args:
-
 melpaBuild (finalAttrs_: {
   src = ./lisp;
 

@@ -4,7 +4,6 @@
   emacsPackagesFor,
   coreutils,
 }:
-
 ((emacsPackagesFor emacs).withPackages (epkgs_: [
   epkgs_.emarccs
   coreutils

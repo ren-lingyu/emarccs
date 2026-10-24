@@ -5,7 +5,6 @@
   org,
   nix-update-script,
 }:
-
 melpaBuild (finalAttrs_: {
   src = fetchFromGitHub {
     owner = "yibie";

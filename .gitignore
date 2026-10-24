@@ -1,27 +1,27 @@
 *
 */
 
-!.gitignore
-!README.org
-!LICENSE
-!flake.nix
-!flake.lock
+!/.gitignore
+!/README.org
+!/LICENSE
+!/flake.nix
+!/flake.lock
 
-!lib/
-!lib/**/
-!lib/**/*.nix
+!/lib/
+!/lib/**/
+!/lib/**/*.nix
 
-!pkgs/
-!pkgs/**/
-!pkgs/**/*.nix
-!pkgs/**/*.el
-!pkgs/**/*.patch
+!/pkgs/
+!/pkgs/**/
+!/pkgs/**/*.nix
+!/pkgs/**/*.el
+!/pkgs/**/*.patch
 
-!tests/
-!tests/**/
-!tests/**/*.nix
-!tests/**/lisp/*.el
-!tests/**/lisp/*.scm
+!/tests/
+!/tests/**/
+!/tests/**/*.nix
+!/tests/**/lisp/*.el
+!/tests/**/lisp/*.scm
 
 **/tmp/
 *~

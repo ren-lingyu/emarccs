@@ -26,6 +26,24 @@ This section supersedes older builder/layout statements in the historical
 migration phases below. README has now been synchronized with this architecture
 and committed; see current.md for documentation scope and static checks.
 
+## Current shared flake foundation
+The root uses personal-nixpkgs.lib.mkFlake inputs.nixpkgs, then an argument
+function supplying inputs/moduleLocation/llib/lpkgs, then the project module.
+Direct inputs are now nixpkgs and personal-nixpkgs; flake-parts/treefmt-nix and
+the shared repository's relative local-nixpkgs subflake are transitive.
+The helper injects the selected Nixpkgs lib and project libraries, imports
+shared package/tool and treefmt infrastructure, and exposes perSystem
+nixpkgs.overlays. Emarccs sets that option to its legacy group instead of
+manually constructing _module.args.pkgs. These details were inspected in the
+exact locked source, without Nix evaluation/build verification.
+
+The shared treefmt module handles Nix and Elisp formatting (among others),
+uses elisp-autofmt for .el files, disables default exclusions and fails on
+unmatched files. Emarccs explicitly enables flakeCheck and excludes *.patch,
+.gitignore, LICENSE, README.org and flake.lock. The owner formatted 20 Elisp
+configuration/test files before restoring the check. No successful full check
+for this revision was supplied or executed by the agent.
+
 ## Current package groups and exports
 pkgs/default.nix uses llib.packages.mkOverlays with groups.default = { } and
 groups.legacy.export = true. Both groups use root pkgs/ and overlay.nix without

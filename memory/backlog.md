@@ -1,5 +1,19 @@
 # Backlog
 
+## Pending: README shared-foundation and formatter alignment
+
+The README update for constructors/test aggregation is committed and complete
+for that earlier baseline. The subsequent shared mkFlake migration changed
+root input ownership and per-system Nixpkgs construction; README still describes
+flake-parts/treefmt-nix as direct root inputs followed by personal-nixpkgs.
+Update that explanation for the shared mkFlake helper and transitive inputs,
+plus the group's legacy export wiring where useful. The formatting paragraph
+still says treefmt checks Nix files only; shared formatting now includes Elisp,
+with *.patch excluded and flakeCheck restored to true. Keep this a factual
+structure/maintenance update, not a record of formatting experiments or tests.
+No README edit is authorized by adding this entry; the owner requested GAW
+maintenance/checkpoint only at this step.
+
 ## Non-blocking: normalize emacsPackages.emarccs
 
 The owner requests a future normalization pass over emacsPackages.emarccs

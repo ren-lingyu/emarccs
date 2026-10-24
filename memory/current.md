@@ -5,13 +5,55 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
+## Committed: shared mkFlake foundation and restored formatting checks
+The owner committed the shared-flake migration, patch exclusion, Elisp formatting
+and restored treefmt check as four separate changes. Read-only confirmation
+inspected their committed diffs and the final root flake; the ordinary project
+worktree/index are clean. The final formatting-check commit is the inspected
+source snapshot for this checkpoint, rather than any earlier temporary state
+where treefmt.flakeCheck was false.
+
+flake.nix now calls personal-nixpkgs.lib.mkFlake inputs.nixpkgs with an argument
+function supplying inputs, moduleLocation, llib and lpkgs. Only nixpkgs and
+personal-nixpkgs remain direct inputs; flake-parts/treefmt-nix are transitive.
+The locked personal-nixpkgs also introduces its own relative local-nixpkgs
+subflake (its pkgs/, not this repository's pkgs/). The upstream nixpkgs follows
+the root input. Root Nixpkgs and retained formatter dependency revisions did
+not change in this lock migration.
+Per-system overlays use nixpkgs.overlays instead of directly overriding
+_module.args.pkgs. Exact locked shared-helper source inspection confirms it
+supplies the package-set option/import machinery, its own tool overlay and
+shared treefmt module. Existing local legacy/default group and test wiring
+remain. This is source inspection, not successful Nix evaluation evidence.
+
+The owner split formatting maintenance: *.patch is excluded, 14 configuration
+Elisp libraries and six test scripts were formatted using owner-executed
+nix fmt, and treefmt.flakeCheck was explicitly restored to true. Existing
+.gitignore/LICENSE/README.org/flake.lock exclusions remain. The shared module
+provides nixfmt and elisp-autofmt (plus other formatters), makes unmatched files
+fatal and disables default exclusions. No formatter success, runtime semantic
+proof or full-check result was independently obtained by the agent.
+The agent reviewed the staged changes for messages and confirmed commits;
+diff --check passes for the final interval. No Nix evaluation/build/check or
+formatter was run by the agent for these changes. Earlier successful checks
+cannot be attributed to this new input/formatting state.
+
+Intervening committed maintenance anchors .gitignore whitelist negations to
+the repository root and removes blank lines from Nix definitions. Those small
+diffs were inspected during checkpoint preparation. No source, lock, project
+index/history or lifecycle state was changed by the agent. The implementation
+is committed; README now needs a separate factual update for the new shared
+foundation and broader formatting check, recorded in backlog.md. Existing
+non-blocking dependency/warning and autoload-coverage tasks remain.
+
 ## Committed: shared overlay groups for package exports
 The owner committed the two-file migration as "refactor(pkgs): use shared
 overlay groups for package exports". Its exact commit was located by title and
 verified through its full diff and resulting pkgs/default.nix and flake.nix,
 rather than assuming current HEAD is the relevant source snapshot. The root
-worktree/index are clean; subsequent gitignore and flake-format commits are
-outside this checkpoint's project association and were not implementation-audited.
+worktree/index were clean at that confirmation. Subsequent gitignore and
+flake-format changes were outside the earlier association; their small diffs
+were inspected during the later shared-foundation checkpoint preparation.
 
 pkgs/default.nix now delegates to llib.packages.mkOverlays with explicit groups:
 default = { }; legacy.export = true. The shared-library pin provides group

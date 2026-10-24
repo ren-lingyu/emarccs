@@ -1,5 +1,4 @@
 {
-
   description = "aRenCoco's Emacs configuration and packages built with Nixpkgs";
 
   inputs = {

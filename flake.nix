@@ -59,7 +59,7 @@
                 };
 
                 treefmt = {
-                  flakeCheck = false;
+                  flakeCheck = true;
                   settings.excludes = [
                     "*.patch"
                     ".gitignore"

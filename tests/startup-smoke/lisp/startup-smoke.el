@@ -9,8 +9,9 @@
   (when (version< emacs-version minver)
     (display-warning
      'emarccs-test
-     (format "This wrapper is only tested with Emacs %s or newer; current Emacs is %s."
-             minver emacs-version)
+     (format
+      "This wrapper is only tested with Emacs %s or newer; current Emacs is %s."
+      minver emacs-version)
      :warning)))
 
 ;; Batch/-q disables user init, so the wrapper must leave config untouched.
@@ -22,32 +23,36 @@
  "Emarccs hook was registered despite disabled user init")
 
 (let ((library (locate-library "emarccs"))
-      (package-directory (or (getenv "EMARCCS_PACKAGE_DIRECTORY")
-                             (error "EMARCCS_PACKAGE_DIRECTORY is not set"))))
+      (package-directory
+       (or (getenv "EMARCCS_PACKAGE_DIRECTORY")
+           (error "EMARCCS_PACKAGE_DIRECTORY is not set"))))
   (emarccs-startup-smoke--check
-   (and library (file-in-directory-p (file-truename library)
-                                    (file-truename package-directory)))
+   (and library
+        (file-in-directory-p
+         (file-truename library) (file-truename package-directory)))
    "Emarccs did not resolve to the supplied installed configuration package"))
 
 (require 'emarccs)
 (dolist (function '(emarccs-initialize-early emarccs-initialize))
   (emarccs-startup-smoke--check
-   (fboundp function)
-   (format "%s is not defined" function)))
+   (fboundp function) (format "%s is not defined" function)))
 (emarccs-startup-smoke--check
- (not (or emarccs--early-initialized emarccs--initialized))
+ (not
+  (or emarccs--early-initialized emarccs--initialized))
  "Requiring Emarccs ran configuration")
 (emarccs-startup-smoke--check
  (not (memq 'emarccs-initialize before-init-hook))
  "Requiring Emarccs registered startup scheduling")
 
 ;; A clean incoming PATH must still find the programs supplied by the wrapper.
-(dolist (program '(("grep" . "EMARCCS_GREP")
-                   ("rg" . "EMARCCS_RG")
-                   ("ls" . "EMARCCS_LS")))
+(dolist (program
+         '(("grep" . "EMARCCS_GREP")
+           ("rg" . "EMARCCS_RG")
+           ("ls" . "EMARCCS_LS")))
   (let ((actual (executable-find (car program)))
-        (expected (or (getenv (cdr program))
-                      (error "%s is not set" (cdr program)))))
+        (expected
+         (or (getenv (cdr program))
+             (error "%s is not set" (cdr program)))))
     (emarccs-startup-smoke--check
      (and actual (file-equal-p actual expected))
      (format "%s did not resolve to the supplied system program: %S"
@@ -65,29 +70,35 @@
       (original-warning (symbol-function 'display-warning))
       forms)
   (with-temp-buffer
-    (insert-file-contents (or (getenv "EMARCCS_SITE_START")
-                             (error "EMARCCS_SITE_START is not set")))
+    (insert-file-contents
+     (or (getenv "EMARCCS_SITE_START")
+         (error "EMARCCS_SITE_START is not set")))
     (goto-char (point-min))
     (condition-case nil
         (while t
           (let ((form (read (current-buffer))))
-            (when (and (consp form) (eq (car form) 'when)
+            (when (and (consp form)
+                       (eq (car form) 'when)
                        (eq (cadr form) 'init-file-user))
               (push form forms))))
-      (end-of-file nil)))
+      (end-of-file
+       nil)))
   (emarccs-startup-smoke--check
    (= (length forms) 1) "Expected one wrapper startup form")
   (unwind-protect
       (progn
-        (fset 'emarccs-initialize-early (lambda () (setq early-called t)))
+        (fset 'emarccs-initialize-early
+              (lambda () (setq early-called t)))
         (fset 'emarccs-initialize (lambda () (setq regular-called t)))
         (fset 'display-warning
               (lambda (type message &optional level _buffer)
                 (push (list type message level) warnings)))
         (eval (car forms) t)
-        (emarccs-startup-smoke--check early-called "Early initializer was skipped")
+        (emarccs-startup-smoke--check
+         early-called "Early initializer was skipped")
         (run-hooks 'before-init-hook)
-        (emarccs-startup-smoke--check regular-called "Regular initializer was skipped"))
+        (emarccs-startup-smoke--check
+         regular-called "Regular initializer was skipped"))
     (fset 'emarccs-initialize-early original-early)
     (fset 'emarccs-initialize original-init)
     (fset 'display-warning original-warning))

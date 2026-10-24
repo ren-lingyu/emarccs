@@ -9,55 +9,42 @@
   (dolist (directory load-path)
     (when (file-directory-p directory)
       (dolist (file
-               (directory-files
-                directory t "-autoloads\\.el\\'" t))
+               (directory-files directory t "-autoloads\\.el\\'" t))
         (load file nil t)))))
 
 (emarccs--load-package-autoloads)
 
 (defun emarccs--getenv-required (name)
   "Return environment variable NAME or signal an error."
-  (or (getenv name)
-      (error "%s is not set" name)))
+  (or (getenv name) (error "%s is not set" name)))
 
-(let* ((source
-        (file-name-as-directory
-         (emarccs--getenv-required
-          "EMARCCS_ELISP_SOURCE")))
+(let*
+    ((source
+      (file-name-as-directory
+       (emarccs--getenv-required "EMARCCS_ELISP_SOURCE")))
 
-       ;; Deterministic order makes build logs reproducible.
-       (files
-        (sort
-         (directory-files-recursively
-          source
-          "\\.el\\'")
-         #'string<))
+     ;; Deterministic order makes build logs reproducible.
+     (files
+      (sort (directory-files-recursively source "\\.el\\'")
+            #'string<))
 
-       (directories
-        (delete-dups
-         (mapcar #'file-name-directory files)))
+     (directories (delete-dups (mapcar #'file-name-directory files)))
 
-       ;; Pretend project-local features have already been loaded.
-       ;;
-       ;; This prevents `require' forms from recursively loading Emarccs
-       ;; source files while they are being checked independently.
-       (local-features
-        (mapcar
-         (lambda (file)
-           (intern (file-name-base file)))
-         files))
+     ;; Pretend project-local features have already been loaded.
+     ;;
+     ;; This prevents `require' forms from recursively loading Emarccs
+     ;; source files while they are being checked independently.
+     (local-features
+      (mapcar (lambda (file) (intern (file-name-base file))) files))
 
-       ;; BYTE-COMPILE-FILE expects an actual output pathname.
-       ;;
-       ;; In particular, do not use `null-device' here: a source file
-       ;; declaring `no-byte-compile: t' is allowed to delete its
-       ;; destination file.
-       (dest-dir
-        (make-temp-file
-         "emarccs-byte-compile-"
-         t))
+     ;; BYTE-COMPILE-FILE expects an actual output pathname.
+     ;;
+     ;; In particular, do not use `null-device' here: a source file
+     ;; declaring `no-byte-compile: t' is allowed to delete its
+     ;; destination file.
+     (dest-dir (make-temp-file "emarccs-byte-compile-" t))
 
-       failed)
+     failed)
 
   ;; Let the byte compiler resolve all project-local source directories.
   (dolist (directory directories)
@@ -67,62 +54,47 @@
 
       (progn
         (dolist (file files)
-          (let* ((relative-file
-                  (file-relative-name
-                   file
-                   source))
+          (let*
+              ((relative-file (file-relative-name file source))
 
-                 ;; Keep the original relative directory structure so
-                 ;; identically named files cannot collide.
-                 (dest-file
-                  (expand-file-name
-                   (concat
-                    (file-name-sans-extension
-                     relative-file)
-                    ".elc")
-                   dest-dir))
+               ;; Keep the original relative directory structure so
+               ;; identically named files cannot collide.
+               (dest-file
+                (expand-file-name
+                 (concat
+                  (file-name-sans-extension relative-file) ".elc")
+                 dest-dir))
 
-                 ;; `features' is a special variable, therefore this
-                 ;; binding remains dynamic with lexical-binding enabled.
-                 (features
-                  (append local-features features))
+               ;; `features' is a special variable, therefore this
+               ;; binding remains dynamic with lexical-binding enabled.
+               (features (append local-features features))
 
-                 (byte-compile-dest-file-function
-                  (lambda (_file)
-                    dest-file)))
+               (byte-compile-dest-file-function
+                (lambda (_file) dest-file)))
 
-            (make-directory
-             (file-name-directory dest-file)
-             t)
+            (make-directory (file-name-directory dest-file) t)
 
             (message "Checking %s" relative-file)
 
-            (let ((result
-                   (byte-compile-file file)))
+            (let ((result (byte-compile-file file)))
 
               (cond
                ((eq result 'no-byte-compile)
-                (message
-                 "Skipped %s (no-byte-compile)"
-                 relative-file))
+                (message "Skipped %s (no-byte-compile)"
+                         relative-file))
 
                (result
-                (message
-                 "Passed %s"
-                 relative-file))
+                (message "Passed %s" relative-file))
 
                (t
                 (setq failed t)
-                (message
-                 "Failed %s"
-                 relative-file))))))
+                (message "Failed %s" relative-file))))))
 
         (when failed
           (error
            "Failed to byte-compile one or more Emacs Lisp files"))
 
-        (message
-         "Emarccs byte-compile check completed successfully"))
+        (message "Emarccs byte-compile check completed successfully"))
 
     ;; The files are inside Nix's temporary build environment anyway,
     ;; but cleaning them here also makes this script pleasant to run

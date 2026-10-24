@@ -8,18 +8,14 @@
 (require 'ox)
 (require 'subr-x)
 
-(declare-function org-latex--caption/label-string
-                  "ox-latex"
+(declare-function org-latex--caption/label-string "ox-latex"
                   (element info))
-(declare-function org-latex--caption-above-p
-                  "ox-latex"
+(declare-function org-latex--caption-above-p "ox-latex"
                   (element info))
-(declare-function org-latex--wrap-latex-math-block
-                  "ox-latex"
+(declare-function org-latex--wrap-latex-math-block "ox-latex"
                   (data info))
 
-(defconst emarccs--org-extension-block--source-namespace
-  "ext"
+(defconst emarccs--org-extension-block--source-namespace "ext"
   "Org source-level namespace used for extension blocks.")
 
 (defconst emarccs--org-extension-block--export-namespace
@@ -98,22 +94,14 @@ the normalized Org AST."
 
 ;;; Extension-block parsing and normalization
 
-(defun emarccs--org-extension-block--source-namespace-block-p
-    (block)
+(defun emarccs--org-extension-block--source-namespace-block-p (block)
   "Return non-nil when BLOCK belongs to the extension namespace."
-  (and
-   (eq
-    (org-element-type block)
-    'special-block)
-   (equal
-    (downcase
-     (or
-      (org-element-property :type block)
-      ""))
-    emarccs--org-extension-block--source-namespace)))
+  (and (eq (org-element-type block) 'special-block)
+       (equal
+        (downcase (or (org-element-property :type block) ""))
+        emarccs--org-extension-block--source-namespace)))
 
-(defun emarccs--org-extension-block--parse-head
-    (block)
+(defun emarccs--org-extension-block--parse-head (block)
   "Parse the extension header of BLOCK.
 
 Return a cons cell
@@ -124,52 +112,33 @@ where KIND is the first positional token and PARAMETER-STRING is
 the remaining Babel-style header-argument string."
   (let ((raw
          (string-trim
-          (or
-           (org-element-property :parameters block)
-           ""))))
-    (when
-        (string-empty-p raw)
-      (user-error
-       "%s block requires a kind"
-       emarccs--org-extension-block--source-namespace))
+          (or (org-element-property :parameters block) ""))))
+    (when (string-empty-p raw)
+      (user-error "%s block requires a kind"
+                  emarccs--org-extension-block--source-namespace))
 
-    (unless
-        (string-match
-         "\\`\\([^[:space:]]+\\)\\(?:[[:space:]]+\\(.*\\)\\)?\\'"
-         raw)
-      (user-error
-       "Invalid %s block header: %s"
-       emarccs--org-extension-block--source-namespace
-       raw))
+    (unless (string-match
+             "\\`\\([^[:space:]]+\\)\\(?:[[:space:]]+\\(.*\\)\\)?\\'"
+             raw)
+      (user-error "Invalid %s block header: %s"
+                  emarccs--org-extension-block--source-namespace
+                  raw))
 
-    (let ((kind
-           (match-string 1 raw))
+    (let ((kind (match-string 1 raw))
           (parameter-string
-           (string-trim
-            (or
-             (match-string 2 raw)
-             ""))))
-      (unless
-          (or
-           (string-empty-p parameter-string)
-           (string-prefix-p ":" parameter-string))
-        (user-error
-         "Unexpected text after %s block kind %s: %s"
-         emarccs--org-extension-block--source-namespace
-         kind
-         parameter-string))
+           (string-trim (or (match-string 2 raw) ""))))
+      (unless (or (string-empty-p parameter-string)
+                  (string-prefix-p ":" parameter-string))
+        (user-error "Unexpected text after %s block kind %s: %s"
+                    emarccs--org-extension-block--source-namespace
+                    kind
+                    parameter-string))
 
-      (cons
-       kind
-       parameter-string))))
+      (cons kind parameter-string))))
 
-(defun emarccs--org-extension-block--spec
-    (kind)
+(defun emarccs--org-extension-block--spec (kind)
   "Return the registry entry corresponding to KIND."
-  (assoc-string
-   kind
-   emarccs--org-extension-block-registry
-   t))
+  (assoc-string kind emarccs--org-extension-block-registry t))
 
 (defun emarccs--org-extension-block--parse-parameters
     (kind spec parameter-string)
@@ -177,44 +146,32 @@ the remaining Babel-style header-argument string."
 
 Return an alist whose keys are parameter keywords and whose
 values are Org secondary strings in source representation."
-  (let ((allowed
-         (cdr spec))
+  (let ((allowed (cdr spec))
         (parameters
-         (org-babel-parse-header-arguments
-          parameter-string
-          t))
+         (org-babel-parse-header-arguments parameter-string t))
         seen)
     (dolist (parameter parameters)
-      (let ((key
-             (car parameter))
-            (value
-             (cdr parameter)))
-        (unless
-            (memq key allowed)
-          (user-error
-           "Unknown parameter for %s kind %s: %s"
-           emarccs--org-extension-block--source-namespace
-           kind
-           key))
+      (let ((key (car parameter))
+            (value (cdr parameter)))
+        (unless (memq key allowed)
+          (user-error "Unknown parameter for %s kind %s: %s"
+                      emarccs--org-extension-block--source-namespace
+                      kind
+                      key))
 
         (unless value
-          (user-error
-           "Parameter %s for %s kind %s requires a value"
-           key
-           emarccs--org-extension-block--source-namespace
-           kind))
+          (user-error "Parameter %s for %s kind %s requires a value"
+                      key
+                      emarccs--org-extension-block--source-namespace
+                      kind))
 
-        (when
-            (memq key seen)
-          (user-error
-           "Duplicate parameter for %s kind %s: %s"
-           emarccs--org-extension-block--source-namespace
-           kind
-           key))
+        (when (memq key seen)
+          (user-error "Duplicate parameter for %s kind %s: %s"
+                      emarccs--org-extension-block--source-namespace
+                      kind
+                      key))
 
-        (push
-         key
-         seen)))
+        (push key seen)))
 
     ;; Babel may parse some literal values into non-string Lisp
     ;; objects.  Extension-block parameters are semantically Org
@@ -224,17 +181,12 @@ values are Org secondary strings in source representation."
      (lambda (parameter)
        (cons
         (car parameter)
-        (if
-            (stringp
-             (cdr parameter))
+        (if (stringp (cdr parameter))
             (cdr parameter)
-          (format
-           "%s"
-           (cdr parameter)))))
+          (format "%s" (cdr parameter)))))
      parameters)))
 
-(defun emarccs--org-extension-block--normalize-block
-    (block)
+(defun emarccs--org-extension-block--normalize-block (block)
   "Normalize extension semantics on BLOCK in place.
 
 Ordinary special blocks are returned unchanged.  An `ext'
@@ -242,62 +194,45 @@ special block receives the properties `:extension-kind' and
 `:extension-parameters'.
 
 The original `:type' and `:parameters' properties are preserved."
-  (when
-      (emarccs--org-extension-block--source-namespace-block-p
-       block)
-    (pcase-let*
-        ((`(,source-kind . ,parameter-string)
-          (emarccs--org-extension-block--parse-head
-           block))
-         (spec
-          (emarccs--org-extension-block--spec
-           source-kind)))
+  (when (emarccs--org-extension-block--source-namespace-block-p block)
+    (pcase-let* ((`(,source-kind . ,parameter-string)
+                  (emarccs--org-extension-block--parse-head block))
+                 (spec
+                  (emarccs--org-extension-block--spec source-kind)))
 
       (unless spec
-        (user-error
-         "Unknown %s block kind: %s"
-         emarccs--org-extension-block--source-namespace
-         source-kind))
+        (user-error "Unknown %s block kind: %s"
+                    emarccs--org-extension-block--source-namespace
+                    source-kind))
 
       ;; The registry spelling is canonical.  Source lookup itself
       ;; is case-insensitive.
-      (let ((kind
-             (car spec)))
-        (org-element-put-property
-         block
-         :extension-kind
-         kind)
+      (let ((kind (car spec)))
+        (org-element-put-property block :extension-kind kind)
 
         (org-element-put-property
          block
          :extension-parameters
          (emarccs--org-extension-block--parse-parameters
-          kind
-          spec
-          parameter-string)))))
+          kind spec parameter-string)))))
 
   block)
 
-(defun emarccs--org-extension-block-normalize
-    (data)
+(defun emarccs--org-extension-block-normalize (data)
   "Normalize extension blocks in Org element DATA.
 
 DATA is modified in place and returned.  Native Org element types
 are preserved; extension blocks remain `special-block' elements
 with additional normalized semantic properties."
   ;; Handle DATA itself when it is an extension block.
-  (when
-      (eq
-       (org-element-type data)
-       'special-block)
-    (emarccs--org-extension-block--normalize-block
-     data))
+  (when (eq (org-element-type data) 'special-block)
+    (emarccs--org-extension-block--normalize-block data))
 
   ;; Normalize extension blocks below DATA.
   (org-element-map
-      data
-      'special-block
-    #'emarccs--org-extension-block--normalize-block)
+   data
+   'special-block
+   #'emarccs--org-extension-block--normalize-block)
 
   data)
 
@@ -312,19 +247,13 @@ The returned tree is an ordinary Org element tree, but every
 extension block has normalized `:extension-kind' and
 `:extension-parameters' properties."
   (emarccs--org-extension-block-normalize
-   (org-element-parse-buffer
-    granularity
-    visible-only)))
+   (org-element-parse-buffer granularity visible-only)))
 
 ;;; Backend-independent export
 
-(defun emarccs--org-extension-block--backend-spec
-    (backend)
+(defun emarccs--org-extension-block--backend-spec (backend)
   "Return the backend specification corresponding to BACKEND."
-  (cdr
-   (assq
-    backend
-    emarccs--org-extension-block--backend-registry)))
+  (cdr (assq backend emarccs--org-extension-block--backend-registry)))
 
 (defun emarccs--org-extension-block--export-secondary-string
     (string block info)
@@ -337,44 +266,28 @@ export environment."
           string
           emarccs--org-extension-block--secondary-string-restriction
           block)))
-    (when
-        (org-export-derived-backend-p
-         (plist-get info :back-end)
-         'latex)
+    (when (org-export-derived-backend-p
+           (plist-get info :back-end) 'latex)
 
       ;; Treat DATA as an independent secondary string while the
       ;; LaTeX math-block pass mutates it.
       (dolist (object data)
-        (unless
-            (stringp object)
-          (org-element-put-property
-           object
-           :parent
-           data)))
+        (unless (stringp object)
+          (org-element-put-property object :parent data)))
 
-      (setq data
-            (org-latex--wrap-latex-math-block
-             data
-             info)))
+      (setq data (org-latex--wrap-latex-math-block data info)))
 
-    (org-export-data
-     data
-     info)))
+    (org-export-data data info)))
 
-(defun emarccs--org-extension-block--export-parameters
-    (block info)
+(defun emarccs--org-extension-block--export-parameters (block info)
   "Export normalized extension parameters of BLOCK using INFO."
   (mapcar
    (lambda (parameter)
      (cons
       (car parameter)
       (emarccs--org-extension-block--export-secondary-string
-       (cdr parameter)
-       block
-       info)))
-   (org-element-property
-    :extension-parameters
-    block)))
+       (cdr parameter) block info)))
+   (org-element-property :extension-parameters block)))
 
 (defun emarccs--org-extension-block--export
     (backend original block contents info)
@@ -382,62 +295,41 @@ export environment."
 
 ORIGINAL is the backend's original special-block transcoder.
 Ordinary special blocks are delegated to ORIGINAL unchanged."
-  (if
-      (not
-       (emarccs--org-extension-block--source-namespace-block-p
-        block))
-      (funcall
-       original
-       block
-       contents
-       info)
+  (if (not
+       (emarccs--org-extension-block--source-namespace-block-p block))
+      (funcall original block contents info)
 
     ;; Export operates on Org's export tree.  Apply exactly the same
     ;; normalization used by `...-parse-buffer' before any
     ;; backend-specific lowering.
-    (emarccs--org-extension-block--normalize-block
-     block)
+    (emarccs--org-extension-block--normalize-block block)
 
     (let ((backend-spec
-           (emarccs--org-extension-block--backend-spec
-            backend)))
+           (emarccs--org-extension-block--backend-spec backend)))
       (unless backend-spec
-        (user-error
-         "Unknown extension-block backend: %s"
-         backend))
+        (user-error "Unknown extension-block backend: %s" backend))
 
-      (let ((renderer
-             (plist-get
-              backend-spec
-              :renderer)))
+      (let ((renderer (plist-get backend-spec :renderer)))
         (unless renderer
           (user-error
            "No extension-block renderer registered for backend %s"
            backend))
 
-        (funcall
-         renderer
-         original
-         block
-         (org-element-property
-          :extension-kind
-          block)
-         contents
-         (emarccs--org-extension-block--export-parameters
-          block
-          info)
-         info)))))
+        (funcall renderer
+                 original
+                 block
+                 (org-element-property :extension-kind block)
+                 contents
+                 (emarccs--org-extension-block--export-parameters
+                  block info)
+                 info)))))
 
 ;;; LaTeX backend
 
 (defun emarccs--org-extension-block--render-latex
     (_original block kind contents parameters info)
   "Render extension BLOCK of KIND for the LaTeX backend."
-  (when
-      (org-export-read-attribute
-       :attr_latex
-       block
-       :options)
+  (when (org-export-read-attribute :attr_latex block :options)
     (user-error
      "%s blocks cannot use ATTR_LATEX :options; use extension parameters"
      emarccs--org-extension-block--source-namespace))
@@ -446,82 +338,51 @@ Ordinary special blocks are delegated to ORIGINAL unchanged."
           (when parameters
             (concat
              "["
-             (mapconcat
-              (lambda (parameter)
-                (format
-                 "%s={%s}"
-                 (substring
-                  (symbol-name
-                   (car parameter))
-                  1)
-                 (cdr parameter)))
-              parameters
-              ",")
+             (mapconcat (lambda (parameter)
+                          (format "%s={%s}"
+                                  (substring (symbol-name
+                                              (car parameter))
+                                             1)
+                                  (cdr parameter)))
+                        parameters
+                        ",")
              "]")))
          (environment
-          (if
-              emarccs--org-extension-block-preserve-namespace
+          (if emarccs--org-extension-block-preserve-namespace
               emarccs--org-extension-block--export-namespace
             kind))
          (begin
-          (if
-              emarccs--org-extension-block-preserve-namespace
-              (format
-               "\\begin{%s}{%s}%s\n"
-               environment
-               kind
-               (or options ""))
-            (format
-             "\\begin{%s}%s\n"
-             environment
-             (or options ""))))
-         (caption
-          (org-latex--caption/label-string
-           block
-           info))
-         (caption-above-p
-          (org-latex--caption-above-p
-           block
-           info)))
+          (if emarccs--org-extension-block-preserve-namespace
+              (format "\\begin{%s}{%s}%s\n"
+                      environment
+                      kind
+                      (or options ""))
+            (format "\\begin{%s}%s\n" environment (or options ""))))
+         (caption (org-latex--caption/label-string block info))
+         (caption-above-p (org-latex--caption-above-p block info)))
 
     (concat
      begin
-     (and
-      caption-above-p
-      caption)
+     (and caption-above-p caption)
      contents
-     (and
-      (not caption-above-p)
-      caption)
-     (format
-      "\\end{%s}"
-      environment))))
+     (and (not caption-above-p) caption)
+     (format "\\end{%s}" environment))))
 
 (defun emarccs--org-extension-block--latex
     (original block contents info)
   "Extend `org-latex-special-block' for extension blocks."
   (emarccs--org-extension-block--export
-   'latex
-   original
-   block
-   contents
-   info))
+   'latex original block contents info))
 
 ;;; HTML backend
 
-(defun emarccs--org-extension-block--html-parameter-name
-    (parameter)
+(defun emarccs--org-extension-block--html-parameter-name (parameter)
   "Return a display name for PARAMETER."
   (capitalize
    (replace-regexp-in-string
-    "-"
-    " "
-    (substring
-     (symbol-name parameter)
-     1))))
+    "-" " " (substring (symbol-name parameter) 1))))
 
-(defun emarccs--org-extension-block--html-metadata
-    (parameters)
+(defun emarccs--org-extension-block--html-metadata (parameters)
   "Render extension PARAMETERS as HTML metadata."
   (when parameters
     (concat
@@ -542,28 +403,20 @@ Ordinary special blocks are delegated to ORIGINAL unchanged."
     (original block kind contents parameters info)
   "Render extension BLOCK of KIND for the HTML backend."
   (let ((metadata
-         (emarccs--org-extension-block--html-metadata
-          parameters)))
+         (emarccs--org-extension-block--html-metadata parameters)))
 
-    (if
-        emarccs--org-extension-block-preserve-namespace
+    (if emarccs--org-extension-block-preserve-namespace
 
         ;; Preserve the extension namespace in a backend-facing form.
         ;; The Org source-level name `ext' is not exposed in HTML.
-        (let ((namespaced-block
-               (org-element-copy
-                block)))
+        (let ((namespaced-block (org-element-copy block)))
           (org-element-put-property
            namespaced-block
-           :type
-           emarccs--org-extension-block--export-namespace)
+           :type emarccs--org-extension-block--export-namespace)
 
           ;; The original value is source syntax for the extension
           ;; header, not parameters of the exported special block.
-          (org-element-put-property
-           namespaced-block
-           :parameters
-           nil)
+          (org-element-put-property namespaced-block :parameters nil)
 
           (funcall
            original
@@ -572,13 +425,10 @@ Ordinary special blocks are delegated to ORIGINAL unchanged."
             (format
              "<div class=\"org-extension-block-kind org-extension-block-%s\" \
 data-extension-kind=\"%s\">\n"
-             kind
-             kind)
+             kind kind)
             metadata
             "<div class=\"org-extension-block-body\">\n"
-            (or
-             contents
-             "")
+            (or contents "")
             "\n</div>\n"
             "</div>")
            info))
@@ -587,145 +437,75 @@ data-extension-kind=\"%s\">\n"
       ;; BLOCK to the stock HTML transcoder as a special block whose
       ;; type is the semantic KIND.  The export tree itself remains
       ;; normalized as `ext'.
-      (let ((lowered-block
-             (org-element-copy
-              block)))
-        (org-element-put-property
-         lowered-block
-         :type
-         kind)
+      (let ((lowered-block (org-element-copy block)))
+        (org-element-put-property lowered-block :type kind)
 
         ;; The original value is extension syntax, not native
         ;; special-block parameters, so do not expose it after
         ;; lowering.
-        (org-element-put-property
-         lowered-block
-         :parameters
-         nil)
+        (org-element-put-property lowered-block :parameters nil)
 
-        (funcall
-         original
-         lowered-block
-         (concat
-          metadata
-          (or
-           contents
-           ""))
-         info)))))
+        (funcall original
+                 lowered-block
+                 (concat metadata (or contents ""))
+                 info)))))
 
 (defun emarccs--org-extension-block--html
     (original block contents info)
   "Extend `org-html-special-block' for extension blocks."
   (emarccs--org-extension-block--export
-   'html
-   original
-   block
-   contents
-   info))
+   'html original block contents info))
 
 ;;; Backend lifecycle
 
-(defun emarccs--org-extension-block--install-backend
-    (backend)
+(defun emarccs--org-extension-block--install-backend (backend)
   "Install integration for BACKEND."
-  (let* ((spec
-          (emarccs--org-extension-block--backend-spec
-           backend))
-         (transcoder
-          (plist-get
-           spec
-           :transcoder))
-         (advice
-          (plist-get
-           spec
-           :advice)))
+  (let* ((spec (emarccs--org-extension-block--backend-spec backend))
+         (transcoder (plist-get spec :transcoder))
+         (advice (plist-get spec :advice)))
     (unless spec
-      (error
-       "Unknown extension-block backend: %s"
-       backend))
+      (error "Unknown extension-block backend: %s" backend))
 
-    (unless
-        (advice-member-p
-         advice
-         transcoder)
-      (advice-add
-       transcoder
-       :around
-       advice))))
+    (unless (advice-member-p advice transcoder)
+      (advice-add transcoder :around advice))))
 
-(defun emarccs--org-extension-block--activate-backend
-    (backend)
+(defun emarccs--org-extension-block--activate-backend (backend)
   "Activate integration for BACKEND when its feature is loaded."
-  (let* ((spec
-          (emarccs--org-extension-block--backend-spec
-           backend))
-         (feature
-          (plist-get
-           spec
-           :feature)))
+  (let* ((spec (emarccs--org-extension-block--backend-spec backend))
+         (feature (plist-get spec :feature)))
     (unless spec
-      (error
-       "Unknown extension-block backend: %s"
-       backend))
+      (error "Unknown extension-block backend: %s" backend))
 
     ;; Important: if the backend is already loaded, install the
     ;; advice directly.  The current feature may still be in the
     ;; process of loading and therefore not yet satisfy `featurep'.
-    (if
-        (featurep feature)
-        (emarccs--org-extension-block--install-backend
-         backend)
+    (if (featurep feature)
+        (emarccs--org-extension-block--install-backend backend)
 
       ;; Only the genuinely delayed path checks whether this
       ;; feature is still loaded.  The callback may outlive it
       ;; after `unload-feature'.
       (with-eval-after-load feature
-        (when
-            (featurep
-             'emarccs--org-extension-block)
-          (emarccs--org-extension-block--install-backend
-           backend))))))
+        (when (featurep 'emarccs--org-extension-block)
+          (emarccs--org-extension-block--install-backend backend))))))
 
-(defun emarccs--org-extension-block--uninstall-backend
-    (backend)
+(defun emarccs--org-extension-block--uninstall-backend (backend)
   "Remove integration for BACKEND."
-  (let* ((spec
-          (emarccs--org-extension-block--backend-spec
-           backend))
-         (feature
-          (plist-get
-           spec
-           :feature))
-         (transcoder
-          (plist-get
-           spec
-           :transcoder))
-         (advice
-          (plist-get
-           spec
-           :advice)))
-    (when
-        (and
-         spec
-         (featurep feature))
-      (advice-remove
-       transcoder
-       advice))))
+  (let* ((spec (emarccs--org-extension-block--backend-spec backend))
+         (feature (plist-get spec :feature))
+         (transcoder (plist-get spec :transcoder))
+         (advice (plist-get spec :advice)))
+    (when (and spec (featurep feature))
+      (advice-remove transcoder advice))))
 
 (defun emarccs--org-extension-block-unload-function ()
   "Unload `emarccs--org-extension-block'."
-  (dolist
-      (entry
-       emarccs--org-extension-block--backend-registry)
-    (emarccs--org-extension-block--uninstall-backend
-     (car entry)))
+  (dolist (entry emarccs--org-extension-block--backend-registry)
+    (emarccs--org-extension-block--uninstall-backend (car entry)))
   nil)
 
-(dolist
-    (entry
-     emarccs--org-extension-block--backend-registry)
-  (emarccs--org-extension-block--activate-backend
-   (car entry)))
+(dolist (entry emarccs--org-extension-block--backend-registry)
+  (emarccs--org-extension-block--activate-backend (car entry)))
 
 (provide 'emarccs--org-extension-block)
 ;;; emarccs--org-extension-block.el ends here.

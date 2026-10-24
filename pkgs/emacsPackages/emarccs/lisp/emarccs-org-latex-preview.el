@@ -6,13 +6,15 @@
 ;;; code:
 
 (with-eval-after-load 'org-latex-preview
-  (plist-put org-latex-preview-appearance-options
-             :page-width 0.8)
+  (plist-put org-latex-preview-appearance-options :page-width 0.8)
   (setq org-latex-preview-process-default 'dvisvgm)
   ;; (add-hook 'org-mode-hook 'org-latex-preview-mode)
   (setq org-latex-preview-mode-ignored-commands
-        '(next-line previous-line mwheel-scroll
-                    scroll-up-command scroll-down-command))
+        '(next-line
+          previous-line
+          mwheel-scroll
+          scroll-up-command
+          scroll-down-command))
   (setq org-latex-preview-numbered t)
   (setq org-latex-preview-mode-display-live nil)
   (setq org-latex-preview-mode-update-delay 1)
@@ -33,14 +35,16 @@
           ("xelatex" . "latexmk -norc -xelatex -no-pdf")
           ("lualatex" . "latexmk -norc -dvilua")))
   (setq org-latex-preview-process-default 'dvisvgm)
-  (setq org-latex-preview-process-alist
-        `((dvisvgm :programs ("dvisvgm" "latexmk")
-                   :description "dvi > svg"
-                   :message "you need to install the programs: texlive and dvisvgm."
-                   :image-input-type "dvi"
-                   :image-output-type "svg"
-                   :latex-compiler ("%l -interaction=nonstopmode -outdir=%o %f")
-                   :image-converter ("dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %B-%%9p.svg %f")))))
+  (setq
+   org-latex-preview-process-alist
+   `((dvisvgm
+      :programs ("dvisvgm" "latexmk")
+      :description "dvi > svg"
+      :message "you need to install the programs: texlive and dvisvgm."
+      :image-input-type "dvi"
+      :image-output-type "svg"
+      :latex-compiler ("%l -interaction=nonstopmode -outdir=%o %f")
+      :image-converter ("dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %B-%%9p.svg %f")))))
 
 (provide 'emarccs-org-latex-preview)
 ;;; emarccs-org-latex-preview.el ends here.

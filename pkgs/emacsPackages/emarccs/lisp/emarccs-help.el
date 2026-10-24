@@ -8,64 +8,79 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package helpful
-  :bind
-  (("C-h f" . helpful-callable)
-   ("C-h v" . helpful-variable)
-   ("C-h k" . helpful-key)
-   ("C-h s" . helpful-symbol))
-  :config
-  (setq helpful-max-buffers 5)
-  ;; don't pop new window
-  (setq helpful-switch-buffer-function
-        (lambda (buf) (if-let* ((window (display-buffer-reuse-mode-window buf '((mode . helpful-mode)))))
-                     ;; ensure the helpful window is selected for `helpful-update'.
-                     (select-window window)
-                   ;; line above returns nil if no available window is found
-                   (pop-to-buffer buf))))
-  (defvar emarccs-help--history () "History of helpful, a list of buffers.")
-  (defun emarccs-help--switch-to-buffer  (buffer &optional offset)
-    "Jump to last SYMBOL in helpful history, offset by OFFSET."
-    (interactive)
-    (require 'seq)
-    (require 'cl-lib)
-    (setq emarccs-help--history
-          (seq-remove (lambda (buf) (not (buffer-live-p buf)))
-                      emarccs-help--history))
-    (cl-labels ((find-index (elt lst)
-                  (let ((idx 0)
-                        (len (length lst)))
-                    (while (and (not (eq elt (nth idx lst)))
-                                (not (eq idx len)))
-                      (setq idx (1+ idx)))
-                    (if (eq idx len)
-                        nil
-                      idx))))
-      (let ((idx (+ (or offset 0) (find-index buffer emarccs-help--history))))
-        (if (or (>= idx (length emarccs-help--history))
-                (< idx 0))
-            (message "No further history.")
-          (switch-to-buffer (nth idx emarccs-help--history))))))
-  (defun emarccs-help--update (oldfunc)
-    "Insert back/forward buttons."
-    (funcall oldfunc)
-    (let ((inhibit-read-only t))
-      (goto-char (point-min))
-      (insert-text-button "Back"
-                          'action (lambda (&rest _)
-                                    (interactive)
-                                    (emarccs-help--switch-to-buffer  (current-buffer) 1)))
-      (insert " | ")
-      (insert-text-button "Forward"
-                          'action (lambda (&rest _)
-                                    (interactive)
-                                    (emarccs-help--switch-to-buffer  (current-buffer)  -1)))
-      (insert "\n\n")))
-  (advice-add #'helpful-update :around #'emarccs-help--update)
-  (advice-add #'helpful--buffer :around (lambda (oldfunc &rest args)
-                                          (let ((buf (apply oldfunc args)))
-                                            (push buf emarccs-help--history)
-                                            buf))))
+(use-package
+ helpful
+ :bind
+ (("C-h f" . helpful-callable)
+  ("C-h v" . helpful-variable)
+  ("C-h k" . helpful-key)
+  ("C-h s" . helpful-symbol))
+ :config (setq helpful-max-buffers 5)
+ ;; don't pop new window
+ (setq
+  helpful-switch-buffer-function
+  (lambda (buf)
+    (if-let* ((window
+               (display-buffer-reuse-mode-window
+                buf '((mode . helpful-mode)))))
+        ;; ensure the helpful window is selected for `helpful-update'.
+        (select-window window)
+      ;; line above returns nil if no available window is found
+      (pop-to-buffer buf))))
+ (defvar emarccs-help--history ()
+   "History of helpful, a list of buffers.")
+ (defun emarccs-help--switch-to-buffer (buffer &optional offset)
+   "Jump to last SYMBOL in helpful history, offset by OFFSET."
+   (interactive)
+   (require 'seq)
+   (require 'cl-lib)
+   (setq emarccs-help--history
+         (seq-remove
+          (lambda (buf) (not (buffer-live-p buf)))
+          emarccs-help--history))
+   (cl-labels
+    ((find-index
+      (elt lst)
+      (let ((idx 0)
+            (len (length lst)))
+        (while (and (not (eq elt (nth idx lst))) (not (eq idx len)))
+          (setq idx (1+ idx)))
+        (if (eq idx len)
+            nil
+          idx))))
+    (let ((idx
+           (+ (or offset 0)
+              (find-index buffer emarccs-help--history))))
+      (if (or (>= idx (length emarccs-help--history)) (< idx 0))
+          (message "No further history.")
+        (switch-to-buffer (nth idx emarccs-help--history))))))
+ (defun emarccs-help--update (oldfunc)
+   "Insert back/forward buttons."
+   (funcall oldfunc)
+   (let ((inhibit-read-only t))
+     (goto-char (point-min))
+     (insert-text-button "Back"
+                         'action
+                         (lambda (&rest _)
+                           (interactive)
+                           (emarccs-help--switch-to-buffer
+                            (current-buffer) 1)))
+     (insert " | ")
+     (insert-text-button "Forward"
+                         'action
+                         (lambda (&rest _)
+                           (interactive)
+                           (emarccs-help--switch-to-buffer
+                            (current-buffer) -1)))
+     (insert "\n\n")))
+ (advice-add #'helpful-update :around #'emarccs-help--update)
+ (advice-add
+  #'helpful--buffer
+  :around
+  (lambda (oldfunc &rest args)
+    (let ((buf (apply oldfunc args)))
+      (push buf emarccs-help--history)
+      buf))))
 
 (provide 'emarccs-help)
 ;;; emarccs-basic.el ends here.

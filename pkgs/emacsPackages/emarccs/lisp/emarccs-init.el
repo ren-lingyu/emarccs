@@ -53,7 +53,8 @@ only after all modules and optional user customizations load successfully."
       (require 'emarccs-debug)
 
       ;; customize
-      (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+      (setq custom-file
+            (expand-file-name "custom.el" user-emacs-directory))
       (when (file-exists-p custom-file)
         (load-file custom-file))
       (setq emarccs--initialized t))))

@@ -6,159 +6,369 @@
   (require 'use-package))
 
 ;; 自动补全
-(use-package company
-  :hook
-  (after-init . global-company-mode))
+(use-package company :hook (after-init . global-company-mode))
 
-(use-package company-auctex
-  :after auctex
-  :hook (LaTeX-mode . company-auctex-init))
+(use-package
+ company-auctex
+ :after auctex
+ :hook (LaTeX-mode . company-auctex-init))
 
-(use-package company-math
-  :disabled
-  :after company
-  :init
-  (add-to-list 'company-backends 'company-math-symbols-unicode)
-  (add-to-list 'company-backends 'company-math-symbols-latex))
+(use-package
+ company-math
+ :disabled
+ :after company
+ :init
+ (add-to-list 'company-backends 'company-math-symbols-unicode)
+ (add-to-list 'company-backends 'company-math-symbols-latex))
 
-(use-package aas
-  :hook
-  (LaTeX-mode . aas-activate-for-major-mode)
-  (org-mode . aas-activate-for-major-mode)
-  :config
-  (remhash 'text-mode aas-keymaps)
-  (aas-set-snippets 'text-mode
-    ;; expand unconditionally
-    ";o-" "ō"
-    ";i-" "ī"
-    ";a-" "ā"
-    ";u-" "ū"
-    ";e-" "ē")
-  (remhash 'org-mode aas-keymaps)
-  (aas-set-snippets 'org-mode
-    ";abst" (lambda () (interactive) (insert "#+BEGIN_abstract\n\n#+END_abstract\n") (forward-line -2) )
-    ";comm" (lambda () (interactive) (insert "#+BEGIN_COMMENT\n\n#+END_COMMENT\n") (forward-line -2) )
-    ";eq" (lambda () (interactive) (insert "\\\(  \\\)") (forward-char -3) )
-    ";ee" (lambda () (interactive) (insert "\\begin{equation}\n\n\\end{equation}\n") (forward-line -2) )
-    ";ean" (lambda () (interactive) (insert "\\begin{align}\n\n\\end{align}\n") (forward-line -2) )
-    ";ead" (lambda () (interactive) (insert "\\begin{aligned}[t]\n\n\\end{aligned}") (forward-line -1) )
-    ";es" (lambda () (interactive) (insert "\\begin{split}\n\n\\end{split}") (forward-line -1) )
-    ";egd" (lambda () (interactive) (insert "\\begin{gathered}\n\n\\end{gathered}") (forward-line -1) )
-    ";eyq" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquant}\n\n\\end{yquant}\n\\end{tikzpicture}") (forward-line -2))
-    ";eyg" (lambda () (interactive) (insert "\\begin{tikzpicture}\n\\begin{yquantgroup}\n\n\\end{yquantgroup}\n\\end{tikzpicture}") (forward-line -2))))
+(use-package
+ aas
+ :hook
+ (LaTeX-mode . aas-activate-for-major-mode)
+ (org-mode . aas-activate-for-major-mode)
+ :config
+ (remhash 'text-mode aas-keymaps)
+ (aas-set-snippets
+  'text-mode
+  ;; expand unconditionally
+  ";o-" "ō" ";i-" "ī" ";a-" "ā" ";u-" "ū" ";e-" "ē")
+ (remhash 'org-mode aas-keymaps)
+ (aas-set-snippets
+  'org-mode ";abst"
+  (lambda ()
+    (interactive)
+    (insert "#+BEGIN_abstract\n\n#+END_abstract\n")
+    (forward-line -2))
+  ";comm"
+  (lambda ()
+    (interactive)
+    (insert "#+BEGIN_COMMENT\n\n#+END_COMMENT\n")
+    (forward-line -2))
+  ";eq"
+  (lambda ()
+    (interactive)
+    (insert "\\\(  \\\)")
+    (forward-char -3))
+  ";ee"
+  (lambda ()
+    (interactive)
+    (insert "\\begin{equation}\n\n\\end{equation}\n")
+    (forward-line -2))
+  ";ean"
+  (lambda ()
+    (interactive)
+    (insert "\\begin{align}\n\n\\end{align}\n")
+    (forward-line -2))
+  ";ead"
+  (lambda ()
+    (interactive)
+    (insert "\\begin{aligned}[t]\n\n\\end{aligned}")
+    (forward-line -1))
+  ";es"
+  (lambda ()
+    (interactive)
+    (insert "\\begin{split}\n\n\\end{split}")
+    (forward-line -1))
+  ";egd"
+  (lambda ()
+    (interactive)
+    (insert "\\begin{gathered}\n\n\\end{gathered}")
+    (forward-line -1))
+  ";eyq"
+  (lambda ()
+    (interactive)
+    (insert
+     "\\begin{tikzpicture}\n\\begin{yquant}\n\n\\end{yquant}\n\\end{tikzpicture}")
+    (forward-line -2))
+  ";eyg"
+  (lambda ()
+    (interactive)
+    (insert
+     "\\begin{tikzpicture}\n\\begin{yquantgroup}\n\n\\end{yquantgroup}\n\\end{tikzpicture}")
+    (forward-line -2))))
 
-(use-package laas
-  :no-require t
-  :init
-  (setq laas-basic-snippets
-        '(";;alp" "\\alpha"
-          ";;bet" "\\beta"
-          ";;gam" "\\gamma"
-          ";;del" "\\delta"
-          ";;eps" "\\epsilon"
-          ";;veps" "\\varepsilon"
-          ";;zet" "\\zeta"
-          ";;eta" "\\eta"
-          ";;the" "\\theta"
-          ";;vthe" "\\vartheta"
-          ";;iot" "\\iota"
-          ";;kap" "\\kappa"
-          ";;lam" "\\lambda"
-          ";;mu" "\\mu"
-          ";;nu" "\\nu"
-          ";;xi" "\\xi"
-          ";;pi" "\\pi"
-          ";;vpi" "\\varpi"
-          ";;rho" "\\rho"
-          ";;vrho" "\\varrho"
-          ";;sig" "\\sigma"
-          ";;vsig" "\\varsigma"
-          ";;tau" "\\tau"
-          ";;ups" "\\upsilon"
-          ";;phi" "\\phi"
-          ";;vphi" "\\varphi"
-          ";;chi" "\\chi"
-          ";;psi" "\\psi"
-          ";;ome" "\\omega"
-          ";;cgam" "\\Gamma"
-          ";;vcgam" "\\varGamma"
-          ";;cdel" "\\Delta"
-          ";;vcdel" "\\varDelta"
-          ";;cthe" "\\Theta"
-          ";;vcthe" "\\varTheta"
-          ";;clam" "\\Lambda"
-          ";;vclam" "\\varLambda"
-          ";;cxi" "\\Xi"
-          ";;vcxi" "\\varXi"
-          ";;cpi" "\\Pi"
-          ";;vcpi" "\\varPi"
-          ";;csig" "\\Sigma"
-          ";;vcsig" "\\varSigma"
-          ";;cups" "\\Upsilon"
-          ";;vcups" "\\varUpsilon"
-          ";;cphi" "\\Phi"
-          ";;vcphi" "\\varPhi"
-          ";;cpsi" "\\Psi"
-          ";;vcpsi" "\\varPsi"
-          ";;come" "\\Omega"
-          ";;vcome" "\\varOmega"
-          ";;ale" "\\aleph"
-          ";;bet" "\\beth"
-          ";;dal" "\\daleth"
-          ";;gim" "\\gimel"))
-  (setq laas-subscript-snippets nil)
-  (setq laas-frac-snippet nil)
-  (setq laas-accent-snippets nil)
-  :config
-  (aas-set-snippets 'laas-mode
-    ";label" (lambda () (interactive) (yas-expand-snippet "\\label{$1:$2}\n$0"))
-    ";uniti" "\\mathrm{i}"
-    ";hom" "\\Hom"
-    ";end" "\\End"
-    ";id" "\\id"
-    ";ker" "\\ker"
-    ";im" "\\im"
-    ";tr" "\\tr"
-    ";mrm" (lambda () (interactive) (yas-expand-snippet "\\mathrm{$1}"))
-    ";mcal" (lambda () (interactive) (yas-expand-snippet "\\mathcal{$1}"))
-    ";mscr" (lambda () (interactive) (yas-expand-snippet "\\mathscr{$1}"))
-    ";mbb" (lambda () (interactive) (yas-expand-snippet "\\mathbb{$1}"))
-    ";mtt" (lambda () (interactive) (yas-expand-snippet "\\mathtt{$1}"))
-    ";mfrak" (lambda () (interactive) (yas-expand-snippet "\\mathfrak{$1}"))
-    ";times" "\\times"
-    ";sum" (lambda () (interactive) (yas-expand-snippet "\\sum_{ $1 }^{ $2 } $0"))
-    ";int" (lambda () (interactive) (yas-expand-snippet "\\int_{ $1 }^{ $2 } $0"))
-    ";prod" (lambda () (interactive) (yas-expand-snippet "\\prod_{ $1 }^{ $2 } $0"))
-    ";otimes" (lambda () (interactive) (yas-expand-snippet "\\bigotimes_{ $1 }^{ $2 } $0"))
-    ";pp" (lambda () (interactive) (yas-expand-snippet "\\left( $1 \\right)$0"))
-    ";ss" (lambda () (interactive) (yas-expand-snippet "\\left[ $1 \\right]$0"))
-    ";bb" (lambda () (interactive) (yas-expand-snippet "\\left\\\\{ $1 \\right\\\\}$0"))
-    ";aa" (lambda () (interactive) (yas-expand-snippet "\\left\\langle $1 \\right\\rangle$0"))
-    ";vv" (lambda () (interactive) (yas-expand-snippet "\\left\\lvert $1 \\right\\rvert$0"))
-    ";VV" (lambda () (interactive) (yas-expand-snippet "\\left\\lVert $1 \\right\\rVert$0"))
-    ";abpp" (lambda () (interactive) (yas-expand-snippet "\\ab( $1 )$0"))
-    ";abss" (lambda () (interactive) (yas-expand-snippet "\\ab[ $1 ]$0"))
-    ";abbb" (lambda () (interactive) (yas-expand-snippet "\\ab\\\\{ $1 \\\\}$0"))
-    ";abaa" (lambda () (interactive) (yas-expand-snippet "\\ab< $1 >$0"))
-    ";abvv" (lambda () (interactive) (yas-expand-snippet "\\ab| $1 |$0"))
-    ";abVV" (lambda () (interactive) (yas-expand-snippet "\\ab\\\\| $1 \\\\|$0"))
-    ";ket" (lambda () (interactive) (yas-expand-snippet "\\ket| $1 >$0"))
-    ";bra" (lambda () (interactive) (yas-expand-snippet "\\bra< $1 |$0"))
-    ";bk" (lambda () (interactive) (yas-expand-snippet "\\braket< $1 | $2 >$0"))
-    ";kb" (lambda () (interactive) (yas-expand-snippet "\\ketbra| $1 >< $2 |$0"))
-    ";bok" (lambda () (interactive) (yas-expand-snippet "\\braket< $1 | $3 | $2 >$0"))
-    ";eval" (lambda () (interactive) (yas-expand-snippet "\\eval{ $1 }_{ $2 }^{ $3 }$0"))
-    ";frac" (lambda () (interactive) (yas-expand-snippet "\\frac{ $1 }{ $2 }$0"))
-    ";sqrt" (lambda () (interactive) (yas-expand-snippet "\\sqrt{ $1 }$0"))
-    ";text" (lambda () (interactive) (yas-expand-snippet "\\text{$1}$0"))
-    ";tensor" (lambda () (interactive) (yas-expand-snippet "\\tensor{ $1 }{ $2 }$0"))
-    ";sp" (lambda () (interactive) (yas-expand-snippet "\\sp{ $1 }$0"))
-    ";sb" (lambda () (interactive) (yas-expand-snippet "\\sb{ $1 }$0")))
-  :hook
-  (LaTeX-mode . laas-mode)
-  (LaTeX-mode . yas-minor-mode)
-  (org-mode . laas-mode)
-  (org-mode . yas-minor-mode))
+(use-package
+ laas
+ :no-require t
+ :init
+ (setq laas-basic-snippets
+       '(";;alp"
+         "\\alpha"
+         ";;bet"
+         "\\beta"
+         ";;gam"
+         "\\gamma"
+         ";;del"
+         "\\delta"
+         ";;eps"
+         "\\epsilon"
+         ";;veps"
+         "\\varepsilon"
+         ";;zet"
+         "\\zeta"
+         ";;eta"
+         "\\eta"
+         ";;the"
+         "\\theta"
+         ";;vthe"
+         "\\vartheta"
+         ";;iot"
+         "\\iota"
+         ";;kap"
+         "\\kappa"
+         ";;lam"
+         "\\lambda"
+         ";;mu"
+         "\\mu"
+         ";;nu"
+         "\\nu"
+         ";;xi"
+         "\\xi"
+         ";;pi"
+         "\\pi"
+         ";;vpi"
+         "\\varpi"
+         ";;rho"
+         "\\rho"
+         ";;vrho"
+         "\\varrho"
+         ";;sig"
+         "\\sigma"
+         ";;vsig"
+         "\\varsigma"
+         ";;tau"
+         "\\tau"
+         ";;ups"
+         "\\upsilon"
+         ";;phi"
+         "\\phi"
+         ";;vphi"
+         "\\varphi"
+         ";;chi"
+         "\\chi"
+         ";;psi"
+         "\\psi"
+         ";;ome"
+         "\\omega"
+         ";;cgam"
+         "\\Gamma"
+         ";;vcgam"
+         "\\varGamma"
+         ";;cdel"
+         "\\Delta"
+         ";;vcdel"
+         "\\varDelta"
+         ";;cthe"
+         "\\Theta"
+         ";;vcthe"
+         "\\varTheta"
+         ";;clam"
+         "\\Lambda"
+         ";;vclam"
+         "\\varLambda"
+         ";;cxi"
+         "\\Xi"
+         ";;vcxi"
+         "\\varXi"
+         ";;cpi"
+         "\\Pi"
+         ";;vcpi"
+         "\\varPi"
+         ";;csig"
+         "\\Sigma"
+         ";;vcsig"
+         "\\varSigma"
+         ";;cups"
+         "\\Upsilon"
+         ";;vcups"
+         "\\varUpsilon"
+         ";;cphi"
+         "\\Phi"
+         ";;vcphi"
+         "\\varPhi"
+         ";;cpsi"
+         "\\Psi"
+         ";;vcpsi"
+         "\\varPsi"
+         ";;come"
+         "\\Omega"
+         ";;vcome"
+         "\\varOmega"
+         ";;ale"
+         "\\aleph"
+         ";;bet"
+         "\\beth"
+         ";;dal"
+         "\\daleth"
+         ";;gim"
+         "\\gimel"))
+ (setq laas-subscript-snippets nil)
+ (setq laas-frac-snippet nil)
+ (setq laas-accent-snippets nil)
+ :config
+ (aas-set-snippets
+  'laas-mode
+  ";label"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\label{$1:$2}\n$0"))
+  ";uniti"
+  "\\mathrm{i}"
+  ";hom"
+  "\\Hom"
+  ";end"
+  "\\End"
+  ";id"
+  "\\id"
+  ";ker"
+  "\\ker"
+  ";im"
+  "\\im"
+  ";tr"
+  "\\tr"
+  ";mrm"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\mathrm{$1}"))
+  ";mcal"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\mathcal{$1}"))
+  ";mscr"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\mathscr{$1}"))
+  ";mbb"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\mathbb{$1}"))
+  ";mtt"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\mathtt{$1}"))
+  ";mfrak"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\mathfrak{$1}"))
+  ";times"
+  "\\times"
+  ";sum"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\sum_{ $1 }^{ $2 } $0"))
+  ";int"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\int_{ $1 }^{ $2 } $0"))
+  ";prod"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\prod_{ $1 }^{ $2 } $0"))
+  ";otimes"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\bigotimes_{ $1 }^{ $2 } $0"))
+  ";pp"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\left( $1 \\right)$0"))
+  ";ss"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\left[ $1 \\right]$0"))
+  ";bb"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\left\\\\{ $1 \\right\\\\}$0"))
+  ";aa"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\left\\langle $1 \\right\\rangle$0"))
+  ";vv"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\left\\lvert $1 \\right\\rvert$0"))
+  ";VV"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\left\\lVert $1 \\right\\rVert$0"))
+  ";abpp"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\ab( $1 )$0"))
+  ";abss"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\ab[ $1 ]$0"))
+  ";abbb"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\ab\\\\{ $1 \\\\}$0"))
+  ";abaa"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\ab< $1 >$0"))
+  ";abvv"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\ab| $1 |$0"))
+  ";abVV"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\ab\\\\| $1 \\\\|$0"))
+  ";ket"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\ket| $1 >$0"))
+  ";bra"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\bra< $1 |$0"))
+  ";bk"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\braket< $1 | $2 >$0"))
+  ";kb"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\ketbra| $1 >< $2 |$0"))
+  ";bok"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\braket< $1 | $3 | $2 >$0"))
+  ";eval"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\eval{ $1 }_{ $2 }^{ $3 }$0"))
+  ";frac"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\frac{ $1 }{ $2 }$0"))
+  ";sqrt"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\sqrt{ $1 }$0"))
+  ";text"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\text{$1}$0"))
+  ";tensor"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\tensor{ $1 }{ $2 }$0"))
+  ";sp"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\sp{ $1 }$0"))
+  ";sb"
+  (lambda ()
+    (interactive)
+    (yas-expand-snippet "\\sb{ $1 }$0")))
+ :hook
+ (LaTeX-mode . laas-mode)
+ (LaTeX-mode . yas-minor-mode)
+ (org-mode . laas-mode)
+ (org-mode . yas-minor-mode))
 
 (provide 'emarccs-complete)
 ;;; emarccs-complete.el ends here

@@ -6,27 +6,29 @@
   (require 'use-package))
 
 ;; Koishi theme
-(use-package koishi-theme
-  :config
-  (unless (custom-theme-enabled-p 'koishi)
-    (load-theme 'koishi t)))
+(use-package
+ koishi-theme
+ :config
+ (unless (custom-theme-enabled-p 'koishi)
+   (load-theme 'koishi t)))
 
 
 ;; Modus themes
-(use-package modus-themes
-  :custom
-  (modus-themes-bold-constructs t)
-  (modus-themes-italic-constructs t))
+(use-package
+ modus-themes
+ :custom
+ (modus-themes-bold-constructs t)
+ (modus-themes-italic-constructs t))
 
 
 ;; Doom modeline
-(use-package doom-modeline
-  :custom
-  (doom-modeline-icon nil)
+(use-package
+ doom-modeline
+ :custom (doom-modeline-icon nil)
 
-  :config
-  (unless doom-modeline-mode
-    (doom-modeline-mode 1)))
+ :config
+ (unless doom-modeline-mode
+   (doom-modeline-mode 1)))
 
 
 (provide 'emarccs-theme)

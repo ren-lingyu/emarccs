@@ -3,7 +3,6 @@
   fetchFromGitHub,
   melpaBuild,
   org,
-  org-roam,
   texmacs,
   nix-update-script,
 }:
@@ -22,10 +21,7 @@ melpaBuild (finalAttrs_: {
 
   files = ''(:defaults "org-texmacs-worker.scm")'';
 
-  packageRequires = [
-    org
-    org-roam
-  ];
+  packageRequires = [ org ];
 
   turnCompilationWarningToError = true;
 

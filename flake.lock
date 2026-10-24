@@ -20,6 +20,33 @@
         "url": "https://github.com/hercules-ci/flake-parts.git"
       }
     },
+    "local-nixpkgs": {
+      "inputs": {
+        "flake-parts": [
+          "personal-nixpkgs",
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "personal-nixpkgs",
+          "nixpkgs"
+        ],
+        "treefmt-nix": [
+          "personal-nixpkgs",
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "path": "./pkgs",
+        "type": "path"
+      },
+      "original": {
+        "path": "./pkgs",
+        "type": "path"
+      },
+      "parent": [
+        "personal-nixpkgs"
+      ]
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1792506237,
@@ -54,21 +81,18 @@
     },
     "personal-nixpkgs": {
       "inputs": {
-        "flake-parts": [
-          "flake-parts"
-        ],
+        "flake-parts": "flake-parts",
+        "local-nixpkgs": "local-nixpkgs",
         "nixpkgs": [
           "nixpkgs"
         ],
-        "treefmt-nix": [
-          "treefmt-nix"
-        ]
+        "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1792837629,
-        "narHash": "sha256-3+yi46Ynm12QHC81L4pARPkQ8JUSddlbRL8B7oqW+PY=",
+        "lastModified": 1792873262,
+        "narHash": "sha256-a6/24D0t4l3QsBhZSIeR7QfYTRXlJrS0QuZSkVPBY1s=",
         "ref": "refs/heads/main",
-        "rev": "78b8e35be90200b3f312325016bb3a94704a68dc",
+        "rev": "81ec8b6ea5cad6d3d9456daae714ffacf3a612a0",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/ren-lingyu/nixpkgs"
@@ -82,15 +106,14 @@
     },
     "root": {
       "inputs": {
-        "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs",
-        "personal-nixpkgs": "personal-nixpkgs",
-        "treefmt-nix": "treefmt-nix"
+        "personal-nixpkgs": "personal-nixpkgs"
       }
     },
     "treefmt-nix": {
       "inputs": {
         "nixpkgs": [
+          "personal-nixpkgs",
           "nixpkgs"
         ]
       },

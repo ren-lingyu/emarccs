@@ -24,6 +24,9 @@
 │   │   └── overlay.nix
 │   ├── emarccs-gtk/
 │   │   └── overlay.nix
+│   ├── texmacs-fandol/
+│   │   ├── overlay.nix
+│   │   └── package.nix
 │   └── emacsPackages/
 │       ├── emarccs/
 │       │   ├── overlay.nix
@@ -138,7 +141,8 @@ pkgs = import inputs.nixpkgs {
 - =consult=: 通过 =propagatedUserEnvPkgs= 提供 GNU grep 和系统 ripgrep.
 - =ripgrep=: Elisp 包传播系统 ripgrep. 系统程序从外层 Nixpkgs 取值, 避免与同名 Elisp package 混淆.
 - =treesit-auto=: 传播对应 scope 的 =with-all-grammars=, 并补充 grammar 库名及初始化符号映射.
-- =org-texmacs=: 将 TeXmacs 程序路径写入配置默认值, 并把 Scheme worker 与 Lisp 文件一起打包.
+- =texmacs-fandol=: 复用 Nixpkgs 的 TeXmacs, 在程序 wrapper 中将完整 Fandol 字体目录加入 =TEXMACS_FONT_PATH=. 通过 default overlay 提供, 并导出到 =legacyPackages.<system>.texmacs-fandol=; 不替换原有 =pkgs.texmacs= 或修改全局字体配置.
+- =org-texmacs=: 默认使用 =texmacs-fandol=, 将程序路径写入配置默认值, 并把 Scheme worker 与 Lisp 文件一起打包. 调用方仍可通过 =org-texmacs.override { texmacs = ...; }= 替换程序.
 - Dired 所需的 GNU coreutils 直接加入 wrapper 的 =withPackages= 列表.
 
 传播的程序和 grammar 库由 Nixpkgs wrapper 接入运行时查找路径.

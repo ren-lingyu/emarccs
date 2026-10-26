@@ -12,6 +12,10 @@
         local-nixpkgs.url = "git+https://github.com/ren-lingyu/nixpkgs.git?ref=refs/heads/main&shallow=1&dir=pkgs";
       };
     };
+    org-texmacs = {
+      url = "git+https://github.com/ren-lingyu/org-texmacs.git?ref=refs/heads/main&shallow=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

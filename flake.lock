@@ -36,16 +36,22 @@
         ]
       },
       "locked": {
-        "path": "./pkgs",
-        "type": "path"
+        "dir": "pkgs",
+        "lastModified": 1792941142,
+        "narHash": "sha256-/M9m0D4N5hh6NFDll7Qg4jwPFVLnT/pNIA04l1NIhVM=",
+        "ref": "refs/heads/main",
+        "rev": "6c339e0d535f093b6934d8e9ff598f165bcee50b",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/ren-lingyu/nixpkgs.git"
       },
       "original": {
-        "path": "./pkgs",
-        "type": "path"
-      },
-      "parent": [
-        "personal-nixpkgs"
-      ]
+        "dir": "pkgs",
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/ren-lingyu/nixpkgs.git"
+      }
     },
     "nixpkgs": {
       "locked": {
@@ -89,19 +95,19 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1792873262,
-        "narHash": "sha256-a6/24D0t4l3QsBhZSIeR7QfYTRXlJrS0QuZSkVPBY1s=",
+        "lastModified": 1792941142,
+        "narHash": "sha256-/M9m0D4N5hh6NFDll7Qg4jwPFVLnT/pNIA04l1NIhVM=",
         "ref": "refs/heads/main",
-        "rev": "81ec8b6ea5cad6d3d9456daae714ffacf3a612a0",
+        "rev": "6c339e0d535f093b6934d8e9ff598f165bcee50b",
         "shallow": true,
         "type": "git",
-        "url": "https://github.com/ren-lingyu/nixpkgs"
+        "url": "https://github.com/ren-lingyu/nixpkgs.git"
       },
       "original": {
         "ref": "refs/heads/main",
         "shallow": true,
         "type": "git",
-        "url": "https://github.com/ren-lingyu/nixpkgs"
+        "url": "https://github.com/ren-lingyu/nixpkgs.git"
       }
     },
     "root": {

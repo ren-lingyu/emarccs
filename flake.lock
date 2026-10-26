@@ -60,10 +60,10 @@
       },
       "locked": {
         "dir": "pkgs",
-        "lastModified": 1792941142,
-        "narHash": "sha256-/M9m0D4N5hh6NFDll7Qg4jwPFVLnT/pNIA04l1NIhVM=",
+        "lastModified": 1793044596,
+        "narHash": "sha256-ztmqdLnDecBlVYdWb+dIxAoaXVrvfjqgqdNhRmwZZlY=",
         "ref": "refs/heads/main",
-        "rev": "6c339e0d535f093b6934d8e9ff598f165bcee50b",
+        "rev": "a9cc71a5233b6885ec66613c7f1f3a45bc2931c6",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/ren-lingyu/nixpkgs.git"
@@ -164,10 +164,10 @@
         "personal-nixpkgs": "personal-nixpkgs"
       },
       "locked": {
-        "lastModified": 1793042851,
-        "narHash": "sha256-nPIL8v0h47Pt3ovkv05uzFBb7/OMZkfqEmRH8mnb06Y=",
+        "lastModified": 1793046135,
+        "narHash": "sha256-EAj/avqWq5hKMKnZ5hQ5spduMPQD8ieWgXrtw8nBHYU=",
         "ref": "refs/heads/main",
-        "rev": "13e3ca7264cbce9f8157006e6c8282069466378c",
+        "rev": "391e7c5a7b602ad8213f959c03e48098d1ee6acb",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/ren-lingyu/org-texmacs.git"
@@ -190,10 +190,10 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1792941142,
-        "narHash": "sha256-/M9m0D4N5hh6NFDll7Qg4jwPFVLnT/pNIA04l1NIhVM=",
+        "lastModified": 1793044596,
+        "narHash": "sha256-ztmqdLnDecBlVYdWb+dIxAoaXVrvfjqgqdNhRmwZZlY=",
         "ref": "refs/heads/main",
-        "rev": "6c339e0d535f093b6934d8e9ff598f165bcee50b",
+        "rev": "a9cc71a5233b6885ec66613c7f1f3a45bc2931c6",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/ren-lingyu/nixpkgs.git"

@@ -28,7 +28,13 @@
           { inherit (inputs.personal-nixpkgs.lib) tests packages; }
           (import ./lib { inherit lib; })
         ];
-        lpkgs = import ./pkgs { inherit lib llib; };
+        lpkgs = import ./pkgs {
+          inherit lib llib;
+          overlays = {
+            emacsPackages.org-texmacs = inputs.org-texmacs.overlays.emacsPackages;
+            texmacs-with-gotor-support = inputs.org-texmacs.overlays.texmacs;
+          };
+        };
       })
       (
         {

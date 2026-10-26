@@ -26,11 +26,30 @@ This section supersedes older builder/layout statements in the historical
 migration phases below. README has now been synchronized with this architecture
 and committed; see current.md for documentation scope and static checks.
 
+## Fandol-enabled TeXmacs variant
+After the committed upstream-overlay migration, pkgs/texmacs-fandol defines a
+symlinkJoin/makeWrapper variant of upstream texmacs-with-gotor-support plus
+explicit fandol font input. Earlier native PDF probes used plain TeXmacs as
+the base and do not validate this new patched build. The wrapper itself only
+prefixes
+TEXMACS_FONT_PATH with the full Fandol OTF directory; the current TeXmacs native
+database already contains those families. It neither replaces pkgs.texmacs nor
+sets global/process Fontconfig or user configuration locations. Discovery adds
+it to default and legacy groups, including legacyPackages.texmacs-fandol.
+The org-texmacs overlay explicitly resolves outer pkgs.texmacs-fandol and passes
+it as texmacs through prev_.org-texmacs.override. The local source recipe is
+removed; the upstream input owns the generic .override-able package definition.
+Font lookup is a TeXmacs packaging prerequisite; org-texmacs does not force a
+font/language policy in document trees. The earlier plain-base variant has fresh
+native PDF positives on x86_64-linux
+only; the new patched-base variant has not been rebuilt or runtime-tested.
+See current.md for provenance and validation limits.
+
 ## Current shared flake foundation
 The root uses personal-nixpkgs.lib.mkFlake inputs.nixpkgs, then an argument
 function supplying inputs/moduleLocation/llib/lpkgs, then the project module.
-Direct inputs are now nixpkgs and personal-nixpkgs; flake-parts/treefmt-nix and
-the shared repository's relative local-nixpkgs subflake are transitive.
+Direct inputs are nixpkgs, personal-nixpkgs and org-texmacs; flake-parts/treefmt-nix
+and the shared repository's relative local-nixpkgs subflake are transitive.
 The helper injects the selected Nixpkgs lib and project libraries, imports
 shared package/tool and treefmt infrastructure, and exposes perSystem
 nixpkgs.overlays. Emarccs sets that option to its legacy group instead of
@@ -45,7 +64,12 @@ configuration/test files before restoring the check. No successful full check
 for this revision was supplied or executed by the agent.
 
 ## Current package groups and exports
-pkgs/default.nix uses llib.packages.mkOverlays with groups.default = { } and
+The committed migration supplies upstream org-texmacs overlays.emacsPackages and
+overlays.texmacs to both groups via groups.<name>.overlays (legacy shares default's
+list). The new locked helper applies external overlays before selected local
+ones. Local org-texmacs override preserves Fandol selection and its local
+export-discovery leaf; external-only package paths are not automatically exported.
+pkgs/default.nix uses llib.packages.mkOverlays with default and legacy groups;
 groups.legacy.export = true. Both groups use root pkgs/ and overlay.nix without
 exclusions. The flake applies lpkgs.overlays.legacy to its perSystem Nixpkgs,
 then exports pkgs.legacyPackages directly. Package selection/export is handled
@@ -402,3 +426,35 @@ and TODO.md / INBOX.md / AGENTS.md are Git-ignored, so edits to them are
 worktree-only.
 Nested Twist experiments, scratch/backup directories, runtime notes/databases
 and private identifiers are not the tracked project architecture.
+
+## TeXmacs Fandol existing-profile limitation
+The current texmacs-fandol wrapper only prefixes TEXMACS_FONT_PATH. This works
+for fresh TeXmacs profiles but does not update a populated native font database.
+The owner's actual export produced <#...> despite selecting the expected
+program; isolation reproduced it by reusing a plain-TeXmacs profile. Native
+font-database-extend-local on the full Fandol OTF directory fixed a copy of that
+profile, preserving existing settings. A package-level migration policy remains
+undecided; do not silently delete user caches or isolate HOME as a workaround.
+See current memory for test evidence and production acceptance limits.
+
+Robustness follow-up: repeated explicit native registration preserves existing
+font records and works after worker restart. The native API does not reject
+missing/empty input directories, so any helper needs preconditions and persisted
+result checks. Official --delete-font-cache also repairs the isolated old-profile
+case, preserving personal files but losing an additional manually registered
+font record. Neither automatic clearing nor auxiliary registration has been
+adopted. Current recommendation favors documented manual cache clearing for
+this stage, with the font-registration caveat; see current memory for evidence.
+
+## Chinese line breaking belongs to document language
+A long-paragraph isolated matrix reproduces CJK one-line overflow in native
+TeXmacs and Org export under default language. Setting document initial
+language=chinese fixes both with matching7/8/8 lines and full567 Han characters;
+selecting FandolSong alone does not. Font packaging and document language are
+separate responsibilities. The previously tested org-texmacs source2c1c7d58
+rejects #+LANGUAGE: zh-CN; this has not been revalidated against the new upstream
+input. In that tested version,
+its existing document-initial interface can declare Chinese explicitly. Future
+Org keyword mapping belongs in org-texmacs; emarccs may choose a personal default,
+but texmacs-fandol should not enforce Chinese language globally. No such change
+is implemented. See current memory for evidence and test limits.

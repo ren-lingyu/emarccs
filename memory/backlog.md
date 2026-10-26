@@ -11,8 +11,11 @@ plus the group's legacy export wiring where useful. The formatting paragraph
 still says treefmt checks Nix files only; shared formatting now includes Elisp,
 with *.patch excluded and flakeCheck restored to true. Keep this a factual
 structure/maintenance update, not a record of formatting experiments or tests.
-No README edit is authorized by adding this entry; the owner requested GAW
-maintenance/checkpoint only at this step.
+Also describe the subsequently committed org-texmacs input/overlay ownership,
+shared external group overlays, and texmacs-fandol's GoToR-patched TeXmacs base.
+Keep older font/cache/language experiments out of README; any troubleshooting
+instructions should describe supported use, not the experiment sequence.
+No README edit is authorized by this entry or the current checkpoint request.
 
 ## Non-blocking: normalize emacsPackages.emarccs
 

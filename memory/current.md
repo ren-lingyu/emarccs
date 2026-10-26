@@ -5,6 +5,273 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
+## Current: upstream-overlay migration committed; validation remains pending
+Owner confirmed the migration commit, and read-only log/show verifies
+refactor(org-texmacs): consume upstream package and TeXmacs overlays. The project
+snapshot associated with this checkpoint contains the reviewed five-path change;
+ordinary project worktree/index are clean. Earlier input preparation3fb6842,
+shared-library update161c59e and upstream-input update30e77f0 are committed too.
+The confirmed project snapshot locks personal-nixpkgs a9cc71a5 and org-texmacs
+391e7c5a; e876a7fc was an earlier intermediate lock observed during the edit. The local
+override is committed, old recipe removed and prior syntax typo fixed. Full
+staged review and diff --check passed before commit; no Nix eval/build/test was
+run for this final source state. Old runtime probes do not validate the new
+upstream Lisp or GoToR-patched TeXmacs base.
+
+Root passes upstream overlays.emacsPackages and overlays.texmacs to pkgs/.
+Both default and legacy groups share their external-overlay list. Exact locked
+shared library/docs establish external overlays first, selected local overlays
+next, export extension last. Local org-texmacs overlay resolves outer pkgs and
+uses prev_.org-texmacs.override { texmacs = pkgs.texmacs-fandol; }; upstream now
+owns source/build recipe. Its local leaf also restores directory-constrained
+legacyPackages.emacsPackages.org-texmacs discovery. Fandol wrapper now uses
+upstream texmacs-with-gotor-support instead of plain Nixpkgs TeXmacs. Root exported
+overlay and perSystem share the same group-based composition, no outer duplicate
+composition. Only local override implementation was agent-written; other project
+changes/staging were owner-managed.
+
+Upstream source-inspection authorization covered read-only Nix recipes/docs at
+13e3ca72 in ~/Projects/org-texmacs. That exact older source established generic
+texmacs argument and GoToR package; current391e7c5a interfaces are represented by the
+owner's consumer changes and not independently runtime-validated. Public raw
+source pages failed; no foreign-source writes or history associations were made.
+
+The owner requested a GAW checkpoint at this boundary. The migration's exact
+committed project snapshot supplies the additional parent: it is the state just
+reviewed and confirmed, not a claim that runtime tests targeted this new state.
+No upstream-repository Git ancestry is associated merely because recipes were
+read. Prior isolated findings below retain their older source/build scope.
+Temporary probe paths are optional ephemeral evidence, not required durable
+inputs for interpreting the distilled findings. README still has older
+shared-foundation wording and should eventually describe upstream overlay
+ownership/GoToR base; no README edit is authorized here.
+
+Owner is considering optional Source Han Serif/Sans static simplified-Chinese
+OTF variants alongside Fandol. These remain proposals, not implemented or tested.
+The read-only LaTeX comparison below and old font probes do not establish their
+compatibility. Font cache recovery and document language remain separate duties.
+
+## Read-only LaTeX font comparison
+Owner explicitly authorized reading ~/org/texmf to identify LaTeX fonts and
+assess a similar TeXmacs setup. Relevant styles only were inspected; no build,
+installation, user-file or production changes. org-note.sty:34 and
+org-beamer.sty:153 select TeX Gyre Pagella for main text. org--math.sty:19 selects
+texgyrepagella-math.otf. Both main styles load ctex without fontset override;
+SimSun/Microsoft YaHei/Palatino alternatives in org-note are COMMENTED, not active.
+No active setCJK/fontset override was found in these styles. Under ordinary Linux
+CTeX defaults this implies Fandol, but external document options/configuration
+and actual LaTeX/PDF fonts were not inspected, so Chinese family is conditional.
+Official CTeX source confirms non-Windows/macOS default Fandol and Song Regular/
+Bold, Kai for italic, Hei for sans, Fang for mono in that preset.
+
+Current base TeXmacs2.1.5 already ships Pagella regular/bold/italic/bolditalic and
+Pagella Math OTF files. Native fonts-truetype.scm registers pagella and
+fonts-math.scm implements math-pagella via those files. Its native database
+contains both families. Thus no additional font dependency appears necessary
+for a Pagella + Pagella Math + Fandol setup; document-level selection and style
+mapping should be assessed rather than changing the Fandol package. This turn
+only establishes source/file availability, not runtime selection or full math
+and emphasis fidelity. In particular previous Org PDF italic used Song faces,
+whereas CTeX Fandol italic maps to Kai; do not promise identical appearance.
+No choice/configuration change has been adopted.
+
+## Completed: isolated long-Chinese line-breaking diagnosis
+Owner requested long Chinese tests and responsibility assessment. Final matrix
+under tmp/tmline-zo94euxq (probe.py/report.md/results.json, .org/.tm/PDF/text and
+position records per case) uses A5/20mm margins, generic style, isolated fresh
+HOME/TeXmacs/Fontconfig/XDG, C.UTF-8 locale, TeXmacs2.1.5 Fandol wrapper and actual
+built org-texmacs ELPA with existing Emacs31.1/pinned Org10.0-pre source. Not the
+full Emarccs wrapper or GUI; no user-profile access, network or production/index
+change. Child40s+3s grace, driver120s; no timeout. No maintained check/archive added.
+
+Fixture has567 Han characters across continuous unspaced Chinese, punctuated
+Chinese and mixed Chinese/English paragraphs. Default Org export and direct
+native TeXmacs both make each paragraph one line; PDF extraction retains only98
+and96 Han characters respectively (long runs clipped). Explicit document initial
+language=chinese gives complete567 characters and7/8/8 paragraph line counts in
+both routes. Font-only FandolSong setting still gives1/1/1 lines and98 characters.
+Org .tm body bytes are identical across default/Chinese cases: the language
+initial is the relevant change, not text rewriting. Geometry estimates assume
+one-em CJK widths; do not claim exact bounding-box or full Chinese typography QA.
+
+In the tested org-texmacs source2c1c7d58, #+LANGUAGE: zh-CN is REJECTED with Unsupported or unprepared block,
+keyword,1; it is not silently honored/ignored. org-texmacs exposes
+org-texmacs-document-initial for language=chinese in that source. This finding
+has not been revalidated against current391e7c5a. TeXmacs source
+text_language.cpp routes chinese to oriental_language_rep::advance CJK break
+properties. Official manual distinguishes document-language layout rules from
+font selection (https://www.texmacs.org/tmweb/manual/webman-env.en.html).
+Responsibility assessment: document author/personal defaults declare language;
+future Org LANGUAGE-to-TeXmacs language mapping belongs in org-texmacs; emarccs
+may set a personal Chinese default. Do not force Chinese globally in
+texmacs-fandol. Tests do not support a needed patch to TeXmacs Chinese breaking;
+clipped unbreakable runs are separate observed native PDF behavior. No language
+mapping/default change was adopted or implemented.
+
+Excluded harness issues: initial completeness assertion aborted on the real
+default clipping symptom; changed oracle to record completeness and assert the
+final expected matrix. First native script's broad PDF placeholder replacement
+changed its mixed fixture, so native-default is excluded; corrected
+native-default-v2/native-chinese use unchanged text. LANGUAGE rejection prevented
+font-only execution in the initial driver; finish-org completed only that case
+and reused completed results. Final matrix assertions pass.
+
+## Completed isolated strategy assessment; no package change adopted
+The owner authorized robustness tests and accepts manual --delete-font-cache
+troubleshooting if an auxiliary registration mechanism is unattractive.
+Four bounded modes passed under tmp/tmf-ub1bdra3 (probe.py, report.md,
+results.json, per-mode logs/PDFs). Runtime uses actual built org-texmacs ELPA,
+existing Emacs31.1 and pinned Org10.0-pre source, not the full root wrapper/GUI.
+All profiles and HOME/Fontconfig/XDG paths are isolated; no network/user-profile
+access or project source/index changes. Per-process45s+3s grace, outer120s/mode;
+no timeouts. No archive or maintained test was added for this diagnostic work.
+
+Incremental registration preserves all144 existing database lines (including a
+real manually registered CustomFira.otf) and adds8 Fandol entries. Repeating it
+leaves the semantic database line set unchanged; both later exports pass all7
+Chinese text fragments and embedded Song Regular/Bold assertions. Personal
+initialization, style, settings and extra-font bytes remain unchanged.
+External registration does not refresh an already running worker: same worker
+still emits <#...>, restarting fixes it, and the next independent process also
+passes. Require all relevant TeXmacs/worker processes stopped before migration;
+this does not claim concurrent writers are safe.
+
+Official --delete-font-cache also restores Chinese and preserves those personal
+files, but drops the CustomFira registration record even though the file remains.
+Native font-database-extend-local silently accepts missing/empty font directories
+and can emit a success marker without adding fonts. Caught Scheme exceptions
+also allow exit0. A helper must check input plus actual persisted font records;
+exit0 or a marker after the function alone is insufficient. Incremental migration
+is feasible, not proven impossible; for this stage the agent recommends keeping
+the package wrapper simple and using documented manual --delete-font-cache as
+the minimal operational remedy, acknowledging extra-font re-registration. This
+is a recommendation only; no owner adoption or helper/package changes yet.
+
+## Diagnosed historical report: missing Chinese with an existing native profile
+After isolated success, the owner reports nix run .#emarccs-pgtk creates PDF
+but all Chinese appears as <#...>. They confirmed org-texmacs-program is exactly
+the tested texmacs-fandol store executable. Their located core.elc symlink
+resolves to the same built org-texmacs output tested below; stale package/program
+selection is not supported by this evidence. Do not claim production acceptance.
+A fresh isolated export using the actual built org-texmacs ELPA package (rather
+than copied Elisp source) passed with Chinese and Fandol fonts; evidence under
+tmp/org-pdf-cjk-r9vadem6/pkg. Existing pinned Org source and installed Emacs remain
+the test runtime, not the full root wrapper. The evaluated current root wrapper
+output is not locally realized, but this alone does not diagnose the owner's
+session. Reproduced the exact symptom in isolation under tmp/org-pdf-cjk-r9vadem6/cached:
+reuse the plain-program negative-control TeXmacs profile, then export with the
+same built package and Fandol executable. PDF succeeds but all Chinese becomes
+<#...>; the positive text assertion correctly fails. font_database_load loads
+the local font database and only derives it from the global database when
+empty, so adding TEXMACS_FONT_PATH alone does not migrate existing profiles.
+The current wrapper is incomplete for existing font databases. The repair control passed under tmp/org-pdf-cjk-r9vadem6/refreshed:
+on a separate copy of that old profile, run native font-database-extend-local
+on the complete Fandol directory, exit, then rerun the same public Org export.
+All Chinese text and Song Regular/Bold font assertions pass. Logs include the
+registration subprocess. This verifies migration without deleting the profile,
+but no package startup migration design has been adopted or implemented.
+Owner actual cache remains unread/unmodified, so this is a matching reproduced
+cause rather than inspection of their specific profile. No user HOME/config was read
+or changed; no production/index changes in this diagnostic turn.
+
+## Passed: actual Org -> PDF Chinese export in isolation
+The owner explicitly requested an isolated org-texmacs Org->PDF Chinese test.
+All three final cases passed under tmp/org-pdf-cjk-r9vadem6/final: plain-program
+negative control (Chinese missing), default settings with texmacs-fandol (Chinese
+present), and article/FandolSong/chinese initial environment (Chinese present).
+Each invokes the public ox-texmacs org-texmacs-export-to-pdf frontend on an actual
+Org file, preserving source bytes/buffer tick. Positive PDFs contain Chinese
+heading/body/bold/italic text, quotation and both list items, no literal fallback,
+and embedded FandolSong Regular/Bold faces. Do not require Org italic to select
+Kai or claim general font/style correctness. Default means nil document initial
+and generic style, without manual font registration or font-family/language
+configuration. The matched negative control uses the base TeXmacs program.
+
+Runtime is existing Emacs31.1 under --batch -Q with root-pinned Org source
+10.0-pre/38e0eaee and compat31.0.0.2 source; org-texmacs is the root-pinned source
+with exactly the production program-path postPatch. Every copied org-texmacs
+Elisp/worker byte was checked against that source plus the one replacement.
+Org autoloads/version files were generated just as in the package recipe using
+the existing Emacs, avoiding an uncached base editor rebuild. Metadata records
+actual libraries, versions and program. This validates source runtime and actual
+PDF chain, not the complete Nix-built ELPA package or Emarccs wrapper.
+
+All cases use separate HOME/TEXMACS_HOME_PATH, empty Fontconfig, invalid initial
+TEXMACS_FONT_PATH and no user config/font imports. Per-Emacs process groups have
+40s timeout/3s kill grace; outer probe120s; worker start/request20s. Local Unix
+socket access required execution outside the restrictive sandbox. No test
+network/download, root source/index/lock or foreign repo modification occurred.
+The owner had staged the implementation before this test and staging is preserved.
+Original fixture/export.el/run.py and copied runtime sources remain in the probe;
+final subdirectories hold PDFs, extracted text/fonts, metadata and stdout/stderr;
+final/results.json summarizes the passing three-case run. No archive was added:
+this is ordinary implementation validation, not a separately requested archive.
+
+Excluded harness preparation failures: the first Org copy retained store
+read-only directory attributes, so a fresh writable copy was used to generate
+autoloads; the sandbox denied worker socket bind; an overly long retry path
+(111bytes) prevented startup and was shortened (longest96bytes). An oracle
+incorrectly required FandolKai for Org italic; actual PDFs use Song faces, so
+text/embedded-font checks follow actual Org output instead. Final run passed
+without production changes. No GUI, populated user-cache or other-platform
+acceptance is implied. Earlier full-flake-build limitations below remain.
+
+## Historical implementation: original plain-base Fandol-enabled TeXmacs
+This section describes the original implementation committed as2bffab9, before
+the upstream-overlay/GoToR-base migration above. The following probes targeted
+that older plain-base/source configuration. The owner authorized
+texmacs-fandol under pkgs/, included in default/legacy groups,
+and explicitly selected as org-texmacs' default texmacs argument while retaining
+.override. New package uses symlinkJoin/makeWrapper around unchanged pkgs.texmacs
+and prefixes only TEXMACS_FONT_PATH with the complete Fandol OTF directory.
+The Emacs overlay resolves outer pkgs explicitly, following existing Consult
+practice. No global texmacs replacement, FONTCONFIG_FILE setting, user HOME
+replacement, font symlinks in user config or startup registration is introduced.
+Current TeXmacs2.1.5 already contains Fandol entries in its native font database;
+using the installed font directory suffices for fresh profiles. Existing
+profiles may need manual font-cache recovery, as reproduced above; no automatic
+registration/clearing is implemented in the package. Fandol is supplied
+as an explicit package argument from texlive.pkgs.fandol.tex. Both texmacs and
+fandol remain overrideable; passthru exposes the underlying inputs. README has
+focused package/default-program/override documentation; the separate shared-flake
+README backlog remains outstanding.
+
+Fresh x86_64-linux wrapper build passed, reusing the base binary. Native batch
+PDF probes used isolated HOME/TEXMACS_HOME_PATH, empty Fontconfig and a deliberately
+invalid initial TEXMACS_FONT_PATH. Plain base failed to render Chinese (negative
+control); wrapper default, explicit FandolSong and article/FandolHei modes all
+rendered heading/body/strong/italic Chinese without literal missing-glyph fallback.
+Default/Song emitted FandolSong-Bold and FandolKai-Regular; Hei emitted Hei Regular,
+so no claim of separate Hei bold/italic faces or universal typography consistency.
+No GUI, populated user-profile cache or other-platform testing was performed.
+The probe is under project tmp/texmacs-fandol-rn_15l10, final PDFs/logs/results.json
+in direct3/results. This is isolated validation, not an added maintained check.
+
+Integration assertions passed on a selective source snapshot including both
+untracked new files: default/legacy texmacs-fandol derivations match, original
+texmacs equals plain Nixpkgs, all three wrapper scopes point org-texmacs at the
+new program and .override { texmacs = plain.texmacs; } restores the original path.
+The same final snapshot passed timeout120s nix flake check --offline
+--no-write-lock-file --no-build. This evaluates all 22 native checks/outputs;
+it does not execute the functional check scripts. Targeted nixfmt --check and
+diff --check pass, and snapshot/current source bytes match. An org-texmacs dry
+build preview requires 21 uncached derivations including base Emacs; full Emacs/
+org-texmacs integration builds and complete flake-check execution were not run.
+
+Excluded harness/tool failures: Poppler and full pypdf test derivations triggered
+large uncached dependency builds and each timed out at120s; --offline still lets
+fetch derivations contact sources, so network occurred. No retries of those full
+tool builds were made. The successful direct PDF analysis imported already
+realized pypdf source with existing Python. An initial native baseline invocation
+timed out at25s; later isolated runs with caught Scheme errors/logs completed.
+Article repeat headings invalidated a strict count oracle, and requiring Hei to
+emit separate bold/Kai font faces overclaimed native behavior; the corrected
+oracle checks its actual Chinese/Hei output, retaining strong default/Song face
+assertions. All four final native outputs passed the corrected analysis. A Nix
+hasInfix assertion initially rejected store-string context, corrected in the
+probe expression without changing production. These are not accepted product
+failures. No root lock, project index/history or foreign repository was modified.
+
 ## Committed: shared mkFlake foundation and restored formatting checks
 The owner committed the shared-flake migration, patch exclusion, Elisp formatting
 and restored treefmt check as four separate changes. Read-only confirmation

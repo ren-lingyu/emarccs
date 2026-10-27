@@ -92,22 +92,16 @@
         ]
       },
       "locked": {
-        "dir": "pkgs",
-        "lastModified": 1793044596,
-        "narHash": "sha256-ztmqdLnDecBlVYdWb+dIxAoaXVrvfjqgqdNhRmwZZlY=",
-        "ref": "refs/heads/main",
-        "rev": "a9cc71a5233b6885ec66613c7f1f3a45bc2931c6",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/ren-lingyu/nixpkgs.git"
+        "path": "./pkgs",
+        "type": "path"
       },
       "original": {
-        "dir": "pkgs",
-        "ref": "refs/heads/main",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/ren-lingyu/nixpkgs.git"
-      }
+        "path": "./pkgs",
+        "type": "path"
+      },
+      "parent": [
+        "personal-nixpkgs"
+      ]
     },
     "nixpkgs": {
       "locked": {

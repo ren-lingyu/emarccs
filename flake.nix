@@ -13,6 +13,18 @@
       url = "git+https://github.com/ren-lingyu/org-texmacs.git?ref=refs/heads/main&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    org-roam-organize = {
+      url = "git+https://github.com/ren-lingyu/org-roam-organize.git?ref=refs/heads/main&shallow=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    org-roam-include = {
+      url = "git+https://github.com/ren-lingyu/org-roam-include.git?ref=refs/heads/main&shallow=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    org-roam-blog = {
+      url = "git+https://github.com/ren-lingyu/org-roam-blog.git?ref=refs/heads/main&shallow=1";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -28,7 +40,12 @@
         lpkgs = import ./pkgs {
           inherit lib llib;
           overlays = {
-            emacsPackages.org-texmacs = inputs.org-texmacs.overlays.emacsPackages;
+            emacsPackages = {
+              org-texmacs = inputs.org-texmacs.overlays.emacsPackages;
+              org-roam-organize = inputs.org-roam-organize.overlays.emacsPackages;
+              org-roam-include = inputs.org-roam-include.overlays.emacsPackages;
+              org-roam-blog = inputs.org-roam-blog.overlays.emacsPackages;
+            };
             texmacs-with-gotor-support = inputs.org-texmacs.overlays.texmacs;
           };
         };

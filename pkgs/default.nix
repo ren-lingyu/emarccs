@@ -9,9 +9,14 @@
     overlayFile = "overlay.nix";
     groups = rec {
       default = {
-        overlays = with overlays; [
-          emacsPackages.org-texmacs
-          texmacs-with-gotor-support
+        overlays = builtins.concatLists [
+          (with (overlays.emacsPackages); [
+            org-texmacs
+            org-roam-organize
+            org-roam-include
+            org-roam-blog
+          ])
+          (with overlays; [ texmacs-with-gotor-support ])
         ];
       };
 

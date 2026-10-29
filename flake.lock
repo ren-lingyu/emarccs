@@ -59,22 +59,17 @@
         ]
       },
       "locked": {
-        "dir": "pkgs",
-        "lastModified": 1793044596,
-        "narHash": "sha256-ztmqdLnDecBlVYdWb+dIxAoaXVrvfjqgqdNhRmwZZlY=",
-        "ref": "refs/heads/main",
-        "rev": "a9cc71a5233b6885ec66613c7f1f3a45bc2931c6",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/ren-lingyu/nixpkgs.git"
+        "path": "./pkgs",
+        "type": "path"
       },
       "original": {
-        "dir": "pkgs",
-        "ref": "refs/heads/main",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/ren-lingyu/nixpkgs.git"
-      }
+        "path": "./pkgs",
+        "type": "path"
+      },
+      "parent": [
+        "org-texmacs",
+        "personal-nixpkgs"
+      ]
     },
     "local-nixpkgs_2": {
       "inputs": {
@@ -144,6 +139,23 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1793195608,
+        "narHash": "sha256-lNZLwWf5tYNKjothaoFq/VZYvzaclmLafjgMdUlpJPQ=",
+        "ref": "refs/heads/nixpkgs-unstable",
+        "rev": "58deea654ec5dd0644f31c840a07c29fa0592528",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs.git"
+      },
+      "original": {
+        "ref": "refs/heads/nixpkgs-unstable",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs.git"
+      }
+    },
     "org-texmacs": {
       "inputs": {
         "nixpkgs": [
@@ -152,10 +164,10 @@
         "personal-nixpkgs": "personal-nixpkgs"
       },
       "locked": {
-        "lastModified": 1793046135,
-        "narHash": "sha256-EAj/avqWq5hKMKnZ5hQ5spduMPQD8ieWgXrtw8nBHYU=",
+        "lastModified": 1793092182,
+        "narHash": "sha256-V45mycfcg/qj+60Waii4EFeeidxD0/ZUonnwYvUoy7g=",
         "ref": "refs/heads/main",
-        "rev": "391e7c5a7b602ad8213f959c03e48098d1ee6acb",
+        "rev": "1017764dc90331e90f54fd56c4989316e6edc9cc",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/ren-lingyu/org-texmacs.git"
@@ -171,10 +183,7 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "local-nixpkgs": "local-nixpkgs",
-        "nixpkgs": [
-          "org-texmacs",
-          "nixpkgs"
-        ],
+        "nixpkgs": "nixpkgs_2",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {

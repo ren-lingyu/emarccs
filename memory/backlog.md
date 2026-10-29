@@ -13,6 +13,11 @@ with *.patch excluded and flakeCheck restored to true. Keep this a factual
 structure/maintenance update, not a record of formatting experiments or tests.
 Also describe the subsequently committed org-texmacs input/overlay ownership,
 shared external group overlays, and texmacs-fandol's GoToR-patched TeXmacs base.
+The latest Org-roam migration additionally adds three direct flake inputs, removes their
+local source recipes, and removes the explicit local-nixpkgs Git URL override.
+Document upstream ownership and dependency-relative local-nixpkgs paths accurately;
+do not promise individual legacy exports for external-only packages without
+checking the current selector/output contract.
 Keep older font/cache/language experiments out of README; any troubleshooting
 instructions should describe supported use, not the experiment sequence.
 No README edit is authorized by this entry or the current checkpoint request.

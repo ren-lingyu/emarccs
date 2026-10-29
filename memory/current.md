@@ -5,51 +5,64 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
-## Current: upstream-overlay migration committed; validation remains pending
-Owner confirmed the migration commit, and read-only log/show verifies
-refactor(org-texmacs): consume upstream package and TeXmacs overlays. The project
-snapshot associated with this checkpoint contains the reviewed five-path change;
-ordinary project worktree/index are clean. Earlier input preparation3fb6842,
-shared-library update161c59e and upstream-input update30e77f0 are committed too.
-The confirmed project snapshot locks personal-nixpkgs a9cc71a5 and org-texmacs
-391e7c5a; e876a7fc was an earlier intermediate lock observed during the edit. The local
-override is committed, old recipe removed and prior syntax typo fixed. Full
-staged review and diff --check passed before commit; no Nix eval/build/test was
-run for this final source state. Old runtime probes do not validate the new
-upstream Lisp or GoToR-patched TeXmacs base.
+## Current: upstream Org-roam package integration committed; static review only
+The owner requested an update/checkpoint against the latest repository. This
+review inspected the clean current project snapshot and the complete changes
+since the previous project-associated boundary. No uncommitted project or GAW
+changes existed at entry. The latest committed integration replaces local
+org-roam-organize, org-roam-include and org-roam-blog recipes/overlays with their
+own flake inputs' overlays.emacsPackages. Six local files are removed; the
+configuration package still declares all three as direct packageRequires.
+Emarccs Lisp, wrapper recipes, tests and README did not change in this interval.
+Package source/build definitions now belong to the upstream inputs; future
+package updates should follow flake.lock rather than restoring old local recipes
+or their nix-update scripts.
 
-Root passes upstream overlays.emacsPackages and overlays.texmacs to pkgs/.
-Both default and legacy groups share their external-overlay list. Exact locked
-shared library/docs establish external overlays first, selected local overlays
-next, export extension last. Local org-texmacs overlay resolves outer pkgs and
-uses prev_.org-texmacs.override { texmacs = pkgs.texmacs-fandol; }; upstream now
-owns source/build recipe. Its local leaf also restores directory-constrained
-legacyPackages.emacsPackages.org-texmacs discovery. Fandol wrapper now uses
-upstream texmacs-with-gotor-support instead of plain Nixpkgs TeXmacs. Root exported
-overlay and perSystem share the same group-based composition, no outer duplicate
-composition. Only local override implementation was agent-written; other project
-changes/staging were owner-managed.
+Root supplies four Emacs overlays (org-texmacs, org-roam-organize,
+org-roam-include, org-roam-blog) and the org-texmacs TeXmacs overlay to pkgs/.
+groups.default.overlays concatenates that list; legacy reuses it and enables
+export. PerSystem applies the legacy group, exported overlays.default uses the
+default group, and all three wrapper outputs/check generation remain unchanged.
+The local org-texmacs override remains: upstream package is overridden with outer
+pkgs.texmacs-fandol; that wrapper still wraps texmacs-with-gotor-support. Unlike
+org-texmacs, the three migrated Org-roam packages retain no local discovery leaf.
+Under the previously inspected directory-based legacy selector, external-only
+paths are not exported automatically: do not assume the old individual
+legacyPackages.emacsPackages.org-roam-* paths remain. Actual current exports were
+not evaluated, and the new shared-library implementation was not re-inspected;
+confirm its contract/exports if needed rather than changing the project during
+this memory-only task. Packages are explicitly supplied in the full Emacs scope.
 
-Upstream source-inspection authorization covered read-only Nix recipes/docs at
-13e3ca72 in ~/Projects/org-texmacs. That exact older source established generic
-texmacs argument and GoToR package; current391e7c5a interfaces are represented by the
-owner's consumer changes and not independently runtime-validated. Public raw
-source pages failed; no foreign-source writes or history associations were made.
+The explicit personal-nixpkgs/local-nixpkgs Git URL override was removed. Current
+lock nodes for local-nixpkgs use path ./pkgs with parent locators scoped to their
+own personal-nixpkgs instance. These are dependency-relative paths, not references
+to this project's pkgs directory. Preserve that ownership distinction. Root
+personal-nixpkgs and org-texmacs plus the three Org-roam inputs all follow root
+nixpkgs; multiple transitive shared-library/formatter branches remain. This review
+did not flatten them or infer a single shared-library version for all inputs.
 
-The owner requested a GAW checkpoint at this boundary. The migration's exact
-committed project snapshot supplies the additional parent: it is the state just
-reviewed and confirmed, not a claim that runtime tests targeted this new state.
-No upstream-repository Git ancestry is associated merely because recipes were
-read. Prior isolated findings below retain their older source/build scope.
-Temporary probe paths are optional ephemeral evidence, not required durable
-inputs for interpreting the distilled findings. README still has older
-shared-foundation wording and should eventually describe upstream overlay
-ownership/GoToR base; no README edit is authorized here.
+Inspected root lock identities: nixpkgs58deea65; personal-nixpkgs b7879c69;
+org-texmacs1017764d; org-roam-organize1f38b4b0; org-roam-include6755bd31;
+org-roam-blog344e988c. The exact project snapshot reviewed supplies this
+checkpoint's additional parent, not additional ancestry of upstream repositories.
+All newly retained project changes concern Nix definitions/public lock sources;
+no new private documents or runtime data were introduced in that ancestor range.
 
-Owner is considering optional Source Han Serif/Sans static simplified-Chinese
-OTF variants alongside Fandol. These remain proposals, not implemented or tested.
-The read-only LaTeX comparison below and old font probes do not establish their
-compatibility. Font cache recovery and document language remain separate duties.
+Validation is limited to read-only source/history/full manifest-and-lock review
+and diff --check. No Nix evaluation, build, flake check, export, network/download
+or external-repository inspection was performed for this state. Prior successful
+font/export probes used old org-texmacs source2c1c7d58 and a plain TeXmacs base;
+they do not validate current upstream Lisp, changed Nixpkgs/shared library or the
+GoToR-patched base. LANGUAGE rejection observed in that old source is historical,
+not a current-version assertion. No current runtime failure is newly diagnosed.
+
+Next actions, only when authorized: validate current overlays/wrappers and any
+required individual legacy exports; align README input/provider documentation.
+Existing nonblocking configuration warning/dependency work remains deferred.
+Optional Source Han static OTF variants remain proposals without implementation
+or compatibility tests. The LaTeX comparison and font-cache/language diagnoses
+below retain their original scope. Temporary probe paths are optional ephemeral
+evidence, not required durable inputs for interpreting those distilled findings.
 
 ## Read-only LaTeX font comparison
 Owner explicitly authorized reading ~/org/texmf to identify LaTeX fonts and
@@ -97,7 +110,7 @@ one-em CJK widths; do not claim exact bounding-box or full Chinese typography QA
 In the tested org-texmacs source2c1c7d58, #+LANGUAGE: zh-CN is REJECTED with Unsupported or unprepared block,
 keyword,1; it is not silently honored/ignored. org-texmacs exposes
 org-texmacs-document-initial for language=chinese in that source. This finding
-has not been revalidated against current391e7c5a. TeXmacs source
+has not been revalidated against later upstream-input versions. TeXmacs source
 text_language.cpp routes chinese to oriental_language_rep::advance CJK break
 properties. Official manual distinguishes document-language layout rules from
 font selection (https://www.texmacs.org/tmweb/manual/webman-env.en.html).

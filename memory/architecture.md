@@ -1,6 +1,16 @@
 # Emarccs architecture
 
-## Latest committed integration
+## Current external package ownership
+The latest project source delegates org-texmacs and the three packages
+org-roam-organize/org-roam-include/org-roam-blog to their flake inputs' Emacs
+overlays. Only org-texmacs retains a local override leaf, selecting the local
+Fandol-enabled GoToR TeXmacs variant. The three Org-roam directories/recipes are
+removed; their configuration packageRequires remain. This is committed source
+integration, not a fresh runtime acceptance result. Current builds/exports have
+not been evaluated by the agent. Older validation summaries below describe their
+original baseline and do not validate newly updated inputs.
+
+## Earlier wrapper/activation baseline
 Emarccs wrapper construction and site-start injection live in
 pkgs/emarccs/package.nix. Root overlays define emarccs and derive GTK/PGTK
 variants through override with their matching final Emacs. flake.nix directly
@@ -17,9 +27,10 @@ missing exports and mismatched derivations were rejected by negative controls.
 Wrapper/smoke outputs were also successfully realized, using cached outputs at
 the final revision. The owner committed the fix and the worktree is clean.
 
-The preceding custom-package migration now uses melpaBuild for all seven former
-trivialBuild derivations, generating ELPA metadata/autoloads. Explicit files
-recipes use MELPA defaults; org-texmacs also includes its Scheme worker. The
+The preceding custom-package migration used melpaBuild for all seven former
+trivialBuild derivations, generating ELPA metadata/autoloads. Subsequently four
+source recipes moved to upstream inputs; this is historical builder context.
+Explicit files recipes use MELPA defaults; org-texmacs also includes its Scheme worker. The
 original trivialBuild gap and later narrowing-glob omission explain earlier
 missing interactive frontend commands; see current.md for evidence and limits.
 This section supersedes older builder/layout statements in the historical
@@ -31,9 +42,9 @@ After the committed upstream-overlay migration, pkgs/texmacs-fandol defines a
 symlinkJoin/makeWrapper variant of upstream texmacs-with-gotor-support plus
 explicit fandol font input. Earlier native PDF probes used plain TeXmacs as
 the base and do not validate this new patched build. The wrapper itself only
-prefixes
-TEXMACS_FONT_PATH with the full Fandol OTF directory; the current TeXmacs native
-database already contains those families. It neither replaces pkgs.texmacs nor
+prefixes TEXMACS_FONT_PATH with the full Fandol OTF directory. The previously
+inspected TeXmacs2.1.5 native database contains those families; this was not
+rechecked in the newly locked Nixpkgs. It neither replaces pkgs.texmacs nor
 sets global/process Fontconfig or user configuration locations. Discovery adds
 it to default and legacy groups, including legacyPackages.texmacs-fandol.
 The org-texmacs overlay explicitly resolves outer pkgs.texmacs-fandol and passes
@@ -41,20 +52,24 @@ it as texmacs through prev_.org-texmacs.override. The local source recipe is
 removed; the upstream input owns the generic .override-able package definition.
 Font lookup is a TeXmacs packaging prerequisite; org-texmacs does not force a
 font/language policy in document trees. The earlier plain-base variant has fresh
-native PDF positives on x86_64-linux
-only; the new patched-base variant has not been rebuilt or runtime-tested.
+native PDF positives on x86_64-linux only; the new patched-base variant has not
+been rebuilt or runtime-tested.
 See current.md for provenance and validation limits.
 
 ## Current shared flake foundation
 The root uses personal-nixpkgs.lib.mkFlake inputs.nixpkgs, then an argument
 function supplying inputs/moduleLocation/llib/lpkgs, then the project module.
-Direct inputs are nixpkgs, personal-nixpkgs and org-texmacs; flake-parts/treefmt-nix
-and the shared repository's relative local-nixpkgs subflake are transitive.
+Direct inputs are nixpkgs, personal-nixpkgs, org-texmacs, org-roam-organize,
+org-roam-include and org-roam-blog. flake-parts/treefmt-nix and the shared
+repository's relative local-nixpkgs subflakes are transitive. The explicit Git
+URL override for personal-nixpkgs/local-nixpkgs is removed; ./pkgs is now relative
+to its dependency parent, as represented by the lock node's parent locator.
 The helper injects the selected Nixpkgs lib and project libraries, imports
 shared package/tool and treefmt infrastructure, and exposes perSystem
 nixpkgs.overlays. Emarccs sets that option to its legacy group instead of
 manually constructing _module.args.pkgs. These details were inspected in the
-exact locked source, without Nix evaluation/build verification.
+earlier locked source, without Nix evaluation/build verification. The newest
+shared-library input has not been independently re-inspected.
 
 The shared treefmt module handles Nix and Elisp formatting (among others),
 uses elisp-autofmt for .el files, disables default exclusions and fails on
@@ -64,11 +79,15 @@ configuration/test files before restoring the check. No successful full check
 for this revision was supplied or executed by the agent.
 
 ## Current package groups and exports
-The committed migration supplies upstream org-texmacs overlays.emacsPackages and
-overlays.texmacs to both groups via groups.<name>.overlays (legacy shares default's
-list). The new locked helper applies external overlays before selected local
-ones. Local org-texmacs override preserves Fandol selection and its local
-export-discovery leaf; external-only package paths are not automatically exported.
+The flake supplies overlays.emacsPackages from org-texmacs and each of the three
+Org-roam inputs, plus org-texmacs overlays.texmacs, to both groups via
+groups.<name>.overlays (legacy shares default's concatenated list). The previously
+inspected helper applies external overlays before local ones. Local org-texmacs
+override preserves Fandol selection and its export-discovery leaf. The three
+Org-roam packages now have no local leaf; under that directory-constrained
+selector, external-only paths are not automatically legacy-exported. Current
+shared-library implementation/actual exports have not been revalidated since
+its update; confirm before promising those individual outputs.
 pkgs/default.nix uses llib.packages.mkOverlays with default and legacy groups;
 groups.legacy.export = true. Both groups use root pkgs/ and overlay.nix without
 exclusions. The flake applies lpkgs.overlays.legacy to its perSystem Nixpkgs,

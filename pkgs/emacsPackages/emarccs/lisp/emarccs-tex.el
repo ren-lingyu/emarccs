@@ -210,9 +210,6 @@
         "\\\\end{abstract}\n\n\\\\begin{abstract}"
         output)))
     output)
-  (add-hook
-   'org-export-filter-final-output-functions
-   #'emarccs-tex--insert-toc-after-abstract-or-title)
   (defun emarccs-tex--remove-angle-brackets-in-timestamp
       (output backend info)
     (when (org-export-derived-backend-p backend 'latex)
@@ -222,9 +219,20 @@
              "\\1\\2\\3"
              output)))
     output)
+  (defun emarccs-tex--register-latex-output-filters (info backend)
+    (when (org-export-derived-backend-p backend 'latex)
+      (setq info
+            (plist-put
+             info
+             :filter-final-output
+             (append
+              (plist-get info :filter-final-output)
+              '(emarccs-tex--remove-angle-brackets-in-timestamp
+                emarccs-tex--insert-toc-after-abstract-or-title)))))
+    info)
   (add-hook
-   'org-export-filter-final-output-functions
-   #'emarccs-tex--remove-angle-brackets-in-timestamp)
+   'org-export-filter-options-functions
+   #'emarccs-tex--register-latex-output-filters)
   ;; 定义\label{eq:...}和\eqref{eq:...}对应的链接类型
   (org-link-set-parameters
    "eq"

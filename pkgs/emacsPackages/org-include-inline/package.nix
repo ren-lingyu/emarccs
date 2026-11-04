@@ -1,20 +1,14 @@
 {
+  src,
   lib,
-  fetchFromGitHub,
   melpaBuild,
   org,
-  nix-update-script,
 }:
-melpaBuild (finalAttrs_: {
-  src = fetchFromGitHub {
-    owner = "yibie";
-    repo = "org-include-inline";
-    rev = "b56bcd6a7297f7453b99ca1ec9bd62bae20bfbe2";
-    hash = "sha256-6c+vVdv/97OPIN8Zo8GLMhMM80u2JZdP+JiqF5V0ZJY=";
-  };
+melpaBuild {
+  inherit src;
 
-  pname = finalAttrs_.src.repo;
-  version = "0-unstable-2025-07-05";
+  pname = "org-include-inline";
+  version = "0.1.0";
   melpaVersion = "0.1.0";
 
   files = "(:defaults)";
@@ -26,15 +20,8 @@ melpaBuild (finalAttrs_: {
   turnCompilationWarningToError = true;
 
   meta = {
-    homepage = "https://github.com/${finalAttrs_.src.owner}/${finalAttrs_.src.repo}";
+    homepage = "https://github.com/yibie/org-include-inline";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--flake"
-      "--version=branch=main"
-    ];
-  };
-})
+}

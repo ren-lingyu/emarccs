@@ -25,6 +25,22 @@
       url = "git+https://github.com/ren-lingyu/org-roam-blog.git?ref=refs/heads/main&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    org = {
+      url = "git+https://github.com/bzg/org-mode.git?ref=refs/heads/main&shallow=1";
+      flake = false;
+    };
+    org-include-inline = {
+      url = "git+https://github.com/yibie/org-include-inline.git?ref=refs/heads/main&shallow=1";
+      flake = false;
+    };
+    org-workbench = {
+      url = "git+https://github.com/yibie/org-workbench.git?ref=refs/heads/main&shallow=1";
+      flake = false;
+    };
+    csl-locales = {
+      url = "git+https://github.com/citation-style-language/locales.git?ref=refs/heads/master&shallow=1";
+      flake = false;
+    };
   };
 
   outputs =
@@ -47,6 +63,14 @@
               org-roam-blog = inputs.org-roam-blog.overlays.emacsPackages;
             };
             texmacs-with-gotor-support = inputs.org-texmacs.overlays.texmacs;
+          };
+          sources = {
+            inherit (inputs)
+              org
+              org-include-inline
+              org-workbench
+              csl-locales
+              ;
           };
         };
       })

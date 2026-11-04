@@ -1,5 +1,23 @@
 {
   "nodes": {
+    "csl-locales": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792477395,
+        "narHash": "sha256-hitOVgBD3/WSJrPLVY/xay+Bmvn4HXv5bn64FhNoXcA=",
+        "ref": "refs/heads/master",
+        "rev": "8bef426f89f38c0789223c50e53ec2197bc50bb3",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/citation-style-language/locales.git"
+      },
+      "original": {
+        "ref": "refs/heads/master",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/citation-style-language/locales.git"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -313,6 +331,42 @@
         "type": "github"
       }
     },
+    "org": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793772592,
+        "narHash": "sha256-ehBIXThH+3M5IrbXXaaxl0dX2HnVjYe6A/k8EkxpmAg=",
+        "ref": "refs/heads/main",
+        "rev": "fe91cdaf6350e03a421286b2ed11fc3c81257f73",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/bzg/org-mode.git"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/bzg/org-mode.git"
+      }
+    },
+    "org-include-inline": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1751737728,
+        "narHash": "sha256-6c+vVdv/97OPIN8Zo8GLMhMM80u2JZdP+JiqF5V0ZJY=",
+        "ref": "refs/heads/main",
+        "rev": "b56bcd6a7297f7453b99ca1ec9bd62bae20bfbe2",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/yibie/org-include-inline.git"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/yibie/org-include-inline.git"
+      }
+    },
     "org-roam-blog": {
       "inputs": {
         "nixpkgs": [
@@ -403,6 +457,24 @@
         "shallow": true,
         "type": "git",
         "url": "https://github.com/ren-lingyu/org-texmacs.git"
+      }
+    },
+    "org-workbench": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1763473008,
+        "narHash": "sha256-dyu1I+QXHn8ps/JlT6jKFGKmvSLgplcx2PgVcjx3xdQ=",
+        "ref": "refs/heads/main",
+        "rev": "5091a1d9042b7409e8757b423280b2bff0919b28",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/yibie/org-workbench.git"
+      },
+      "original": {
+        "ref": "refs/heads/main",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/yibie/org-workbench.git"
       }
     },
     "personal-nixpkgs": {
@@ -528,11 +600,15 @@
     },
     "root": {
       "inputs": {
+        "csl-locales": "csl-locales",
         "nixpkgs": "nixpkgs",
+        "org": "org",
+        "org-include-inline": "org-include-inline",
         "org-roam-blog": "org-roam-blog",
         "org-roam-include": "org-roam-include",
         "org-roam-organize": "org-roam-organize",
         "org-texmacs": "org-texmacs",
+        "org-workbench": "org-workbench",
         "personal-nixpkgs": "personal-nixpkgs_5"
       }
     },

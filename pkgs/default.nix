@@ -1,6 +1,7 @@
 {
   lib,
   llib,
+  sources,
   overlays,
 }:
 {
@@ -24,6 +25,9 @@
         export = true;
         overlays = default.overlays;
       };
+    };
+    extraArgs = {
+      inherit sources;
     };
   };
 }

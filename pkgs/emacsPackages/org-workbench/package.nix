@@ -8,8 +8,6 @@ melpaBuild {
   inherit src;
 
   pname = "org-workbench";
-  version = "0.3.0";
-  melpaVersion = "0.3.0";
 
   files = "(:defaults)";
 
@@ -20,7 +18,6 @@ melpaBuild {
   turnCompilationWarningToError = true;
 
   meta = {
-    homepage = "https://github.com/yibie/org-workbench";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };

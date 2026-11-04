@@ -83,8 +83,6 @@ melpaBuild (finalAttrs_: {
   src = ./lisp;
 
   pname = "emarccs";
-  version = "0.1.0";
-  melpaVersion = "0.1.0";
 
   files = "(:defaults)";
 

@@ -8,8 +8,6 @@ melpaBuild {
   inherit src;
 
   pname = "org-include-inline";
-  version = "0.1.0";
-  melpaVersion = "0.1.0";
 
   files = "(:defaults)";
 

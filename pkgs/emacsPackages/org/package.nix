@@ -11,8 +11,6 @@ melpaBuild (finalAttrs_: {
   src = src;
 
   pname = "org";
-  version = "10.0-pre";
-  melpaVersion = "10.0pre";
 
   commit = finalAttrs_.src.rev;
 
@@ -36,7 +34,6 @@ melpaBuild (finalAttrs_: {
   '';
 
   meta = {
-    homepage = "https://orgmode.org";
     license = [
       lib.licenses.gpl3Plus
       lib.licenses.cc-by-sa-30

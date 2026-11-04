@@ -33,9 +33,26 @@ melpaBuild (finalAttrs_: {
     } EMACS=${lib.getExe emacs}"
   ];
 
+  postPatch = ''
+    cp ${
+      fetchFromGitHub {
+        owner = "citation-style-language";
+        repo = "locales";
+        rev = "8bef426f89f38c0789223c50e53ec2197bc50bb3";
+        hash = "sha256-hitOVgBD3/WSJrPLVY/xay+Bmvn4HXv5bn64FhNoXcA=";
+      }
+    }/locales-*.xml etc/csl/
+    printf '%s\n' \
+      'Additional CSL locales: https://citationstyles.org/ (CC BY-SA 3.0).' \
+      >> etc/csl/README
+  '';
+
   meta = {
     homepage = "https://orgmode.org";
-    license = lib.licenses.gpl3Plus;
+    license = [
+      lib.licenses.gpl3Plus
+      lib.licenses.cc-by-sa-30
+    ];
   };
 
   passthru.updateScript = nix-update-script {

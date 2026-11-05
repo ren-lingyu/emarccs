@@ -18,6 +18,24 @@
         "url": "https://github.com/citation-style-language/locales.git"
       }
     },
+    "elisp-autofmt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786424162,
+        "narHash": "sha256-5UHY8xkdVlB+YZdXdaDYBeUg0tFYuU2gdNlVspm4Ons=",
+        "ref": "refs/heads/master",
+        "rev": "a41fe15d3d2c69a6f069bab4d90caab8a4b62be7",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/emacsmirror/elisp-autofmt.git"
+      },
+      "original": {
+        "ref": "refs/heads/master",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/emacsmirror/elisp-autofmt.git"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -103,10 +121,10 @@
         "nixpkgs-lib": "nixpkgs-lib_5"
       },
       "locked": {
-        "lastModified": 1790898470,
-        "narHash": "sha256-zTwuwezD0w3hpga6a6P8emidzAZFyWqlNeRBlpWOOl8=",
+        "lastModified": 1793576659,
+        "narHash": "sha256-V1h85lUaJBQoHFrB2vpXZOE0Ju1MYSnIpsehoVZYlDo=",
         "ref": "refs/heads/main",
-        "rev": "024633cd702b10285db5cb19b40ad48d2399ba60",
+        "rev": "ea2630b7470978622c7689a1ff75d2b389175399",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/hercules-ci/flake-parts.git"
@@ -116,6 +134,24 @@
         "shallow": true,
         "type": "git",
         "url": "https://github.com/hercules-ci/flake-parts.git"
+      }
+    },
+    "lisplens": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1784324509,
+        "narHash": "sha256-K0QzGwW7pSQ5hJn5W6iJffqaQeaGx1guPHomLKEXzzc=",
+        "ref": "refs/tags/v0.6.0",
+        "rev": "2662b944d8d93a2734bc78464864b140ec9e0b8f",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/rigortype/lisplens.git"
+      },
+      "original": {
+        "ref": "refs/tags/v0.6.0",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/rigortype/lisplens.git"
       }
     },
     "local-nixpkgs": {
@@ -220,7 +256,9 @@
     },
     "local-nixpkgs_5": {
       "inputs": {
+        "elisp-autofmt": "elisp-autofmt",
         "flake-parts": "flake-parts_5",
+        "lisplens": "lisplens",
         "nixpkgs": [
           "personal-nixpkgs",
           "nixpkgs"
@@ -318,11 +356,11 @@
     },
     "nixpkgs-lib_5": {
       "locked": {
-        "lastModified": 1790477367,
-        "narHash": "sha256-oujbxmVKDhci2E4EM3KyAbRUgp5/IsCoiA/LfEF7OOk=",
+        "lastModified": 1793504054,
+        "narHash": "sha256-ThkfL3D/FhCiZFc9+3BtxwuMmpuK+/bGtXCSo1+yVew=",
         "owner": "nix-community",
         "repo": "nixpkgs.lib",
-        "rev": "f7cd230690d9fc982d06129f9189b101fddcfa3b",
+        "rev": "7851ba61fd862b277cb6a9cef37394bc18bb94e4",
         "type": "github"
       },
       "original": {
@@ -583,10 +621,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1793106151,
-        "narHash": "sha256-ntsu4fHDrDu2Q3NWC/4URM29JBzgHV3JaH46iP43ayY=",
+        "lastModified": 1793843841,
+        "narHash": "sha256-C405HBhEzL6l+exT8EBvUiSf4zmDH2nbGo02o5+tTXo=",
         "ref": "refs/heads/main",
-        "rev": "b7879c696e8052cdc0d872ccce0e99fa972791c3",
+        "rev": "cc0a8cf9c6ec12a1a69593e9906292ca6518ae5a",
         "shallow": true,
         "type": "git",
         "url": "https://github.com/ren-lingyu/nixpkgs.git"

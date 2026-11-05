@@ -112,6 +112,7 @@
                 treefmt = {
                   flakeCheck = true;
                   settings.excludes = [
+                    "*.el"
                     "*.patch"
                     ".gitignore"
                     "LICENSE"

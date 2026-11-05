@@ -199,139 +199,139 @@
       entries))))
 
 ;; org-roam-blog configuration
-(use-package
- org-roam-blog
- :after org-roam
- :custom
- (org-roam-blog-directory
-  (expand-file-name "./roam/permanent/" org-directory))
- (org-roam-blog-publish-directory
-  (expand-file-name "./public/" org-directory))
- (org-roam-blog-publish-store "store")
- (org-roam-blog-site-url (concat emarccs--org-roam-blog-site-url "/"))
- (org-roam-blog-published-property "PUBLISHED")
- (org-roam-blog-sitemap
-  (list
-   :enable t
-   :path "./sitemap.html"
-   :preamble
-   (concat
-    "#+TITLE: Post\n"
-    "#+DESCRIPTION: The map of blog posting, sorted by PUBLISHED DATE and categorized by FILESTAGS.\n"
-    "#+BEGIN_abstract\n"
-    "The map of blog posting, sorted by PUBLISHED DATE and categorized by FILESTAGS.\n"
-    "#+END_abstract\n")
-   :sort 'anti-chronologically
-   :visible-tags '("2026" "日常" "年度总结" "随笔")
-   :renderer #'emarccs--org-roam-blog-sitemap-renderer))
- (org-roam-blog-theindex
-  (list
-   :enable t
-   :path "./theindex.html"
-   :preamble
-   (concat
-    "#+TITLE: Index\n"
-    "#+DESCRIPTION: The website index, sorted by the first letter of the title.\n"
-    "#+BEGIN_abstract\n"
-    "The website index, sorted by the first letter of the title."
-    "\n"
-    "#+END_abstract\n")))
- (org-roam-blog-content
-  (list
+(use-package org-roam-blog
+  :after org-roam
+  :custom
+  (org-roam-blog-directory
+   (expand-file-name "./roam/permanent/" org-directory))
+  (org-roam-blog-publish-directory
+   (expand-file-name "./public/" org-directory))
+  (org-roam-blog-publish-store "store")
+  (org-roam-blog-site-url
+   (concat emarccs--org-roam-blog-site-url "/"))
+  (org-roam-blog-published-property "PUBLISHED")
+  (org-roam-blog-sitemap
    (list
-    :name "index"
-    :tags '("blog" "index")
-    :directory "./"
-    :sitemap nil
-    :theindex t)
+    :enable t
+    :path "./sitemap.html"
+    :preamble
+    (concat
+     "#+TITLE: Post\n"
+     "#+DESCRIPTION: The map of blog posting, sorted by PUBLISHED DATE and categorized by FILESTAGS.\n"
+     "#+BEGIN_abstract\n"
+     "The map of blog posting, sorted by PUBLISHED DATE and categorized by FILESTAGS.\n"
+     "#+END_abstract\n")
+    :sort 'anti-chronologically
+    :visible-tags '("2026" "日常" "年度总结" "随笔")
+    :renderer #'emarccs--org-roam-blog-sitemap-renderer))
+  (org-roam-blog-theindex
    (list
-    :name "post"
-    :tags '("blog" "post")
-    :directory nil
-    :sitemap t
-    :theindex t
+    :enable t
+    :path "./theindex.html"
+    :preamble
+    (concat
+     "#+TITLE: Index\n"
+     "#+DESCRIPTION: The website index, sorted by the first letter of the title.\n"
+     "#+BEGIN_abstract\n"
+     "The website index, sorted by the first letter of the title."
+     "\n"
+     "#+END_abstract\n")))
+  (org-roam-blog-content
+   (list
+    (list
+     :name "index"
+     :tags '("blog" "index")
+     :directory "./"
+     :sitemap nil
+     :theindex t)
+    (list
+     :name "post"
+     :tags '("blog" "post")
+     :directory nil
+     :sitemap t
+     :theindex t
+     :template
+     (list :with-toc t :section-numbers t)
+     :body
+     (list #'emarccs--org-roam-blog-article-body))))
+  (org-roam-blog-static
+   (list
+    (list
+     :source
+     (expand-file-name "./static/" org-directory)
+     :directory "./"
+     :extensions "css\\|js\\|svg")))
+  (org-roam-blog-export-default
+   (list
     :template
-    (list :with-toc t :section-numbers t)
-    :body
-    (list #'emarccs--org-roam-blog-article-body))))
- (org-roam-blog-static
-  (list
-   (list
-    :source
-    (expand-file-name "./static/" org-directory)
-    :directory "./"
-    :extensions "css\\|js\\|svg")))
- (org-roam-blog-export-default
-  (list
-   :template
-   (list
-    :author "aRenCoco"
-    :email "aRen_Coco@outlook.com"
-    :with-author t
-    :with-email t
-    :headline-levels 5
-    :with-toc nil
-    :with-creator t
-    :with-timestamp t
-    :with-planning t
-    :html-link-home "/index.html"
-    :html-preamble t
-    :html-postamble t
-    :section-numbers nil)
-   :bindings
-   (list
-    (cons
-     'org-html-head
-     (concat
-      "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/MapleMono-NF-CN-Regular/result.css\"/>\n"
-      "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/LXGWWenKai-Regular/result.css\"/>\n"
-      "<link rel=\"stylesheet\" href=\"https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css\"/>\n"
-      "<link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\"/>\n"
-      "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-default.css?v="
-      (format-time-string "%Y%m%d%z")
-      "\"/>\n"
-      "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-local.css?v="
-      (format-time-string "%Y%m%d%z")
-      "\"/>\n"
-      "<link rel=\"alternate\" type=\"application/atom+xml\" title=\""
-      emarccs--org-roam-blog-site-name
-      " - Atom\" href=\"/feed.atom\"/>\n"))
-    (cons 'org-html-head-extra nil)
-    (cons 'org-html-head-include-default-style nil)
-    (cons 'org-html-home/up-format "<div class=\"flexbox\">\n")
-    (cons
-     'org-html-preamble-format
-     `(("en" ,(concat
-          "\n"
-          "<header>\n"
-          "<nav>\n"
-          "<a accesskey=\"\" href=\"/index.html\">aRenCoco's Blog</a>\n"
-          "<a accesskey=\"\" href=\"/sitemap.html\">Post</a>\n"
-          "<a accesskey=\"\" href=\"/about.html\">About</a>\n"
-          "<a accesskey=\"\" href=\"/style.html\">Style</a>\n"
-          "<a accesskey=\"\" href=\"/theindex.html\">Index</a>\n"
-          "<a accesskey=\"\" href=\""
-          emarccs--org-roam-blog-site-url
-          "/feed.atom\">Feed</a>\n"
-          "</nav>\n"
-          "</header>\n"
-          "<hr class=\"topline\">\n\n"))))
-    (cons
-     'org-html-postamble-format
-     `(("en" ,(concat
-          "\n"
-          "<footer>\n"
-          "<p>\n"
-          emarccs--org-roam-blog-cc-license-no-genic-work-no-full-tool-name
-          "</p>\n"
-          "<p>\n"
-          "Generated at <span class=\"update-time\">%T</span> by %c on <a href=\"https://nixos.org\">NixOS</a>."
-          "</p>\n"
-          "</footer>\n"
-          "</div>\n"
-          "\n"))))
-    (cons
-     'org-html-metadata-timestamp-format "%Y-%m-%d %a %H:%M %z")))))
+    (list
+     :author "aRenCoco"
+     :email "aRen_Coco@outlook.com"
+     :with-author t
+     :with-email t
+     :headline-levels 5
+     :with-toc nil
+     :with-creator t
+     :with-timestamp t
+     :with-planning t
+     :html-link-home "/index.html"
+     :html-preamble t
+     :html-postamble t
+     :section-numbers nil)
+    :bindings
+    (list
+     (cons
+      'org-html-head
+      (concat
+       "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/MapleMono-NF-CN-Regular/result.css\"/>\n"
+       "<link rel=\"stylesheet\" href=\"https://font.aren-coco.com/LXGWWenKai-Regular/result.css\"/>\n"
+       "<link rel=\"stylesheet\" href=\"https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css\"/>\n"
+       "<link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\"/>\n"
+       "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-default.css?v="
+       (format-time-string "%Y%m%d%z")
+       "\"/>\n"
+       "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org-html-style-local.css?v="
+       (format-time-string "%Y%m%d%z")
+       "\"/>\n"
+       "<link rel=\"alternate\" type=\"application/atom+xml\" title=\""
+       emarccs--org-roam-blog-site-name
+       " - Atom\" href=\"/feed.atom\"/>\n"))
+     (cons 'org-html-head-extra nil)
+     (cons 'org-html-head-include-default-style nil)
+     (cons 'org-html-home/up-format "<div class=\"flexbox\">\n")
+     (cons
+      'org-html-preamble-format
+      `(("en" ,(concat
+           "\n"
+           "<header>\n"
+           "<nav>\n"
+           "<a accesskey=\"\" href=\"/index.html\">aRenCoco's Blog</a>\n"
+           "<a accesskey=\"\" href=\"/sitemap.html\">Post</a>\n"
+           "<a accesskey=\"\" href=\"/about.html\">About</a>\n"
+           "<a accesskey=\"\" href=\"/style.html\">Style</a>\n"
+           "<a accesskey=\"\" href=\"/theindex.html\">Index</a>\n"
+           "<a accesskey=\"\" href=\""
+           emarccs--org-roam-blog-site-url
+           "/feed.atom\">Feed</a>\n"
+           "</nav>\n"
+           "</header>\n"
+           "<hr class=\"topline\">\n\n"))))
+     (cons
+      'org-html-postamble-format
+      `(("en" ,(concat
+           "\n"
+           "<footer>\n"
+           "<p>\n"
+           emarccs--org-roam-blog-cc-license-no-genic-work-no-full-tool-name
+           "</p>\n"
+           "<p>\n"
+           "Generated at <span class=\"update-time\">%T</span> by %c on <a href=\"https://nixos.org\">NixOS</a>."
+           "</p>\n"
+           "</footer>\n"
+           "</div>\n"
+           "\n"))))
+     (cons
+      'org-html-metadata-timestamp-format "%Y-%m-%d %a %H:%M %z")))))
 
 (provide 'emarccs-org-roam-blog)
 

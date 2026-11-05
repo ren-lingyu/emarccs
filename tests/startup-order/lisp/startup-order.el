@@ -76,7 +76,10 @@
                  "emarccs"))
         (load (locate-library library) nil t)))
     (dolist (feature
-             '(use-package org auctex emarccs-basic emarccs-org))
+             '(use-package org
+                auctex
+                emarccs-basic
+                emarccs-org))
       (should-not (memq feature required)))
     (should-not before-init-hook)
     (should-not emarccs--early-initialized)
@@ -215,20 +218,19 @@
           (should
            (equal
             (nreverse required)
-            '(use-package
-              emarccs-basic
-              emarccs-help
-              emarccs-theme
-              emarccs-org
-              emarccs-tex
-              emarccs-complete
-              emarccs-lisp
-              emarccs-org-roam
-              emarccs-org-roam-organize
-              emarccs-org-latex-preview
-              emarccs-feed
-              emarccs-org-roam-blog
-              emarccs-debug))))
+            '(use-package emarccs-basic
+               emarccs-help
+               emarccs-theme
+               emarccs-org
+               emarccs-tex
+               emarccs-complete
+               emarccs-lisp
+               emarccs-org-roam
+               emarccs-org-roam-organize
+               emarccs-org-latex-preview
+               emarccs-feed
+               emarccs-org-roam-blog
+               emarccs-debug))))
       (delete-directory fixture-dir t))))
 
 (ert-deftest emarccs-startup-order--failed-initialization-can-retry ()

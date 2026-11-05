@@ -1,5 +1,5 @@
-#+TITLE: Emarccs
-#+AUTHOR: aRenCoco
+#+title: Emarccs
+#+author: aRenCoco
 
 * 项目介绍
 这是本人自用的 Emacs 配置. =flake.nix= 通过 Nixpkgs 的 Emacs package scope 打包配置和第三方依赖, 并构建配置好的 Emacs wrapper.
@@ -10,44 +10,44 @@
 
 * 项目结构
 #+begin_src text
-.
-├── flake.nix
-├── flake.lock
-├── lib/
-│   └── default.nix
-├── pkgs/
-│   ├── default.nix
-│   ├── emarccs/
-│   │   ├── overlay.nix
-│   │   └── package.nix
-│   ├── emarccs-pgtk/
-│   │   └── overlay.nix
-│   ├── emarccs-gtk/
-│   │   └── overlay.nix
-│   ├── texmacs-fandol/
-│   │   ├── overlay.nix
-│   │   └── package.nix
-│   └── emacsPackages/
-│       ├── emarccs/
-│       │   ├── overlay.nix
-│       │   ├── package.nix
-│       │   └── lisp/
-│       │       ├── emarccs.el
-│       │       ├── emarccs-early-init.el
-│       │       ├── emarccs-init.el
-│       │       └── emarccs-*.el
-│       └── <package>/
-│           ├── overlay.nix
-│           └── ...
-└── tests/
-    ├── default.nix
-    ├── overlay-equivalence/
-    ├── startup-smoke/
-    ├── startup-order/
-    ├── package-availability-smoke/
-    ├── elisp-byte-compile/
-    ├── package-lint/
-    └── treesit-grammars-runtime/
+  .
+  ├── flake.nix
+  ├── flake.lock
+  ├── lib/
+  │   └── default.nix
+  ├── pkgs/
+  │   ├── default.nix
+  │   ├── emarccs/
+  │   │   ├── overlay.nix
+  │   │   └── package.nix
+  │   ├── emarccs-pgtk/
+  │   │   └── overlay.nix
+  │   ├── emarccs-gtk/
+  │   │   └── overlay.nix
+  │   ├── texmacs-fandol/
+  │   │   ├── overlay.nix
+  │   │   └── package.nix
+  │   └── emacsPackages/
+  │       ├── emarccs/
+  │       │   ├── overlay.nix
+  │       │   ├── package.nix
+  │       │   └── lisp/
+  │       │       ├── emarccs.el
+  │       │       ├── emarccs-early-init.el
+  │       │       ├── emarccs-init.el
+  │       │       └── emarccs-*.el
+  │       └── <package>/
+  │           ├── overlay.nix
+  │           └── ...
+  └── tests/
+      ├── default.nix
+      ├── overlay-equivalence/
+      ├── startup-smoke/
+      ├── startup-order/
+      ├── package-availability-smoke/
+      ├── elisp-byte-compile/
+      ├── package-lint/
+      └── treesit-grammars-runtime/
 #+end_src
 
 关键约定:
@@ -75,31 +75,31 @@
 =flake.nix= 使用 =flake-parts= 组织输出. 当前主要输出:
 
 #+begin_src text
-packages.<system>.emarccs
-packages.<system>.emarccs-pgtk
-packages.<system>.emarccs-gtk
+  packages.<system>.emarccs
+  packages.<system>.emarccs-pgtk
+  packages.<system>.emarccs-gtk
 
-legacyPackages.<system>.emarccs
-legacyPackages.<system>.emarccs-pgtk
-legacyPackages.<system>.emarccs-gtk
-legacyPackages.<system>.emacsPackages.<package>
+  legacyPackages.<system>.emarccs
+  legacyPackages.<system>.emarccs-pgtk
+  legacyPackages.<system>.emarccs-gtk
+  legacyPackages.<system>.emacsPackages.<package>
 
-checks.<system>.<package>-<test>
-checks.<system>.treefmt
+  checks.<system>.<package>-<test>
+  checks.<system>.treefmt
 
-overlays.default
-formatter.<system>
+  overlays.default
+  formatter.<system>
 #+end_src
 
 常用命令:
 
 #+begin_src sh
-nix build .#emarccs-pgtk -L --show-trace
-nix run .#emarccs-pgtk
-nix flake check -L --show-trace
-nix build .#legacyPackages.x86_64-linux.emacsPackages.org-texmacs
-nix build .#checks.x86_64-linux.emarccs-pgtk-overlay-equivalence
-nix fmt
+  nix build .#emarccs-pgtk -L --show-trace
+  nix run .#emarccs-pgtk
+  nix flake check -L --show-trace
+  nix build .#legacyPackages.x86_64-linux.emacsPackages.org-texmacs
+  nix build .#checks.x86_64-linux.emarccs-pgtk-overlay-equivalence
+  nix fmt
 #+end_src
 
 三个 wrapper 共用 =pkgs/emarccs/package.nix= 的构造逻辑, 使用 =emacsPackagesFor= / =withPackages= 加入配置包和 GNU coreutils. GTK/PGTK 变体通过 =override= 选择对应的基础 Emacs. 配置依赖从该 Emacs 对应的 package scope 解析.
@@ -107,10 +107,10 @@ nix fmt
 =overlays.default= 直接导出 =pkgs/default.nix= 组合的 overlay, 包含本地 Elisp package 定义、覆盖及三个 wrapper. flake 自身导入 Nixpkgs 时也使用同一 overlay, =packages= 直接继承其中的 wrapper. 在其他 flake 中将本仓库作为 =emarccs= input 后, 可以这样使用:
 
 #+begin_src nix
-pkgs = import inputs.nixpkgs {
-  inherit system;
-  overlays = [ inputs.emarccs.overlays.default ];
-};
+  pkgs = import inputs.nixpkgs {
+    inherit system;
+    overlays = [ inputs.emarccs.overlays.default ];
+  };
 #+end_src
 
 =personal-nixpkgs= 提供 package/overlay 发现和测试聚合等通用 helper, 其 =nixpkgs=, =flake-parts= 和 =treefmt-nix= 依赖 follows 本仓库对应输入. =llib= 使用 =mergeAttrsRecursive { allowOverrides = false; }= 合并共享库中的 =packages=, =tests= 和本地扩展, 重叠的叶节点定义会报错.
@@ -121,9 +121,9 @@ pkgs = import inputs.nixpkgs {
 由共享库加载的 =overlay.nix= 和 =test-overlay.nix= 都采用 constructor 协议. 当前文件无需构造参数, 使用如下形式:
 
 #+begin_src nix
-{ }: final: prev: {
-  emarccs = final.callPackage ./package.nix { };
-}
+  { }: final: prev: {
+    emarccs = final.callPackage ./package.nix { };
+  }
 #+end_src
 
 外层函数由共享库实例化, 返回标准的 =final: prev: ...= overlay. 对外导出的 =overlays.default= 仍按普通 Nixpkgs overlay 使用.

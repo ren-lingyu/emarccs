@@ -2,10 +2,10 @@
 */
 
 !/.gitignore
-!/README.org
 !/LICENSE
-!/flake.nix
+!/README.org
 !/flake.lock
+!/flake.nix
 
 !/lib/
 !/lib/**/
@@ -13,8 +13,8 @@
 
 !/pkgs/
 !/pkgs/**/
-!/pkgs/**/*.nix
 !/pkgs/**/*.el
+!/pkgs/**/*.nix
 !/pkgs/**/*.patch
 
 !/tests/
@@ -23,6 +23,6 @@
 !/tests/**/lisp/*.el
 !/tests/**/lisp/*.scm
 
+*#*
 **/tmp/
 *~
-*#*

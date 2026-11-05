@@ -5,40 +5,39 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package
- auctex
- :defer t
- :init
- (add-hook 'TeX-mode-hook #'TeX-fold-mode)
- (add-hook
-  'LaTeX-mode-hook
-  (lambda ()
-    (setq
-     TeX-electric-escape nil
-     TeX-electric-sub-and-superscript nil)))
- :config
- (setq TeX-auto-local (locate-user-emacs-file "cache/auctex-auto/"))
- (unless (file-exists-p TeX-auto-local)
-   (make-directory TeX-auto-local t))
- (setq TeX-auto-save t)
- (setq TeX-parse-self t)
- (setq TeX-parse-self t) ; 自动解析文档结构
- (setq TeX-master nil) ; 不指定主文件
- (setq preview-image-type nil) ; 禁用预览
- ;; (setq TeX-command-default "LuaLaTeX")
- (setq TeX-save-query nil)
- (setq TeX-show-compilation nil) ; 禁用编译
- (setq TeX-PDF-mode nil)
- (setq TeX-view-program-selection '((output-pdf "Zathura")))
- (setq TeX-view-program-list '(("Zathura" "zathura %o"))))
+(use-package auctex
+  :defer t
+  :init
+  (add-hook 'TeX-mode-hook #'TeX-fold-mode)
+  (add-hook
+   'LaTeX-mode-hook
+   (lambda ()
+     (setq
+      TeX-electric-escape nil
+      TeX-electric-sub-and-superscript nil)))
+  :config
+  (setq TeX-auto-local (locate-user-emacs-file "cache/auctex-auto/"))
+  (unless (file-exists-p TeX-auto-local)
+    (make-directory TeX-auto-local t))
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq TeX-parse-self t) ; 自动解析文档结构
+  (setq TeX-master nil) ; 不指定主文件
+  (setq preview-image-type nil) ; 禁用预览
+  ;; (setq TeX-command-default "LuaLaTeX")
+  (setq TeX-save-query nil)
+  (setq TeX-show-compilation nil) ; 禁用编译
+  (setq TeX-PDF-mode nil)
+  (setq TeX-view-program-selection '((output-pdf "Zathura")))
+  (setq TeX-view-program-list '(("Zathura" "zathura %o"))))
 
-(use-package flycheck :hook (LaTeX-mode . flycheck-mode))
+(use-package flycheck
+  :hook (LaTeX-mode . flycheck-mode))
 
-(use-package
- cdlatex
- :hook
- (org-mode . turn-on-org-cdlatex)
- (LaTeX-mode . company-auctex-init))
+(use-package cdlatex
+  :hook
+  (org-mode . turn-on-org-cdlatex)
+  (LaTeX-mode . company-auctex-init))
 
 ;; 启用 org-mode 的 LaTeX 区域高亮支持
 (setq org-highlight-latex-and-related '(native script))

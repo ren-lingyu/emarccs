@@ -11,9 +11,9 @@
   ;; :demand t
   :after (org)
   :custom
-  (org-roam-directory (expand-file-name "./roam/" org-directory)) ;; 你的笔记根目录
+  (org-roam-directory org-directory) ;; 你的笔记根目录
   (org-roam-db-location
-   (expand-file-name "./roam/.org-roam.db" org-directory)) ;; 数据库文件位置
+   (expand-file-name "./.org-roam.db" org-roam-directory)) ;; 数据库文件位置
   (org-roam-dailies-directory "journal/")
   (org-roam-completion-everywhere t)
   (org-roam-node-display-template "${title} ${tags}")
@@ -35,7 +35,7 @@
          `(("I" "post index" plain "%?"
             :if-new
             (file+head
-             "permanent/${slug}.org"
+             "inbox/${slug}.org"
              ,(concat
                "#+TITLE: ${title}\n"
                "#+INDEX: ${title}\n"

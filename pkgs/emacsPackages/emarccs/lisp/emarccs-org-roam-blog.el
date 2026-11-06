@@ -202,8 +202,7 @@
 (use-package org-roam-blog
   :after org-roam
   :custom
-  (org-roam-blog-directory
-   (expand-file-name "./roam/permanent/" org-directory))
+  (org-roam-blog-directory org-roam-directory)
   (org-roam-blog-publish-directory
    (expand-file-name "./public/" org-directory))
   (org-roam-blog-publish-store "store")

@@ -16,7 +16,7 @@
      :tag "map"
      :moc t
      :basic t
-     :directory "navigation"
+     :directory "."
      :inbox "Not be Classified"
      :template
      '((keywords
@@ -29,7 +29,7 @@
      :name "fleeting"
      :tag "idea"
      :basic t
-     :directory "fleeting"
+     :directory "."
      :inbox "Not be Classified"
      :template
      '((path . "${slug}.org")
@@ -45,7 +45,7 @@
      :cite t
      :basic t
      :bibliography t
-     :directory "literature"
+     :directory "."
      :inbox "Citing Nodes"
      :backend
      (list
@@ -77,7 +77,7 @@
      :name "permanent"
      :tag "zettel"
      :basic t
-     :directory "permanent"
+     :directory "."
      :inbox "Not be Classified"
      :template
      '((path . "${slug}.org")
@@ -91,7 +91,7 @@
      :name "note"
      :tag "note"
      :basic nil
-     :directory "permanent"
+     :directory "."
      :inbox "Not be Classified"
      :template
      '((path . "${slug}.org")
@@ -105,7 +105,7 @@
      :name "blog"
      :tag "blog"
      :basic nil
-     :directory "permanent"
+     :directory "."
      :inbox "Not be Classified"
      :template
      '((path . "${slug}.org")
@@ -158,8 +158,7 @@
     (expand-file-name "./texmf/bibtex/bib/org-citar.bib"
                       org-directory)))
   (citar-library-paths nil)
-  (citar-notes-paths
-   (list (expand-file-name "./literature/" org-roam-directory))))
+  (citar-notes-paths (list org-roam-directory)))
 
 (use-package citar-embark
   :after (citar embark)

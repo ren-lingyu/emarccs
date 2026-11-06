@@ -170,7 +170,7 @@ If the link is not an Org-roam ID link or the node cannot be found, display an a
   :after org-roam
   :config
   (org-roam-timestamps-mode 1)
-  (setq org-roam-timestamps-parent-file t)
+  (setq org-roam-timestamps-timestamp-parent-file t)
   (setq org-roam-timestamps-remember-timestamps t))
 
 (provide 'emarccs-org-roam)

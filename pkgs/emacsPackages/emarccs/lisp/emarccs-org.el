@@ -152,37 +152,6 @@
    org-agenda-mode-map
    ("C-c ." . org-gtd-agenda-transient)))
 
-;; 中文标记处理
-;; (font-lock-add-keywords 'org-mode
-;;   '(("\\cc\\( \\)[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)?\\cc?"
-;;       (1 (prog1 () (compose-region (match-beginning 1) (match-end 1) ""))))
-;;     ("\\cc?\\( \\)?[/+*_=~][^a-zA-Z0-9/+*_=~\n]+?[/+*_=~]\\( \\)\\cc"
-;;       (2 (prog1 () (compose-region (match-beginning 2) (match-end 2) "")))))
-;;   'append)
-;; (with-eval-after-load 'ox
-;;   (defun eli-strip-ws-maybe (text _backend _info)
-;;     (let* (;; remove whitespace from line break
-;;         (text (replace-regexp-in-string "\\(\\cc\\) *\n *\\(\\cc\\)" "\\1\\2" text))
-;;         ;; remove whitespace from `org-emphasis-alist'
-;;         (text (replace-regexp-in-string "\\(\\cc\\) \\(.*?\\) \\(\\cc\\)" "\\1\\2\\3" text))
-;;         ;; restore whitespace between English words and Chinese words
-;;         (text (replace-regexp-in-string "\\(\\cc\\)\\(\\(?:<[^>]+>\\)?[a-z0-9A-Z-]+\\(?:<[^>]+>\\)?\\)\\(\\cc\\)" "\\1 \\2 \\3" text)))
-;;       text))
-;;   (add-to-list 'org-export-filter-paragraph-functions #'eli-strip-ws-maybe))
-
-;; (defun emarccs-org-update-setupfile (path)
-;;   "Update #+SETUPFILE only for specific Org files."
-;;   (when (and  (eq major-mode 'org-mode)
-;;               (buffer-file-name)
-;;               (file-in-directory-p (buffer-file-name) path)))
-;;     (save-excursion
-;;       (goto-char (point-min))
-;;       (let ((setupfile-path "~/dataspace/knowhub/ProjectFiles/setup.org"))
-;;         (when (re-search-forward "^#\\+SETUPFILE:" nil t)
-;;           ;; 只替换路径, 不删掉关键字
-;;           (delete-region (match-end 0) (line-end-position))
-;;           (insert " " setupfile-path))))))
-
 ;; 快捷键
 (global-set-key
  (kbd "C-c u d")

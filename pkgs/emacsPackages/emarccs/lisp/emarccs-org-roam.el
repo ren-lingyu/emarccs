@@ -24,13 +24,8 @@
    ("C-c n l" . org-roam-buffer-toggle)
    ("C-c n c" . org-roam-capture)
    ("C-c c l" . emarccs-org-roam-forward-links))
-  :config (org-roam-db-autosync-mode)
-  ;; (advice-add 'org-roam-mode-hook :after
-  ;;   (lambda (&rest _)
-  ;;     (display-line-numbers-mode 1)
-  ;;     (font-lock-mode 1)
-  ;;   )
-  ;; )
+  :config
+  (org-roam-db-autosync-mode)
   (setq org-roam-node-display-template
         (concat
          "${title:*} " (propertize "${tags:30}" 'face 'org-tag)))

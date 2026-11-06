@@ -42,50 +42,7 @@
                       :foreground "#6b6b6b"
                       :background "#ffffff"
                       :weight 'ultra-bold
-                      :inverse-video t)
-  ;; 更新文件头
-  (defun emarccs-org-update-date (path time_string insert_bool)
-    "Update #+DATE only for specific Org files."
-    (when (and (eq major-mode 'org-mode)
-               (buffer-file-name) ; 确保有文件名
-               (file-directory-p path)
-               (file-in-directory-p (buffer-file-name) path)
-               (stringp time_string)
-               (booleanp insert_bool))
-      (save-excursion
-        (goto-char (point-min))
-        (let* ((now (format-time-string time_string)))
-          (if (re-search-forward "^#\\+DATE:" nil t)
-              ;; 如果找到 DATE 关键字, 更新它
-              (progn
-                (delete-region (point) (line-end-position))
-                (insert " " now))
-            ;; 如果没有找到 DATE 关键字, 在适当位置插入
-            (progn
-              (when insert_bool
-                (progn
-                  (goto-char (point-min))
-                  (let ((insert-pos (point-min))
-                        (keywords
-                         '("SETUPFILE"
-                           "TITLE"
-                           "AUTHOR"
-                           "EMAIL"
-                           "INDEX")))
-                    ;; 查找最后一个存在的关键字位置
-                    (dolist (keyword keywords)
-                      (when (re-search-forward (concat
-                                                "^#\\+" keyword ":")
-                                               nil t)
-                        (setq insert-pos (line-end-position))))
-                    ;; 移动到插入位置并插入新的 DATE 关键字
-                    (goto-char insert-pos)
-                    (if (= insert-pos (point-min))
-                        ;; 如果没有找到任何关键字, 在文件开头插入
-                        (insert "#+DATE: " now "\n")
-                      ;; 在最后一个关键字后插入
-                      (forward-line)
-                      (insert "#+DATE: " now "\n"))))))))))))
+                      :inverse-video t))
 
 (use-package emarccs--org-extension-block
   :after org
@@ -151,17 +108,6 @@
    :map
    org-agenda-mode-map
    ("C-c ." . org-gtd-agenda-transient)))
-
-;; 快捷键
-(global-set-key
- (kbd "C-c u d")
- (lambda ()
-   (interactive)
-   (when (buffer-file-name)
-     (emarccs-org-update-date
-      (file-name-directory (buffer-file-name))
-      "<%Y-%m-%d %a %z>"
-      nil))))
 
 (provide 'emarccs-org)
 ;;; emarccs-org.el ends here.

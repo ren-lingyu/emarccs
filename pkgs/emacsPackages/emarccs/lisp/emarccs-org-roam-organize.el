@@ -119,46 +119,6 @@
   (org-roam-organize-moc-managed-tag-property "MOC_MANAGED_TAG")
   (org-roam-organize-moc-managed-node-count-property
    "MOC_MANAGED_NODE_COUNT")
-  :config
-  (defun emarccs-org-roam-organize--post-p ()
-    "Return t if the current file's level-0 node is tagged `post', otherwise nil."
-    (and buffer-file-name
-         (not
-          (null
-           (org-roam-db-query
-            (vector
-             :select (vector 'nodes:file)
-             :from 'tags
-             :left-join 'nodes
-             :on '(= tags:node-id nodes:id)
-             :where
-             '(and (= nodes:file $s1)
-                   (= nodes:level 0)
-                   (like tag (quote "%\"post\"%")))
-             :limit 1)
-            buffer-file-name)))))
-  (defun emarccs-org-roam-organize--before-save ()
-    (when (and org-roam-organize-mode
-               buffer-file-name
-               (file-in-directory-p
-                buffer-file-name org-roam-organize-directory))
-      (cond
-       ;; Literature notes are not updated.
-       ((file-in-directory-p
-         buffer-file-name
-         (expand-file-name "./literature/"
-                           org-roam-organize-directory))
-        nil)
-       ;; Posts are not updated.
-       ((emarccs-org-roam-organize--post-p)
-        nil)
-       ;; Update all other managed notes.
-       (t
-        (emarccs-org-update-date
-         org-roam-organize-directory "<%Y-%m-%d %a %z>" t)
-        (message "Updated DATE in %s" buffer-file-name)))))
-  (add-hook
-   'before-save-hook #'emarccs-org-roam-organize--before-save)
   :bind
   (("C-c o o" . org-roam-organize-mode)
    ("C-c o n c" . org-roam-organize-node-create)

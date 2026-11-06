@@ -15,6 +15,7 @@
      :name "navigation"
      :tag "map"
      :moc t
+     :moc-id "ffffffff-ffff-ffff-ffff-ffffffffffff"
      :basic t
      :directory "."
      :inbox "Not be Classified"
@@ -46,7 +47,7 @@
      :basic t
      :bibliography t
      :directory "."
-     :inbox "Citing Nodes"
+     :inbox "Not be Classified"
      :backend
      (list
       'citar

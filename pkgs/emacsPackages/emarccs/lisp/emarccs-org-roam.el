@@ -11,7 +11,7 @@
   ;; :demand t
   :after (org)
   :custom
-  (org-roam-directory org-directory) ;; 你的笔记根目录
+  (org-roam-directory (expand-file-name "./roam" org-directory)) ;; 你的笔记根目录
   (org-roam-db-location
    (expand-file-name "./.org-roam.db" org-roam-directory)) ;; 数据库文件位置
   (org-roam-dailies-directory "journal/")

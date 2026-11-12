@@ -23,7 +23,7 @@
      '((keywords
         .
         ((author . "Lingyu Ren")
-         (date . "<%<%Y-%m-%d %A %z>>")
+         (date . "<%<%Y-%m-%d %a %z>>")
          (description . nil)
          (filetags . ("map"))))))
     (list
@@ -37,7 +37,7 @@
        (keywords
         .
         ((author . "Lingyu Ren")
-         (date . "<%<%Y-%m-%d %A %H:%M:%S %z>>")
+         (date . "<%<%Y-%m-%d %a %z>>")
          (description . nil)
          (filetags . ("idea"))))))
     (list
@@ -85,7 +85,7 @@
        (keywords
         .
         ((author . "Lingyu Ren")
-         (date . "<%<%Y-%m-%d %A %H:%M:%S %z>>")
+         (date . "<%<%Y-%m-%d %a %z>>")
          (description . nil)
          (filetags . ("zettel"))))))
     (list
@@ -99,7 +99,7 @@
        (keywords
         .
         ((author . "Lingyu Ren")
-         (date . "<%<%Y-%m-%d %A %H:%M:%S %z>>")
+         (date . "<%<%Y-%m-%d %a %z>>")
          (description . nil)
          (filetags . ("zettel" "note"))))))
     (list

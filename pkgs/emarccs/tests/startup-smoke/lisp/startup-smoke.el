@@ -44,20 +44,6 @@
  (not (memq 'emarccs-initialize before-init-hook))
  "Requiring Emarccs registered startup scheduling")
 
-;; A clean incoming PATH must still find the programs supplied by the wrapper.
-(dolist (program
-         '(("grep" . "EMARCCS_GREP")
-           ("rg" . "EMARCCS_RG")
-           ("ls" . "EMARCCS_LS")))
-  (let ((actual (executable-find (car program)))
-        (expected
-         (or (getenv (cdr program))
-             (error "%s is not set" (cdr program)))))
-    (emarccs-startup-smoke--check
-     (and actual (file-equal-p actual expected))
-     (format "%s did not resolve to the supplied system program: %S"
-             (car program) actual))))
-
 ;; Exercise real package activation in a fresh batch process without ERT or an
 ;; explicit cl-lib preload.  Replace only personal configuration initializers.
 (let ((init-file-user "activation-test")

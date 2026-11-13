@@ -105,7 +105,7 @@
 
                 checks = import ./tests {
                   inherit pkgs lib llib;
-                  packages = config.packages;
+                  packages = config.legacyPackages;
                   overlay = toplevel.config.flake.overlays.default;
                 };
 

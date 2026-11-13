@@ -27,8 +27,9 @@
       };
     };
     extraArgs = {
-      inherit sources;
+      inherit lib sources;
       inherit (llib) mkMelpaBuild;
+      inherit (llib.tests) mkChecks;
     };
   };
 }

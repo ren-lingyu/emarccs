@@ -194,7 +194,7 @@
 测试按所验证的 package 组织. 源码检查在 package 构建中执行, 对完整安装产物的检查作为独立 derivations 通过 =passthru.tests= 暴露. 顶层 flake checks 负责聚合导出 packages 的独立测试, 以及验证 flake 自身的导出契约和本地 Nix helper.
 
 ** 测试执行状态报告
-本地 =lib/withProgress.nix= 通过 =llib.tests.withProgress= 提供 Bash 代码生成 helper, 与 =mkChecks= 的测试发现和聚合机制相互独立. 它不构造 derivation, 也不需要额外的计时工具. 当前先通过独立的 flake check 验证该 helper, 尚未修改各 package 的测试执行入口.
+本地 =lib/withProgress.nix= 通过 =llib.tests.withProgress= 提供 Bash 代码生成 helper, 与 =mkChecks= 的测试发现和聚合机制相互独立. 它不构造 derivation, 也不需要额外的计时工具.
 
 #+begin_src nix
   withProgress {
@@ -211,6 +211,8 @@
 - 使用 =coproc= 和 =read -t= 实现周期性报告; 原代码结束时关闭控制管道并回收 heartbeat, 不等待下一个报告间隔. 构建取消及任务后代进程的管理由 Nix 负责. Heartbeat 表示任务尚未结束, 不表示任务取得实际进展; 它也会影响 Nix 的 =max-silent-time= 判断.
 
 =tests/with-progress/= 验证字符串及 path 输入, 输出保留, 退出状态, Shell 隔离, 空代码, 周期性报告和 =exec= 等行为. 可以通过 =nix build .#checks.x86_64-linux.with-progress -L= 单独构建.
+
+本仓库通过 =pkgs/default.nix= 的 =extraArgs= 将 =llib.tests.withProgress= 提供给各 package, 并通过 =mkChecks.args= 注入 wrapper 测试 scope. 配置包的两项源码检查、三个 wrapper 测试、Tree-sitter grammar runtime 及两个 TeXmacs package tests 均使用该 helper 报告执行状态. Emacs 测试仍不设置进程级超时; TeXmacs 渲染保留原有的 180 秒超时和 5 秒强制终止宽限, 渲染输出仍写入各自的日志文件, 状态报告则直接进入构建日志. =overlay-equivalence= 的断言在 Nix 求值阶段执行, 不包装仅创建检查产物的 builder.
 
 ** Elisp 配置包
 =pkgs/emacsPackages/emarccs/package.nix= 通过 =melpaBuild= 构建配置包, 由其正常的安装及编译流程检查 Elisp 编译错误, 不再额外运行独立的 =elisp-byte-compile= 测试. 编译警告仍不作为失败条件.

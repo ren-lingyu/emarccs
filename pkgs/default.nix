@@ -29,7 +29,7 @@
     extraArgs = {
       inherit lib sources;
       inherit (llib) mkMelpaBuild;
-      inherit (llib.tests) mkChecks;
+      inherit (llib.tests) mkChecks withProgress;
     };
   };
 }

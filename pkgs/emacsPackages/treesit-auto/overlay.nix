@@ -18,6 +18,7 @@
             (old_.passthru.tests or { })
             {
               grammars-runtime = final_.callPackage ./tests {
+                inherit (extraArgs) withProgress;
                 emacsPackage = final_.withPackages (_: [ finalAttrs_.finalPackage ]);
                 grammarPackage = final_.treesit-grammars.with-all-grammars;
               };

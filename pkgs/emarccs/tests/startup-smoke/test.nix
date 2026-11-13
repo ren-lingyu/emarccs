@@ -1,6 +1,7 @@
 {
   runCommand,
   lib,
+  withProgress,
   emacsPackage,
   configurationPackage,
 }:
@@ -13,6 +14,11 @@ runCommand "emarccs-startup-smoke"
   ''
     export HOME="$TMPDIR/home"
     mkdir -p "$HOME"
-    ${lib.getExe' emacsPackage "emacs"} --batch -q --load ${./lisp/startup-smoke.el}
+    ${withProgress {
+      name = "startup-smoke";
+      text = ''
+        ${lib.getExe' emacsPackage "emacs"} --batch -q --load ${./lisp/startup-smoke.el}
+      '';
+    }}
     touch "$out"
   ''

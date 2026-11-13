@@ -1,6 +1,7 @@
 {
   runCommand,
   lib,
+  withProgress,
   emacsPackage,
   configurationPackage,
 }:
@@ -12,6 +13,11 @@ runCommand "emarccs-startup-order"
   ''
     export HOME="$TMPDIR/home"
     mkdir -p "$HOME"
-    ${lib.getExe' emacsPackage "emacs"} --batch -Q --load ${./lisp/startup-order.el} --funcall ert-run-tests-batch-and-exit
+    ${withProgress {
+      name = "startup-order";
+      text = ''
+        ${lib.getExe' emacsPackage "emacs"} --batch -Q --load ${./lisp/startup-order.el} --funcall ert-run-tests-batch-and-exit
+      '';
+    }}
     touch "$out"
   ''

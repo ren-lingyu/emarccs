@@ -1,6 +1,7 @@
 {
   runCommand,
   lib,
+  withProgress,
   emacsPackage,
   configurationPackage,
 }:
@@ -13,6 +14,11 @@ runCommand "emarccs-package-availability-smoke"
   ''
     export HOME="$TMPDIR/home"
     mkdir -p "$HOME"
-    ${lib.getExe' emacsPackage "emacs"} --batch -q --load ${./lisp/package-availability-smoke.el}
+    ${withProgress {
+      name = "package-availability-smoke";
+      text = ''
+        ${lib.getExe' emacsPackage "emacs"} --batch -q --load ${./lisp/package-availability-smoke.el}
+      '';
+    }}
     touch "$out"
   ''

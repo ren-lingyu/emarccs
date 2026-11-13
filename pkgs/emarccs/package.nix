@@ -1,6 +1,7 @@
 {
   lib,
   mkChecks,
+  withProgress,
   runCommand,
   emacs,
   emacsPackagesFor,
@@ -45,7 +46,12 @@
         (old_.passthru or { })
         {
           tests = import ./tests {
-            inherit lib mkChecks runCommand;
+            inherit
+              lib
+              mkChecks
+              runCommand
+              withProgress
+              ;
             emacsPackage = finalAttrs_.finalPackage;
             checks = old_.passthru.tests or { };
           };

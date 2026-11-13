@@ -1,6 +1,7 @@
 {
   lib,
   melpaBuild,
+  withProgress,
   # checkInputs
   package-lint,
   # packageRequires
@@ -92,6 +93,7 @@ melpaBuild (finalAttrs_: {
     builtins.removeAttrs args [
       "lib"
       "melpaBuild"
+      "withProgress"
       "package-lint"
     ]
   );
@@ -109,29 +111,39 @@ melpaBuild (finalAttrs_: {
     export EMARCCS_ELISP_SOURCE="${finalAttrs_.src}"
     mkdir -p "$HOME"
 
-    emacs ${
-      lib.escapeShellArgs [
-        "--batch"
-        "-Q"
-        "-L"
-        "${finalAttrs_.src}"
-        "--load"
-        "${./tests/lisp/initialization.el}"
-        "--funcall"
-        "ert-run-tests-batch-and-exit"
-      ]
-    }
+    ${withProgress {
+      name = "initialization";
+      text = ''
+        emacs ${
+          lib.escapeShellArgs [
+            "--batch"
+            "-Q"
+            "-L"
+            "${finalAttrs_.src}"
+            "--load"
+            "${./tests/lisp/initialization.el}"
+            "--funcall"
+            "ert-run-tests-batch-and-exit"
+          ]
+        }
+      '';
+    }}
 
-    emacs ${
-      lib.escapeShellArgs [
-        "--batch"
-        "-Q"
-        "--funcall"
-        "package-activate-all"
-        "--load"
-        "${./tests/lisp/emarccs-package-lint.el}"
-      ]
-    }
+    ${withProgress {
+      name = "package-lint";
+      text = ''
+        emacs ${
+          lib.escapeShellArgs [
+            "--batch"
+            "-Q"
+            "--funcall"
+            "package-activate-all"
+            "--load"
+            "${./tests/lisp/emarccs-package-lint.el}"
+          ]
+        }
+      '';
+    }}
 
     runHook postCheck
   '';

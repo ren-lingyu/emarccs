@@ -1,6 +1,7 @@
 {
   lib,
   callPackage,
+  withProgress,
   writeText,
   texmacs,
   fandol,
@@ -26,8 +27,14 @@ texmacs.overrideAttrs (
         tests = lib.mergeAttrsList [
           (old.passthru.tests or { })
           {
-            resources = callPackage ./tests/resources.nix { texmacs = finalAttrs.finalPackage; };
-            math-syntax = callPackage ./tests/math-syntax.nix { texmacs = finalAttrs.finalPackage; };
+            resources = callPackage ./tests/resources.nix {
+              inherit withProgress;
+              texmacs = finalAttrs.finalPackage;
+            };
+            math-syntax = callPackage ./tests/math-syntax.nix {
+              inherit withProgress;
+              texmacs = finalAttrs.finalPackage;
+            };
           }
         ];
       }

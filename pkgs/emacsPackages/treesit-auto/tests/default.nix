@@ -1,6 +1,7 @@
 {
   runCommand,
   lib,
+  withProgress,
   emacsPackage,
   grammarPackage,
 }:
@@ -9,6 +10,11 @@ runCommand "emarccs-treesit-grammars-runtime"
   ''
     export HOME="$TMPDIR/home"
     mkdir -p "$HOME"
-    ${lib.getExe' emacsPackage "emacs"} --batch -q --load ${./lisp/treesit-grammars-runtime.el}
+    ${withProgress {
+      name = "grammars-runtime";
+      text = ''
+        ${lib.getExe' emacsPackage "emacs"} --batch -q --load ${./lisp/treesit-grammars-runtime.el}
+      '';
+    }}
     touch "$out"
   ''

@@ -17,12 +17,13 @@
 !/pkgs/**/*.nix
 !/pkgs/**/*.patch
 !/pkgs/**/*.scm
+!/pkgs/**/*.sh
 
 !/tests/
 !/tests/**/
+!/tests/**/*.el
 !/tests/**/*.nix
-!/tests/**/lisp/*.el
-!/tests/**/lisp/*.scm
+!/tests/**/*.scm
 
 *#*
 **/tmp/

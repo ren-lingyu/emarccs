@@ -24,9 +24,16 @@
   │   │   └── overlay.nix
   │   ├── emarccs-gtk/
   │   │   └── overlay.nix
-  │   ├── texmacs-fandol/
+  │   ├── texmacs-with-fandol-and-math-syntax/
   │   │   ├── overlay.nix
-  │   │   └── package.nix
+  │   │   ├── package.nix
+  │   │   ├── math/
+  │   │   │   ├── default.nix
+  │   │   │   └── registry.nix
+  │   │   └── tests/
+  │   │       ├── resources.nix
+  │   │       ├── math-syntax.nix
+  │   │       └── render.scm
   │   └── emacsPackages/
   │       ├── emarccs/
   │       │   ├── overlay.nix
@@ -57,7 +64,7 @@
 - =emarccs-early-init.el= 定义 =emarccs-initialize-early=, =emarccs-init.el= 定义 =emarccs-initialize=. 加载这两个文件不执行初始化.
 - wrapper 的启动调度由 =pkgs/emarccs/package.nix= 生成, 各功能模块管理其内部的 hooks/advice.
 - =lib/default.nix= 保留本仓库的 Nix helper 扩展入口. 通用 helper 来自 =personal-nixpkgs= input, 合并后以 =llib= 与 Nixpkgs 的 =lib= 区分.
-- =tests/default.nix= 接收 =pkgs=, =packages=, =lib=, =llib= 和 =overlay=, 通过 =llib.tests.mkChecks= 为每个 wrapper 生成 =<package>-<test>= checks. 各项测试由 =test-overlay.nix= 注册, 具体定义位于同目录的 =test.nix=.
+- =tests/default.nix= 接收 =pkgs=, =packages=, =lib=, =llib= 和 =overlay=, 通过 =llib.tests.mkChecks= 为每个 wrapper 生成 =<package>-<test>= checks. 各项测试由 =test-overlay.nix= 注册, 具体定义位于同目录的 =test.nix=. 独立 package tests 随 package 定义, 通过 =passthru.tests= 暴露.
 
 * 启动注入
 配置通过 wrapper 的 =site-start.el= 接入启动流程. =init-file-user= 非 nil 时, wrapper 依次:
@@ -83,6 +90,7 @@
   legacyPackages.<system>.emarccs-pgtk
   legacyPackages.<system>.emarccs-gtk
   legacyPackages.<system>.emacsPackages.<package>
+  legacyPackages.<system>.texmacs-with-fandol-and-math-syntax
 
   checks.<system>.<package>-<test>
   checks.<system>.treefmt
@@ -99,6 +107,7 @@
   nix flake check -L --show-trace
   nix build .#legacyPackages.x86_64-linux.emacsPackages.org-texmacs
   nix build .#checks.x86_64-linux.emarccs-pgtk-overlay-equivalence
+  nix build .#legacyPackages.x86_64-linux.texmacs-with-fandol-and-math-syntax
   nix fmt
 #+end_src
 
@@ -141,11 +150,29 @@
 - =consult=: 通过 =propagatedUserEnvPkgs= 提供 GNU grep 和系统 ripgrep.
 - =ripgrep=: Elisp 包传播系统 ripgrep. 系统程序从外层 Nixpkgs 取值, 避免与同名 Elisp package 混淆.
 - =treesit-auto=: 传播对应 scope 的 =with-all-grammars=, 并补充 grammar 库名及初始化符号映射.
-- =texmacs-fandol=: 复用 Nixpkgs 的 TeXmacs, 在程序 wrapper 中将完整 Fandol 字体目录加入 =TEXMACS_FONT_PATH=. 通过 default overlay 提供, 并导出到 =legacyPackages.<system>.texmacs-fandol=; 不替换原有 =pkgs.texmacs= 或修改全局字体配置.
-- =org-texmacs=: 默认使用 =texmacs-fandol=, 将程序路径写入配置默认值, 并把 Scheme worker 与 Lisp 文件一起打包. 调用方仍可通过 =org-texmacs.override { texmacs = ...; }= 替换程序.
+- =texmacs-with-fandol-and-math-syntax=: 基于 Org-TeXmacs overlay 提供的 =texmacs-with-gotor-support= 进行 =overrideAttrs=, 在 =TeXmacs/fonts/truetype/fandol/= 安装 Fandol OpenType 字体, 在 =TeXmacs/packages/emarccs/= 安装纯 Nix 生成的 =emarccs-math.ts=. 保留 GoToR 修复, 不修改内置 style, 不替换原有 =pkgs.texmacs=, 不另设字体 wrapper. 通过 default overlay 提供, 并导出到 =legacyPackages.<system>.texmacs-with-fandol-and-math-syntax=.
+- =org-texmacs=: 默认使用 =texmacs-with-fandol-and-math-syntax=, 将程序路径写入配置默认值, 并把 Scheme worker 与 Lisp 文件一起打包. =texmacs-with-fandol-and-math-syntax= 已安装 =emarccs-math= style, 启用该语法时把 =org-texmacs-document-style= 设为 ='("generic" "emarccs-math")=; 调用方仍可通过 =org-texmacs.override { texmacs = ...; }= 替换程序.
 - Dired 所需的 GNU coreutils 直接加入 wrapper 的 =withPackages= 列表.
 
 传播的程序和 grammar 库由 Nixpkgs wrapper 接入运行时查找路径.
+
+** TeXmacs 数学语法
+=pkgs/texmacs-with-fandol-and-math-syntax/math/registry.nix= 定义原生定界符, =math/default.nix= 生成 package 文本. 生成器通过纯 Nix 函数计算字符串, =writeText= 将其变为构建依赖, =postPatch= 仅安装生成的文件; 不需要 Elisp 或其他外部代码生成器, 也不需要 IFD. 修改定义会重新构建最终的 TeXmacs derivation.
+
+普通定界符采用 =l<count><kind>= / =r<count><kind>= 编码, 单层另有省略数字的别名; =n= 是不可见定界符. 47 个代码可任意有序组合, 只排除 =nn=. 名称直接连接两个代码, 如 =lprp=, =lpn=, =l2vr2v=. 每种组合提供单参数宏和 =concat-= 前缀的变参宏, 共 4416 个定界符宏; 另提供 =application=, 连接函数、数学空格与参数.
+
+#+begin_src scheme
+  (lprp (frac "1" "2"))
+  (concat-lprp "x" "+" "y")
+  (application "f" (lprp "x"))
+#+end_src
+
+生成的 style 可单独构建检查, 无需构建 TeXmacs:
+
+#+begin_src sh
+  nix build --option allow-import-from-derivation false \
+    .#legacyPackages.x86_64-linux.texmacs-with-fandol-and-math-syntax.mathStyle
+#+end_src
 
 * 检查
 =tests/default.nix= 为默认、PGTK 和 GTK wrapper 分别调用 =llib.tests.mkChecks=, 发现并组合各目录的 =test-overlay.nix=. =mkChecks= 构造独立的测试 scope, 通过 =args= 接收显式注入的工具、wrapper、配置包和 grammar 包, 并提取七类检查. 测试 overlay 不修改 =pkgs=, 注入的辅助依赖不会自动导出为 checks.
@@ -161,6 +188,19 @@
 - =treesit-grammars-runtime=: 枚举指定产物中的 grammar 库, 检查 Emacs 的实际查找路径可找到语言并创建 parser, 不向查找路径补目录; 不验证真实源码解析、major mode、font-lock 或缩进.
 
 另有 =treefmt= 检查 Nix 文件格式. 首次全量检查可能需要构建 wrapper、依赖和 grammar 产物.
+
+** TeXmacs package tests
+独立检查定义于 =pkgs/texmacs-with-fandol-and-math-syntax/tests/=, 由该 package 的 =passthru.tests= 暴露, 不纳入本仓库的 flake checks. 这些测试独立于 Emacs wrapper 的测试组织:
+
+- =resources=: 核对生成的 4417 个宏定义及代表性源码, 比较安装的 style 与生成文件, 比较安装的 Fandol 字体与来源文件.
+- =math-syntax=: 直接调用最终 TeXmacs, 使用独立的配置目录渲染自定义宏和等价原生表达式的 native 文档, 比较 PDF 文本及单页 raster 输出. 不依赖 Emacs 或 Org-TeXmacs, 不验证全部定界符的字体字形. 保留文档、PDF、文本、raster 和日志供检查.
+
+通过 =legacyPackages= 直接构建 package tests:
+
+#+begin_src sh
+  nix build .#legacyPackages.x86_64-linux.texmacs-with-fandol-and-math-syntax.tests.resources
+  nix build .#legacyPackages.x86_64-linux.texmacs-with-fandol-and-math-syntax.tests.math-syntax
+#+end_src
 
 * 维护注意事项
 - =.gitignore= 使用倒置白名单模式. 新增可追踪文件时, 需要同时确认对应 =!pattern= 已放行.

@@ -14,7 +14,9 @@
   ├── flake.nix
   ├── flake.lock
   ├── lib/
-  │   └── default.nix
+  │   ├── default.nix
+  │   ├── mkMelpaBuild.nix
+  │   └── withProgress.nix
   ├── pkgs/
   │   ├── default.nix
   │   ├── emarccs/
@@ -64,7 +66,8 @@
   │           └── ...
   └── tests/
       ├── default.nix
-      └── overlay-equivalence/
+      ├── overlay-equivalence/
+      └── with-progress/
 #+end_src
 
 关键约定:
@@ -104,6 +107,7 @@
 
   checks.<system>.<package-path>-<test>
   checks.<system>.overlay-equivalence
+  checks.<system>.with-progress
   checks.<system>.treefmt
 
   overlays.default
@@ -118,6 +122,7 @@
   nix flake check -L --show-trace
   nix build .#legacyPackages.x86_64-linux.emacsPackages.org-texmacs
   nix build .#checks.x86_64-linux.overlay-equivalence
+  nix build .#checks.x86_64-linux.with-progress -L
   nix build .#legacyPackages.x86_64-linux.texmacs-with-fandol-and-math-syntax
   nix fmt
 #+end_src
@@ -186,7 +191,26 @@
 #+end_src
 
 * 检查
-测试按所验证的 package 组织. 源码检查在 package 构建中执行, 对完整安装产物的检查作为独立 derivations 通过 =passthru.tests= 暴露. 顶层 flake checks 负责聚合导出 packages 的独立测试, 以及验证 flake 自身的导出契约.
+测试按所验证的 package 组织. 源码检查在 package 构建中执行, 对完整安装产物的检查作为独立 derivations 通过 =passthru.tests= 暴露. 顶层 flake checks 负责聚合导出 packages 的独立测试, 以及验证 flake 自身的导出契约和本地 Nix helper.
+
+** 测试执行状态报告
+本地 =lib/withProgress.nix= 通过 =llib.tests.withProgress= 提供 Bash 代码生成 helper, 与 =mkChecks= 的测试发现和聚合机制相互独立. 它不构造 derivation, 也不需要额外的计时工具. 当前先通过独立的 flake check 验证该 helper, 尚未修改各 package 的测试执行入口.
+
+#+begin_src nix
+  withProgress {
+    name = "example";
+    interval = 10;
+    text = "emacs --batch -Q ...";
+  }
+#+end_src
+
+- =name= 为非空字符串, =interval= 为正整数秒数, 默认为 10. =text= 接收 Bash 源代码字符串或 Nix path; path 在求值时通过 =builtins.readFile= 读取并内嵌, 不作为独立脚本执行.
+- 生成的代码要求 Bash >= 5.3. 开始时打印任务名, 运行期间按 interval 定期报告经过的时间, 结束时打印成功或失败及总耗时, 并保留原代码块的退出状态. 不设置超时, 不管理任务的进程树.
+- 同时报告 =EPOCHREALTIME= 的有符号差值 (保留六位小数) 和 =BASH_MONOSECONDS= 的整数秒差值. 前者可能受系统时钟调整影响; 后者在平台不支持单调时钟时由 Bash 回退到实时时钟. 不尝试校正两者的差异.
+- 原代码直接继承 stdout, stderr, Shell 变量和当前目录, 不通过输出代理或缓存; 状态日志追加到 stderr, 原代码内部的重定向保持有效. 两层 subshell 隔离 reporter 和原代码的变量、目录及 trap 修改, 原代码的 Shell 选项和错误传播遵循 Bash 的通常规则 (包括 =errexit= 在条件上下文中的行为).
+- 使用 =coproc= 和 =read -t= 实现周期性报告; 原代码结束时关闭控制管道并回收 heartbeat, 不等待下一个报告间隔. 构建取消及任务后代进程的管理由 Nix 负责. Heartbeat 表示任务尚未结束, 不表示任务取得实际进展; 它也会影响 Nix 的 =max-silent-time= 判断.
+
+=tests/with-progress/= 验证字符串及 path 输入, 输出保留, 退出状态, Shell 隔离, 空代码, 周期性报告和 =exec= 等行为. 可以通过 =nix build .#checks.x86_64-linux.with-progress -L= 单独构建.
 
 ** Elisp 配置包
 =pkgs/emacsPackages/emarccs/package.nix= 通过 =melpaBuild= 构建配置包, 由其正常的安装及编译流程检查 Elisp 编译错误, 不再额外运行独立的 =elisp-byte-compile= 测试. 编译警告仍不作为失败条件.
@@ -221,7 +245,7 @@
 #+end_src
 
 ** Flake checks
-=tests/default.nix= 接收 =config.legacyPackages= 导出的有限 package tree, 递归提取 derivation 叶节点的 =tests=, 保留 namespace 结构. 没有独立测试的 package 对应空测试集合. 一次调用 =llib.tests.mkChecks=, 通过 =checks= 纳入上述测试树, 同时发现顶层测试目录中的 =test-overlay.nix=. =mkChecks= 合并测试树, 以 =-= 为分隔符平铺属性路径并检查名称冲突. 新增导出 package 的 =passthru.tests= 无需修改顶层测试列表. 顶层 =test-overlay.nix= 定义依赖 flake 上下文的 =overlay-equivalence= 测试:
+=tests/default.nix= 接收 =config.legacyPackages= 导出的有限 package tree, 递归提取 derivation 叶节点的 =tests=, 保留 namespace 结构. 没有独立测试的 package 对应空测试集合. 一次调用 =llib.tests.mkChecks=, 通过 =checks= 纳入上述测试树, 同时发现顶层测试目录中的 =test-overlay.nix=. =mkChecks= 合并测试树, 以 =-= 为分隔符平铺属性路径并检查名称冲突. 新增导出 package 的 =passthru.tests= 无需修改顶层测试列表. 顶层 =test-overlay.nix= 定义独立的 =with-progress= helper 测试和依赖 flake 上下文的 =overlay-equivalence= 测试:
 
 - =overlay-equivalence=: 从同一份 Nixpkgs 独立导入只应用公开 default overlay 的包集合, 递归比较 =legacyPackages= 中每个 package 与对应属性路径下的 package 的 =drvPath=. 缺少对应 package、求值失败或 derivation 不一致都会失败; 通过后仅生成一个空检查产物, 不重复构建被比较的 packages.
 

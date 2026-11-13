@@ -21,6 +21,7 @@ llib.tests.mkChecks {
       lib
       overlay
       ;
-    inherit (pkgs) runCommand;
+    inherit (pkgs) runCommand writeText;
+    inherit (llib.tests) withProgress;
   };
 }

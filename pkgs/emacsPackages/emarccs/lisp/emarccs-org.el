@@ -64,6 +64,47 @@
           ("proof" . ())
           ("solution" . ()))))
 
+(use-package org-texmacs
+  :after org
+  :init
+  (setq org-texmacs-export-menu-keys
+        '(:prefix ?T :buffer ?T :file ?t :pdf ?p))
+  :custom
+  ;; (org-texmacs-program "texmacs")
+  (org-texmacs-worker-start-timeout 60)
+  (org-texmacs-worker-request-timeout 10)
+  (org-texmacs-format-headline-function
+   #'org-texmacs-format-headline-default-function)
+  (org-texmacs-cite-export-processor '(texmacs-native "plain" nil))
+  (org-texmacs-typed-references t)
+  (org-texmacs-document-style '("generic" "smart-ref" "emarccs-math"))
+  (org-texmacs-document-initial
+   '(("page-type" . "a4")
+     ("page-width-margin" . "false")
+     ("page-height-margin" . "false")
+     ("page-odd" . "12.7mm")
+     ("page-even" . "12.7mm")
+     ("page-right" . "12.7mm")
+     ("page-top" . "12.7mm")
+     ("page-bot" . "12.7mm")))
+  (org-texmacs-pdf-file-links-as-absolute nil)
+  (org-texmacs-link-org-files-as-pdf t)
+  (org-texmacs-edit-mode 'scheme-mode)
+  (org-texmacs-fragment-tags
+   '("math"
+     "equation"
+     "equation*"
+     "eqnarray"
+     "eqnarray*"
+     "align"
+     "align*"
+     "gather"
+     "gather*"
+     "eqsplit"
+     "eqsplit*"
+     "reference"
+     "rcl-table")))
+
 ;; 嵌入
 (use-package org-transclusion
   :after org

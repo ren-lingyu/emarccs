@@ -16,6 +16,7 @@
 !/pkgs/**/*.el
 !/pkgs/**/*.nix
 !/pkgs/**/*.patch
+!/pkgs/**/*.scm
 
 !/tests/
 !/tests/**/

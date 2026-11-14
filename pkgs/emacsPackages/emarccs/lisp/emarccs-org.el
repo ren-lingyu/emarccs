@@ -39,20 +39,7 @@
   (setq org-publish-timestamp-directory
         (expand-file-name "./cache/.org-timestamps/" org-directory))
   (setq org-id-locations-file
-        (expand-file-name "./cache/.org-id-locations" org-directory))
-  (set-face-attribute 'org-footnote nil
-                      :underline nil ; 移除下划线
-                      :foreground "#79a8ff" ; 保留颜色但不设置其他属性
-                      :background 'unspecified
-                      :inherit nil
-                      :inverse-video 'unspecified
-                      :weight 'unspecified)
-  (set-face-attribute 'org-link nil
-                      :underline t
-                      :foreground "#6b6b6b"
-                      :background "#ffffff"
-                      :weight 'ultra-bold
-                      :inverse-video t))
+        (expand-file-name "./cache/.org-id-locations" org-directory)))
 
 (use-package emarccs--org-extension-block
   :after org

@@ -16,7 +16,6 @@
    (expand-file-name "./.org-roam.db" org-roam-directory)) ;; 数据库文件位置
   (org-roam-dailies-directory "journal/")
   (org-roam-completion-everywhere t)
-  (org-roam-node-display-template "${title} ${tags}")
   (org-roam-db-update-method 'immediate)
   :bind
   (("C-c n f" . org-roam-node-find)
@@ -29,24 +28,6 @@
   (setq org-roam-node-display-template
         (concat
          "${title:*} " (propertize "${tags:30}" 'face 'org-tag)))
-  (setq org-roam-capture-templates
-        (append
-         org-roam-capture-templates
-         `(("I" "post index" plain "%?"
-            :if-new
-            (file+head
-             "inbox/${slug}.org"
-             ,(concat
-               "#+TITLE: ${title}\n"
-               "#+INDEX: ${title}\n"
-               "#+DESCRIPTION:\n"
-               "#+AUTHOR: aRenCoco\n"
-               "#+EMAIL: aRen_Coco@outlook.com\n"
-               "#+DATE: "
-               (format-time-string "<%Y-%m-%d %a %z>")
-               "\n"
-               "#+FILETAGS: :zettel:blog:\n"))
-            :unnarrowed t))))
   (defun emarccs-org-roam-forward-links (&optional other-window)
     "Select an Org-roam node linked from the current buffer.
 
@@ -133,13 +114,6 @@ If the link is not an Org-roam ID link or the node cannot be found, display an a
 (use-package org-roam-include
   :after org-roam
   :hook ((after-init . org-roam-include-mode)))
-
-(global-set-key
- (kbd "C-c h d")
- (lambda ()
-   (interactive)
-   (insert
-    (concat "\n* " (format-time-string "%Y-%m-%d %A %z") "\n"))))
 
 (use-package org-roam-ui
   :after org-roam

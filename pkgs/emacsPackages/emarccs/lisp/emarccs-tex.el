@@ -20,7 +20,6 @@
   (unless (file-exists-p TeX-auto-local)
     (make-directory TeX-auto-local t))
   (setq TeX-auto-save t)
-  (setq TeX-parse-self t)
   (setq TeX-parse-self t) ; 自动解析文档结构
   (setq TeX-master nil) ; 不指定主文件
   (setq preview-image-type nil) ; 禁用预览
@@ -42,51 +41,7 @@
 ;; 启用 org-mode 的 LaTeX 区域高亮支持
 (setq org-highlight-latex-and-related '(native script))
 
-;; 自定义 LaTeX 高亮规则
-(defun emarccs-tex--org-latex-font-lock ()
-  "Strict LaTeX syntax highlighting in org-mode."
-  (font-lock-add-keywords
-   nil
-   '( ;; 数学区域 $...$ 和 \( ... \)
-     ("\\$[^$ \n]+\\$" . font-lock-constant-face)
-     ("\\\\(\\([^() \n]+\\)\\\\)" 1 font-lock-constant-face)
-     ;; 环境名, 如 \begin{equation}
-     ("\\\\\\(begin\\|end\\){\\([^}]+\\)}"
-      (1 font-lock-keyword-face)
-      (2 font-lock-type-face))
-     ;; LaTeX 命令, 如 \frac, \alpha
-     ("\\\\[a-zA-Z@]+" . font-lock-keyword-face)
-     ;; 匹配 ^{...} 或 ^单个字符
-     ("\\^\\({[^}]*}\\|[^{ \n]\\)" . font-lock-builtin-face)
-     ;; 匹配 _{...} 或 _单个字符
-     ("_\\({[^}]*}\\|[^{ \n]\\)" . font-lock-builtin-face)
-
-     ;; 自定义宏命令(严格匹配)
-     ("\\\\\\(mr\\|bs\\|diagmat\\){[^{} \n]+}"
-      .
-      font-lock-builtin-face)
-     ;; \ab(...)、\ab{...}、\ab[...]、\ab|...|、\ab<...>
-     ("\\\\ab(\\([^() \n]+\\))" 1 font-lock-builtin-face)
-     ("\\\\ab{\\([^{} \n]+\\)}" 1 font-lock-builtin-face)
-     ("\\\\ab\\[\\([^][]+\\)\\]" 1 font-lock-builtin-face)
-     ("\\\\ab|\\([^| \n]+\\)|" 1 font-lock-builtin-face)
-     ("\\\\ab<\\([^<> \n]+\\)>" 1 font-lock-builtin-face)
-     ;; 量子态符号(严格匹配, 避免孤立符号)
-     ("\\\\bra<\\([^| \n]+\\)|" 1 font-lock-keyword-face)
-     ("\\\\ket|\\([^> \n]+\\)>" 1 font-lock-keyword-face)
-     ;; \braket<...|...> 和 \braket<...|...|...>
-     ("\\\\braket<\\([^| \n]+\\)|\\([^> \n]+\\)>"
-      .
-      font-lock-keyword-face)
-     ("\\\\braket<\\([^| \n]+\\)|\\([^| \n]+\\)|\\([^> \n]+\\)>"
-      .
-      font-lock-keyword-face))))
-
-;; (add-hook 'org-mode-hook #'emarccs-tex--org-latex-font-lock)
-(add-hook 'LaTeX-mode-hook #'emarccs-tex--org-latex-font-lock)
-
 ;; 与latex环境有关的快捷键
-
 (global-set-key
  (kbd "C-c l e e")
  (lambda ()
@@ -231,39 +186,7 @@
     info)
   (add-hook
    'org-export-filter-options-functions
-   #'emarccs-tex--register-latex-output-filters)
-  ;; 定义\label{eq:...}和\eqref{eq:...}对应的链接类型
-  (org-link-set-parameters
-   "eq"
-   :follow
-   (lambda (path _arg)
-     (let ((label (concat "\\label{eq:" path "}")))
-       (org-mark-ring-push)
-       (goto-char (point-min))
-       (if (re-search-forward label nil t)
-           (progn
-             (beginning-of-line)
-             (recenter)
-             (message "找到公式引用: %s" label))
-         (message "未找到公式引用: %s" label))))
-   ;; 设置导出函数，导出为 \eqref{eq:...}
-   :export
-   (lambda (path description backend info)
-     (cond
-      ((or (eq backend 'latex) (eq backend 'beamer))
-       (format "\\eqref{eq:%s}" path))
-      ((eq backend 'html)
-       (format "<span class=\"eqref\">eq:%s</span>"
-               (or description path)))
-      (t
-       (or description (format "eq:%s" path)))))
-   :face
-   '( ;; :inherit 'org-link
-     :foreground
-     "dark red"
-     :background "yellow"
-     :underline t)
-   :help-echo "公式引用链接. \n格式: [[eq:<label>]]. \n跳转时采用正则表达式查找当前光标所在buffer内\\label{eq:<label>}所在行. "))
+   #'emarccs-tex--register-latex-output-filters))
 
 (defvar org-beamer-frame-level)
 (defvar org-beamer-theme)

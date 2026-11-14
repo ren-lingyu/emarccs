@@ -400,9 +400,7 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package highlight-parentheses
-  :hook
-  (prog-mode . rainbow-delimiters-mode)
-  (minibuffer-setup-hook . highlight-parentheses-minibuffer-setup))
+  :hook (minibuffer-setup-hook . highlight-parentheses-minibuffer-setup))
 
 (use-package hl-block-mode
   :hook (prog-mode . hl-block-mode))
@@ -447,8 +445,6 @@
   :custom
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
-  (completion-category-overrides
-   '((file (styles partial-completion))))
   (completion-category-overrides
    '((file (styles partial-completion))
      (command (styles orderless))

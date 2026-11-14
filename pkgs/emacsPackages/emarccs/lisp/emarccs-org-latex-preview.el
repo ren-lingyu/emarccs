@@ -7,7 +7,6 @@
 
 (with-eval-after-load 'org-latex-preview
   (plist-put org-latex-preview-appearance-options :page-width 0.8)
-  (setq org-latex-preview-process-default 'dvisvgm)
   ;; (add-hook 'org-mode-hook 'org-latex-preview-mode)
   (setq org-latex-preview-mode-ignored-commands
         '(next-line

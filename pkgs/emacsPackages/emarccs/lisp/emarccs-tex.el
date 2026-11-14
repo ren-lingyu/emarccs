@@ -34,9 +34,7 @@
   :hook (LaTeX-mode . flycheck-mode))
 
 (use-package cdlatex
-  :hook
-  (org-mode . turn-on-org-cdlatex)
-  (LaTeX-mode . company-auctex-init))
+  :hook (org-mode . turn-on-org-cdlatex))
 
 ;; 启用 org-mode 的 LaTeX 区域高亮支持
 (setq org-highlight-latex-and-related '(native script))

@@ -1,7 +1,8 @@
 ;;; emarccs-org-roam-blog.el --- Configure the personal Org-roam blog -*- lexical-binding: t; -*-
 
-;;; commentary:
-;;; code:
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
@@ -12,7 +13,7 @@
 (defconst emarccs--org-roam-blog-site-url "https://aren-coco.com")
 (defconst emarccs--org-roam-blog-beginning-year 2026)
 
-;; License strings.
+;; License strings
 (defconst
   emarccs--org-roam-blog-cc-license-generic-work-full-tool-name
   (concat
@@ -72,7 +73,7 @@
    "<img src=\"https://mirrors.creativecommons.org/presskit/icons/nc.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"
    "<img src=\"https://mirrors.creativecommons.org/presskit/icons/sa.svg\" alt=\"\" style=\"max-width: 1em;max-height:1em;margin-left: .2em;\">"))
 
-;; Blog configuration.
+;; Blog configuration helpers
 (defun emarccs--org-roam-blog-article-body (context)
   "Prepend publication metadata to the article body in CONTEXT."
   (let ((format-value
@@ -198,7 +199,7 @@
            (mapconcat (lambda (x) (concat "#" x)) tags "\u0020"))))
       entries))))
 
-;; org-roam-blog configuration
+;; Org-roam-blog configuration
 (use-package org-roam-blog
   :after org-roam
   :custom

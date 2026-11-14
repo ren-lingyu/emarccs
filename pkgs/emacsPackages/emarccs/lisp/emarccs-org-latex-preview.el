@@ -1,13 +1,13 @@
 ;;; emarccs-org-latex-preview.el --- Org preview configuration -*- lexical-binding: t; -*-
-;;; commentary:
 
-;;; from https://abode.karthinks.com/org-latex-preview/
+;;; Commentary:
 
-;;; code:
+;; Based on https://abode.karthinks.com/org-latex-preview/
+
+;;; Code:
 
 (with-eval-after-load 'org-latex-preview
   (plist-put org-latex-preview-appearance-options :page-width 0.8)
-  ;; (add-hook 'org-mode-hook 'org-latex-preview-mode)
   (setq org-latex-preview-mode-ignored-commands
         '(next-line
           previous-line
@@ -46,4 +46,5 @@
       :image-converter ("dvisvgm --page=1- --optimize --clipjoin --relative --no-fonts --bbox=preview -o %B-%%9p.svg %f")))))
 
 (provide 'emarccs-org-latex-preview)
-;;; emarccs-org-latex-preview.el ends here.
+
+;;; emarccs-org-latex-preview.el ends here

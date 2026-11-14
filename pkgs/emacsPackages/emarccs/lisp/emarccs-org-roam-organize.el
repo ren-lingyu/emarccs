@@ -1,6 +1,8 @@
-;;; emarccs-org-roam-organize.el -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+;;; emarccs-org-roam-organize.el --- Org-roam organization and citation configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
@@ -55,7 +57,6 @@
       :info
       (list
        :citar-key "${=key=}"
-       ;; :citar-title "${title}"
        :citar-author "${author editor}"
        :citar-year "${year issued date}"
        :citar-month "${month}"

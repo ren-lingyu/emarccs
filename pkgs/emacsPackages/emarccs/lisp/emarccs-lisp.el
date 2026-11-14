@@ -1,6 +1,8 @@
-;;; emarccs-lisp.el -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+;;; emarccs-lisp.el --- Common Lisp development configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))

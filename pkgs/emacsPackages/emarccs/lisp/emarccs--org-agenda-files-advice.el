@@ -1,4 +1,11 @@
-;;; emarccs--org-agenda-files-advice.el -*- lexical-binding: t; -*-
+;;; emarccs--org-agenda-files-advice.el --- Recursive Org agenda file discovery -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;; Construct Org agenda file discovery advice with configurable
+;; directory exclusion patterns.
+
+;;; Code:
 
 (require 'cl-lib)
 
@@ -61,4 +68,4 @@ exclusions; explicit entries remain valid."
 
 (provide 'emarccs--org-agenda-files-advice)
 
-;;; emarccs--org-agenda-files-advice.el ends here.
+;;; emarccs--org-agenda-files-advice.el ends here

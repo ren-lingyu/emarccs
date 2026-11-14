@@ -1,9 +1,10 @@
-;;; emarccs-help.el -*- lexical-binding: t; -*-
-;;; commentary:
+;;; emarccs-help.el --- Help and documentation configuration -*- lexical-binding: t; -*-
 
-;; 参考了https://emacs-china.org/t/helpful-el/8153
+;;; Commentary:
 
-;;; code:
+;; 参考了 https://emacs-china.org/t/helpful-el/8153
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
@@ -82,4 +83,5 @@
        buf))))
 
 (provide 'emarccs-help)
-;;; emarccs-basic.el ends here.
+
+;;; emarccs-help.el ends here

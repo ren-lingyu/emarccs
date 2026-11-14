@@ -1,6 +1,8 @@
-;;; emarccs-tex.el -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+;;; emarccs-tex.el --- TeX and Org LaTeX configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
@@ -23,7 +25,6 @@
   (setq TeX-parse-self t) ; 自动解析文档结构
   (setq TeX-master nil) ; 不指定主文件
   (setq preview-image-type nil) ; 禁用预览
-  ;; (setq TeX-command-default "LuaLaTeX")
   (setq TeX-save-query nil)
   (setq TeX-show-compilation nil) ; 禁用编译
   (setq TeX-PDF-mode nil)
@@ -39,7 +40,7 @@
 ;; 启用 org-mode 的 LaTeX 区域高亮支持
 (setq org-highlight-latex-and-related '(native script))
 
-;; 与latex环境有关的快捷键
+;; LaTeX 环境快捷键
 (global-set-key
  (kbd "C-c l e e")
  (lambda ()
@@ -124,7 +125,6 @@
            ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
   (setq org-export-headline-levels 4)
   (setq org-latex-default-class "note")
-  ;; (setq org-latex-title-command "")
   (setq org-export-with-toc t)
   (defun emarccs-tex--insert-toc-after-abstract-or-title
       (output backend _info)
@@ -196,7 +196,6 @@
   (setq org-beamer-outline-frame-title "Outlines")
   (setq org-beamer-outline-frame-options "t"))
 
-;; The End
 (provide 'emarccs-tex)
 
 ;;; emarccs-tex.el ends here

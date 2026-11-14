@@ -1,14 +1,13 @@
-;;; emarccs-basic.el -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+;;; emarccs-basic.el --- Basic editor configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
 
 (setenv "TZ" "Asia/Shanghai")
-
-;; 加载最新的.el文件
-;; (setq load-prefer-newer t)
 
 ;; temporary directory
 (setq temporary-file-directory (expand-file-name "~/tmp/emacs/"))
@@ -85,13 +84,11 @@
 (column-number-mode t) ; 在 Mode line 显示列号
 (global-display-line-numbers-mode 1) ; 全局显示行号
 (global-prettify-symbols-mode t)
-;; (setq display-line-numbers-type 'relative) ; 显示相对行号
 
 (setq-default indent-tabs-mode nil) ; 默认禁用制表符
 (setq-default tab-width 4) ; 默认 tab 宽度为 4 个空格
 
-;; Emacs行为设置
-;; (electric-pair-mode t)                        ; 自动补全括号
+;; Emacs 行为设置
 (global-auto-revert-mode t) ; 文件外部修改自动刷新
 (delete-selection-mode t) ; 选中文本后输入替换
 
@@ -113,9 +110,6 @@
   (make-directory (cadr entry) t))
 
 (add-hook 'prog-mode-hook #'hs-minor-mode) ; 编程模式折叠代码块
-;; (savehist-mode 1)                           ; 保存历史记录
-
-;; (setq confirm-kill-emacs #'y-or-n-p) ; 关闭 Emacs 前确认
 
 (defconst emarccs-basic--spell-check-support-enabled-p t) ; 是否启用拼写检查
 
@@ -126,7 +120,7 @@
 ;; 忽略格式风格警告
 (setq byte-compile-warnings '(not docstrings))
 
-;; 有关 buffe 显示
+;; 有关 buffer 显示
 (setq display-buffer-alist
       '(("*compilation*"
          (display-buffer-in-direction)
@@ -519,8 +513,6 @@
   :config
   (setq default-input-method "pyim")
   (setq pyim-page-length 9)
-  ;; (setq pyim-default-scheme 'cangjie)
-  ;; (setq pyim-assistant-scheme 'quanpin)
   (setq pyim-default-scheme 'quanpin)
   (setq-default pyim-punctuation-translate-p '(no)))
 
@@ -584,13 +576,6 @@
 ;; 键位设置和快捷键
 (setq x-super-keysym 'hyper) ;通过把 Super 映射为 Hyper 在逻辑上禁用 Super 键
 
-;; (global-set-key (kbd "RET") 'newline-and-indent) ; Enter 键设置为"新其一行并做缩进"
-;; (global-set-key (kbd "M-w") 'kill-region)              ; 交换 M-w 和 C-w, M-w 为剪切
-;; (global-set-key (kbd "C-w") 'kill-ring-save)           ; 交换 M-w 和 C-w, C-w 为复制
-;; (global-set-key (kbd "C-a") 'back-to-indentation)      ; 交换 C-a 和 M-m, C-a 为到缩进后的行首
-;; (global-set-key (kbd "M-m") 'move-beginning-of-line)   ; 交换 C-a 和 M-m, M-m 为到真正的行首
-;; (global-set-key (kbd "C-c /") 'comment-or-uncomment-region) ; 为选中的代码加注释/去注释, 与VSCode中一致
-
 (global-set-key (kbd "C-c m p") 'org-mark-ring-push)
 (global-set-key (kbd "C-c m g") 'org-mark-ring-goto)
 
@@ -609,4 +594,5 @@
    (forward-line -2)))
 
 (provide 'emarccs-basic)
-;;; emarccs-basic.el ends here.
+
+;;; emarccs-basic.el ends here

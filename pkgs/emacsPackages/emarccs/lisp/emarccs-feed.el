@@ -1,6 +1,8 @@
-;;; emarccs-feed.el -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+;;; emarccs-feed.el --- Feed reader configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
@@ -24,4 +26,5 @@
   (setq arxiv-frame-alist '((name . "*arXiv*"))))
 
 (provide 'emarccs-feed)
-;;; emarccs-feed.el ends here.
+
+;;; emarccs-feed.el ends here

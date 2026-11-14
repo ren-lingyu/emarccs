@@ -1,14 +1,14 @@
-;;; emarccs-org-roam.el -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+;;; emarccs-org-roam.el --- Org-roam configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
 
 ;; org-roam
 (use-package org-roam
-  ;; :defer
-  ;; :demand t
   :after (org)
   :custom
   (org-roam-directory (expand-file-name "./roam" org-directory)) ;; 你的笔记根目录
@@ -117,10 +117,6 @@ If the link is not an Org-roam ID link or the node cannot be found, display an a
 
 (use-package org-roam-ui
   :after org-roam
-  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-  ;;         a hookable mode anymore, you're advised to pick something yourself
-  ;;         if you don't care about startup time, use
-  ;;  :hook (after-init . org-roam-ui-mode)
   :config
   (setq
    org-roam-ui-sync-theme t
@@ -134,7 +130,7 @@ If the link is not an Org-roam ID link or the node cannot be found, display an a
   :after org-roam ; 或 org-supertag、org-brain 等
   :config (org-workbench-setup))
 
-;; DATE
+;; Org-roam timestamps
 (use-package org-roam-timestamps
   :after org-roam
   :config
@@ -143,4 +139,5 @@ If the link is not an Org-roam ID link or the node cannot be found, display an a
   (setq org-roam-timestamps-remember-timestamps t))
 
 (provide 'emarccs-org-roam)
+
 ;;; emarccs-org-roam.el ends here

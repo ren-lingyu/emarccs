@@ -1,12 +1,13 @@
 ;;; emarccs-org.el --- Org mode configuration -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
 
 (use-package org
-  ;; :defer
   :demand t
   :init (setq org-directory (expand-file-name "~/org/"))
   :config
@@ -67,7 +68,6 @@
   (setq org-texmacs-export-menu-keys
         '(:prefix ?T :buffer ?T :file ?t :pdf ?p))
   :custom
-  ;; (org-texmacs-program "texmacs")
   (org-texmacs-worker-start-timeout 60)
   (org-texmacs-worker-request-timeout 10)
   (org-texmacs-format-headline-function
@@ -164,4 +164,5 @@
    ("C-c ." . org-gtd-agenda-transient)))
 
 (provide 'emarccs-org)
-;;; emarccs-org.el ends here.
+
+;;; emarccs-org.el ends here

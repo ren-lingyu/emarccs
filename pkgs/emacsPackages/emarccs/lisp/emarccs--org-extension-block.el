@@ -1,6 +1,8 @@
 ;;; emarccs--org-extension-block.el --- Namespaced Org extension blocks -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+
+;;; Commentary:
+
+;;; Code:
 
 (require 'org)
 (require 'org-element)
@@ -508,4 +510,5 @@ data-extension-kind=\"%s\">\n"
   (emarccs--org-extension-block--activate-backend (car entry)))
 
 (provide 'emarccs--org-extension-block)
-;;; emarccs--org-extension-block.el ends here.
+
+;;; emarccs--org-extension-block.el ends here

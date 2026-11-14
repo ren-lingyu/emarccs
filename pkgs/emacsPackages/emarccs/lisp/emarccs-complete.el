@@ -1,6 +1,8 @@
-;;; emarccs-complete.el -*- lexical-binding: t; -*-
-;;; commentary:
-;;; code:
+;;; emarccs-complete.el --- Completion and snippet configuration -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;; Code:
 
 (eval-when-compile
   (require 'use-package))
@@ -368,4 +370,5 @@
   (org-mode . yas-minor-mode))
 
 (provide 'emarccs-complete)
+
 ;;; emarccs-complete.el ends here

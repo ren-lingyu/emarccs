@@ -129,7 +129,7 @@
 
 三个 wrapper 共用 =pkgs/emarccs/package.nix= 的构造逻辑, 使用 =emacsPackagesFor= / =withPackages= 加入配置包和 GNU coreutils. GTK/PGTK 变体通过 =override= 选择对应的基础 Emacs. 配置依赖从该 Emacs 对应的 package scope 解析.
 
-=overlays.default= 直接导出 =pkgs/default.nix= 组合的 overlay, 包含本地 Elisp package 定义、覆盖及三个 wrapper. flake 自身导入 Nixpkgs 时也使用同一 overlay, =packages= 直接继承其中的 wrapper. 在其他 flake 中将本仓库作为 =emarccs= input 后, 可以这样使用:
+=overlays.default= 直接导出 =pkgs/default.nix= 组合的 overlay, 包含本地 Elisp package 定义, 覆盖及三个 wrapper. flake 自身导入 Nixpkgs 时也使用同一 overlay, =packages= 直接继承其中的 wrapper. 在其他 flake 中将本仓库作为 =emarccs= input 后, 可以这样使用:
 
 #+begin_src nix
   pkgs = import inputs.nixpkgs {
@@ -175,7 +175,7 @@
 ** TeXmacs 数学语法
 =pkgs/texmacs-with-fandol-and-math-syntax/math/registry.nix= 定义原生定界符, =math/default.nix= 生成 package 文本. 生成器通过纯 Nix 函数计算字符串, =writeText= 将其变为构建依赖, =postPatch= 仅安装生成的文件; 不需要 Elisp 或其他外部代码生成器, 也不需要 IFD. 修改定义会重新构建最终的 TeXmacs derivation.
 
-普通定界符采用 =l<count><kind>= / =r<count><kind>= 编码, 单层另有省略数字的别名; =n= 是不可见定界符. 47 个代码可任意有序组合, 只排除 =nn=. 名称直接连接两个代码, 如 =lprp=, =lpn=, =l2vr2v=. 每种组合提供单参数宏和 =concat-= 前缀的变参宏, 共 4416 个定界符宏; 另提供 =application=, 连接函数、数学空格与参数.
+普通定界符采用 =l<count><kind>= / =r<count><kind>= 编码, 单层另有省略数字的别名; =n= 是不可见定界符. 47 个代码可任意有序组合, 只排除 =nn=. 名称直接连接两个代码, 如 =lprp=, =lpn=, =l2vr2v=. 每种组合提供单参数宏和 =concat-= 前缀的变参宏, 共 4416 个定界符宏; 另提供 =application=, 连接函数, 数学空格与参数.
 
 #+begin_src scheme
   (lprp (frac "1" "2"))
@@ -207,26 +207,26 @@
 - =name= 为非空字符串, =interval= 为正整数秒数, 默认为 10. =text= 接收 Bash 源代码字符串或 Nix path; path 在求值时通过 =builtins.readFile= 读取并内嵌, 不作为独立脚本执行.
 - 生成的代码要求 Bash >= 5.3. 开始时打印任务名, 运行期间按 interval 定期报告经过的时间, 结束时打印成功或失败及总耗时, 并保留原代码块的退出状态. 不设置超时, 不管理任务的进程树.
 - 同时报告 =EPOCHREALTIME= 的有符号差值 (保留六位小数) 和 =BASH_MONOSECONDS= 的整数秒差值. 前者可能受系统时钟调整影响; 后者在平台不支持单调时钟时由 Bash 回退到实时时钟. 不尝试校正两者的差异.
-- 原代码直接继承 stdout, stderr, Shell 变量和当前目录, 不通过输出代理或缓存; 状态日志追加到 stderr, 原代码内部的重定向保持有效. 两层 subshell 隔离 reporter 和原代码的变量、目录及 trap 修改, 原代码的 Shell 选项和错误传播遵循 Bash 的通常规则 (包括 =errexit= 在条件上下文中的行为).
+- 原代码直接继承 stdout, stderr, Shell 变量和当前目录, 不通过输出代理或缓存; 状态日志追加到 stderr, 原代码内部的重定向保持有效. 两层 subshell 隔离 reporter 和原代码的变量, 目录及 trap 修改, 原代码的 Shell 选项和错误传播遵循 Bash 的通常规则 (包括 =errexit= 在条件上下文中的行为).
 - 使用 =coproc= 和 =read -t= 实现周期性报告; 原代码结束时关闭控制管道并回收 heartbeat, 不等待下一个报告间隔. 构建取消及任务后代进程的管理由 Nix 负责. Heartbeat 表示任务尚未结束, 不表示任务取得实际进展; 它也会影响 Nix 的 =max-silent-time= 判断.
 
 =tests/with-progress/= 验证字符串及 path 输入, 输出保留, 退出状态, Shell 隔离, 空代码, 周期性报告和 =exec= 等行为. 可以通过 =nix build .#checks.x86_64-linux.with-progress -L= 单独构建.
 
-本仓库通过 =pkgs/default.nix= 的 =extraArgs= 将 =llib.tests.withProgress= 提供给各 package, 并通过 =mkChecks.args= 注入 wrapper 测试 scope. 配置包的两项源码检查、三个 wrapper 测试、Tree-sitter grammar runtime 及两个 TeXmacs package tests 均使用该 helper 报告执行状态. Emacs 测试仍不设置进程级超时; TeXmacs 渲染保留原有的 180 秒超时和 5 秒强制终止宽限, 渲染输出仍写入各自的日志文件, 状态报告则直接进入构建日志. =overlay-equivalence= 的断言在 Nix 求值阶段执行, 不包装仅创建检查产物的 builder.
+本仓库通过 =pkgs/default.nix= 的 =extraArgs= 将 =llib.tests.withProgress= 提供给各 package, 并通过 =mkChecks.args= 注入 wrapper 测试 scope. 配置包的两项源码检查, 三个 wrapper 测试, Tree-sitter grammar runtime 及两个 TeXmacs package tests 均使用该 helper 报告执行状态. Emacs 测试仍不设置进程级超时; TeXmacs 渲染保留原有的 180 秒超时和 5 秒强制终止宽限, 渲染输出仍写入各自的日志文件, 状态报告则直接进入构建日志. =overlay-equivalence= 的断言在 Nix 求值阶段执行, 不包装仅创建检查产物的 builder.
 
 ** Elisp 配置包
 =pkgs/emacsPackages/emarccs/package.nix= 通过 =melpaBuild= 构建配置包, 由其正常的安装及编译流程检查 Elisp 编译错误, 不再额外运行独立的 =elisp-byte-compile= 测试. 编译警告仍不作为失败条件.
 
 配置包启用 =doCheck=, 在 =checkPhase= 中分别启动独立的 batch Emacs 进程执行下列源码检查. =package-lint= 通过当前 Emacs package scope 的 =checkInputs= 引入, 由 Emacs setup hook 和 =package-activate-all= 提供依赖查找环境, 不加入 =packageRequires= 或配置的运行依赖, 也不手写 package 的版本化安装目录. 测试目录独立于 =src=, 不纳入 MELPA package archive.
 
-- =initialization=: 由原 =startup-order= 中的四项 ERT 用例组成, 验证接口加载无配置副作用、早期及常规初始化只执行一次、模块顺序、初始化重入和失败后重试. 直接使用配置包源码, 不需要构建最终 wrapper.
+- =initialization=: 由原 =startup-order= 中的四项 ERT 用例组成, 验证接口加载无配置副作用, 早期及常规初始化只执行一次, 模块顺序, 初始化重入和失败后重试. 直接使用配置包源码, 不需要构建最终 wrapper.
 - =package-lint=: 检查全部配置源码, 以 =emarccs.el= 为主文件. 仅豁免功能配置中的保留键位和 =with-eval-after-load= 两类诊断并逐项输出; 其他诊断均失败, 三个入口/初始化接口文件无此豁免.
 
 ** Emarccs wrapper tests
-=pkgs/emarccs/tests/default.nix= 通过 =mkChecks= 构造独立的测试 scope, 发现各目录中的 =test-overlay.nix=, 并通过测试 scope 的 =callPackage= 加载同目录的 =test.nix=. 使用当前 wrapper 的最终 derivation 及其对应的配置包. =pkgs/emarccs/package.nix= 通过 =passthru.tests= 暴露这些测试, 并保留底层包的已有 tests. 默认、GTK 和 PGTK wrapper 共用该定义, 各自通过 =override= 实例化测试, 不单独维护测试源码.
+=pkgs/emarccs/tests/default.nix= 通过 =mkChecks= 构造独立的测试 scope, 发现各目录中的 =test-overlay.nix=, 并通过测试 scope 的 =callPackage= 加载同目录的 =test.nix=. 使用当前 wrapper 的最终 derivation 及其对应的配置包. =pkgs/emarccs/package.nix= 通过 =passthru.tests= 暴露这些测试, 并保留底层包的已有 tests. 默认, GTK 和 PGTK wrapper 共用该定义, 各自通过 =override= 实例化测试, 不单独维护测试源码.
 
-- =startup-smoke=: 验证禁用用户初始化时配置不执行、require 入口保持惰性、配置库来自指定安装产物. 随后执行实际 wrapper 启动表达式, 保留真实 package activation, 仅替换配置初始化函数, 检查激活结果和调度.
-- =startup-order=: 原测试中与 wrapper 有关的三项 ERT 用例, 用实际生成的 =site-start.el= 和替身验证 hook 注册不叠加、用户 init 前的执行顺序及禁用用户 init. 不启动交互式 Emacs.
+- =startup-smoke=: 验证禁用用户初始化时配置不执行, require 入口保持惰性, 配置库来自指定安装产物. 随后执行实际 wrapper 启动表达式, 保留真实 package activation, 仅替换配置初始化函数, 检查激活结果和调度.
+- =startup-order=: 原测试中与 wrapper 有关的三项 ERT 用例, 用实际生成的 =site-start.el= 和替身验证 hook 注册不叠加, 用户 init 前的执行顺序及禁用用户 init. 不启动交互式 Emacs.
 - =package-availability-smoke=: 根据配置包的 =packageRequires= 用 =locate-library= 检查依赖可被 Emacs 找到, 不验证包的完整运行行为.
 
 可以通过 wrapper 的 =tests= 属性直接构建相应测试:
@@ -240,7 +240,7 @@
 ** Tree-sitter grammar runtime test
 =pkgs/emacsPackages/treesit-auto/tests/= 定义 =grammars-runtime= 测试, 由对应 Emacs scope 中的 =treesit-auto= override 通过 =passthru.tests= 暴露. 测试使用只显式包含最终 =treesit-auto= 及其传播依赖的 Emacs wrapper, 不依赖完整 Emarccs wrapper.
 
-测试枚举指定产物中的 grammar 库, 检查 Emacs 的实际查找路径可找到语言并创建 parser, 不向查找路径补目录; 不验证真实源码解析、major mode、font-lock 或缩进. 测试断言与原 =treesit-grammars-runtime= 相同, 但现在验证的是 =treesit-auto= 的依赖传播及运行时行为, 而非完整 Emarccs 环境.
+测试枚举指定产物中的 grammar 库, 检查 Emacs 的实际查找路径可找到语言并创建 parser, 不向查找路径补目录; 不验证真实源码解析, major mode, font-lock 或缩进. 测试断言与原 =treesit-grammars-runtime= 相同, 但现在验证的是 =treesit-auto= 的依赖传播及运行时行为, 而非完整 Emarccs 环境.
 
 #+begin_src sh
   nix build .#legacyPackages.x86_64-linux.emacsPackages.treesit-auto.tests.grammars-runtime
@@ -249,7 +249,7 @@
 ** Flake checks
 =tests/default.nix= 接收 =config.legacyPackages= 导出的有限 package tree, 递归提取 derivation 叶节点的 =tests=, 保留 namespace 结构. 没有独立测试的 package 对应空测试集合. 一次调用 =llib.tests.mkChecks=, 通过 =checks= 纳入上述测试树, 同时发现顶层测试目录中的 =test-overlay.nix=. =mkChecks= 合并测试树, 以 =-= 为分隔符平铺属性路径并检查名称冲突. 新增导出 package 的 =passthru.tests= 无需修改顶层测试列表. 顶层 =test-overlay.nix= 定义独立的 =with-progress= helper 测试和依赖 flake 上下文的 =overlay-equivalence= 测试:
 
-- =overlay-equivalence=: 从同一份 Nixpkgs 独立导入只应用公开 default overlay 的包集合, 递归比较 =legacyPackages= 中每个 package 与对应属性路径下的 package 的 =drvPath=. 缺少对应 package、求值失败或 derivation 不一致都会失败; 通过后仅生成一个空检查产物, 不重复构建被比较的 packages.
+- =overlay-equivalence=: 从同一份 Nixpkgs 独立导入只应用公开 default overlay 的包集合, 递归比较 =legacyPackages= 中每个 package 与对应属性路径下的 package 的 =drvPath=. 缺少对应 package, 求值失败或 derivation 不一致都会失败; 通过后仅生成一个空检查产物, 不重复构建被比较的 packages.
 
 例如 =emarccs-pgtk-startup-order= 和 =emacsPackages-treesit-auto-grammars-runtime= 分别对应 wrapper 的测试及默认 Emacs scope 中 =treesit-auto= 的测试. 三个 wrapper 各自的 tests 均纳入, =treesit-auto= 不再经三个 wrapper 重复纳入. 所有导出 packages 的 tests (包括继承的上游 tests 和 TeXmacs tests) 均参与聚合.
 
@@ -265,7 +265,7 @@
 独立检查定义于 =pkgs/texmacs-with-fandol-and-math-syntax/tests/=, 由该 package 的 =passthru.tests= 暴露, 并随 =legacyPackages= 中的其他 package tests 自动纳入 flake checks. 这些测试独立于 Emacs wrapper 的测试组织:
 
 - =resources=: 核对生成的 4417 个宏定义及代表性源码, 比较安装的 style 与生成文件, 比较安装的 Fandol 字体与来源文件.
-- =math-syntax=: 直接调用最终 TeXmacs, 使用独立的配置目录渲染自定义宏和等价原生表达式的 native 文档, 比较 PDF 文本及单页 raster 输出. 不依赖 Emacs 或 Org-TeXmacs, 不验证全部定界符的字体字形. 保留文档、PDF、文本、raster 和日志供检查.
+- =math-syntax=: 直接调用最终 TeXmacs, 使用独立的配置目录渲染自定义宏和等价原生表达式的 native 文档, 比较 PDF 文本及单页 raster 输出. 不依赖 Emacs 或 Org-TeXmacs, 不验证全部定界符的字体字形. 保留文档, PDF, 文本, raster 和日志供检查.
 
 通过 =legacyPackages= 直接构建 package tests:
 
@@ -277,7 +277,7 @@
 * 维护注意事项
 - =.gitignore= 使用倒置白名单模式. 新增可追踪文件时, 需要同时确认对应 =!pattern= 已放行.
 - 修改 =pkgs/emacsPackages/emarccs/lisp/emarccs-init.el= 的模块顺序时要谨慎, 当前顺序是配置初始化语义的一部分.
-- 新增或调整 Elisp 包时, 同时核对 =packageRequires=, MELPA recipe 的文件选择、ELPA metadata/autoloads 和所需运行资源.
+- 新增或调整 Elisp 包时, 同时核对 =packageRequires=, MELPA recipe 的文件选择, ELPA metadata/autoloads 和所需运行资源.
 
 * 许可证
 本项目采用 MIT 许可证, 见 [[file:LICENSE][LICENSE]].

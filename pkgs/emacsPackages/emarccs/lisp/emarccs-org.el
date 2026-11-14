@@ -22,8 +22,18 @@
   (setq org-src-tab-acts-natively t) ; Org代码块TAB缩进
   (setq org-timestamp-formats
         '("%Y-%m-%d %a %z" . "%Y-%m-%d %H:%M:%S %z"))
+  (setq org-todo-keywords
+        '((sequence "TODO" "NEXT" "WAIT" "|" "DONE" "CNCL")))
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
+  ;; Keep the GTD directory explicit for clients that read the variable.
+  (setq org-agenda-files
+        (list org-directory (expand-file-name "gtd/" org-directory)))
+  (require 'emarccs--org-agenda-files-advice)
+  (advice-add 'org-agenda-files
+              :around
+              (emarccs--org-agenda-files-advice '("cache"))
+              '((name . emarccs--org-agenda-files)))
   (setq bookmark-default-file
         (expand-file-name "./cache/bookmarks" org-directory))
   (setq org-publish-timestamp-directory
@@ -115,7 +125,26 @@
   :after org
   :hook (org-mode . org-include-inline-mode))
 
-;; GTD and agenda
+(use-package org-agenda
+  :after org
+  :bind (("C-c a" . org-agenda))
+  :custom
+  (org-agenda-span 'week)
+  (org-agenda-start-on-weekday 1)
+  (org-agenda-skip-unavailable-files t)
+  :config
+  (add-to-list
+   'org-agenda-custom-commands
+   '("D" "Daily dashboard"
+     ((agenda
+       ""
+       ((org-agenda-span 1)
+        (org-agenda-start-day nil)
+        (org-agenda-overriding-header "Today's schedule")))
+      (todo
+       "NEXT" ((org-agenda-overriding-header "Next actions")))))))
+
+;; GTD
 (use-package org-edna
   :after org
   :config
@@ -128,19 +157,16 @@
   :after (org org-edna)
   :init
   (setq org-gtd-update-ack "4.0.0")
-  (setq org-gtd-directory (expand-file-name "agenda/" org-directory))
+  (setq org-gtd-directory (expand-file-name "gtd/" org-directory))
   (unless (file-directory-p org-gtd-directory)
     (make-directory org-gtd-directory t))
   :custom
-  (org-todo-keywords
-   '((sequence "TODO" "NEXT" "WAIT" "|" "DONE" "CNCL")))
   (org-gtd-keyword-mapping
    '((todo . "TODO")
      (next . "NEXT")
      (wait . "WAIT")
      (done . "DONE")
      (canceled . "CNCL")))
-  :config (setq org-agenda-files (list org-gtd-directory))
   :bind
   (("C-c d" . org-gtd-command-center)
    :map

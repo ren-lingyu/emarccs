@@ -5,64 +5,65 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
-## Current: upstream Org-roam package integration committed; static review only
-The owner requested an update/checkpoint against the latest repository. This
-review inspected the clean current project snapshot and the complete changes
-since the previous project-associated boundary. No uncommitted project or GAW
-changes existed at entry. The latest committed integration replaces local
-org-roam-organize, org-roam-include and org-roam-blog recipes/overlays with their
-own flake inputs' overlays.emacsPackages. Six local files are removed; the
-configuration package still declares all three as direct packageRequires.
-Emarccs Lisp, wrapper recipes, tests and README did not change in this interval.
-Package source/build definitions now belong to the upstream inputs; future
-package updates should follow flake.lock rather than restoring old local recipes
-or their nix-update scripts.
+## Current: consolidated architecture and snippet configuration at main 8abd482
+The formal checkpoint represents the project at main HEAD 8abd482
+("feat(pkgs/emacsPackages/emarccs): reorganize and extend snippet
+configuration"). It consolidates the 37 project commits between the previous
+project-associated boundary 534188d and 8abd482. The prior GAW checkpoint
+already recorded the Org-roam upstream migration; its durable facts live in
+architecture.md and its validation limits remain valid.
 
-Root supplies four Emacs overlays (org-texmacs, org-roam-organize,
-org-roam-include, org-roam-blog) and the org-texmacs TeXmacs overlay to pkgs/.
-groups.default.overlays concatenates that list; legacy reuses it and enables
-export. PerSystem applies the legacy group, exported overlays.default uses the
-default group, and all three wrapper outputs/check generation remain unchanged.
-The local org-texmacs override remains: upstream package is overridden with outer
-pkgs.texmacs-fandol; that wrapper still wraps texmacs-with-gotor-support. Unlike
-org-texmacs, the three migrated Org-roam packages retain no local discovery leaf.
-Under the previously inspected directory-based legacy selector, external-only
-paths are not exported automatically: do not assume the old individual
-legacyPackages.emacsPackages.org-roam-* paths remain. Actual current exports were
-not evaluated, and the new shared-library implementation was not re-inspected;
-confirm its contract/exports if needed rather than changing the project during
-this memory-only task. Packages are explicitly supplied in the full Emacs scope.
+architecture.md now describes the current package ownership and source
+injection, the texmacs-with-fandol-and-math-syntax resource package and its
+generated math syntax, package-owned tests with flake aggregation, the
+withProgress contract, Org workflows (roam layout, recursive agenda
+discovery, backend-scoped LaTeX filters, Org-TeXmacs consumer configuration)
+and the snippet architecture, including the Scheme AAS isolation failure and
+its evidence limits. Superseded states are marked historical there and in the
+records below.
 
-The explicit personal-nixpkgs/local-nixpkgs Git URL override was removed. Current
-lock nodes for local-nixpkgs use path ./pkgs with parent locators scoped to their
-own personal-nixpkgs instance. These are dependency-relative paths, not references
-to this project's pkgs directory. Preserve that ownership distinction. Root
-personal-nixpkgs and org-texmacs plus the three Org-roam inputs all follow root
-nixpkgs; multiple transitive shared-library/formatter branches remain. This review
-did not flatten them or infer a single shared-library version for all inputs.
+Evidence for this consolidation is read-only: complete log/diff --stat of the
+range, targeted diffs of every architectural anchor, and full source reads of
+flake.nix, pkgs/default.nix, lib/, the TeXmacs package and tests, the emarccs
+package and tests, treesit-auto, Org workflow and snippet libraries, README
+and .gitignore, plus diff --check. No Nix evaluation, build, test, export or
+network access was performed by the agent. Project main and its worktree were
+not modified.
 
-Inspected root lock identities: nixpkgs58deea65; personal-nixpkgs b7879c69;
-org-texmacs1017764d; org-roam-organize1f38b4b0; org-roam-include6755bd31;
-org-roam-blog344e988c. The exact project snapshot reviewed supplies this
-checkpoint's additional parent, not additional ancestry of upstream repositories.
-All newly retained project changes concern Nix definitions/public lock sources;
-no new private documents or runtime data were introduced in that ancestor range.
+Owner-reported validation covers the final snippet implementation: all tests
+and builds passed (owner-reported, not repeated by the agent, no other
+platform or complete interactive environment implied). No runtime result is
+recorded for the TeXmacs resource package or its tests; the historical font
+probes below target the former wrapper and source versions and do not
+transfer to the new resource layout.
 
-Validation is limited to read-only source/history/full manifest-and-lock review
-and diff --check. No Nix evaluation, build, flake check, export, network/download
-or external-repository inspection was performed for this state. Prior successful
-font/export probes used old org-texmacs source2c1c7d58 and a plain TeXmacs base;
-they do not validate current upstream Lisp, changed Nixpkgs/shared library or the
-GoToR-patched base. LANGUAGE rejection observed in that old source is historical,
-not a current-version assertion. No current runtime failure is newly diagnosed.
+Backlog reconciliation: the README alignment item is closed (README documents
+current ownership, outputs, the TeXmacs package, math syntax, package-owned
+tests, withProgress and snippets). Remaining items: non-blocking Elisp
+package normalization (warnings, dependency audit), the frontend-autoload
+coverage candidate, the new AAS state-isolation investigation, and the
+TeXmacs existing-profile validation candidate, each scoped in backlog.md.
 
-Next actions, only when authorized: validate current overlays/wrappers and any
-required individual legacy exports; align README input/provider documentation.
-Existing nonblocking configuration warning/dependency work remains deferred.
-Optional Source Han static OTF variants remain proposals without implementation
-or compatibility tests. The LaTeX comparison and font-cache/language diagnoses
-below retain their original scope. Temporary probe paths are optional ephemeral
-evidence, not required durable inputs for interpreting those distilled findings.
+Next actions, only when authorized: validate current overlays/wrappers and
+individual legacy exports against the current shared-library selector; the
+AAS investigation starts with a minimal two-buffer reproduction. No build,
+export or user-profile work is implied by this maintenance task.
+
+## Historical records
+All sections below record earlier states and probes with their original
+baselines; nothing below supersedes the current state above or
+architecture.md. In particular, the font/cache/language probes below target
+the former texmacs-fandol TEXMACS_FONT_PATH wrapper, org-texmacs source
+2c1c7d58 and TeXmacs 2.1.5 as stated per section; they neither diagnose nor
+validate the new texmacs-with-fandol-and-math-syntax resource package.
+
+## Previous checkpoint: upstream Org-roam package integration (superseded)
+The previous checkpoint recorded the upstream Org-roam migration against
+project commit 61a7c7e. Its durable facts are folded into architecture.md
+(package ownership, groups and exports, dependency-relative lock paths); its
+lock identities are obsolete after later input updates and are preserved in
+first-parent history. Its validation limits (static review only, exports not
+evaluated) remain applicable where restated above.
 
 ## Read-only LaTeX font comparison
 Owner explicitly authorized reading ~/org/texmf to identify LaTeX fonts and
@@ -431,7 +432,7 @@ explicitly deferred. The commit draft was updated for the final staged API and
 naming before the owner committed it; no implementation work remains pending
 for this authorized test-aggregation refactor.
 
-## Latest review: shared built-in Emacs aggregation
+## Historical review: shared built-in Emacs aggregation
 The owner made a personal-nixpkgs lock bump to its built-in aggregation-rules
 revision and deleted pkgs/emacsPackages/overlay.nix, then committed the reviewed
 change as "refactor(pkgs): use built-in Emacs package aggregation". Subsequent
@@ -460,7 +461,7 @@ alignment until the next planned shared-library update and associated changes;
 this documentation mismatch is known and intentionally deferred, not a blocker
 for the current aggregation migration.
 
-## Latest fix: select executable startup forms structurally
+## Historical fix: select executable startup forms structurally
 The owner added two declare-function forms for emarccs-initialize-early and
 emarccs-initialize to the injected site-start source to remove byte-compiler
 unknown-function warnings. The old startup-order helper matched any form whose
@@ -479,7 +480,7 @@ index/history mutation occurred. The owner subsequently committed the declaratio
 "fix(startup): declare initialization functions for byte compilation", confirmed
 read-only during the later aggregation review. The authorized fix is complete.
 
-## Current state: org-edna direct dependency committed
+## Completed: org-edna direct dependency committed
 The owner requested comparing use-package declarations in the configuration with
 emarccs' direct Nix dependencies. Scoped static inspection found 80 distinct
 use-package names and 75 direct packageRequires arguments. The only external
@@ -498,7 +499,7 @@ This checkpoint associates the inspected resulting project commit. No new
 build/test was run or reported for this addition. The broader non-blocking
 normalization/dependency audit remains open; it is not completed by this fix.
 
-## Current state: README synchronization committed
+## Completed: README synchronization committed
 The owner authorized updating README after the backlog review. The project
 worktree was clean at start; the factual baseline is the committed standalone
 overlay fix, compared with the last README update at the earlier Elisp source
@@ -525,7 +526,7 @@ handle dependencies, without making it a gate for completed or unrelated work.
 See backlog.md for scope; no implementation/testing was requested by this entry.
 Naming privacy rules remain constraints, not pending renames.
 
-## Current state: standalone overlay fix committed
+## Completed: standalone overlay fix committed
 The owner committed the seven-file change as "fix(overlays): make the default
 overlay usable independently". Read-only confirmation found the expected wrapper
 package extraction, direct overlay export and equivalence checks in HEAD and
@@ -574,7 +575,7 @@ the new test file. The authorized implementation and review/commit next action
 are complete. Earlier org-texmacs findings below were reviewed for this memory
 snapshot and retain their original validation limits.
 
-## Current verification: package-directory wrapper strategy passes
+## Historical verification: package-directory wrapper strategy passes
 The owner abandoned the explicit wrapper constructor in flake.overlays.default
 and moved the common wrapper constructor/startup injection to
 pkgs/emarccs/package.nix. Root overlays provide emarccs and derive GTK/PGTK
@@ -753,7 +754,7 @@ No project edits or index changes were made during that diagnosis/verification.
 The then-staged/unstaged package edits are now committed; the ordinary project
 worktree is clean at current confirmation.
 
-## Current state: Nixpkgs migration committed
+## Completed: Nixpkgs migration committed
 The owner committed the migration as "build(nix): replace Twist packaging with
 Nixpkgs". Read-only confirmation found that HEAD contains the reviewed 93-file
 migration and that the ordinary project worktree/index are clean. This

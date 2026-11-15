@@ -1,85 +1,110 @@
 # Backlog
 
-## Pending: README shared-foundation and formatter alignment
+## Closed: README shared-foundation, ownership and formatter alignment
+The README has been updated and committed for the current architecture:
+package ownership (upstream Org-TeXmacs and Org-roam flake inputs, local
+overlays, sources), Nix outputs, the texmacs-with-fandol-and-math-syntax
+resource package, the generated math syntax, package-owned tests and flake
+aggregation, withProgress and the snippet reorganization. The earlier
+shared-foundation/formatter backlog is therefore closed.
 
-The README update for constructors/test aggregation is committed and complete
-for that earlier baseline. The subsequent shared mkFlake migration changed
-root input ownership and per-system Nixpkgs construction; README still describes
-flake-parts/treefmt-nix as direct root inputs followed by personal-nixpkgs.
-Update that explanation for the shared mkFlake helper and transitive inputs,
-plus the group's legacy export wiring where useful. The formatting paragraph
-still says treefmt checks Nix files only; shared formatting now includes Elisp,
-with *.patch excluded and flakeCheck restored to true. Keep this a factual
-structure/maintenance update, not a record of formatting experiments or tests.
-Also describe the subsequently committed org-texmacs input/overlay ownership,
-shared external group overlays, and texmacs-fandol's GoToR-patched TeXmacs base.
-The latest Org-roam migration additionally adds three direct flake inputs, removes their
-local source recipes, and removes the explicit local-nixpkgs Git URL override.
-Document upstream ownership and dependency-relative local-nixpkgs paths accurately;
-do not promise individual legacy exports for external-only packages without
-checking the current selector/output contract.
-Keep older font/cache/language experiments out of README; any troubleshooting
-instructions should describe supported use, not the experiment sequence.
-No README edit is authorized by this entry or the current checkpoint request.
+The intermediate treefmt state that excluded `*.el` (6ea3416) was superseded
+by the restored formatting check (40e0945): current treefmt formats Nix,
+Elisp, Org and gitignore files with flakeCheck = true and excludes only
+`*.patch`, `LICENSE` and `flake.lock`. Do not record Elisp formatting as
+still disabled.
+
+One residual documentation nuance remains, recorded only as a factual
+observation: README says personal-nixpkgs's nixpkgs, flake-parts and
+treefmt-nix dependencies all follow this repository's corresponding inputs,
+but only nixpkgs has a root-level follows declaration; flake-parts and
+treefmt-nix are transitive through personal-nixpkgs's lock. No README edit is
+authorized by this entry.
 
 ## Non-blocking: normalize emacsPackages.emarccs
-
-The owner requests a future normalization pass over emacsPackages.emarccs
-(pkgs/emacsPackages/emarccs), aiming to minimize byte-compilation warnings and
+The owner requests a future normalization pass over
+pkgs/emacsPackages/emarccs, aiming to minimize byte-compilation warnings and
 handle dependencies carefully. This is non-blocking: it does not gate the
-completed migration, current builds or unrelated work, and it is not a promise
-of zero warnings.
+current state, builds or unrelated work, and it is not a promise of zero
+warnings. turnCompilationWarningToError remains false for emarccs
+(org-include-inline and org-workbench enable it), and package-lint keeps its
+explicit, narrow exemptions.
 
-Review actual diagnostics and address their causes in declarations, compile-time
-macro availability and configuration code. Audit direct/indirect, compile-time/
-runtime and optional dependencies; align packageRequires and Elisp loading/
-use-package declarations with actual requirements while preserving intended
-lazy loading and configuration behavior. Record any intentionally remaining
-warnings rather than hiding them with blanket suppression.
+Review actual diagnostics and address their causes in declarations,
+compile-time macro availability and configuration code. Audit
+direct/indirect, compile-time/runtime and optional dependencies; align
+packageRequires and Elisp loading/use-package declarations with actual
+requirements while preserving intended lazy loading and configuration
+behavior. Record any intentionally remaining warnings rather than hiding
+them with blanket suppression. Keep the checkInputs (package-lint) versus
+runtime packageRequires distinction.
 
-A targeted read-only comparison found 80 distinct use-package names and an
-org-edna direct-dependency omission. The owner subsequently committed its
-addition, bringing the direct packageRequires argument count from 75 to 76;
-this specific finding is resolved and must not be re-added as pending work.
-Other unmatched names are seven Emacs built-ins (dired, dired-x, eglot,
-lisp-mode, recentf, savehist, which-key) and internal
-emarccs--org-extension-block. No new build/test or transitive-dependency audit
-was performed for that correction. The broader warning/dependency review above
-remains non-blocking and incomplete.
+A targeted read-only comparison previously found 80 distinct use-package
+names and an org-edna direct-dependency omission. The owner committed its
+addition (direct packageRequires count 75 -> 76); that specific finding is
+resolved and must not be re-added as pending work. The broader
+warning/dependency review above remains non-blocking and incomplete. No
+source changes, dependency updates, warning-policy changes or build/test
+runs are authorized by this entry.
 
-This entry records scope and motivation only. No source changes, dependency
-updates, warning-policy changes or build/test runs are authorized by adding it.
-
-## Candidate regression coverage: custom-package command autoloads
-
-The earlier Org-TeXmacs issue established two distinct failure modes: trivialBuild
-installed sources without ELPA descriptors/autoloads, and a narrowed files recipe
-omitted ox-texmacs.el even after activation worked. The committed migration uses
-melpaBuild with explicit MELPA defaults and includes the Scheme worker.
-Existing startup-smoke tests Citar/Consult/Org activation and library availability
-checks locate dependencies; no maintained test directly verifies the three
-Org-TeXmacs frontend commands are autoloaded from the installed package.
+## Candidate regression coverage: Org-TeXmacs frontend autoloads
+The earlier Org-TeXmacs issue established two distinct failure modes:
+trivialBuild installed sources without ELPA descriptors/autoloads, and a
+narrowed files recipe omitted ox-texmacs.el. The org-texmacs recipe is now
+upstream-owned; the local overlay only selects the TeXmacs program.
+Current startup-smoke checks the emarccs entry interfaces and real package
+activation, and package-availability-smoke only runs locate-library over
+packageRequires; no maintained test verifies that the three Org-TeXmacs
+frontend commands (org-texmacs-export-as-texmacs,
+org-texmacs-export-to-texmacs, org-texmacs-export-to-pdf) autoload from the
+installed package.
 Consider a bounded batch regression check of frontend library presence and
-command/autoload availability without eager require of ox-texmacs or invoking
-TeXmacs/export. This is a coverage candidate, not a currently reproduced failure
-or authorization to implement/run it. Preserve the earlier probe's validation
-limits recorded in current.md.
+command/autoload availability without eager require of ox-texmacs or
+invoking TeXmacs/export. This is a coverage candidate, not a currently
+reproduced failure or authorization to implement/run it. Preserve the
+earlier probe's validation limits recorded in current.md.
+
+## Non-blocking: AAS per-buffer isolation reproduction
+The Scheme snippet work exposed a likely upstream AAS state-isolation
+defect: shared mutation of the defvar-local aas--current-prefix-maps default
+can leak expansion state across buffers in one process. The history,
+observed failure, static hypothesis and evidence limits are recorded in
+architecture.md under "Historical Scheme isolation failure and potential
+AAS defect". This is not a diagnosed Emarccs build defect: the final
+configuration removes AAS from Scheme and its tests pass (owner-reported).
+
+Future investigation should first build a minimal AAS-only reproduction with
+two buffers, checking state before/after completing a trigger and after
+failed expansion, then decide on an upstream patch (for example nil default
+plus lazy per-buffer initialization) and regression tests. No execution,
+dependency update or upstream PR is authorized by this entry.
+
+## Validation candidate: existing-profile behavior under the new resource layout
+All font/cache probes in current.md targeted the former texmacs-fandol
+TEXMACS_FONT_PATH wrapper and the then-current org-texmacs/TeXmacs
+versions. They do not demonstrate that
+texmacs-with-fandol-and-math-syntax has the same existing-profile behavior,
+nor that it is fixed. If and when a real validation need arises, isolate
+fresh versus existing TeXmacs profiles and check font discoverability, style
+loading (emarccs-math.ts) and Org PDF export separately. Do not adopt cache
+migration helpers, global Chinese language defaults or Source Han font plans
+without owner confirmation.
 
 ## Naming constraints and retired pending work
-
 The former naming task depended on a Git-ignored TODO.md that is no longer
 present. Current scoped source review found no my/ definitions; the remaining
-non-emarccs definition forms are declarations of external package/Emacs variables.
-There is no supported concrete rename list to resume, and no naming prerequisite
-blocking future layout work. Re-establish a specific target before new renaming.
+non-emarccs definition forms are declarations of external package/Emacs
+variables. There is no supported concrete rename list to resume, and no
+naming prerequisite blocking future layout work. Re-establish a specific
+target before new renaming.
 
-The owner deliberately preserves emarccs--org-roam-blog-* despite the feature
-being emarccs-org-roam-blog: the double hyphens express distinct privacy scopes.
-This is a design constraint, not an outstanding defect.
+The owner deliberately preserves emarccs--org-roam-blog-* despite the
+feature being emarccs-org-roam-blog: the double hyphens express distinct
+privacy scopes. This is a design constraint, not an outstanding defect.
 
-Inputs cleanup, cross-repository library extraction, standalone overlay repair,
-its equivalence checks and README synchronization are committed; they are no
-longer backlog items.
-The shared library may intentionally contain logic unused by Emarccs. The older
-~/nixos/pkgs/lib/ comparison was historical; the current shared-library input
-comes from personal-nixpkgs. Do not assume the reference copies stay synchronized.
+Inputs cleanup, cross-repository library extraction, standalone overlay
+repair, its equivalence checks, README synchronization and the upstream
+package migrations are committed; they are no longer backlog items. The
+shared library may intentionally contain logic unused by Emarccs; the
+current shared-library input comes from personal-nixpkgs and reference
+copies are not assumed to stay synchronized.

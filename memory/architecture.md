@@ -1,479 +1,475 @@
 # Emarccs architecture
 
-## Current external package ownership
-The latest project source delegates org-texmacs and the three packages
-org-roam-organize/org-roam-include/org-roam-blog to their flake inputs' Emacs
-overlays. Only org-texmacs retains a local override leaf, selecting the local
-Fandol-enabled GoToR TeXmacs variant. The three Org-roam directories/recipes are
-removed; their configuration packageRequires remain. This is committed source
-integration, not a fresh runtime acceptance result. Current builds/exports have
-not been evaluated by the agent. Older validation summaries below describe their
-original baseline and do not validate newly updated inputs.
+## Current package ownership and sources
+flake.nix is the boundary for external inputs; package files never access
+flake inputs directly. Direct inputs are nixpkgs, personal-nixpkgs,
+org-texmacs, org-roam-organize, org-roam-include and org-roam-blog (all
+flakes), plus flake = false sources org, org-include-inline, org-workbench
+and csl-locales. The root passes external overlays and sources explicitly to
+pkgs/default.nix: overlays.emacsPackages carries the four package flakes'
+Emacs overlays, overlays.texmacs-with-gotor-support carries org-texmacs's
+TeXmacs overlay, and sources carries the four non-flake inputs.
 
-## Earlier wrapper/activation baseline
-Emarccs wrapper construction and site-start injection live in
-pkgs/emarccs/package.nix. Root overlays define emarccs and derive GTK/PGTK
-variants through override with their matching final Emacs. flake.nix directly
-exports lpkgs.overlays.default and inherits its packages; easyOverlay and
-perSystem.overlayAttrs are removed. easyOverlay's forced external prev could
-omit the local package definitions required by the old wrapper construction.
-The explicit export now composes package and wrapper definitions independently.
-Tests receive this exported overlay and import the same pkgs.path/config/system
-with only that overlay. Each <package>-overlay-equivalence check compares drvPath
-against the regular package during evaluation, then produces an empty result.
-No wrapper build dependency is introduced by the equality assertion. Native
-x86_64-linux independent overlay imports and all three new checks passed;
-missing exports and mismatched derivations were rejected by negative controls.
-Wrapper/smoke outputs were also successfully realized, using cached outputs at
-the final revision. The owner committed the fix and the worktree is clean.
+Package definitions for org-texmacs, org-roam-organize, org-roam-include and
+org-roam-blog belong to their upstream flake inputs; no local recipes remain
+for the three Org-roam packages, and their configuration packageRequires are
+retained. Emarccs keeps consumer-specific customization: a local org-texmacs
+overlay leaf that only selects the TeXmacs program, local packages built from
+flake sources (org, org-include-inline, org-workbench), local overrides
+(consult, ripgrep, treesit-auto, haskell-ts-mode), the configuration package
+and the three wrappers. It does not re-maintain recipes provided upstream.
 
-The preceding custom-package migration used melpaBuild for all seven former
-trivialBuild derivations, generating ELPA metadata/autoloads. Subsequently four
-source recipes moved to upstream inputs; this is historical builder context.
-Explicit files recipes use MELPA defaults; org-texmacs also includes its Scheme worker. The
-original trivialBuild gap and later narrowing-glob omission explain earlier
-missing interactive frontend commands; see current.md for evidence and limits.
-This section supersedes older builder/layout statements in the historical
-migration phases below. README has now been synchronized with this architecture
-and committed; see current.md for documentation scope and static checks.
+The Org recipe bundles csl-locales: postPatch copies locales-*.xml into
+etc/csl/ and appends a source/CC BY-SA 3.0 note to etc/csl/README; its files
+selection includes etc/ so the locale data ships with the package, and
+meta.license declares gpl3Plus plus cc-by-sa-30. org-include-inline and org-workbench apply
+local byte-compile-warning patches and enable turnCompilationWarningToError.
 
-## Fandol-enabled TeXmacs variant
-After the committed upstream-overlay migration, pkgs/texmacs-fandol defines a
-symlinkJoin/makeWrapper variant of upstream texmacs-with-gotor-support plus
-explicit fandol font input. Earlier native PDF probes used plain TeXmacs as
-the base and do not validate this new patched build. The wrapper itself only
-prefixes TEXMACS_FONT_PATH with the full Fandol OTF directory. The previously
-inspected TeXmacs2.1.5 native database contains those families; this was not
-rechecked in the newly locked Nixpkgs. It neither replaces pkgs.texmacs nor
-sets global/process Fontconfig or user configuration locations. Discovery adds
-it to default and legacy groups, including legacyPackages.texmacs-fandol.
-The org-texmacs overlay explicitly resolves outer pkgs.texmacs-fandol and passes
-it as texmacs through prev_.org-texmacs.override. The local source recipe is
-removed; the upstream input owns the generic .override-able package definition.
-Font lookup is a TeXmacs packaging prerequisite; org-texmacs does not force a
-font/language policy in document trees. The earlier plain-base variant has fresh
-native PDF positives on x86_64-linux only; the new patched-base variant has not
-been rebuilt or runtime-tested.
-See current.md for provenance and validation limits.
+lib/mkMelpaBuild.nix wraps Nixpkgs melpaBuild to derive package metadata from
+the main Elisp file headers: version prefers Package-Version over Version
+(case-insensitive header match), melpaVersion defaults to version with "-pre"
+rewritten to "pre", homepage comes from the URL header. Caller-provided
+version/melpaVersion/meta.homepage win. The library file is <ename>.el at the
+source root, then lisp/<ename>.el, or an explicit libraryFile; a missing
+version header with no override throws. This is a local recipe helper, not a
+shared personal-nixpkgs interface or a MELPA dependency solver.
+
+## TeXmacs resource package and math syntax
+pkgs/texmacs-with-fandol-and-math-syntax replaces the former
+pkgs/texmacs-fandol symlinkJoin/makeWrapper font-prefix package
+(ef09c70, BREAKING-CHANGE). It applies overrideAttrs to the upstream
+texmacs-with-gotor-support from org-texmacs's TeXmacs overlay, preserving the
+GoToR fix. postPatch installs the complete Fandol OTF set from
+texlive.pkgs.fandol.tex into TeXmacs/fonts/truetype/fandol/ and the generated
+style into TeXmacs/packages/emarccs/emarccs-math.ts. There is no standalone
+font wrapper, no global replacement of pkgs.texmacs, and no modification of
+TeXmacs built-in styles.
+
+math/registry.nix holds native delimiter codes; math/default.nix generates the
+style string in pure Nix; writeText turns it into a build input exposed as
+passthru.mathStyle (independently buildable). No external generator or IFD.
+Codes are l<count><kind>/r<count><kind> with aliases for single-layer forms,
+plus n as the invisible delimiter: 47 codes in total. All 2208 ordered pairs
+except nn are generated; each pair yields one unary macro and one concat-
+prefixed variadic macro (4416 delimiter macros), plus an application macro.
+Exact names and the registry stay authoritative in source and README.
+
+passthru.tests provides resources and math-syntax. resources byte-compares the
+installed style with the generated file, checks the 4417 assign lines and
+representative definitions, rejects any nn macro, and byte-compares installed
+Fandol fonts against their source. math-syntax renders a native document using
+the custom macros and an equivalent reference document with explicit around*
+markup in headless TeXmacs (offscreen Qt, isolated HOME/TEXMACS_HOME_PATH),
+then compares extracted PDF text and single-page raster output. It keeps the
+180s render timeout with a 5s kill grace, does not depend on Emacs or
+Org-TeXmacs, and does not validate every delimiter glyph.
+
+The local org-texmacs overlay selects this package as the default program via
+prev_.org-texmacs.override { texmacs = ...; }; callers can still override the
+program. Responsibility split: Emarccs defines personal math notation and
+packages the style, Org-TeXmacs converts documents, TeXmacs renders math.
+Font resources, document language, math syntax and export conversion are
+distinct responsibilities.
 
 ## Current shared flake foundation
-The root uses personal-nixpkgs.lib.mkFlake inputs.nixpkgs, then an argument
-function supplying inputs/moduleLocation/llib/lpkgs, then the project module.
-Direct inputs are nixpkgs, personal-nixpkgs, org-texmacs, org-roam-organize,
-org-roam-include and org-roam-blog. flake-parts/treefmt-nix and the shared
-repository's relative local-nixpkgs subflakes are transitive. The explicit Git
-URL override for personal-nixpkgs/local-nixpkgs is removed; ./pkgs is now relative
-to its dependency parent, as represented by the lock node's parent locator.
-The helper injects the selected Nixpkgs lib and project libraries, imports
-shared package/tool and treefmt infrastructure, and exposes perSystem
-nixpkgs.overlays. Emarccs sets that option to its legacy group instead of
-manually constructing _module.args.pkgs. These details were inspected in the
-earlier locked source, without Nix evaluation/build verification. The newest
-shared-library input has not been independently re-inspected.
+The root uses personal-nixpkgs.lib.mkFlake inputs.nixpkgs with an argument
+function supplying inputs/moduleLocation/llib/lpkgs and the project module.
+llib merges the shared library's tests and packages with the local ./lib
+extension through mergeAttrsRecursive { allowOverrides = false; }; local
+lib/default.nix contributes mkMelpaBuild and tests.withProgress. The helper
+injects the selected Nixpkgs lib, imports shared package/tool/treefmt
+infrastructure and exposes perSystem nixpkgs.overlays; Emarccs sets that to
+its legacy group rather than constructing _module.args.pkgs manually.
+The explicit personal-nixpkgs/local-nixpkgs Git URL override is removed;
+lock nodes use dependency-relative path locators. All four package flakes and
+personal-nixpkgs declare inputs.nixpkgs.follows = "nixpkgs" at the root (the
+lock resolves personal-nixpkgs's nixpkgs through org-roam-blog's nixpkgs
+node). The lock still contains multiple transitive personal-nixpkgs
+instances (one per consumer flake); they have not been flattened or assumed
+to share one library revision.
 
 The shared treefmt module handles Nix and Elisp formatting (among others),
 uses elisp-autofmt for .el files, disables default exclusions and fails on
-unmatched files. Emarccs explicitly enables flakeCheck and excludes *.patch,
-.gitignore, LICENSE, README.org and flake.lock. The owner formatted 20 Elisp
-configuration/test files before restoring the check. No successful full check
-for this revision was supplied or executed by the agent.
+unmatched files. Emarccs enables flakeCheck and excludes only *.patch,
+LICENSE and flake.lock; *.el, README.org and .gitignore are formatted. The
+intermediate commit that excluded *.el (6ea3416) was superseded by the
+restored formatting check (40e0945); no successful full check for the final
+revision was supplied or executed by the agent.
 
 ## Current package groups and exports
-The flake supplies overlays.emacsPackages from org-texmacs and each of the three
-Org-roam inputs, plus org-texmacs overlays.texmacs, to both groups via
-groups.<name>.overlays (legacy shares default's concatenated list). The previously
-inspected helper applies external overlays before local ones. Local org-texmacs
-override preserves Fandol selection and its export-discovery leaf. The three
-Org-roam packages now have no local leaf; under that directory-constrained
-selector, external-only paths are not automatically legacy-exported. Current
-shared-library implementation/actual exports have not been revalidated since
-its update; confirm before promising those individual outputs.
-pkgs/default.nix uses llib.packages.mkOverlays with default and legacy groups;
-groups.legacy.export = true. Both groups use root pkgs/ and overlay.nix without
-exclusions. The flake applies lpkgs.overlays.legacy to its perSystem Nixpkgs,
-then exports pkgs.legacyPackages directly. Package selection/export is handled
-by the shared library from the final package set. The separately exposed
-flake.overlays.default remains lpkgs.overlays.default, without the legacy
-export member. This supersedes the earlier local mkLegacyPackages wrapper and
-manually composed legacy-export extension; the locked library no longer
-provides the mkLegacyPackages API. No Nix validation was run for this migration.
+pkgs/default.nix uses llib.packages.mkOverlays with default and legacy groups.
+Both groups apply the four external Emacs overlays (org-texmacs,
+org-roam-organize, org-roam-include, org-roam-blog) and the external TeXmacs
+overlay before local ones; legacy reuses default's list and adds export = true.
+extraArgs injects lib, sources, mkMelpaBuild, mkChecks and withProgress.
+flake.nix exposes flake.overlays.default = lpkgs.overlays.default, applies
+lpkgs.overlays.legacy per system, exports pkgs.legacyPackages directly and
+picks the three wrappers from pkgs. The migrated Org-roam packages have no
+local overlay leaf, so individual legacyPackages.emacsPackages.org-roam-*
+paths are not promised; local leaves (org, org-include-inline, org-workbench,
+org-texmacs, treesit-auto, consult, ripgrep, haskell-ts-mode, emarccs and the
+wrappers, texmacs-with-fandol-and-math-syntax) are discoverable for export.
+Actual exports have not been re-evaluated after the shared-library updates;
+confirm against the current selector before promising specific paths.
 
 ## Overlay constructor protocol
-The shared-library loader requires source overlays to be constructors. Package
-and test overlay files use { }: final: prev: ... even when they need no
-construction parameters. The loader instantiates this outer function before
-applying the resulting ordinary overlay. The owner committed the coordinated
-input/consumer migration; no Nix validation was run for it by the agent.
+The shared-library loader requires source overlays and test overlays to be
+constructors: { }: final: prev: ... even when no construction parameters are
+needed. The loader instantiates the outer function before applying the
+resulting ordinary overlay; extraArgs carries shared helpers.
 
-## Current test aggregation
-The shared llib.tests.mkChecks API internally discovers and composes
-test-overlay.nix registrations in tests/, constructs its own independent test
-scope and extracts derivations. Each leaf registers its test.nix
-through that scope's callPackage. tests/default.nix calls mkChecks per wrapper,
-explicitly injecting lib/tools and matching wrapper/configuration/grammar/
-standalone-overlay package references via args, then prefixes names with the
-wrapper name and "-". No public tests.mkOverlays or caller-built scope remains.
-The standalone-overlay package import remains independent of already configured
-pkgs. Optional checks are unused here; derivation-valued helper args are not
-exported as extra checks. Test bodies and variant selection remain unchanged.
+## Package-owned tests and flake aggregation
+Tests are owned by the object under test; the top-level flake aggregates a
+finite package tree and checks its own contracts. pkgs/emacsPackages/emarccs/
+package.nix builds the configuration package via melpaBuild, whose normal
+install/compile flow is the compile check (no separate elisp-byte-compile
+test exists). doCheck runs three independent batch Emacs processes in
+checkPhase, each reported by withProgress: initialization (four ERT cases
+against package sources), snippets (seven behavior ERT cases with real
+package activation) and package-lint (all 18 source libraries, main file
+emarccs.el). package-lint arrives via checkInputs, not runtime
+packageRequires; test files live outside src and are not part of the MELPA
+source archive. Existing explicit, narrow lint exemptions remain; compile
+warnings are still not failures (turnCompilationWarningToError = false).
 
-Flattened tool aliases are adapted explicitly in test-overlay.nix; the lint
-check accepts package-lint, passed from args.emacsPackagesPackageLint, avoiding
-a same-name dependency/check fixed-point collision.
+pkgs/emarccs/tests/ holds startup-smoke, startup-order and
+package-availability-smoke. Tests use the final wrapper or its generated
+startup form together with the matching configuration package. The three
+wrapper variants share one definition and instantiate it per variant through
+override. startup-smoke verifies batch startup leaves configuration
+untouched, the installed configuration package resolves from the supplied
+directory, requiring emarccs stays lazy, and a real package-activation run
+with substituted initializers. startup-order runs three ERT cases against the
+actual generated site-start form: phase order, hook uniqueness and disabled
+user init. package-availability-smoke locates every declared packageRequires
+library (auctex mapped to tex-site); it does not verify frontend autoloads or
+full runtime behavior. Real package activation, substituted initializers and
+complete interactive startup remain distinct scenarios.
 
-## Committed Nixpkgs migration
-The committed 2026-10-22 migration supersedes the earlier Twist architecture
-below: Nixpkgs emacsPackagesFor/withPackages now consumes a local emarccs
-trivialBuild package at pkgs/emacsPackages/emarccs, with local dependency
-overlays. The wrapper's injected site-start owns early initialization and a
-before-init-hook registration; emarccs.el only requires interface definitions.
-Old bootstrap/advice scheduling, root lisp/, Twist runtime integration and
-lock/update apps are removed; obsolete inputs were removed in a follow-up. Tests have
-now been adapted and reconnected for all three Emacs outputs through explicit
-configurationPackage/grammarPackage parameters. flake.nix passes only
-{ pkgs, packages = config.packages, lib, llib, overlay } to tests/, which owns
-check naming and per-test callPackage injection. Variant-specific package references come
-from each wrapper.emacs.pkgs, reusing Nixpkgs' existing scope exposure without
-custom passthru or a duplicate variant map. Individual tests declare tools
-instead of accepting the whole pkgs. Sources come from the package's src;
-runtime/ERT use installed libraries and actual generated site-start forms.
-The new 19-check flake run passed on x86_64-linux, including seven ERT cases per
-variant, 17-library lint, 75 dependency availability and 334 grammar parsers.
-See current.md for evidence, preserved lint exemptions and verification limits.
-Runtime program supply follows ownership: Consult's local override propagates
-GNU grep and ripgrep, and the ripgrep Elisp override propagates system ripgrep.
-Their overlays explicitly select outer pkgs.ripgrep; Emacs scope lookup
-must not accidentally choose the Elisp package. Built-in Dired has no separate
-package derivation; flake withPackages includes pkgs.coreutils alongside
-emarccs. Nixpkgs' wrapper supports ordinary derivations and links their bin/
-into its runtime executable directory. Startup smoke now verifies this with a
-clean incoming PATH, plus real package activation without preloading cl-lib.
-The removed old Citar patch did not reproduce a real-activation failure.
-The owner intends lib/packages.nix to become a standalone cross-repository Nix
-library. Some generic logic can intentionally be unused by Emarccs; assess it
-against that reusable scope rather than treating lack of local callers as a
-cleanup defect. The owner identified ~/nixos/pkgs/lib/ as another practice to
-consult during library design/review. A subsequent read-only comparison found
-the two packages.nix files byte-identical (5,518 bytes each) before the owner's
-subsequent discovery changes; no broader NixOS repository behavior was inspected.
-The owner needs legacyPackages to expose pure overrides for individual builds.
-Emarccs discovery selects using overlay files and package-set derivation
-attributes, not package.nix presence. The former mkLegacyPackages and retained
-mkOverlays interfaces used overlayFile (private parameters use overlayFile_); callers in
-pkgs/default.nix supply "overlay.nix". Pure overrides may be inlined into their
-overlay without losing export eligibility. The rename did not modify NixOS.
-A subsequent committed edit inlines the pure Consult, ripgrep and treesit-auto
-overrides into overlay.nix and removes their package.nix files. The grammar
-patch remains beside treesit-auto's overlay; standalone package definitions
-elsewhere retain package.nix. The owner reports full pkgs/ build validation
-passed with every target using cached outputs; the agent confirmed the committed
-change and clean project worktree. See current.md for evidence attribution.
-Final revalidation of the staged repository passed nix flake check on
-x86_64-linux after these discovery/naming edits, reusing all existing check
-outputs. The owner also reports all build targets passed. See current.md for
-validation attribution, scope and the single-commit assessment.
-A newer committed cleanup removes the remaining unused Twist/registry/nix-to-lisp
-inputs and their obsolete lock graph, leaving nixpkgs, flake-parts and treefmt-nix.
-llib directly imports the local library. Retained input revisions are unchanged;
-this cleanup has only static review so far. Its commit and clean project
-worktree were confirmed read-only. README remains deferred.
-The latest committed change extracts lib/packages.nix to the personal-nixpkgs
-input, leaving an empty local lib/default.nix extension. External and local
-libraries are combined through the external mergeAttrsRecursive helper with
-allowOverrides = false; consumer interfaces remain llib.packages. The input's
-nixpkgs/flake-parts/treefmt-nix all follow this repository. Existing input pins
-are unchanged. Owner-authorized read-only inspection of ~/nixpkgs verified the
-external exports and merge semantics; its three library files match the locked
-input, and packages.nix matches the removed Emarccs implementation byte-for-byte.
-The reference checkout's newer commit only adds its own checks wiring.
-The extraction commit and clean project worktree are confirmed; Nix integration
-evaluation/build behavior for the extraction has not been verified.
-The owner committed the migration as "build(nix): replace Twist packaging with
-Nixpkgs"; the project worktree was confirmed clean. The remaining sections
-retain the preceding Twist baseline as historical context; where they conflict,
-this section and current.md describe the committed architecture.
+treesit-auto owns its grammar runtime test (passthru.tests.grammars-runtime),
+run in a minimal wrapper containing only treesit-auto and its propagated
+dependencies. It enumerates the supplied libtree-sitter-*.so libraries and
+checks library discovery plus parser creation, without adding directories to
+the lookup path; it does not claim real source parsing, font-lock, indentation
+or major-mode correctness.
+
+The TeXmacs package owns resources and math-syntax as described above.
+Top-level tests/default.nix invokes llib.tests.mkChecks once, aggregating the
+recursive passthru.tests tree from the exported legacyPackages plus its own
+test-overlay registrations (overlay-equivalence, with-progress), flattening
+paths with "-". overlay-equivalence imports pkgs.path with only the exported
+default overlay and recursively compares drvPaths during evaluation, then
+produces an empty result. treefmt is the flake formatter check. No traversal
+of the whole of Nixpkgs occurs.
+
+## withProgress contract
+lib/withProgress.nix, exposed as llib.tests.withProgress, is a local Bash
+code-generation helper. It takes a nonempty name, a positive interval
+(default 10) and text as either a Bash source string or a path read and
+embedded at evaluation time. It requires Bash >= 5.3. It reports start,
+periodic heartbeat and final passed/failed with elapsed time, reporting both
+EPOCHREALTIME-derived signed realtime and BASH_MONOSECONDS monotonic elapsed
+values, and preserves the wrapped code's exit status. The original code
+inherits stdout/stderr, shell state and cwd; reporter output goes to stderr;
+no output proxying or caching. Two subshells isolate reporter state from the
+original code; a coproc with read -t provides the heartbeat and the EXIT trap
+reclaims the reporter without waiting for a full next interval. The helper
+creates no derivation, performs no test discovery or aggregation, imposes no
+timeout and does not manage the task process tree. A heartbeat does not prove
+progress and can affect Nix max-silent-time. The TeXmacs render timeout is
+part of that test itself, not a withProgress feature.
+
+## Org workflows and backend boundaries
+The final Org-roam root is org-directory/roam/, with the database under that
+root and dailies in journal/. All org-roam-organize registry records use
+:directory ".", so node types are expressed through registry entries, tags,
+templates and MOCs rather than physical subdirectories. The navigation MOC
+uses a fixed ID and the unified inbox name is "Not be Classified". Capture
+date templates use one shared format. Automatic DATE updates and their
+before-save hooks were removed; org-roam-timestamps remains enabled with
+timestamp-parent-file and remember-timestamps, a different mechanism.
+Flattening the node-type directories and restoring the independent roam/ root
+are complementary decisions. No claim is made that personal notes have been
+migrated, and real note libraries are not inspected or modified by memory
+work.
+
+org-agenda-files contains org-directory and the explicit gtd/ directory. The
+emarccs--org-agenda-files-advice constructor takes excluded-patterns and
+returns a lexical-closure advice with a stable name. It delegates native
+Org handling for restriction, archives, list-file entries and unavailable
+files; for directory sources it recursively expands to directory lists
+(excluding hidden directories and not descending into symlinked directories),
+binds org-agenda-files dynamically and calls the native function. Exclusion
+globs expand relative to org-directory and only filter recursively discovered
+directories; explicit entries are never excluded. The current exclusions are
+("cache"); the explicit gtd/ entry is kept for clients that read the variable
+directly, even though it lies under the recursive root.
+
+LaTeX output filters are registered only for backends derived from latex via
+org-export-derived-backend-p inside org-export-filter-options-functions:
+TOC placement after abstract/title and date angle-bracket cleanup. They do
+not apply to TeXmacs or HTML exports. Backend-specific output transformation
+is kept separate from generic Org preparation; personal LaTeX macro-package
+evolution is not part of this repository's architecture record.
+
+The Org-TeXmacs block in emarccs-org.el records consumer choices: export menu
+keys, worker start/request timeouts (60/10), native citation processor with
+plain bibliography style, typed references, document styles
+generic/smart-ref/emarccs-math, A4 with 12.7mm margins, relative PDF links and
+org-file-to-PDF linking, scheme-mode edit mode and fragment tags including
+reference and rcl-table. These are personal configuration, not upstream
+defaults or protocol. The emarccs--org-extension-block layer still exists;
+the new canonical statement TYPE snippets do not extend the old ext namespace,
+which neither removes the layer nor migrates old documents. Fragment
+recognition and independent editing are outside the snippet reorganization.
+
+## Snippet architecture
+Completion and snippet expansion are separate responsibilities: Company
+configuration lives in emarccs-basic (candidate-driven completion), while
+emarccs-snippet (renamed from emarccs-complete, no compatibility alias)
+manages AAS, LAAS and YASnippet. The snippet module enables yas-minor-mode
+and AAS in LaTeX and Org buffers, and LAAS with its upstream default
+basic/subscript/fraction/accent snippets explicitly disabled (set to nil,
+not merely cleared) plus local laas-mode snippets.
+
+AAS native yas expansions are used: a generic Org block constructor defined
+in aas :config returns (list 'yas (format "#+begin_${1:%s}%s\n$0\n#+end_$1\n"
+name parameters)), where the opening block name is an editable field, the
+closing name mirrors it, $0 is the body position and parameters sit outside
+the mirrored field. Starred variants come from editing the name field, not
+separate triggers. The constructor supports 10 general/math/floating block
+triggers and 16 formal statement triggers; statements use the Org-TeXmacs
+canonical #+begin_statement TYPE form without extending the ext namespace.
+AAS registration needs no YASnippet load order, and no constructor closure or
+declare-function for expansion exists; LAAS's package dependency on AAS is
+separate from AAS's optional use of YASnippet expansion.
+
+Org blocks use the ;; prefix; ; remains for LaTeX structures and plain text.
+;abst/;comm became ;;abst/;;comm, ;eq remains LaTeX inline math while ;;eq is
+the Org equation block; their suffix overlap is covered by input tests.
+Existing LaTeX fragment/environment commands (insert-based, unchanged),
+parameterized math structures, delimiters, Physics2 macros and the long-vowel
+text snippets are retained. Custom Greek/Hebrew letters and the eight
+single-symbol math snippets (;uniti ;hom ;end ;id ;ker ;im ;tr ;times) are
+removed. No tag-specific STM snippets were added: STM has a uniform
+S-expression structure and its macro semantics belong to the TeXmacs style,
+not the snippet layer; only Org ;par -> (|) exists for explicit
+S-expressions. Scheme and Scheme Tree-sitter modes deliberately do not enable
+AAS/LAAS/YASnippet; parentheses and structure editing rely on ordinary
+Scheme/Lisp editing facilities, and no electric-pair configuration was added.
+
+Seven behavior ERT cases in the package's snippets check drive real mode
+hooks and key input through AAS, LAAS, YASnippet and execute-kbd-macro:
+org-blocks (all 26 block triggers with wrapper, field jump and body),
+block-name-mirror (equation*, figure*, table* and a custom name),
+parentheses, scheme-isolation (scheme-mode only; the Tree-sitter variant is
+not separately exercised), retained-latex (a subset of LaTeX behaviors),
+removed-symbols (disabled defaults plus removed triggers stay literal) and
+retained-text. Coverage follows the actual tests, not a per-trigger matrix.
+
+## Historical Scheme isolation failure and potential AAS defect
+An intermediate implementation enabled AAS/YASnippet in Scheme buffers to
+reuse ;par. A new seven-case ERT had six passes; scheme-isolation failed:
+with LAAS disabled in Scheme, typing ;;eq still expanded to an Org equation
+block. Source analysis of upstream AAS found aas--current-prefix-maps
+declared with defvar-local and a (list nil) default, while matching mutates
+the list in place (nconc/setcar/setcdr); defvar-local does not guarantee each
+buffer a fresh mutable list on first read, so mutation of the shared default
+can leak into later buffers, and the post-expansion reassignment does not
+restore an already-mutated default object. Running several ERT cases in one
+Emacs process makes this visible, but that is not a test defect: interactive
+Emacs also shares one process across buffers. The proposed fixes (setq-local
+in an aas-mode hook, or nil default with lazy per-buffer initialization
+upstream) were not adopted; no AAS patch or upstream PR exists.
+The final decision removed AAS from Scheme entirely; two later test failures
+were stale expectations and were corrected. Owner-reported final tests and
+builds passed for the committed configuration. Distinguish the observed
+anomaly, the strong static hypothesis about shared mutable defaults, the
+absence of an independent minimal AAS-only reproduction, the unverified
+upstream fix, and the fact that the final ERT validates Emarccs configuration
+only. A future investigation should first build an AAS-only two-buffer
+reproduction before considering an upstream patch.
+
+## Earlier wrapper/activation baseline
+Emarccs wrapper construction and site-start injection live in
+pkgs/emarccs/package.nix: emacsPackagesFor/withPackages with emarccs and
+coreutils, then overrideAttrs replacing the site-start insertion marker with
+the guarded startup form (package-activate-all, require emarccs,
+emarccs-initialize-early, before-init-hook registration) plus the two
+declare-function forms. Root overlays define emarccs and derive GTK/PGTK
+variants through override with the matching final Emacs. flake.nix exports
+lpkgs.overlays.default directly; the former easyOverlay strategy, whose forced
+external prev omitted local package definitions, is removed. Overlay
+equivalence checks and wrapper/smoke realizations under the independent
+overlay import were validated on x86_64-linux at the committed revision with
+cached outputs; the owner committed the fix.
+
+The preceding custom-package migration used melpaBuild for all seven former
+trivialBuild derivations, generating ELPA metadata/autoloads; subsequently
+the org-texmacs and three Org-roam source recipes moved to upstream inputs,
+leaving historical builder context. Explicit files recipes use MELPA
+defaults; org-texmacs also packages its Scheme worker upstream. The original
+trivialBuild gap and later narrowed-glob omission explain earlier missing
+interactive frontend commands; see current.md for evidence and limits.
 
 ## Purpose and initialization
 Personal configuration targeting Emacs 31.1+, organized as an Elisp source
-package under the existing flat lisp/ directory. Source normalization does
-not add a Nix derivation, distribution archive or complete Package-Requires
-closure. Third-party packages still come from the Twist wrapper; Emarccs
-itself is loaded directly from source. No root native init.el/early-init.el
-entry or straight bootstrap remains.
-
-emarccs.el is the sole startup registration owner. Requiring it loads the
-bootstrap/early-init/init interface definitions and installs one named
-emarccs-startup :before advice on startup--load-user-init-file. It does not
-load Org, AUCTeX or the functional configuration modules. Reloading the entry
-checks the advice name to avoid stacking; the name supports lookup/removal.
-
-emarccs-bootstrap.el only defines the adapter. Non-nil init-file-user allows
-emarccs-initialize-early in the early phase and emarccs-initialize in the
-load-defaults phase. Native :before advice preserves original arguments,
-execution and return values. The flake's generated site-start only adds lisp/
-to load-path with eval-and-compile and requires emarccs; it no longer selects
-initializers, embeds early-init paths or registers the advice itself.
-
-The early initializer preserves existing frame/package settings and applies
-them once. The regular initializer requires use-package, disables automatic
-ensuring, requires functional modules in their established order and loads
-optional custom.el last. It prevents recursive initialization, skips successful
-repeat calls and marks completion only after success. Functional module hooks
-and advice remain local to those modules. Actual macro users explicitly require
-use-package at compile time rather than depending on compilation order.
+package under pkgs/emacsPackages/emarccs/lisp/ (18 libraries). emarccs.el
+only requires the early-init and init interfaces; the wrapper owns startup
+scheduling and requiring the entry never initializes configuration.
+emarccs-initialize-early applies settings once and preserves later
+overrides; emarccs-initialize requires use-package with always-ensure nil,
+loads functional modules in fixed order (basic, help, theme, org, tex,
+snippet, lisp, org-roam, org-roam-organize, org-latex-preview, feed,
+org-roam-blog, debug), loads optional custom.el last, guards recursion and
+repeat calls and marks completion only after success. Changing the module
+order can change initialization semantics.
 
 Persistent frame defaults are separate from first-frame bootstrap colors;
 theme configuration owns lasting colors. Graphical font sizing prefers a
 nominal 4 mm face parameter when physical dimensions are valid, accepting
 list or dotted-pair mm-size data, then falls back to the smaller pixel ratio
-against 1920x1080 at height 110. These are font parameters, not measured glyph
-dimensions.
+against 1920x1080 at height 110. These are font parameters, not measured
+glyph dimensions.
 
-## Package ownership and startup adapter
-Files/features use emarccs-<name>, with emarccs.el providing emarccs as the main
+## Naming and ownership conventions
+Files/features use emarccs-<name>, with emarccs.el providing the main
 library. The double hyphen in the private extension module and inside symbols
 such as emarccs--org-extension-block--source-namespace marks distinct privacy
-scopes; it is not planned for flattening. The former pure-emacs/straight entry,
-recipe convention and split shared/twist source directories were removed in
-the preceding accepted step, not left unmaintained.
+scopes; emarccs--org-roam-blog-* is deliberately preserved for the same
+reason and is not a flattening defect. Public/private helper ownership
+follows provided features and domain, using one/two hyphens respectively;
+underscore lexical locals are a separate convention.
 
-Loading interface definitions, installing startup scheduling and executing
-configuration are separate responsibilities. Future hooks or a startup.el
-patch should change the entry's registration logic while retaining initializer
-interfaces; neither alternative is introduced now. Do not reset
-user-emacs-directory to emulate the startup boundary.
-
-The flake uses Twist makeEnv with explicit package seeds and locked dependency
-closure, not blanket alwaysEnsure or parsing real init.el for :ensure.
-Installed packages do not automatically enable their configurations.
-Native compilation ahead is enabled. GTK/PGTK packages now use generic
-`pkgs.emacs-gtk` and `pkgs.emacs-pgtk`, sharing `locks/emacs`. Per-variant
-packages, lock/update apps, checks and same-platform overlays derive from
-common context. This replaces the former Home Manager file-deployment interface.
-
-## Nix interfaces and package adaptation
-Flake-parts `config.context` is a typed function result with raw elispkgs and
-nested variant package/lockDir options. It replaces the old flake.context output.
-This centralizes repeated inputs for packages, apps and checks. The owner's
-retrospective clarification identifies the broader goal: keep configuration data
-within an explicit module system wherever practical, instead of maintaining a
-parallel non-module configuration source. Prior NixOS practice may have informed
-this choice. Options/submodules express ownership and constraints; ordinary
-functions still transform data and construct outputs. This is an architectural
-preference, not a requirement to turn every local value or function into an option.
-Nixpkgs helpers are `lib`; project helpers are `llib`, instantiated through
-`self.lib { inherit lib; }`. `lib/default.nix` receives nixpkgs lib rather than
-capturing pkgs. Generated variant names/configurations and unique-source-line
-lookup are reusable helper responsibilities. The lib/llib distinction clarifies
-helper ownership; it supports the configuration-data goal rather than defining it.
-
-`pkgs/default.nix` owns explicit packages, recipe discovery and override assembly.
-Local copied MELPA recipes outrank MELPA, GNU and NonGNU registries. Files are
-renamed from melpa-recipe.el to package names. Copying regular files addresses
-the historically reproduced reader filter that discarded symlink entries.
-This version-specific discovery constraint is distinct from MELPA source-boundary
-restrictions on links outside a source repository. Do not generalize it into
-a rejection of all symlinks or assume an upstream Nix-native registry exists.
-Savannah input and registry URLs are rewritten through the HTTPS mirror.
-
-Input overrides own recipe/package metadata and Elisp dependency edges.
-`scope.overrideAttrs` owns native derivation changes; `scope.executablePackages`
-contributes runtime tools, aggregated and deduplicated with inherited tools.
-Recovered user decisions favor local consumer ownership: each package may declare
-the same tool independently, and the assembly layer uses lib.unique to deduplicate.
-Consumers should not need to coordinate a manually deduplicated global tool list.
-Runtime environment tools belong beside derivation adjustments in scope, not
-inside an individual Elisp derivation's attributes.
-Dired owns coreutils, search packages own search tools, org-texmacs owns the
-font-enabled TeXmacs executable. SLY requests sbcl by name; no package-local
-SBCL executable contribution is established by this tree.
-Directory assertions require at least a MELPA recipe or an override in each
-package directory, and recipe-defined packages in the explicit list.
-Override-only built-ins remain valid.
-The owner clarified that directory/framework constraints should be enforced
-during relevant Nix evaluation, before invalid structure reaches package builds
-or runtime. The generic predicate evaluator receives the root, packages and
-rules from its caller; recipe filenames are policy in pkgs/default.nix rather
-than hardcoded validator knowledge. Because evaluation is lazy, assertions run
-when the asserted expression is evaluated, not merely when flake.nix is parsed.
-
-The root Twist Org recipe and lock now select the official bzg/org-mode main
-branch, replacing tecosaur/dev. The existing pre-build version-metadata helper
-still invokes an exact Emacs binary. The owner supplied a successful root
-nix flake check after this switch: x86_64-linux GTK/PGTK checks and their
-required builds passed, with an Org 10.0-pre derivation visible in the build
-output. The separate independent Nixpkgs experiment used Org 9.8.10; its result
-must not be substituted for this owner-run upstream-source validation.
-Important adaptations also include explicit AUCTeX manual builds with native TeX/Perl/Git;
-citar's cl-lib autoload prerequisite; package-specific writable HOME needs;
-and laas/math-symbol-lists dependency metadata. The company source patch corrects
-Texinfo example placement for the updated locked package. pdf-tools builds native
-epdfinfo with required native/development inputs and exposes it to the package.
-The superseded string-context rendering workaround and placeholder AUCTeX manuals
-are historical experiments, not current design.
+Nixpkgs helpers are lib; project helpers are lllib, instantiated through
+mergeAttrsRecursive as described above. Local extension helpers
+(mkMelpaBuild, withProgress) are not shared-library interfaces.
 
 ## Shared behavior and workflow boundaries
-Load order is basic, help, theme, Org, TeX, completion/snippets, Lisp, Org-roam,
-organization/citation, LaTeX preview, feed, org-roam-blog and debug, then custom.
-Changing this order can change initialization semantics.
-
 Completion/navigation combines Consult, Vertico, Orderless, Marginalia and
-Embark. Dirvish, structural highlighting, large-file support, whitespace cleanup
-and margin diff-hl serve editing. Koishi setup and Doom modeline replace the
-former multi-theme switcher. Common Lisp uses SLY/SBCL; Haskell Tree-sitter mode
-uses Eglot. PDF files use pdf-view-mode and themed rendering. Expanded snippets
-offer left/right delimiters alongside ab variants. Package availability does
-not prove a language server, external executable or live workflow is configured.
+Embark. Dirvish, structural highlighting, large-file support, whitespace
+cleanup and margin diff-hl serve editing. Koishi setup and Doom modeline
+replace the former multi-theme switcher. Common Lisp uses SLY/SBCL; Haskell
+Tree-sitter mode uses Eglot. PDF files use pdf-view-mode and themed
+rendering. Package availability does not prove a language server, external
+executable or live workflow is configured.
 
-Org owns capture, agenda/GTD, export and date helpers, with BibLaTeX for LaTeX
-citations and a corrected bookmark-default-file. GTD uses its command center
-and a complete done-state mapping instead of the earlier custom ID advice.
-Org-roam owns database/autosync, capture, timestamps, post queries and native
-forward-link navigation; consult-org-roam was removed.
-Organization registries and org-roam-include replace legacy flat organization
-settings. The organization module owns Citar/Citar-Embark and declarative Citar
-literature backend fields with bibliography support. The handwritten provider
-is gone; Citar-Org-Roam remains declared but disabled. Citar waits for Org and
-Org-roam to avoid the earlier unbound-directory failure.
+Org owns capture, agenda/GTD, export and date helpers, with BibLaTeX for
+LaTeX citations and a corrected bookmark-default-file. GTD uses its command
+center and a complete done-state mapping instead of the earlier custom ID
+advice. Org-roam owns database/autosync, capture, timestamps, post queries
+and native forward-link navigation; consult-org-roam was removed.
+Organization registries and org-roam-include replace legacy flat
+organization settings. The organization module owns Citar/Citar-Embark and
+declarative Citar literature backend fields with bibliography support. The
+handwritten provider is gone; Citar-Org-Roam remains declared but disabled.
+Citar waits for Org and Org-roam to avoid the earlier unbound-directory
+failure.
 
-Publishing orchestration belongs to external org-roam-blog. Recovered historical
-decisions describe extraction as a responsibility and side-effect boundary:
-Emarccs configures the site, org-roam-organize manages nodes/literature, and the
-publishing package orchestrates output. The local module owns presentation,
-content groups, roots, export bindings, static assets and article/sitemap
-renderers. Old native publishing advice and the local after-save hook were removed.
+Publishing orchestration belongs to external org-roam-blog. Emarccs
+configures the site, org-roam-organize manages nodes/literature, and the
+publishing package orchestrates output. The Org-roam DB remains the sole
+source of publishable level-0 nodes without a directory-scan fallback;
+handwritten index and about pages are legitimate nodes. Canonical output
+should preserve source-relative structure for existing links; generated
+public entries/redirects need not determine canonical content paths. Node
+metadata comes from the DB, while position-sensitive #+INDEX annotations
+belong to the export parse tree. Publishing should leave no permanent global
+project-list changes, advice, export filters or save hooks, while still
+running normal Org export hooks/filters including citation preprocessing.
+These are recovered design requirements, not claims about external-package
+verification. The former orgraph aggregate is gone: TeX owns export tools,
+preview owns preview, and Org-roam owns date/post-query behavior. The former
+AI module and unused package definitions are removed.
 
-The recovered publishing requirements make the Org-roam DB the sole source of
-publishable level-0 nodes, without a directory-scan fallback. Handwritten index
-and about pages remain legitimate nodes. Canonical output should preserve
-source-relative structure for existing links; generated public entries/redirects
-need not determine canonical content paths. Node metadata comes from the DB,
-while position-sensitive #+INDEX annotations belong to the export parse tree.
-Plan output and detect target collisions before writing.
-Publishing should leave no permanent global project-list changes, advice, export
-filters or save hooks. This scoped operation must still run normal Org Export
-hooks/filters, including citation preprocessing. Git deployment remains outside
-publishing orchestration. These are recovered design requirements, not a claim
-that every external-package behavior has been independently verified here.
-The former orgraph aggregate is gone: TeX owns export tools, preview owns preview,
-and Org-roam owns date/post-query behavior. Org Element is required at use sites.
-Public/private helper ownership follows provided features and domain, using
-one/two hyphens respectively; underscore lexical locals are a separate convention.
-The former AI module and unused package definitions are removed.
+The custom eq: Org link type and its jump/export/display logic were removed
+(26b05eb, BREAKING-CHANGE); documents using it must migrate to native Org
+references or other supported mechanisms.
 
 ## Extension-block semantics
-The project-local layer accepts `#+begin_ext KIND :KEY VALUE`. Recovered user
+The project-local layer accepts #+begin_ext KIND :KEY VALUE. Recovered user
 decisions chose one namespace to avoid native block-name collisions such as
 example while keeping Org documents canonical and leaving the native parser
 unchanged. Native special-block types and raw type/parameters are preserved;
-normalization adds `:extension-kind` and validated `:extension-parameters`.
-Registry spelling is canonical with case-insensitive
-lookup; unknown, duplicate or valueless parameters are errors.
-Values remain source-form Org secondary strings until backend export.
-HTML/LaTeX can lower to KIND or preserve the distinct org-extension-block export
-namespace; local configuration preserves it. The stable writing syntax is
-deliberately independent of a backend's representation name. preserve-namespace
-changes export lowering only, not canonical source or normalized AST semantics.
-Source naming, normalized semantics and backend output have separate
-responsibilities. HTML lowers a copied node;
-LaTeX parameter export performs math wrapping and rejects conflicting ATTR_LATEX
-options. Advice supports delayed exporter activation and feature unload cleanup.
-Kinds include reply, mathematical statements, exercise/exercise*, proof and
-solution. This is not a new native Org AST element type.
+normalization adds :extension-kind and validated :extension-parameters.
+Registry spelling is canonical with case-insensitive lookup; unknown,
+duplicate or valueless parameters are errors. Values remain source-form Org
+secondary strings until backend export. HTML/LaTeX can lower to KIND or
+preserve the distinct org-extension-block export namespace; local
+configuration preserves it. The stable writing syntax is deliberately
+independent of a backend's representation name. preserve-namespace changes
+export lowering only, not canonical source or normalized AST semantics.
+HTML lowers a copied node; LaTeX parameter export performs math wrapping and
+rejects conflicting ATTR_LATEX options. Advice supports delayed exporter
+activation and feature unload cleanup. Kinds include reply, mathematical
+statements, exercise/exercise*, proof and solution. This is not a new native
+Org AST element type. New statement snippets emit Org-TeXmacs canonical
+statement blocks instead of extending this namespace.
 
 Recovered user reports describe ordinary inline markup and links working in
 HTML/LaTeX secondary-string export; this is limited historical evidence, not
-acceptance of every secondary syntax.
-Reference material reports that citations inside parameters can miss document-wide
-citation preprocessing because synthetic secondary AST is parsed during block
-transcoding. No corresponding fix is established by this reconstruction; do not
-claim complete parameter citation support. Reassess the export pipeline before
+acceptance of every secondary syntax. Reference material reports that
+citations inside parameters can miss document-wide citation preprocessing
+because synthetic secondary AST is parsed during block transcoding. No
+corresponding fix is established by this reconstruction; do not claim
+complete parameter citation support. Reassess the export pipeline before
 changing it.
 
+## TeXmacs historical validation boundaries
+All font/cache/language probes described in current.md targeted the former
+texmacs-fandol symlinkJoin wrapper (TEXMACS_FONT_PATH prefixing), the
+then-current org-texmacs source 2c1c7d58 and TeXmacs 2.1.5, not the new
+texmacs-with-fandol-and-math-syntax resource package. In particular:
+
+- Fresh-profile Fandol PDF positives used the plain-base wrapper.
+- The existing-profile <#...> reproduction and its font-database-extend-local
+  repair, incremental registration results, --delete-font-cache behavior and
+  the recommendation for documented manual cache clearing all apply to that
+  old wrapper and its TEXMACS_FONT_PATH approach.
+- The long-Chinese line-breaking matrix shows document language (initial
+  language=chinese) fixes clipping while FandolSong font selection alone does
+  not, and that the tested org-texmacs source rejects #+LANGUAGE: zh-CN. It
+  did not test the new resource package.
+
+None of these probes proves the new resource layout has the same
+existing-profile behavior, nor that it is fixed. Do not adopt cache migration
+helpers, global Chinese language defaults, Source Han font plans or any
+historical recommendation without owner confirmation.
+
+## Nixpkgs migration and earlier history
+The committed 2026-10-22 migration superseded the Twist architecture:
+Nixpkgs emacsPackagesFor/withPackages consumes the local emarccs package with
+local dependency overlays; the wrapper's injected site-start owns early
+initialization and before-init-hook registration; emarccs.el only requires
+interface definitions. Old bootstrap/advice scheduling, root lisp/, Twist
+runtime integration and lock/update apps are removed, and obsolete
+Twist/registry inputs were removed in follow-ups. lib/packages.nix was
+extracted to the personal-nixpkgs input; the local library extension and the
+external merge combine as described above. Overlay discovery selects using
+overlay files and package-set derivation attributes, not package.nix
+presence; pure overrides may be inlined into their overlay without losing
+legacy export eligibility. Consult propagates GNU grep and ripgrep; the
+ripgrep Elisp override propagates system ripgrep from outer pkgs; Dired's
+coreutils join the wrapper via withPackages. Earlier Twist-era detail
+(registries, recipe conventions, per-variant locks, config.context) is
+preserved in first-parent history and is not current design.
+
 ## Validation and repository boundaries
-treesit-auto receives a package-local patch using unique-source-anchor lookup.
-It adds the aggregate with-all-grammars library path instead of copying individual
-parsers or maintaining a shortlist. Unique exact matching is not fuzzy patching.
-Six project check families cover independent byte compilation, startup
-injection, adapter/initializer behavior, source package lint, library
-availability and produced-grammar loadability. Compilation loads package
-autoloads, supplies local feature placeholders and uses disposable output
-files; it does not initialize the complete configuration. Its input remains
-lisp/ and includes all eighteen source libraries. Existing warnings are not
-fatal; passing byte compilation is not a warning-free claim.
+Static source verification for the current consolidation inspected the
+37-commit range 534188d..8abd482 (diffs of the architectural anchors and the
+final trees of flake.nix, pkgs/default.nix, lib/, the TeXmacs package, the
+emarccs package and tests, treesit-auto, Org workflow and snippet sources,
+README and .gitignore) with diff --check. No Nix evaluation, build, test,
+formatter run or network access was performed by the agent for this state.
+Owner-reported validation covers the final snippet implementation (tests and
+builds all passed); it is owner-reported, was not repeated by the agent and
+does not extend to other platforms or complete interactive environments.
+No runtime result is recorded for the TeXmacs resource package or its tests.
 
-Startup smoke greps the wrapper's generated site-start for the source path
-and main entry, then checks that emarccs was loaded, its named advice and
-initializer interfaces exist, and batch startup has not run configuration.
-Startup-order uses bounded --batch -Q ERT with substitutes to check lazy entry
-loading, unique/removable registration, phase ordering, native parameter/return
-semantics, disabled user initialization, repeat/recursive initialization and
-failure retry. No interactive session or complete personal configuration is
-required by that test.
-
-Package-lint uses independent Nixpkgs test tooling and the public buffer API,
-with emarccs.el as main file. It checks all lisp libraries. The owner approved
-only reserved-key and with-eval-after-load diagnostics in functional personal
-configuration modules as explicit, printed exemptions; every other diagnostic
-fails and the four initialization/entry libraries are strict. This intermediate
-source-package stage declares only verified metadata, not a full independently
-installable third-party dependency closure.
-
-Grammar checks enumerate actual output libraries, test language availability
-and create parsers with diagnostic symbol candidates. They do not prove real
-source parsing, modes, font locking or indentation. All six GTK/PGTK families
-and treefmt passed in the agent-run x86_64-linux selected-source-snapshot check
-for the source-normalization implementation before final README cleanup and
-the Nix smoke minimum-version parameter correction. A later owner-run root
-nix flake check passed with the final parameter correction and official Org
-source switch included, covering the required builds as well as checks. Other
-platforms and complete interactive configuration startup were not validated.
-Stale dtd/ocaml-interface/tsx aliases were removed when native symbols changed,
-and patch hunk length was corrected; the final reported pass came from the owner.
-Treefmt/nixfmt also supplies a formatter and flake check.
-
-No Nix build or Emacs runtime suite was executed during memory reconstruction.
-Historical source probes and owner reports retain their narrower scopes.
-README now describes the committed source-package entry, guarded
-initializers, source-injected wrapper, six check families and explicit lint
-exemptions. The owner explicitly requires README to remain stable project
-documentation, not an execution/experiment log; validation runs and temporary
-verification methods belong in current memory. The current step's validation
-is agent-executed, separate from the owner's passing checks for step one.
-The inverted ignore whitelist requires explicit inclusion of new tracked files,
-and TODO.md / INBOX.md / AGENTS.md are Git-ignored, so edits to them are
-worktree-only.
-Nested Twist experiments, scratch/backup directories, runtime notes/databases
-and private identifiers are not the tracked project architecture.
-
-## TeXmacs Fandol existing-profile limitation
-The current texmacs-fandol wrapper only prefixes TEXMACS_FONT_PATH. This works
-for fresh TeXmacs profiles but does not update a populated native font database.
-The owner's actual export produced <#...> despite selecting the expected
-program; isolation reproduced it by reusing a plain-TeXmacs profile. Native
-font-database-extend-local on the full Fandol OTF directory fixed a copy of that
-profile, preserving existing settings. A package-level migration policy remains
-undecided; do not silently delete user caches or isolate HOME as a workaround.
-See current memory for test evidence and production acceptance limits.
-
-Robustness follow-up: repeated explicit native registration preserves existing
-font records and works after worker restart. The native API does not reject
-missing/empty input directories, so any helper needs preconditions and persisted
-result checks. Official --delete-font-cache also repairs the isolated old-profile
-case, preserving personal files but losing an additional manually registered
-font record. Neither automatic clearing nor auxiliary registration has been
-adopted. Current recommendation favors documented manual cache clearing for
-this stage, with the font-registration caveat; see current memory for evidence.
-
-## Chinese line breaking belongs to document language
-A long-paragraph isolated matrix reproduces CJK one-line overflow in native
-TeXmacs and Org export under default language. Setting document initial
-language=chinese fixes both with matching7/8/8 lines and full567 Han characters;
-selecting FandolSong alone does not. Font packaging and document language are
-separate responsibilities. The previously tested org-texmacs source2c1c7d58
-rejects #+LANGUAGE: zh-CN; this has not been revalidated against the new upstream
-input. In that tested version,
-its existing document-initial interface can declare Chinese explicitly. Future
-Org keyword mapping belongs in org-texmacs; emarccs may choose a personal default,
-but texmacs-fandol should not enforce Chinese language globally. No such change
-is implemented. See current memory for evidence and test limits.
+The inverted .gitignore whitelist requires explicit inclusion of new tracked
+files; *.scm is allowed under pkgs/ and *.sh under tests/ (moved from pkgs/).
+README.org describes the committed architecture (ownership, outputs,
+TeXmacs package, math syntax, package-owned tests, withProgress, snippets)
+without experiment logs. The no-warning claim is not made anywhere: byte
+compilation succeeds with warnings and package-lint retains its explicit
+exemptions. Historical probes and owner reports retain their narrower scopes.

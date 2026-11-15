@@ -35,7 +35,7 @@ only after all modules and optional user customizations load successfully."
 
       (require 'emarccs-tex) ; Tex 设置
 
-      (require 'emarccs-complete) ; 自动补全
+      (require 'emarccs-snippet) ; 补全及 snippets
 
       (require 'emarccs-lisp)
 

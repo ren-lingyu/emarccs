@@ -469,6 +469,21 @@
    ("C-c g" . consult-grep)
    ("C-c G" . consult-ripgrep)))
 
+;; 自动补全
+(use-package company
+  :hook (after-init . global-company-mode))
+
+(use-package company-auctex
+  :after auctex
+  :hook (LaTeX-mode . company-auctex-init))
+
+(use-package company-math
+  :disabled
+  :after company
+  :init
+  (add-to-list 'company-backends 'company-math-symbols-unicode)
+  (add-to-list 'company-backends 'company-math-symbols-latex))
+
 ;; 大文件
 (use-package vlf
   :config

@@ -130,6 +130,26 @@ melpaBuild (finalAttrs_: {
     }}
 
     ${withProgress {
+      name = "snippets";
+      text = ''
+        emacs ${
+          lib.escapeShellArgs [
+            "--batch"
+            "-Q"
+            "-L"
+            "${finalAttrs_.src}"
+            "--funcall"
+            "package-activate-all"
+            "--load"
+            "${./tests/lisp/snippets.el}"
+            "--funcall"
+            "ert-run-tests-batch-and-exit"
+          ]
+        }
+      '';
+    }}
+
+    ${withProgress {
       name = "package-lint";
       text = ''
         emacs ${

@@ -53,6 +53,7 @@
   │       │   └── tests/
   │       │       └── lisp/
   │       │           ├── initialization.el
+  │       │           ├── snippets.el
   │       │           └── emarccs-package-lint.el
   │       ├── treesit-auto/
   │       │   ├── overlay.nix
@@ -90,6 +91,19 @@
 用户的原生 init 文件仍由 Emacs 加载. =init-file-user= 为 nil 时, 如 =-q= / =--no-init-file= 或 batch 启动, wrapper 跳过上述 Emarccs 启动调度.
 
 初始化成功后不重复执行, 保留用户后续覆盖. 常规初始化加载 =use-package= 并设置 =use-package-always-ensure= 为 nil, 按固定顺序加载内部模块, 最后设置 =custom-file= 并加载用户 Emacs 目录中可选的 =custom.el=. 重入时跳过, 失败时不置完成标记.
+
+* 输入 snippets
+=emarccs-basic.el= 配置 Company 补全, =emarccs-snippet.el= 配置 AAS 自动展开, LAAS 数学结构及 YASnippet 字段. Org blocks 使用 =;;= 前缀, 已有 LaTeX 结构及普通文本长音字母 snippets 保持单分号 trigger.
+
+- 普通 Org blocks: =;;block= (任意名称), =;;abst= (abstract), =;;comm= (comment), =;;quote= (quote), =;;center= (center), =;;example= (literal example).
+- 数学及浮动环境: =;;tm= (texmacs), =;;eq= (equation), =;;fig= (figure), =;;tab= (table).
+- Formal statements: =;;thm= (theorem), =;;prop= (proposition), =;;lem= (lemma), =;;cor= (corollary), =;;axm= (axiom), =;;def= (definition), =;;notn= (notation), =;;conj= (conjecture), =;;rem= (remark), =;;exmp= (example), =;;note= (note), =;;warn= (warning), =;;conv= (convention), =;;exer= (exercise), =;;prob= (problem), =;;prf= (proof).
+
+所有 block snippets 仅在 Org buffer 中注册. 开始标记的名称为 YASnippet 可编辑字段, 结束标记镜像该字段; TAB 进入 body. 需要 starred 形式时, 修改第一个字段 (如 =equation*=), 不单独定义 starred trigger. Formal statements 生成 Org-TeXmacs 的 canonical =statement TYPE= block, 不扩展旧的 =ext= namespace. 通用 =;;block= 的字段仅表示 block 名称, 参数应写在该字段之外.
+
+=;par= 插入一对圆括号并将光标放在其内部, 用于直接在 Org 中书写 STM. 不为 STM tags 定义专用 snippets. Scheme 和 Scheme Tree-sitter buffers 不启用 AAS, LAAS 或 YASnippet. =;eq= 仍插入 LaTeX 行内数学定界符, =;;eq= 则创建 Org equation block.
+
+LAAS 默认 basic, subscript, fraction 和 accent snippets 均禁用, 移除原有希腊/希伯来字母及单符号自定义 snippets; 已有 LaTeX 环境, 定界符和参数化数学结构的 trigger 及模板保持不变. 不改变 Org-TeXmacs 的 island 识别或独立编辑机制.
 
 * Nix 入口
 =flake.nix= 使用 =flake-parts= 组织输出. 当前主要输出:
@@ -212,7 +226,7 @@
 
 =tests/with-progress/= 验证字符串及 path 输入, 输出保留, 退出状态, Shell 隔离, 空代码, 周期性报告和 =exec= 等行为. 可以通过 =nix build .#checks.x86_64-linux.with-progress -L= 单独构建.
 
-本仓库通过 =pkgs/default.nix= 的 =extraArgs= 将 =llib.tests.withProgress= 提供给各 package, 并通过 =mkChecks.args= 注入 wrapper 测试 scope. 配置包的两项源码检查, 三个 wrapper 测试, Tree-sitter grammar runtime 及两个 TeXmacs package tests 均使用该 helper 报告执行状态. Emacs 测试仍不设置进程级超时; TeXmacs 渲染保留原有的 180 秒超时和 5 秒强制终止宽限, 渲染输出仍写入各自的日志文件, 状态报告则直接进入构建日志. =overlay-equivalence= 的断言在 Nix 求值阶段执行, 不包装仅创建检查产物的 builder.
+本仓库通过 =pkgs/default.nix= 的 =extraArgs= 将 =llib.tests.withProgress= 提供给各 package, 并通过 =mkChecks.args= 注入 wrapper 测试 scope. 配置包的三项源码检查, 三个 wrapper 测试, Tree-sitter grammar runtime 及两个 TeXmacs package tests 均使用该 helper 报告执行状态. Emacs 测试仍不设置进程级超时; TeXmacs 渲染保留原有的 180 秒超时和 5 秒强制终止宽限, 渲染输出仍写入各自的日志文件, 状态报告则直接进入构建日志. =overlay-equivalence= 的断言在 Nix 求值阶段执行, 不包装仅创建检查产物的 builder.
 
 ** Elisp 配置包
 =pkgs/emacsPackages/emarccs/package.nix= 通过 =melpaBuild= 构建配置包, 由其正常的安装及编译流程检查 Elisp 编译错误, 不再额外运行独立的 =elisp-byte-compile= 测试. 编译警告仍不作为失败条件.
@@ -220,6 +234,7 @@
 配置包启用 =doCheck=, 在 =checkPhase= 中分别启动独立的 batch Emacs 进程执行下列源码检查. =package-lint= 通过当前 Emacs package scope 的 =checkInputs= 引入, 由 Emacs setup hook 和 =package-activate-all= 提供依赖查找环境, 不加入 =packageRequires= 或配置的运行依赖, 也不手写 package 的版本化安装目录. 测试目录独立于 =src=, 不纳入 MELPA package archive.
 
 - =initialization=: 由原 =startup-order= 中的四项 ERT 用例组成, 验证接口加载无配置副作用, 早期及常规初始化只执行一次, 模块顺序, 初始化重入和失败后重试. 直接使用配置包源码, 不需要构建最终 wrapper.
+- =snippets=: 加载真实 AAS, LAAS 和 YASnippet, 通过实际键入验证 Org block 展开, 镜像字段及光标跳转, =;eq= 与 =;;eq= 共存, STM 括号, mode 隔离, 已移除及保留的 snippets. 与 initialization 一样直接使用配置包源码, 不启动最终 wrapper.
 - =package-lint=: 检查全部配置源码, 以 =emarccs.el= 为主文件. 仅豁免功能配置中的保留键位和 =with-eval-after-load= 两类诊断并逐项输出; 其他诊断均失败, 三个入口/初始化接口文件无此豁免.
 
 ** Emarccs wrapper tests
@@ -253,7 +268,7 @@
 
 例如 =emarccs-pgtk-startup-order= 和 =emacsPackages-treesit-auto-grammars-runtime= 分别对应 wrapper 的测试及默认 Emacs scope 中 =treesit-auto= 的测试. 三个 wrapper 各自的 tests 均纳入, =treesit-auto= 不再经三个 wrapper 重复纳入. 所有导出 packages 的 tests (包括继承的上游 tests 和 TeXmacs tests) 均参与聚合.
 
-配置初始化 ERT 和 =package-lint= 随各自的配置包构建执行, 不再导出独立的源码检查; =elisp-byte-compile= 已由正常构建取代. 本仓库定义的 Emacs 测试不设置进程级超时, 使用标准构建环境中的工具, 需要限制构建时间时由 Nix 构建设置控制. 另有 =treefmt= 格式检查. 首次全量检查可能需要构建 wrapper, 依赖, grammar 和 TeXmacs 产物.
+配置初始化和 snippets ERT, 以及 =package-lint= 随各自的配置包构建执行, 不再导出独立的源码检查; =elisp-byte-compile= 已由正常构建取代. 本仓库定义的 Emacs 测试不设置进程级超时, 使用标准构建环境中的工具, 需要限制构建时间时由 Nix 构建设置控制. 另有 =treefmt= 格式检查. 首次全量检查可能需要构建 wrapper, 依赖, grammar 和 TeXmacs 产物.
 
 查看最终导出的 checks:
 

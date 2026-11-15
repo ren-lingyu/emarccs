@@ -124,7 +124,7 @@
                emarccs-theme
                emarccs-org
                emarccs-tex
-               emarccs-complete
+               emarccs-snippet
                emarccs-lisp
                emarccs-org-roam
                emarccs-org-roam-organize

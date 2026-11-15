@@ -5,13 +5,53 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
-## Current: consolidated architecture and snippet configuration at main 8abd482
-The formal checkpoint represents the project at main HEAD 8abd482
+## Current: basic configuration cleanup committed at 5b3215d
+The formal checkpoint represents the project at main HEAD 5b3215d
+("fix(pkgs/emacsPackages/emarccs): correct frame geometry and clean up basic
+configuration"), a direct descendant of the previous associated snapshot
+8abd482. The maintenance range is exactly this one commit.
+
+The committed cleanup:
+- Updates both frame alists independently with monitor-derived width/height
+  through emarccs-basic--frame-alist-with-geometry, preserving unrelated
+  entries (fullscreen, bootstrap colors) in each list.
+- Factors the dimension validity condition into valid-geometry-p, reuses it
+  for font scaling and geometry, and drops the duplicate frame-size
+  extraction.
+- Matches the compilation buffer name exactly with rx while keeping the
+  display action, direction, height and compilation-scroll-output unchanged.
+- Fixes the Savehist variable name from kill-rings to kill-ring.
+- Normalizes the highlight-parentheses :hook notation (minibuffer-setup).
+- Removes the unused spelling-check constant and the embark-consult
+  self-require.
+- Corrects the snippet module's initializer comment and aligns README with
+  the shared mkFlake interface.
+
+Unchanged by this commit: the snippet module, the package dependency set,
+initializer module order, early initialization strategy, Nix architecture and
+existing test definitions. The broader Elisp normalization work is not
+completed by this cleanup.
+
+Evidence is read-only: the full committed diff was inspected, and the
+spelling-check constant's history was traced with -G and snapshot greps (all
+hits are the definition itself; no tracked consumer exists). The commit adds
+no tests: the initialization ERT asserts the early-init frame alists, not the
+new regular-initialization geometry logic; no geometry regression test exists
+and none is claimed. No runtime validation was performed for the frame, font
+or display behavior; committed parameter assignments do not establish
+realized window sizes or compositor results.
+
+Next actions, only when authorized: validate current overlays/wrappers and
+individual legacy exports against the current shared-library selector; the
+AAS investigation starts with a minimal two-buffer reproduction. No build,
+export or user-profile work is implied by this maintenance task.
+
+## Previous checkpoint: consolidated architecture at 8abd482 (superseded)
+The preceding checkpoint represented the project at main HEAD 8abd482
 ("feat(pkgs/emacsPackages/emarccs): reorganize and extend snippet
-configuration"). It consolidates the 37 project commits between the previous
-project-associated boundary 534188d and 8abd482. The prior GAW checkpoint
-already recorded the Org-roam upstream migration; its durable facts live in
-architecture.md and its validation limits remain valid.
+configuration"), consolidating the 37 project commits between 534188d and
+8abd482. Its architecture descriptions remain inherited context; the
+current state above supersedes its represented snapshot.
 
 architecture.md now describes the current package ownership and source
 injection, the texmacs-with-fandol-and-math-syntax resource package and its
@@ -22,13 +62,11 @@ and the snippet architecture, including the Scheme AAS isolation failure and
 its evidence limits. Superseded states are marked historical there and in the
 records below.
 
-Evidence for this consolidation is read-only: complete log/diff --stat of the
-range, targeted diffs of every architectural anchor, and full source reads of
-flake.nix, pkgs/default.nix, lib/, the TeXmacs package and tests, the emarccs
-package and tests, treesit-auto, Org workflow and snippet libraries, README
-and .gitignore, plus diff --check. No Nix evaluation, build, test, export or
-network access was performed by the agent. Project main and its worktree were
-not modified.
+Evidence for this consolidation was read-only: complete log/diff --stat of
+the range, targeted diffs of every architectural anchor, and full source
+reads of the key files, plus diff --check. No Nix evaluation, build, test,
+export or network access was performed by the agent. Project main and its
+worktree were not modified.
 
 Owner-reported validation covers the final snippet implementation: all tests
 and builds passed (owner-reported, not repeated by the agent, no other
@@ -37,17 +75,13 @@ recorded for the TeXmacs resource package or its tests; the historical font
 probes below target the former wrapper and source versions and do not
 transfer to the new resource layout.
 
-Backlog reconciliation: the README alignment item is closed (README documents
-current ownership, outputs, the TeXmacs package, math syntax, package-owned
-tests, withProgress and snippets). Remaining items: non-blocking Elisp
-package normalization (warnings, dependency audit), the frontend-autoload
-coverage candidate, the new AAS state-isolation investigation, and the
-TeXmacs existing-profile validation candidate, each scoped in backlog.md.
-
-Next actions, only when authorized: validate current overlays/wrappers and
-individual legacy exports against the current shared-library selector; the
-AAS investigation starts with a minimal two-buffer reproduction. No build,
-export or user-profile work is implied by this maintenance task.
+Backlog reconciliation at that point: the README alignment item was closed
+(README documents current ownership, outputs, the TeXmacs package, math
+syntax, package-owned tests, withProgress and snippets). Remaining items:
+non-blocking Elisp package normalization (warnings, dependency audit), the
+frontend-autoload coverage candidate, the new AAS state-isolation
+investigation, and the TeXmacs existing-profile validation candidate, each
+scoped in backlog.md.
 
 ## Historical records
 All sections below record earlier states and probes with their original

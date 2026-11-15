@@ -14,12 +14,13 @@ Elisp, Org and gitignore files with flakeCheck = true and excludes only
 `*.patch`, `LICENSE` and `flake.lock`. Do not record Elisp formatting as
 still disabled.
 
-One residual documentation nuance remains, recorded only as a factual
-observation: README says personal-nixpkgs's nixpkgs, flake-parts and
-treefmt-nix dependencies all follow this repository's corresponding inputs,
-but only nixpkgs has a root-level follows declaration; flake-parts and
-treefmt-nix are transitive through personal-nixpkgs's lock. No README edit is
-authorized by this entry.
+One residual documentation nuance existed after the main alignment and is
+now resolved by commit 5b3215d: README previously said personal-nixpkgs's
+nixpkgs, flake-parts and treefmt-nix dependencies all follow this
+repository's corresponding inputs, while only nixpkgs has a root-level
+follows declaration. The commit rewrites the paragraph to describe the
+shared mkFlake interface and helper set without claiming the provider's
+internal dependency follows. No README edit remains pending for this item.
 
 ## Non-blocking: normalize emacsPackages.emarccs
 The owner requests a future normalization pass over
@@ -42,8 +43,14 @@ runtime packageRequires distinction.
 A targeted read-only comparison previously found 80 distinct use-package
 names and an org-edna direct-dependency omission. The owner committed its
 addition (direct packageRequires count 75 -> 76); that specific finding is
-resolved and must not be re-added as pending work. The broader
-warning/dependency review above remains non-blocking and incomplete. No
+resolved and must not be re-added as pending work. The basic configuration
+cleanup committed as 5b3215d resolves several concrete configuration issues
+(frame geometry alist handling, compilation buffer matching, Savehist
+variable, hook notation, unused constant, redundant self-require) but does
+not complete this normalization entry: no dependency audit, warning
+inventory, strict compilation policy or full use-package review is
+established by it. The broader warning/dependency review above remains
+non-blocking and incomplete. No
 source changes, dependency updates, warning-policy changes or build/test
 runs are authorized by this entry.
 

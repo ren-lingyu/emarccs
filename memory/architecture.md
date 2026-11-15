@@ -96,6 +96,13 @@ intermediate commit that excluded *.el (6ea3416) was superseded by the
 restored formatting check (40e0945); no successful full check for the final
 revision was supplied or executed by the agent.
 
+README documents the shared interfaces Emarccs consumes (the mkFlake entry,
+package and overlay discovery helpers, test aggregation helpers, and the
+local llib merge with its collision policy) rather than the internal
+dependency arrangement of the providing repository; the sentence describing
+several personal-nixpkgs dependencies as following Emarccs root inputs was
+removed. The project flake and lock were unchanged by that cleanup.
+
 ## Current package groups and exports
 pkgs/default.nix uses llib.packages.mkOverlays with default and legacy groups.
 Both groups apply the four external Emacs overlays (org-texmacs,
@@ -325,12 +332,40 @@ org-roam-blog, debug), loads optional custom.el last, guards recursion and
 repeat calls and marks completion only after success. Changing the module
 order can change initialization semantics.
 
-Persistent frame defaults are separate from first-frame bootstrap colors;
-theme configuration owns lasting colors. Graphical font sizing prefers a
-nominal 4 mm face parameter when physical dimensions are valid, accepting
-list or dotted-pair mm-size data, then falls back to the smaller pixel ratio
-against 1920x1080 at height 110. These are font parameters, not measured
-glyph dimensions.
+Early initialization owns two independent frame parameter lists:
+default-frame-alist carries persistent frame defaults (maximized fullscreen,
+disabled scroll/menu/tool bars) and initial-frame-alist carries first-frame
+bootstrap appearance (gray10/gray90 colors plus the same chrome settings).
+Theme configuration owns lasting colors. The lists have distinct
+responsibilities and must not be replaced with one another merely to update
+geometry.
+
+The regular graphical configuration computes monitor-dependent width and
+height and applies them to both lists independently through
+emarccs-basic--frame-alist-with-geometry. The helper copies the input list
+structure, removes existing entries keyed by the symbols width and height,
+and prepends the new text-pixel dimensions; it does not modify the original
+list structure and is not a deep copy of nested objects. The earlier
+implementation used the computed numeric dimensions as assq-delete-all keys
+(which never match the symbol keys), dynamically bound default-frame-alist
+inside let*, and assigned initial-frame-alist from that temporary default
+list; the new implementation drops those operations and updates both
+variables from their own previous values, preserving unrelated entries such
+as fullscreen and bootstrap appearance parameters.
+
+The retained display strategy keeps the display-graphic-p guard, the
+physical-dimension-based font sizing with its resolution-based fallback, the
+font family and face settings, and the early maximization settings. The
+dimension validity condition is factored into valid-geometry-p and reused
+for both resolution-based font scaling and frame geometry updates; width and
+height come directly from monitor-width and monitor-height, and invalid
+dimensions do not trigger frame geometry replacement. These are committed
+parameter assignments, not realized window sizes or compositor behavior.
+
+Graphical font sizing prefers a nominal 4 mm face parameter when physical
+dimensions are valid, accepting list or dotted-pair mm-size data, then falls
+back to the smaller pixel ratio against 1920x1080 at height 110. These are
+font parameters, not measured glyph dimensions.
 
 ## Naming and ownership conventions
 Files/features use emarccs-<name>, with emarccs.el providing the main
@@ -344,6 +379,32 @@ underscore lexical locals are a separate convention.
 Nixpkgs helpers are lib; project helpers are lllib, instantiated through
 mergeAttrsRecursive as described above. Local extension helpers
 (mkMelpaBuild, withProgress) are not shared-library interfaces.
+
+## Basic configuration conventions
+use-package :hook declarations omit the conventional -hook suffix
+(highlight-parentheses now uses :hook (minibuffer-setup .
+highlight-parentheses-minibuffer-setup)); direct add-hook calls use actual
+hook variable names. This is notation normalization, not a correction of a
+demonstrated hook registration failure.
+
+The compilation buffer display rule now matches the standard buffer name
+exactly with (rx string-start "*compilation*" string-end), with rx required
+within eval-when-compile. The display action (display-buffer-in-direction),
+direction (below), requested height (window-height 6) and
+compilation-scroll-output are unchanged. display-buffer-alist is still set
+as a whole; the rule does not claim to cover every compilation-mode buffer
+or to fix the window height permanently.
+
+The embark-consult declaration dropped its :config form that explicitly
+required embark-consult itself, retaining its :after and :hook settings;
+this is removal of a redundant self-require in the configuration.
+
+The removed emarccs-basic--spell-check-support-enabled-p constant is
+historical: its tracked definition survived the namespace and layout
+migrations (originally *spell-check-support-enabled* at d09aac5, renamed in
+a0e3c90 and 672b9c0, relocated in a80a89a) with no tracked consumer anywhere
+in project history, and was removed as unused configuration. No
+compatibility alias or spelling-check implementation task exists.
 
 ## Shared behavior and workflow boundaries
 Completion/navigation combines Consult, Vertico, Orderless, Marginalia and

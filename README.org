@@ -106,7 +106,7 @@
 LAAS 默认 basic, subscript, fraction 和 accent snippets 均禁用, 移除原有希腊/希伯来字母及单符号自定义 snippets; 已有 LaTeX 环境, 定界符和参数化数学结构的 trigger 及模板保持不变. 不改变 Org-TeXmacs 的 island 识别或独立编辑机制.
 
 * Nix 入口
-=flake.nix= 使用 =flake-parts= 组织输出. 当前主要输出:
+=flake.nix= 使用 =personal-nixpkgs= 提供的 =mkFlake= 组织输出. 当前主要输出:
 
 #+begin_src text
   packages.<system>.emarccs
@@ -152,7 +152,7 @@ LAAS 默认 basic, subscript, fraction 和 accent snippets 均禁用, 移除原�
   };
 #+end_src
 
-=personal-nixpkgs= 提供 package/overlay 发现和测试聚合等通用 helper, 其 =nixpkgs=, =flake-parts= 和 =treefmt-nix= 依赖 follows 本仓库对应输入. =llib= 使用 =mergeAttrsRecursive { allowOverrides = false; }= 合并共享库中的 =packages=, =tests= 和本地扩展, 重叠的叶节点定义会报错.
+=personal-nixpkgs= 提供共享的 =mkFlake=, package/overlay 发现及测试聚合等通用 helper. =llib= 使用 =mergeAttrsRecursive { allowOverrides = false; }= 合并共享库中的 =packages=, =tests= 和本地扩展, 重叠的叶节点定义会报错.
 
 * Package 定义
 =pkgs/default.nix= 通过 =llib.packages.mkOverlays= 递归发现 =overlay.nix=, 组合本地覆盖. 共享库为顶层 =emacsPackages/= 目录提供内置聚合规则, 通过 =emacsPackagesFor= 的 =overrideScope= 将后代 overlay 应用到对应 Emacs 的 package scope; 本仓库无需单独定义该目录的聚合 overlay.

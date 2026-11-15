@@ -5,6 +5,7 @@
 ;;; Code:
 
 (eval-when-compile
+  (require 'rx)
   (require 'use-package))
 
 (setenv "TZ" "Asia/Shanghai")
@@ -22,6 +23,14 @@
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice t)
 
+(defun emarccs-basic--frame-alist-with-geometry (alist width height)
+  "Return ALIST with WIDTH and HEIGHT in text pixels, without modifying ALIST."
+  (append
+   `((width . (text-pixels . ,width))
+     (height . (text-pixels . ,height)))
+   (assq-delete-all
+    'width (assq-delete-all 'height (copy-sequence alist)))))
+
 (when (display-graphic-p)
   (let* ((font-height-mm 4)
          (mm-size (frame-monitor-attribute 'mm-size))
@@ -37,11 +46,13 @@
          (base-width 1920.0)
          (base-height 1080.0)
          (base-font-height 110)
+         (valid-geometry-p
+          (and (numberp monitor-width)
+               (numberp monitor-height)
+               (> monitor-width 0)
+               (> monitor-height 0)))
          (scale
-          (when (and (numberp monitor-width)
-                     (numberp monitor-height)
-                     (> monitor-width 0)
-                     (> monitor-height 0))
+          (when valid-geometry-p
             (min (/ monitor-width base-width)
                  (/ monitor-height base-height))))
          (font-height
@@ -52,22 +63,19 @@
                 (round (* font-height-mm 10 (/ 72.27 25.4))))
               (when scale
                 (round (* base-font-height scale)))
-              'unspecified))
-         (frame-size (cdr (cdr geometry)))
-         (width (car frame-size))
-         (height (car (cdr frame-size)))
-         (default-frame-alist
-          (assq-delete-all width default-frame-alist))
-         (default-frame-alist
-          (assq-delete-all height default-frame-alist)))
+              'unspecified)))
     (set-face-attribute 'default nil
                         :height font-height
                         :weight 'regular
                         :width 'normal
                         :family "Maple Mono NF CN")
-    (push `(width . (text-pixels . ,width)) default-frame-alist)
-    (push `(height . (text-pixels . ,height)) default-frame-alist)
-    (setq initial-frame-alist default-frame-alist)))
+    (when valid-geometry-p
+      (setq default-frame-alist
+            (emarccs-basic--frame-alist-with-geometry
+             default-frame-alist monitor-width monitor-height)
+            initial-frame-alist
+            (emarccs-basic--frame-alist-with-geometry
+             initial-frame-alist monitor-width monitor-height)))))
 
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
@@ -111,8 +119,6 @@
 
 (add-hook 'prog-mode-hook #'hs-minor-mode) ; 编程模式折叠代码块
 
-(defconst emarccs-basic--spell-check-support-enabled-p t) ; 是否启用拼写检查
-
 (add-hook 'prog-mode-hook #'delete-trailing-whitespace-mode)
 
 (add-hook 'conf-mode-hook #'delete-trailing-whitespace-mode)
@@ -122,7 +128,7 @@
 
 ;; 有关 buffer 显示
 (setq display-buffer-alist
-      '(("*compilation*"
+      `((,(rx string-start "*compilation*" string-end)
          (display-buffer-in-direction)
          (direction . below)
          (window-height . 6))))
@@ -375,7 +381,7 @@
   ;; 设置保存文件的位置
   (savehist-file (locate-user-emacs-file "cache/savehist"))
   ;; 额外保存剪切板和shell命令行历史
-  (savehist-additional-variables '(kill-rings shell-command-history))
+  (savehist-additional-variables '(kill-ring shell-command-history))
   ;; 不保存消息历史
   (savehist-ignored-variables '(message-history))
   ;; 自动去重
@@ -394,7 +400,7 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package highlight-parentheses
-  :hook (minibuffer-setup-hook . highlight-parentheses-minibuffer-setup))
+  :hook (minibuffer-setup . highlight-parentheses-minibuffer-setup))
 
 (use-package hl-block-mode
   :hook (prog-mode . hl-block-mode))
@@ -499,10 +505,7 @@
 ;; Embark 与 Consult 的集成增强
 (use-package embark-consult
   :after (embark consult)
-  :hook (embark-collect-mode . embark-consult-preview-minor-mode)
-  :config
-  ;; 显式加载, 确保消除警告
-  (require 'embark-consult))
+  :hook (embark-collect-mode . embark-consult-preview-minor-mode))
 
 (use-package ace-window
   :bind (("C-x o" . 'ace-window)))

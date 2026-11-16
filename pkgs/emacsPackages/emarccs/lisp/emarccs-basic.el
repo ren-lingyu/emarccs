@@ -594,23 +594,6 @@
 ;; 键位设置和快捷键
 (setq x-super-keysym 'hyper) ;通过把 Super 映射为 Hyper 在逻辑上禁用 Super 键
 
-(global-set-key (kbd "C-c m p") 'org-mark-ring-push)
-(global-set-key (kbd "C-c m g") 'org-mark-ring-goto)
-
-(global-set-key
- (kbd "C-c c c")
- (lambda ()
-   (interactive)
-   (insert "#+BEGIN_COMMENT\n\n#+END_COMMENT\n")
-   (forward-line -2)))
-
-(global-set-key
- (kbd "C-c c a")
- (lambda ()
-   (interactive)
-   (insert "#+BEGIN_abstract\n\n#+END_abstract\n")
-   (forward-line -2)))
-
 (provide 'emarccs-basic)
 
 ;;; emarccs-basic.el ends here

@@ -10,6 +10,7 @@
 (use-package org
   :demand t
   :init (setq org-directory (expand-file-name "~/org/"))
+  :bind (("C-c m p" . org-mark-ring-push) ("C-c m g" . org-mark-ring-goto))
   :config
   (setq org-startup-indented t)
   (setq org-startup-truncated nil)

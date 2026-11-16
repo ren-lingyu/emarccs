@@ -101,6 +101,8 @@
 
 所有 block snippets 仅在 Org buffer 中注册. 开始标记的名称为 YASnippet 可编辑字段, 结束标记镜像该字段; TAB 进入 body. 需要 starred 形式时, 修改第一个字段 (如 =equation*=), 不单独定义 starred trigger. Formal statements 生成 Org-TeXmacs 的 canonical =statement TYPE= block, 不扩展旧的 =ext= namespace. 通用 =;;block= 的字段仅表示 block 名称, 参数应写在该字段之外.
 
+Org buffer 中的 LaTeX 环境可使用 =;ee= (equation), =;ean= (align), =;es= (split) 输入, =;label= 使用 YASnippet 的两个字段构造 label. Emarccs 不再为这些结构或 comment/abstract blocks 注册额外的全局插入快捷键.
+
 =;par= 插入一对圆括号并将光标放在其内部, 用于直接在 Org 中书写 STM. 不为 STM tags 定义专用 snippets. Scheme 和 Scheme Tree-sitter buffers 不启用 AAS, LAAS 或 YASnippet. =;eq= 仍插入 LaTeX 行内数学定界符, =;;eq= 则创建 Org equation block.
 
 LAAS 默认 basic, subscript, fraction 和 accent snippets 均禁用, 移除原有希腊/希伯来字母及单符号自定义 snippets; 已有 LaTeX 环境, 定界符和参数化数学结构的 trigger 及模板保持不变. 不改变 Org-TeXmacs 的 island 识别或独立编辑机制.

@@ -40,35 +40,6 @@
 ;; 启用 org-mode 的 LaTeX 区域高亮支持
 (setq org-highlight-latex-and-related '(native script))
 
-;; LaTeX 环境快捷键
-(global-set-key
- (kbd "C-c l e e")
- (lambda ()
-   (interactive)
-   (insert "\\begin{equation}\n\n\\end{equation}")
-   (forward-line -2)))
-
-(global-set-key
- (kbd "C-c l e a")
- (lambda ()
-   (interactive)
-   (insert "\\begin{align}\n\n\\end{align}")
-   (forward-line -2)))
-
-(global-set-key
- (kbd "C-c l e s")
- (lambda ()
-   (interactive)
-   (insert "\\begin{split}\n\n\\end{split}")
-   (forward-line -2)))
-
-(global-set-key
- (kbd "C-c l e l")
- (lambda ()
-   (interactive)
-   (insert "\\label{}\n")
-   (forward-line -1)))
-
 (with-eval-after-load 'ox-latex
   (setq org-latex-precompile nil)
   (setq org-latex-compiler "lualatex")

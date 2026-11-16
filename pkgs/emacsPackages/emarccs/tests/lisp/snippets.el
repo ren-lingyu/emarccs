@@ -135,6 +135,23 @@
      (equal (buffer-string) "\\begin{equation}\n\n\\end{equation}\n"))
     (should (looking-at "\n\\\\end{equation}")))
   (emarccs-snippet-test--with-buffer #'org-mode
+    (execute-kbd-macro ";ean")
+    (should
+     (equal (buffer-string) "\\begin{align}\n\n\\end{align}\n"))
+    (should (looking-at "\n\\\\end{align}")))
+  (emarccs-snippet-test--with-buffer #'org-mode
+    (execute-kbd-macro ";es")
+    (should (equal (buffer-string) "\\begin{split}\n\n\\end{split}"))
+    (should (looking-at "\n\\\\end{split}")))
+  (emarccs-snippet-test--with-buffer #'org-mode
+    (execute-kbd-macro ";label")
+    (execute-kbd-macro "eq")
+    (execute-kbd-macro (kbd "TAB"))
+    (execute-kbd-macro "example")
+    (execute-kbd-macro (kbd "TAB"))
+    (should (equal (buffer-string) "\\label{eq:example}\n"))
+    (should (= (point) (point-max))))
+  (emarccs-snippet-test--with-buffer #'org-mode
     (execute-kbd-macro ";frac")
     (execute-kbd-macro "a")
     (execute-kbd-macro (kbd "TAB"))

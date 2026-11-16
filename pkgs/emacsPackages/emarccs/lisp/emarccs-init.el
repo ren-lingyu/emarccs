@@ -49,9 +49,6 @@ only after all modules and optional user customizations load successfully."
 
       (require 'emarccs-org-roam-blog) ; 博客发布设置
 
-      ;; debug
-      (require 'emarccs-debug)
-
       ;; customize
       (setq custom-file
             (expand-file-name "custom.el" user-emacs-directory))

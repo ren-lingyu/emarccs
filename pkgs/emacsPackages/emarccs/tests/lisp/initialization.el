@@ -130,8 +130,7 @@
                emarccs-org-roam-organize
                emarccs-org-latex-preview
                emarccs-feed
-               emarccs-org-roam-blog
-               emarccs-debug))))
+               emarccs-org-roam-blog))))
       (delete-directory fixture-dir t))))
 
 (ert-deftest emarccs-startup-order--failed-initialization-can-retry ()

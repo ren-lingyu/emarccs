@@ -5,13 +5,59 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
-## Current: basic configuration cleanup committed at 5b3215d
-The formal checkpoint represents the project at main HEAD 5b3215d
+## Current: legacy cleanup and document input consolidation at 65a3385
+The formal checkpoint represents the project at main HEAD 65a3385
+("refactor(pkgs/emacsPackages/emarccs): consolidate document input and Org
+navigation bindings"). The previous formal checkpoint 7ba0512 represented
+5b3215d; the maintenance range is the two consecutive commits 5205b016 and
+65a3385.
+
+5205b016 removes the legacy debug module: emarccs-debug.el, whose only
+substantive setting was a fixed image-scaling-factor of 1.0, is deleted; the
+regular initialization no longer requires it and the initialization-order
+ERT no longer expects it. The fixed image scaling setting was not migrated
+to another module and no new image scaling policy was introduced. The
+remaining functional modules load in their original order and optional
+custom.el still loads after them.
+
+65a3385 removes the old global insertion bindings: emarccs-basic's C-c c c /
+C-c c a (Org comment/abstract blocks) and emarccs-tex's C-c l e e / a / s / l
+(equation/align/split/label). Quick input for these structures now comes
+from the snippet configuration: Org block snippets (;;comm, ;;abst) are
+registered in Org buffers; LaTeX environment snippets (;ee, ;ean, ;es) are
+managed by the AAS/LAAS configuration and mode hooks; ;label expands through
+two YASnippet fields and is not textually identical to the removed global
+command. The Org mark ring bindings C-c m p / C-c m g move from
+global-set-key in emarccs-basic to use-package org :bind without a local
+keymap, so they remain global bindings while their configuration ownership
+moves to the Org module. README documents the snippet-only input for these
+structures.
+
+The retained-latex ERT is extended with ;ean (align), ;es (split) and ;label
+(two fields, prefixed label and final cursor position) using real key input;
+the snippets check still defines seven ERT cases (no new ert-deftest).
+Updated test definitions are source facts, not runtime validation results.
+
+Evidence for this maintenance is read-only: both commit diffs were inspected
+and the current tree was checked (17 Elisp sources after the debug module
+removal, current initializer module order, remaining keybinding definitions,
+snippet definitions and tests, README). No build, flake check or ERT run was
+performed by the agent.
+
+Next actions remain the non-blocking backlog candidates (Elisp
+normalization, Org-TeXmacs frontend autoload coverage, AAS per-buffer
+isolation reproduction, TeXmacs existing-profile validation) plus the
+standing overlay/wrapper/legacy-export validation candidate; none of these
+is the current maintenance plan.
+
+## Previous checkpoint: basic configuration cleanup at 5b3215d (superseded)
+The preceding checkpoint represented the project at main HEAD 5b3215d
 ("fix(pkgs/emacsPackages/emarccs): correct frame geometry and clean up basic
 configuration"), a direct descendant of the previous associated snapshot
-8abd482. The maintenance range is exactly this one commit.
+8abd482. The maintenance range for it was exactly that one commit. The
+current state above supersedes its represented snapshot.
 
-The committed cleanup:
+The committed cleanup recorded there:
 - Updates both frame alists independently with monitor-derived width/height
   through emarccs-basic--frame-alist-with-geometry, preserving unrelated
   entries (fullscreen, bootstrap colors) in each list.
@@ -41,10 +87,11 @@ and none is claimed. No runtime validation was performed for the frame, font
 or display behavior; committed parameter assignments do not establish
 realized window sizes or compositor results.
 
-Next actions, only when authorized: validate current overlays/wrappers and
-individual legacy exports against the current shared-library selector; the
-AAS investigation starts with a minimal two-buffer reproduction. No build,
-export or user-profile work is implied by this maintenance task.
+Next actions recorded at that checkpoint (historical): validate current
+overlays/wrappers and individual legacy exports against the current
+shared-library selector; the AAS investigation starts with a minimal
+two-buffer reproduction. No build, export or user-profile work was implied
+by that maintenance task.
 
 ## Previous checkpoint: consolidated architecture at 8abd482 (superseded)
 The preceding checkpoint represented the project at main HEAD 8abd482

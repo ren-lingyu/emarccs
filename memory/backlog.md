@@ -97,6 +97,16 @@ loading (emarccs-math.ts) and Org PDF export separately. Do not adopt cache
 migration helpers, global Chinese language defaults or Source Han font plans
 without owner confirmation.
 
+## Current configuration policies (reviewable, not mandated)
+The basic configuration still sets explicit backup/auto-save/lockfile
+behavior (make-backup-files t, auto-save-default nil, create-lockfiles nil,
+with cache/backups and cache/auto-save transforms), redirects
+temporary-file-directory to ~/tmp/emacs/ and assigns display-buffer-alist
+as a whole. These are current configuration policies. Reviewing or changing
+them is not a decided task, and no specific refactor (multi-instance state
+isolation, enabling lockfiles or auto-save, or a temporary directory layout
+change) is mandated by this entry.
+
 ## Naming constraints and retired pending work
 The former naming task depended on a Git-ignored TODO.md that is no longer
 present. Current scoped source review found no my/ definitions; the remaining
@@ -112,6 +122,9 @@ privacy scopes. This is a design constraint, not an outstanding defect.
 Inputs cleanup, cross-repository library extraction, standalone overlay
 repair, its equivalence checks, README synchronization and the upstream
 package migrations are committed; they are no longer backlog items. The
+legacy debug module and the old global document-structure insertion
+shortcuts are removed and committed (5205b016, 65a3385); they are not
+pending work and must not be re-added as tasks. The
 shared library may intentionally contain logic unused by Emarccs; the
 current shared-library input comes from personal-nixpkgs and reference
 copies are not assumed to stay synchronized.

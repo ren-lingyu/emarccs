@@ -133,7 +133,7 @@ install/compile flow is the compile check (no separate elisp-byte-compile
 test exists). doCheck runs three independent batch Emacs processes in
 checkPhase, each reported by withProgress: initialization (four ERT cases
 against package sources), snippets (seven behavior ERT cases with real
-package activation) and package-lint (all 18 source libraries, main file
+package activation) and package-lint (all 17 source libraries, main file
 emarccs.el). package-lint arrives via checkInputs, not runtime
 packageRequires; test files live outside src and are not part of the MELPA
 source archive. Existing explicit, narrow lint exemptions remain; compile
@@ -254,9 +254,18 @@ separate from AAS's optional use of YASnippet expansion.
 Org blocks use the ;; prefix; ; remains for LaTeX structures and plain text.
 ;abst/;comm became ;;abst/;;comm, ;eq remains LaTeX inline math while ;;eq is
 the Org equation block; their suffix overlap is covered by input tests.
-Existing LaTeX fragment/environment commands (insert-based, unchanged),
-parameterized math structures, delimiters, Physics2 macros and the long-vowel
-text snippets are retained. Custom Greek/Hebrew letters and the eight
+Existing LaTeX fragment/environment snippets (the insert-based ;ee, ;ean,
+;es and related triggers), the parameterized math structures, delimiters,
+Physics2 macros and the long-vowel text snippets are retained; ;label
+expands through two YASnippet fields (prefix:name) and is not textually
+identical to the removed global insertion command. The separate global
+insertion bindings previously defined in emarccs-basic (C-c c c, C-c c a for
+Org comment/abstract blocks) and emarccs-tex (C-c l e e/a/s/l for
+equation/align/split/label) are removed: document-structure input now comes
+from the snippet configuration, with Org block snippets registered in Org
+buffers and LaTeX snippets managed by the AAS/LAAS configuration and mode
+hooks. This does not guarantee behavior identical to the former global
+commands in every buffer. Custom Greek/Hebrew letters and the eight
 single-symbol math snippets (;uniti ;hom ;end ;id ;ker ;im ;tr ;times) are
 removed. No tag-specific STM snippets were added: STM has a uniform
 S-expression structure and its macro semantics belong to the TeXmacs style,
@@ -270,7 +279,9 @@ hooks and key input through AAS, LAAS, YASnippet and execute-kbd-macro:
 org-blocks (all 26 block triggers with wrapper, field jump and body),
 block-name-mirror (equation*, figure*, table* and a custom name),
 parentheses, scheme-isolation (scheme-mode only; the Tree-sitter variant is
-not separately exercised), retained-latex (a subset of LaTeX behaviors),
+not separately exercised), retained-latex (inline math, equation/align/split
+environments, the two-field label expansion with its final cursor position,
+and fraction; still a subset of the configured LaTeX templates),
 removed-symbols (disabled defaults plus removed triggers stay literal) and
 retained-text. Coverage follows the actual tests, not a per-trigger matrix.
 
@@ -321,14 +332,14 @@ interactive frontend commands; see current.md for evidence and limits.
 
 ## Purpose and initialization
 Personal configuration targeting Emacs 31.1+, organized as an Elisp source
-package under pkgs/emacsPackages/emarccs/lisp/ (18 libraries). emarccs.el
+package under pkgs/emacsPackages/emarccs/lisp/ (17 libraries). emarccs.el
 only requires the early-init and init interfaces; the wrapper owns startup
 scheduling and requiring the entry never initializes configuration.
 emarccs-initialize-early applies settings once and preserves later
 overrides; emarccs-initialize requires use-package with always-ensure nil,
 loads functional modules in fixed order (basic, help, theme, org, tex,
 snippet, lisp, org-roam, org-roam-organize, org-latex-preview, feed,
-org-roam-blog, debug), loads optional custom.el last, guards recursion and
+org-roam-blog), loads optional custom.el last, guards recursion and
 repeat calls and marks completion only after success. Changing the module
 order can change initialization semantics.
 
@@ -405,6 +416,17 @@ migrations (originally *spell-check-support-enabled* at d09aac5, renamed in
 a0e3c90 and 672b9c0, relocated in a80a89a) with no tracked consumer anywhere
 in project history, and was removed as unused configuration. No
 compatibility alias or spelling-check implementation task exists.
+
+Module ownership of quick document input: the basic module no longer defines
+the two Org block insertion bindings and the tex module no longer defines
+the four LaTeX environment/label insertion bindings; the snippet module owns
+these inputs. The org module owns the Org mark ring bindings through
+use-package org :bind (("C-c m p" . org-mark-ring-push) ("C-c m g" .
+org-mark-ring-goto)) without a local keymap, so the bindings remain global
+while their configuration ownership moved to the Org module. The legacy
+debug module (emarccs-debug.el) is removed from the package and no longer
+participates in regular initialization; its fixed image-scaling-factor
+setting was not migrated to another module.
 
 ## Shared behavior and workflow boundaries
 Completion/navigation combines Consult, Vertico, Orderless, Marginalia and

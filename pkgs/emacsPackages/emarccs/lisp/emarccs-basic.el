@@ -112,20 +112,27 @@
 ;; 退出时保存书签
 (add-hook 'bookmark-exit-hook #'bookmark-save)
 
-;; Backup, auto-save and lockfile configuration
-(setq make-backup-files t) ; 备份文件 <filename>~
-(setq auto-save-default nil) ; 自动保存文件 #<filename>#
-(setq create-lockfiles nil) ; 锁文件 .#<filename>
-
+;; Backup
+(setq make-backup-files t)
+(setq vc-make-backup-files t)
+(setq version-control t)
+(setq kept-old-versions 0)
+(setq kept-new-versions 20)
+(setq delete-old-versions t)
 (setq backup-directory-alist
       `((".*" . ,(locate-user-emacs-file "cache/backups/"))))
 (dolist (entry backup-directory-alist)
   (make-directory (cdr entry) t))
 
+;; Auto-save
+(setq auto-save-default t)
 (setq auto-save-file-name-transforms
       `((".*" ,(locate-user-emacs-file "cache/auto-save/") t)))
 (dolist (entry auto-save-file-name-transforms)
   (make-directory (cadr entry) t))
+
+;; Lockfiles
+(setq create-lockfiles t)
 
 ;; 忽略格式风格警告
 (setq byte-compile-warnings '(not docstrings))

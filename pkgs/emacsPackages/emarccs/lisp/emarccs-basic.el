@@ -362,10 +362,6 @@
 ;; 图标
 (use-package nerd-icons)
 
-;; 状态栏美化(终端兼容)
-(use-package powerline
-  :config (powerline-default-theme))
-
 ;; 快捷键提示
 (use-package which-key
   :hook (after-init . which-key-mode)

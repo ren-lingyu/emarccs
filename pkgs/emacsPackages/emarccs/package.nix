@@ -65,7 +65,6 @@
   org-transclusion,
   org-workbench,
   pdf-tools,
-  powerline,
   pyim,
   pyim-basedict,
   pyim-cangjiedict,

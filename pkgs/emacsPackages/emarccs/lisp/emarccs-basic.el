@@ -454,20 +454,18 @@
 (use-package marginalia
   :init (marginalia-mode))
 
-(use-package counsel)
-
 (use-package ripgrep)
 
 (use-package consult
   :after ripgrep
   :bind
-  (("C-s" . consult-line) ;; 替代 swiper
-   ("C-x b" . consult-buffer) ;; 替代 ivy-switch-buffer
-   ("C-c v" . consult-bookmark) ;; 替代 ivy-push-view
-   ("C-c s" . consult-buffer) ;; 替代 ivy-switch-view
-   ("C-c V" . consult-recent-file) ;; 替代 ivy-pop-view
-   ("C-x C-SPC" . consult-mark) ;; 替代 counsel-mark-ring
-   ("C-x C-@" . consult-mark) ;; macOS 映射
+  (("C-s" . consult-line)
+   ("C-x b" . consult-buffer)
+   ("C-c v" . consult-bookmark)
+   ("C-c s" . consult-buffer)
+   ("C-c V" . consult-recent-file)
+   ("C-x C-SPC" . consult-mark)
+   ("C-x C-@" . consult-mark) ; macOS 映射
    ("C-c i" . consult-imenu)
    ("C-c g" . consult-grep)
    ("C-c G" . consult-ripgrep)))

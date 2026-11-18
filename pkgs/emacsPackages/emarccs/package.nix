@@ -20,7 +20,6 @@
   company-auctex,
   company-math,
   consult,
-  counsel,
   diff-hl,
   dired-rainbow,
   diredfl,

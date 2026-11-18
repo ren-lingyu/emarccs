@@ -9,15 +9,6 @@
 
 (setenv "TZ" "Asia/Shanghai")
 
-;; temporary directory
-(setq temporary-file-directory (expand-file-name "~/tmp/emacs/"))
-(unless (file-directory-p temporary-file-directory)
-  (make-directory temporary-file-directory t))
-(setq small-temporary-file-directory
-      (expand-file-name temporary-file-directory))
-(setq org-babel-remote-temporary-directory
-      (expand-file-name temporary-file-directory))
-
 ;; 启动界面
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice t)

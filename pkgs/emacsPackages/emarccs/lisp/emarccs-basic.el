@@ -5,7 +5,6 @@
 ;;; Code:
 
 (eval-when-compile
-  (require 'rx)
   (require 'use-package))
 
 (setenv "TZ" "Asia/Shanghai")
@@ -126,14 +125,9 @@
 ;; 忽略格式风格警告
 (setq byte-compile-warnings '(not docstrings))
 
-;; 有关 buffer 显示
-(setq display-buffer-alist
-      `((,(rx string-start "*compilation*" string-end)
-         (display-buffer-in-direction)
-         (direction . below)
-         (window-height . 6))))
-
-(setq compilation-scroll-output t)
+;; 编译
+(use-package compile
+  :custom (compilation-scroll-output t))
 
 ;; dired
 (use-package dired

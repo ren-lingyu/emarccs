@@ -5,12 +5,63 @@ Read architecture.md for initialization, package ownership, Nix interfaces and
 Org workflows; backlog.md for deferred work; reconstruction.md for historical
 evidence limits. Use public GAW status/check for live lifecycle state.
 
-## Current: legacy cleanup and document input consolidation at 65a3385
-The formal checkpoint represents the project at main HEAD 65a3385
+## Current: configuration cleanup and dependency decisions at 91f4b18
+The formal checkpoint represents the project at main HEAD 91f4b18
+("docs(readme): clarify optional package dependencies and maintenance
+policy"). The previous formal checkpoint d3e77f3 represented 65a3385; the
+maintenance range is the seven commits from 11f3bad through 91f4b18:
+six configuration cleanup commits plus the README policy clarification.
+
+The six cleanup commits:
+- 11f3bad removes the dedicated *compilation* display-buffer-alist rule and
+  its compile-time rx requirement; compilation-scroll-output remains enabled
+  through the built-in use-package compile declaration.
+- b0921ba splits the basic configuration into coherent sections without
+  intended behavior change; this is organization, not a new capability.
+- 7a411e1 enables numbered backups for ordinary and VC-managed files (20
+  new versions kept, old versions auto-removed), ordinary auto-save and
+  lockfiles. These are explicit current policies, not disabled settings.
+- 405af0c removes the temporary-file-directory,
+  small-temporary-file-directory and org-babel-remote-temporary-directory
+  overrides and the ~/tmp/emacs/ creation; temporary directory selection
+  follows Emacs and Org defaults.
+- 3e017e5 removes the counsel use-package declaration, its direct Nix
+  dependency and the obsolete Ivy/Swiper/Counsel migration comments; the
+  Consult workflow and bindings are unchanged. This is a targeted removal,
+  not a claim that the entire dependency closure excludes Counsel.
+- 61f3add removes Powerline's powerline-default-theme declaration and its
+  direct Nix dependency; Doom Modeline remains the configured status line.
+  On normal initialization Powerline set mode-line-format first and Doom
+  Modeline replaced it later, and no Powerline-specific fallback branch or
+  API use was found.
+
+The README commit 91f4b18 clarifies the package policy: packageRequires is
+an explicit direct dependency inventory that also contains optional packages
+with independent capabilities; use-package :disabled does not remove the
+corresponding Nix dependency; adding, replacing or deleting packages
+requires reviewing both use-package declarations and packageRequires while
+preserving optional, independent packages. The direct packageRequires count
+is now 74 (76 minus counsel and powerline).
+
+Validation is read-only: all seven commit diffs were inspected and the
+current sources were checked (backup/auto-save/lockfile settings, temporary
+directory removal, compilation configuration, remaining counsel/powerline
+references, theme module, package.nix). The owner reported that nix flake
+check passed with the Powerline removal staged on the current system; the
+agent did not rerun it and no GUI/TTY visual regression or cross-system
+validation is claimed.
+
+Next actions remain the open backlog items: the Elisp
+normalization/warning/dependency audit (partially progressed by the
+targeted Counsel and Powerline removals, not completed), the Org-TeXmacs
+frontend autoload coverage candidate, the AAS per-buffer isolation
+reproduction and the TeXmacs existing-profile validation candidate.
+
+## Previous checkpoint: legacy cleanup and document input consolidation at 65a3385 (superseded)
+The preceding checkpoint represented the project at main HEAD 65a3385
 ("refactor(pkgs/emacsPackages/emarccs): consolidate document input and Org
-navigation bindings"). The previous formal checkpoint 7ba0512 represented
-5b3215d; the maintenance range is the two consecutive commits 5205b016 and
-65a3385.
+navigation bindings"). Its recorded facts remain inherited context; the
+current state above supersedes its represented snapshot.
 
 5205b016 removes the legacy debug module: emarccs-debug.el, whose only
 substantive setting was a fixed image-scaling-factor of 1.0, is deleted; the
@@ -44,11 +95,11 @@ removal, current initializer module order, remaining keybinding definitions,
 snippet definitions and tests, README). No build, flake check or ERT run was
 performed by the agent.
 
-Next actions remain the non-blocking backlog candidates (Elisp
-normalization, Org-TeXmacs frontend autoload coverage, AAS per-buffer
-isolation reproduction, TeXmacs existing-profile validation) plus the
-standing overlay/wrapper/legacy-export validation candidate; none of these
-is the current maintenance plan.
+Next actions recorded at that checkpoint (historical): the non-blocking
+backlog candidates (Elisp normalization, Org-TeXmacs frontend autoload
+coverage, AAS per-buffer isolation reproduction, TeXmacs existing-profile
+validation) plus the standing overlay/wrapper/legacy-export validation
+candidate; none of these was the maintenance plan at that checkpoint.
 
 ## Previous checkpoint: basic configuration cleanup at 5b3215d (superseded)
 The preceding checkpoint represented the project at main HEAD 5b3215d

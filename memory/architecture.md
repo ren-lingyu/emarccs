@@ -398,13 +398,22 @@ highlight-parentheses-minibuffer-setup)); direct add-hook calls use actual
 hook variable names. This is notation normalization, not a correction of a
 demonstrated hook registration failure.
 
-The compilation buffer display rule now matches the standard buffer name
-exactly with (rx string-start "*compilation*" string-end), with rx required
-within eval-when-compile. The display action (display-buffer-in-direction),
-direction (below), requested height (window-height 6) and
-compilation-scroll-output are unchanged. display-buffer-alist is still set
-as a whole; the rule does not claim to cover every compilation-mode buffer
-or to fix the window height permanently.
+There is no dedicated compilation buffer display rule: the former
+display-buffer-alist entry matching "*compilation*" and its compile-time
+rx requirement were removed in favor of Emacs default buffer display, and
+compilation-scroll-output is now configured through the built-in
+use-package compile declaration. The earlier rx-based exact matching was a
+personal override that no longer justified itself.
+
+Recovery and multi-process edit safety are explicit current policies:
+numbered backups are enabled for ordinary and VC-managed files (20 new
+versions kept, old versions auto-removed), ordinary auto-save is enabled
+and lockfiles are enabled, with backup and auto-save files kept under the
+user's cache directories. Temporary directory selection follows Emacs and
+Org defaults: the former ~/tmp/emacs/ overrides of
+temporary-file-directory, small-temporary-file-directory and
+org-babel-remote-temporary-directory were removed as unnecessary local
+overrides.
 
 The embark-consult declaration dropped its :config form that explicitly
 required embark-consult itself, retaining its :after and :hook settings;
@@ -430,9 +439,16 @@ setting was not migrated to another module.
 
 ## Shared behavior and workflow boundaries
 Completion/navigation combines Consult, Vertico, Orderless, Marginalia and
-Embark. Dirvish, structural highlighting, large-file support, whitespace
-cleanup and margin diff-hl serve editing. Koishi setup and Doom modeline
-replace the former multi-theme switcher. Common Lisp uses SLY/SBCL; Haskell
+Embark; the legacy counsel declaration and its direct Nix dependency were
+removed, leaving the Consult workflow and its bindings unchanged, without
+claiming the entire dependency closure excludes Counsel. Dirvish, structural
+highlighting, large-file support, whitespace cleanup and margin diff-hl
+serve editing. Koishi setup and Doom Modeline replace the former
+multi-theme switcher; Doom Modeline is the active status line and Powerline
+is no longer configured or a direct dependency (on normal initialization
+Powerline set mode-line-format first and Doom Modeline replaced it later,
+with no Powerline-specific fallback branch or API use found). Common Lisp
+uses SLY/SBCL; Haskell
 Tree-sitter mode uses Eglot. PDF files use pdf-view-mode and themed
 rendering. Package availability does not prove a language server, external
 executable or live workflow is configured.
@@ -446,6 +462,11 @@ Organization registries and org-roam-include replace legacy flat
 organization settings. The organization module owns Citar/Citar-Embark and
 declarative Citar literature backend fields with bibliography support. The
 handwritten provider is gone; Citar-Org-Roam remains declared but disabled.
+Targeted dependency removals do not imply every disabled declaration is
+redundant: org-include-inline, org-workbench, the Elfeed extensions and
+company-math retain distinct optional capabilities, and Citar-Org-Roam
+overlaps current workflow responsibilities but offers a different generic
+reference model, so wholesale replacement is not established.
 Citar waits for Org and Org-roam to avoid the earlier unbound-directory
 failure.
 
@@ -539,7 +560,8 @@ preserved in first-parent history and is not current design.
 
 ## Validation and repository boundaries
 Static source verification for the current consolidation inspected the
-37-commit range 534188d..8abd482 (diffs of the architectural anchors and the
+37-commit range from 534188d through 8abd482 (diffs of the architectural
+anchors and the
 final trees of flake.nix, pkgs/default.nix, lib/, the TeXmacs package, the
 emarccs package and tests, treesit-auto, Org workflow and snippet sources,
 README and .gitignore) with diff --check. No Nix evaluation, build, test,
@@ -552,7 +574,7 @@ No runtime result is recorded for the TeXmacs resource package or its tests.
 The inverted .gitignore whitelist requires explicit inclusion of new tracked
 files; *.scm is allowed under pkgs/ and *.sh under tests/ (moved from pkgs/).
 README.org describes the committed architecture (ownership, outputs,
-TeXmacs package, math syntax, package-owned tests, withProgress, snippets)
-without experiment logs. The no-warning claim is not made anywhere: byte
+TeXmacs package, math syntax, package-owned tests, withProgress, snippets
+and the optional-dependency maintenance policy) without experiment logs. The no-warning claim is not made anywhere: byte
 compilation succeeds with warnings and package-lint retains its explicit
 exemptions. Historical probes and owner reports retain their narrower scopes.

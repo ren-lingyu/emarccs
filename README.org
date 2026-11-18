@@ -172,7 +172,7 @@ LAAS 默认 basic, subscript, fraction 和 accent snippets 均禁用, 移除原�
 - 独立构建的包保留 =package.nix=, 由同目录的 =overlay.nix= 使用 =callPackage= 接入.
 - 仅覆盖已有包的目录可只保留 =overlay.nix=. 例如 =consult=, =ripgrep= 和 =treesit-auto= 直接调用原包的 =overrideAttrs=.
 - =legacyPackages= 按 overlay 文件和包集合中的 derivation 属性导出本地定义或覆盖的包, 不要求存在 =package.nix=.
-- =pkgs/emacsPackages/emarccs/package.nix= 显式声明配置所需的 =packageRequires=. 本地配置和自定义 Elisp packages 使用 =melpaBuild=, 显式指定 =files= 和 =melpaVersion=, 生成 ELPA 描述文件及 autoloads.
+- =pkgs/emacsPackages/emarccs/package.nix= 显式声明 =packageRequires=, 包括当前启用的功能和作为可选独立功能保留的包. =use-package= 的 =:disabled= 不会从 Nix 依赖中排除相应包. 本地配置和自定义 Elisp packages 使用 =melpaBuild=, 显式指定 =files= 和 =melpaVersion=, 生成 ELPA 描述文件及 autoloads.
 - 文件选择通常使用 =(:defaults)=. 额外运行资源要写入 recipe, 例如 =org-texmacs-worker.scm=; 只按主包名前缀选择文件可能漏掉其他入口库.
 
 主要包适配和运行依赖:
@@ -294,7 +294,7 @@ LAAS 默认 basic, subscript, fraction 和 accent snippets 均禁用, 移除原�
 * 维护注意事项
 - =.gitignore= 使用倒置白名单模式. 新增可追踪文件时, 需要同时确认对应 =!pattern= 已放行.
 - 修改 =pkgs/emacsPackages/emarccs/lisp/emarccs-init.el= 的模块顺序时要谨慎, 当前顺序是配置初始化语义的一部分.
-- 新增或调整 Elisp 包时, 同时核对 =packageRequires=, MELPA recipe 的文件选择, ELPA metadata/autoloads 和所需运行资源.
+- 新增, 替换或移除 Elisp 包时, 同时核对 =packageRequires=, =use-package= 声明, MELPA recipe 的文件选择, ELPA metadata/autoloads 和所需运行资源; 不将暂时禁用等同于功能冗余.
 
 * 许可证
 本项目采用 MIT 许可证, 见 [[file:LICENSE][LICENSE]].

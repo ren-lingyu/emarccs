@@ -18,10 +18,11 @@
 (setq org-babel-remote-temporary-directory
       (expand-file-name temporary-file-directory))
 
-;; 基础编码和启动界面设置, 基本外观设置
+;; 启动界面
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice t)
 
+;; 字体与窗口尺寸
 (defun emarccs-basic--frame-alist-with-geometry (alist width height)
   "Return ALIST with WIDTH and HEIGHT in text pixels, without modifying ALIST."
   (append
@@ -76,36 +77,46 @@
             (emarccs-basic--frame-alist-with-geometry
              initial-frame-alist monitor-width monitor-height)))))
 
+(unless (display-graphic-p)
+  (setq frame-background-mode 'dark))
+
+;; 编码
 (prefer-coding-system 'utf-8)
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
 
-(unless (display-graphic-p)
-  (setq frame-background-mode 'dark))
-
+;; 高亮与符号美化
 (show-paren-mode 1) ; 高亮匹配括号
 (global-font-lock-mode 1) ; 全局语法高亮
+(global-prettify-symbols-mode t) ; 符号美化
 
+;; 行号与列号
 (column-number-mode t) ; 在 Mode line 显示列号
 (global-display-line-numbers-mode 1) ; 全局显示行号
-(global-prettify-symbols-mode t)
 
-(setq-default indent-tabs-mode nil) ; 默认禁用制表符
-(setq-default tab-width 4) ; 默认 tab 宽度为 4 个空格
-
-;; Emacs 行为设置
+;; 文件自动重载与选中替换
 (global-auto-revert-mode t) ; 文件外部修改自动刷新
 (delete-selection-mode t) ; 选中文本后输入替换
 
+;; 缩进
+(setq-default indent-tabs-mode nil) ; 默认禁用制表符
+(setq-default tab-width 4) ; 默认 tab 宽度为 4 个空格
+
+;; prog-mode hook & conf-mode hook
+(add-hook 'prog-mode-hook #'hs-minor-mode) ; 编程模式折叠代码块
+(add-hook 'prog-mode-hook #'delete-trailing-whitespace-mode)
+(add-hook 'conf-mode-hook #'delete-trailing-whitespace-mode)
+
+;; 退出时保存书签
+(add-hook 'bookmark-exit-hook #'bookmark-save)
+
+;; Backup, auto-save and lockfile configuration
 (setq make-backup-files t) ; 备份文件 <filename>~
 (setq auto-save-default nil) ; 自动保存文件 #<filename>#
 (setq create-lockfiles nil) ; 锁文件 .#<filename>
 
-(add-hook 'bookmark-exit-hook #'bookmark-save)
-
-;; Backup and auto-save configuration
 (setq backup-directory-alist
       `((".*" . ,(locate-user-emacs-file "cache/backups/"))))
 (dolist (entry backup-directory-alist)
@@ -115,12 +126,6 @@
       `((".*" ,(locate-user-emacs-file "cache/auto-save/") t)))
 (dolist (entry auto-save-file-name-transforms)
   (make-directory (cadr entry) t))
-
-(add-hook 'prog-mode-hook #'hs-minor-mode) ; 编程模式折叠代码块
-
-(add-hook 'prog-mode-hook #'delete-trailing-whitespace-mode)
-
-(add-hook 'conf-mode-hook #'delete-trailing-whitespace-mode)
 
 ;; 忽略格式风格警告
 (setq byte-compile-warnings '(not docstrings))

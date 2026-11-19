@@ -41,6 +41,8 @@ Edit the opening name to update its closing mirror, then jump to the body."
    'org-mode
    ";par"
    '(yas "($0)")
+   ";stm"
+   '(yas "\\\\(($0)\\\\)")
    ;; General Org blocks.
    ";;block"
    (emarccs-snippet--org-block-snippet "block")

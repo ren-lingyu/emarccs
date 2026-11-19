@@ -86,22 +86,7 @@
      ("page-top" . "12.7mm")
      ("page-bot" . "12.7mm")))
   (org-texmacs-pdf-file-links-as-absolute nil)
-  (org-texmacs-link-org-files-as-pdf t)
-  (org-texmacs-edit-mode 'scheme-mode)
-  (org-texmacs-fragment-tags
-   '("math"
-     "equation"
-     "equation*"
-     "eqnarray"
-     "eqnarray*"
-     "align"
-     "align*"
-     "gather"
-     "gather*"
-     "eqsplit"
-     "eqsplit*"
-     "reference"
-     "rcl-table")))
+  (org-texmacs-link-org-files-as-pdf t))
 
 ;; 嵌入
 (use-package org-transclusion

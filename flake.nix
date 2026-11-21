@@ -10,7 +10,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     org-texmacs = {
-      url = "git+https://github.com/ren-lingyu/org-texmacs.git?ref=refs/heads/main&shallow=1";
+      url = "git+https://github.com/ren-lingyu/org-texmacs.git?ref=refs/tags/v0.8.0&shallow=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     org-roam-organize = {
